@@ -1,8 +1,32 @@
 # everyday.dev
 
+> **everyday.dev** is a platform where developers and tech enthusiasts engage with knowledge through collaboration, discussion and learning, fostering the collective growth of the developer community. It will empower developers to stay updated with industry trends, enhance their skills, and streamline their learning.
+
+## Project Components
+
+* [ER: Requirements Specification](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24041/-/wikis/er)
+* EBD: Database Specification
+* EAP: Architecture Specification and Prototype
+* PA: Product and Presentation
+
+## Artefacts Checklist
++ The artefacts checklist is available at this [link](https://docs.google.com/spreadsheets/d/1Slm9z7z6odYqT0jRxVVs8Aj4tcNGQtVQG1Yro9hezzI/edit?gid=1240712519#gid=1240712519).
+
+## Team
+
+* Afonso Moura, up202207931@fe.up.pt
+* Diogo Goiana, up202207944@fe.up.pt
+* Mansur Mustafin, up202102355@fe.up.pt
+* Rubem Neto, up202207086@fe.up.pt
+
+## 
+
+GROUP24041, 26/09/2024
+
+<!-- # lbaw24041
 
 
-<!-- ## Getting started
+## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
@@ -50,34 +74,15 @@ When you're ready to make this README your own, just edit this file and use the 
 
 ## Suggestions for a good README
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information. -->
+Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
+## Name
+Choose a self-explaining name for your project.
 
-> **everyday.dev** is a community-driven platform designed to revolutionize how developers and tech enthusiasts share, discuss, and curate industry news. It will empower developers to stay updated with industry trends, enhance their skills, and streamline their learning.
+## Description
+Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Project Components
-
-* ER: Requirements Specification
-* EBD: Database Specification
-* EAP: Architecture Specification and Prototype
-* PA: Product and Presentation
-
-## Artefacts Checklist
-+ The artefacts checklist is available at this [link](https://docs.google.com/spreadsheets/d/1czJnJ0lK132UG-wRH0axwTT0YZwfGLI_wWlapBiHpwo/edit?gid=957598369#gid=957598369)
-
-
-## Team
-
-* Afonso Moura, up202207931@fe.up.pt
-* Diogo Goiana, up202207944@fe.up.pt
-* Mansur Mustafin, up202102355@fe.up.pt
-* Rubem Neto, up202207086@fe.up.pt
-
-## 
-
-GROUP24041, 26/09/2024
-
-<!-- ## Badges
+## Badges
 On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
 ## Visuals
@@ -100,13 +105,12 @@ State if you are open to contributions and what your requirements are for accept
 
 For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser. -->
+You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
+## Authors and acknowledgment
+Show your appreciation to those who have contributed to the project.
 
-
-
-
-<!-- ## License
+## License
 For open source projects, say how it is licensed.
 
 ## Project status
