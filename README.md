@@ -5,7 +5,7 @@
 ## Project Components
 
 * [ER: Requirements Specification](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24041/-/wikis/er)
-* EBD: Database Specification
+* [EBD: Database Specification](https://gitlab.up.pt/lbaw/lbaw2425/lbaw24041/-/wikis/edb)
 * EAP: Architecture Specification and Prototype
 * PA: Product and Presentation
 
