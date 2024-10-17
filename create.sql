@@ -37,13 +37,18 @@ CREATE TABLE news_post (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     changed_at TIMESTAMP DEFAULT NULL CHECK (changed_at <= CURRENT_TIMESTAMP),
     content TEXT NOT NULL,
-    hash VARCHAR NOT NULL,
-    is_public BOOLEAN NOT NULL DEFAULT TRUE,
-    image_path VARCHAR,
+    for_followers BOOLEAN NOT NULL DEFAULT TRUE,
     upvotes INTEGER NOT NULL DEFAULT 0 CHECK (upvotes >= 0),
     downvotes INTEGER NOT NULL DEFAULT 0 CHECK (downvotes >= 0),
     author_id INTEGER NOT NULL REFERENCES "user"(id),
     CHECK (changed_at IS NULL OR created_at < changed_at)
+);
+
+CREATE TABLE image (
+    id SERIAL PRIMARY KEY,
+    path VARCHAR NOT NULL,
+    is_title_image BOOLEAN NOT NULL DEFAULT FALSE,
+    news_post_id INTEGER REFERENCES news_post(id)
 );
 
 CREATE TABLE comment (

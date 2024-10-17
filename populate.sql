@@ -31,27 +31,33 @@ VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
 --
 -- Inserting news_post
 --
-INSERT INTO news_post (title, created_at, changed_at, content, hash, is_public, image_path, author_id)
+INSERT INTO news_post (title, created_at, changed_at, content, for_followers, upvotes, downvotes, author_id)
 VALUES
-('Python 3.10 Released with Pattern Matching', NOW() - INTERVAL '10 days', NULL, 'The latest version of Python introduces pattern matching and other features.', 'hash001', TRUE, '/images/posts/python.jpg', 1),
-('JavaScript ES2021 Features Announced', NOW() - INTERVAL '9 days', NULL, 'ES2021 brings new features like logical assignment operators.', 'hash002', TRUE, NULL, 2),
-('GitHub Copilot Now Available to All Developers', NOW() - INTERVAL '8 days', NOW() - INTERVAL '7 days', 'GitHub has made Copilot available to all developers after successful beta.', 'hash003', TRUE, '/images/posts/copilot.jpg', 3),
-('React 18 Released with Concurrent Features', NOW() - INTERVAL '7 days', NULL, 'React 18 includes concurrent rendering features for better performance.', 'hash004', TRUE, NULL, 4),
-('Interview with Linus Torvalds on Linux Kernel Development', NOW() - INTERVAL '6 days', NOW() - INTERVAL '5 days', 'An exclusive interview with Linus Torvalds discussing the future of Linux.', 'hash005', FALSE, '/images/posts/linus.jpg', 5),
-('Top 10 VSCode Extensions for Developers', NOW() - INTERVAL '5 days', NULL, 'Enhance your development workflow with these top VSCode extensions.', 'hash006', TRUE, NULL, 6),
-('TypeScript 4.5 Released with New Features', NOW() - INTERVAL '4 days', NULL, 'TypeScript 4.5 introduces new language features and improvements.', 'hash007', TRUE, '/images/posts/typescript.jpg', 7),
-('Django 4.0: What’s New', NOW() - INTERVAL '3 days', NULL, 'Django 4.0 brings asynchronous handlers and other new features.', 'hash008', TRUE, NULL, 8),
-('Advancements in Machine Learning Frameworks', NOW() - INTERVAL '2 days', NULL, 'New updates in TensorFlow and PyTorch improve ML development.', 'hash009', TRUE, '/images/posts/ml.jpg', 9),
-('Upcoming Tech Conferences You Should Attend', NOW() - INTERVAL '1 days', NULL, 'Don''t miss these tech conferences happening soon.', 'hash010', TRUE, NULL, 10),
-('Rust Becomes the Most Loved Language Again', NOW(), NULL, 'Rust tops the list of most loved programming languages.', 'hash011', TRUE, '/images/posts/rust.jpg', 1),
-('Google Announces Flutter 2.5', NOW() - INTERVAL '6 days', NULL, 'Flutter 2.5 brings performance improvements and new features.', 'hash012', TRUE, NULL, 2),
-('Kubernetes 1.22 Released with Major Updates', NOW() - INTERVAL '5 days', NULL, 'Kubernetes 1.22 introduces significant changes and deprecations.', 'hash013', TRUE, '/images/posts/kubernetes.jpg', 3),
-('Microsoft Announces .NET 6.0', NOW() - INTERVAL '4 days', NULL, 'The release of .NET 6.0 brings performance enhancements.', 'hash014', TRUE, NULL, 4),
-('Exploring the New Features in PHP 8.1', NOW() - INTERVAL '3 days', NULL, 'PHP 8.1 introduces enums, fibers, and other features.', 'hash015', TRUE, '/images/posts/php.jpg', 5);
-
+('Breaking News in AI', NOW() - INTERVAL '7 days', NULL, 'Artificial Intelligence is transforming industries across the globe.', TRUE, 150, 3, 1),
+('The Future of Cloud Computing', NOW() - INTERVAL '6 days', NOW() - INTERVAL '1 day', 'Cloud services continue to evolve with exciting new trends.', FALSE, 100, 2, 2),
+('Top Python Tips for Developers', NOW() - INTERVAL '5 days', NULL, 'Here are some of the best Python tips to improve your coding skills.', TRUE, 200, 5, 3),
+('Cybersecurity Threats in 2024', NOW() - INTERVAL '4 days', NULL, 'New threats emerge in the digital world, learn how to protect yourself.', FALSE, 175, 8, 4),
+('Machine Learning Breakthroughs', NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days', 'The latest machine learning algorithms are pushing boundaries.', TRUE, 300, 1, 5),
+('Innovations in Health Tech', NOW() - INTERVAL '2 days', NULL, 'Health technologies are making it easier to diagnose and treat diseases.', TRUE, 250, 4, 6),
+('Exploring Quantum Computing', NOW() - INTERVAL '1 day', NULL, 'Quantum computing could revolutionize data processing.', FALSE, 350, 2, 7),
+('Developments in 5G Technology', NOW(), NULL, '5G is set to become more prevalent, offering faster connectivity.', TRUE, 400, 6, 8);
 
 --
--- Inserting news_post
+-- Inserting image
+--
+INSERT INTO image (path, news_post_id, is_title_image)
+VALUES
+('/images/news/ai_news.jpg', 1, TRUE),
+('/images/news/cloud_news.jpg', 2, TRUE),
+('/images/news/python_tips.jpg', 3, TRUE),
+('/images/news/cybersecurity_threats.jpg', 4, TRUE),
+('/images/news/ml_breakthroughs.jpg', 5, TRUE),
+('/images/news/health_tech.jpg', 6, TRUE),
+('/images/news/quantum_computing.jpg', 7, TRUE),
+('/images/news/5g_tech.jpg', 8, TRUE);
+
+--
+-- Inserting comment
 --
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
@@ -62,8 +68,8 @@ VALUES
 (NOW() - INTERVAL '1 days', 'Fascinating interview.', 6, 5, NULL),
 (NOW() - INTERVAL '12 hours', 'I disagree with this point.', 7, 6, NULL),
 (NOW() - INTERVAL '6 hours', 'Could you provide more details?', 8, 7, NULL),
-(NOW() - INTERVAL '3 hours', 'Looking forward to attending.', 9, 10, NULL),
-(NOW() - INTERVAL '1 hours', 'Important advancements indeed.', 10, 9, NULL),
+(NOW() - INTERVAL '3 hours', 'Looking forward to attending.', 9, 7, NULL),
+(NOW() - INTERVAL '1 hours', 'Important advancements indeed.', 10, 7, NULL),
 (NOW(), 'Thanks for sharing!', 1, 8, NULL),
 (NOW() - INTERVAL '4 days', 'Replying to your comment.', 3, NULL, 1),
 (NOW() - INTERVAL '2 days', 'I have a different opinion.', 4, NULL, 6),
@@ -167,14 +173,14 @@ VALUES
 (5, 13),
 (6, 5),
 (7, 6),
-(8, 14),
-(9, 7),
-(10, 4),
-(11, 7),
-(12, 8),
-(13, 9),
-(14, 11),
-(15, 15);
+(1, 14),
+(2, 7),
+(3, 4),
+(4, 7),
+(5, 8),
+(6, 9),
+(7, 11),
+(8, 15);
 
 
 --
@@ -261,12 +267,12 @@ VALUES
 (4, 5),
 (5, 6),
 (6, 7),
-(7, 8),
-(8, 9),
-(9, 10),
-(10, 1),
+(7, 2),
+(8, 3),
+(9, 4),
+(10, 5),
 (1, 5),
 (2, 6),
 (3, 7),
 (4, 8),
-(5, 9);
+(5, 3);
