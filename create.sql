@@ -158,3 +158,10 @@ CREATE TABLE bookmarks (
     news_post_id INTEGER NOT NULL REFERENCES news_post(id),
     PRIMARY KEY (user_id, news_post_id)
 );
+
+--
+-- Indexes
+--
+CREATE UNIQUE INDEX unique_title_image_per_post
+ON image (news_post_id)
+WHERE is_title_image = TRUE;
