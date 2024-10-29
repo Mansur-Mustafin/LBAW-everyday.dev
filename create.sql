@@ -17,18 +17,25 @@ CREATE TYPE ReportType AS ENUM ('PostReport', 'UserReport', 'CommentReport');
 --
 -- Create Tables
 --
+CREATE TABLE image (
+    id SERIAL PRIMARY KEY,
+    path VARCHAR NOT NULL,
+    is_title_image BOOLEAN NOT NULL DEFAULT FALSE,
+    news_post_id INTEGER REFERENCES news_post(id)
+);
+
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     username VARCHAR NOT NULL UNIQUE,
     public_name VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
-    image_path VARCHAR,
     email VARCHAR NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     rank Ranking NOT NULL DEFAULT 'noobie',
     status UserStatus NOT NULL DEFAULT 'active',
     reputation INTEGER NOT NULL DEFAULT 0,
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    image_id INTEGER REFERENCES image(id)
 );
 
 CREATE TABLE news_post (
@@ -40,15 +47,9 @@ CREATE TABLE news_post (
     for_followers BOOLEAN NOT NULL DEFAULT TRUE,
     upvotes INTEGER NOT NULL DEFAULT 0 CHECK (upvotes >= 0),
     downvotes INTEGER NOT NULL DEFAULT 0 CHECK (downvotes >= 0),
+    is_omitted BOOLEAN NOT NULL DEFAULT FALSE,
     author_id INTEGER NOT NULL REFERENCES "user"(id),
     CHECK (changed_at IS NULL OR created_at < changed_at)
-);
-
-CREATE TABLE image (
-    id SERIAL PRIMARY KEY,
-    path VARCHAR NOT NULL,
-    is_title_image BOOLEAN NOT NULL DEFAULT FALSE,
-    news_post_id INTEGER REFERENCES news_post(id)
 );
 
 CREATE TABLE comment (
