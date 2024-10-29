@@ -3,22 +3,39 @@
 --
 SET search_path TO lbaw2441;
 
+--
+-- Inserting image
+--
+INSERT INTO image (path, news_post_id, is_title_image)
+VALUES
+('/images/news/ai_news.jpg', 1, TRUE),
+('/images/news/cloud_news.jpg', 2, TRUE),
+('/images/news/python_tips.jpg', 3, TRUE),
+('/images/news/cybersecurity_threats.jpg', 4, TRUE),
+('/images/news/ml_breakthroughs.jpg', 5, TRUE),
+('/images/news/health_tech.jpg', 6, TRUE),
+('/images/news/quantum_computing.jpg', 7, TRUE),
+('/images/news/5g_tech.jpg', 8, TRUE),
+('/images/users/johndoe.jpg', NULL, FALSE),
+('/images/users/lindajones.jpg', NULL, FALSE),
+('/images/users/emilywhite.jpg', NULL, FALSE),
+('/images/users/alexmartin.jpg', NULL, FALSE);
 
 --
 -- Inserting users
 --
-INSERT INTO "user" (username, public_name, password, image_path, email, rank, status, reputation, is_admin)
+INSERT INTO "user" (username, public_name, password, image_id, email, rank, status, reputation, is_admin)
 VALUES
-('johndoe', 'John Doe', 'password123', '/images/users/johndoe.jpg', 'johndoe@example.com', 'noobie', 'active', 0, FALSE),
+('johndoe', 'John Doe', 'password123', 8, 'johndoe@example.com', 'noobie', 'active', 0, FALSE),
 ('janedoe', 'Jane Doe', 'securepassword', NULL, 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
 ('adminuser', 'Admin User', 'adminpass', NULL, 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
 ('samsmith', 'Sam Smith', 'samspassword', NULL, 'samsmith@example.com', 'code monkey', 'active', 20, FALSE),
-('lindajones', 'Linda Jones', 'lindapass', '/images/users/lindajones.jpg', 'lindajones@example.com', 'noobie', 'active', 250, FALSE),
+('lindajones', 'Linda Jones', 'lindapass', 9, 'lindajones@example.com', 'noobie', 'active', 250, FALSE),
 ('mikebrown', 'Mike Brown', 'mikepassword', NULL, 'mikebrown@example.com', '10x developer', 'active', 500, FALSE),
-('emilywhite', 'Emily White', 'emilypass', '/images/users/emilywhite.jpg', 'emilywhite@example.com', 'code monkey', 'blocked', -15, FALSE),
+('emilywhite', 'Emily White', 'emilypass', 10, 'emilywhite@example.com', 'code monkey', 'blocked', -15, FALSE),
 ('davidjohnson', 'David Johnson', 'davidpass', NULL, 'davidjohnson@example.com', 'noobie', 'active', 80, FALSE),
 ('sarahlee', 'Sarah Lee', 'sarahpassword', NULL, 'sarahlee@example.com', 'noobie', 'active', 30, FALSE),
-('alexmartin', 'Alex Martin', 'alexpass', '/images/users/alexmartin.jpg', 'alexmartin@example.com', 'noobie', 'pending', 200, FALSE);
+('alexmartin', 'Alex Martin', 'alexpass', 11, 'alexmartin@example.com', 'noobie', 'pending', 200, FALSE);
 
 
 --
@@ -42,19 +59,6 @@ VALUES
 ('Exploring Quantum Computing', NOW() - INTERVAL '1 day', NULL, 'Quantum computing could revolutionize data processing.', FALSE, 350, 2, 7),
 ('Developments in 5G Technology', NOW(), NULL, '5G is set to become more prevalent, offering faster connectivity.', TRUE, 400, 6, 8);
 
---
--- Inserting image
---
-INSERT INTO image (path, news_post_id, is_title_image)
-VALUES
-('/images/news/ai_news.jpg', 1, TRUE),
-('/images/news/cloud_news.jpg', 2, TRUE),
-('/images/news/python_tips.jpg', 3, TRUE),
-('/images/news/cybersecurity_threats.jpg', 4, TRUE),
-('/images/news/ml_breakthroughs.jpg', 5, TRUE),
-('/images/news/health_tech.jpg', 6, TRUE),
-('/images/news/quantum_computing.jpg', 7, TRUE),
-('/images/news/5g_tech.jpg', 8, TRUE);
 
 --
 -- Inserting comment
