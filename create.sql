@@ -1,7 +1,11 @@
 --
--- Set lbaw2441 as a default schema.
+-- Drop old schema
 --
 DROP SCHEMA IF EXISTS lbaw2441 CASCADE;
+
+--
+-- Set lbaw2441 as a default schema.
+--
 CREATE SCHEMA IF NOT EXISTS lbaw2441;
 SET search_path TO lbaw2441;
 
@@ -13,17 +17,11 @@ CREATE TYPE UserStatus AS ENUM ('active', 'blocked', 'pending');
 CREATE TYPE VoteType AS ENUM ('PostVote', 'CommentVote');
 CREATE TYPE NotificationType AS ENUM ('PostNotification', 'VoteNotification', 'FollowNotification', 'CommentNotification');
 CREATE TYPE ReportType AS ENUM ('PostReport', 'UserReport', 'CommentReport');
+CREATE TYPE ImageType AS ENUM ('Profile', 'PostTitle', 'PostContent');
 
 --
 -- Create Tables
 --
-CREATE TABLE image (
-    id SERIAL PRIMARY KEY,
-    path VARCHAR NOT NULL,
-    is_title_image BOOLEAN NOT NULL DEFAULT FALSE,
-    news_post_id INTEGER REFERENCES news_post(id)
-);
-
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     username VARCHAR NOT NULL UNIQUE,
@@ -34,8 +32,7 @@ CREATE TABLE "user" (
     rank Ranking NOT NULL DEFAULT 'noobie',
     status UserStatus NOT NULL DEFAULT 'active',
     reputation INTEGER NOT NULL DEFAULT 0,
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
-    image_id INTEGER REFERENCES image(id)
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE news_post (
@@ -50,6 +47,14 @@ CREATE TABLE news_post (
     is_omitted BOOLEAN NOT NULL DEFAULT FALSE,
     author_id INTEGER NOT NULL REFERENCES "user"(id),
     CHECK (changed_at IS NULL OR created_at < changed_at)
+);
+
+CREATE TABLE image (
+    id SERIAL PRIMARY KEY,
+    path VARCHAR NOT NULL,
+    image_type ImageType NOT NULL,
+    news_post_id INTEGER REFERENCES news_post(id),
+    user_id INTEGER REFERENCES "user"(id)
 );
 
 CREATE TABLE comment (
@@ -165,4 +170,4 @@ CREATE TABLE bookmarks (
 --
 CREATE UNIQUE INDEX unique_title_image_per_post
 ON image (news_post_id)
-WHERE is_title_image = TRUE;
+WHERE image_type = 'PostTitle';

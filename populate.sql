@@ -4,50 +4,26 @@
 SET search_path TO lbaw2441;
 
 --
--- Inserting image
+-- Inserting values
 --
-INSERT INTO image (path, news_post_id, is_title_image)
+INSERT INTO "user" (username, public_name, password, email, rank, status, reputation, is_admin)
 VALUES
-('/images/news/ai_news.jpg', 1, TRUE),
-('/images/news/cloud_news.jpg', 2, TRUE),
-('/images/news/python_tips.jpg', 3, TRUE),
-('/images/news/cybersecurity_threats.jpg', 4, TRUE),
-('/images/news/ml_breakthroughs.jpg', 5, TRUE),
-('/images/news/health_tech.jpg', 6, TRUE),
-('/images/news/quantum_computing.jpg', 7, TRUE),
-('/images/news/5g_tech.jpg', 8, TRUE),
-('/images/users/johndoe.jpg', NULL, FALSE),
-('/images/users/lindajones.jpg', NULL, FALSE),
-('/images/users/emilywhite.jpg', NULL, FALSE),
-('/images/users/alexmartin.jpg', NULL, FALSE);
-
---
--- Inserting users
---
-INSERT INTO "user" (username, public_name, password, image_id, email, rank, status, reputation, is_admin)
-VALUES
-('johndoe', 'John Doe', 'password123', 8, 'johndoe@example.com', 'noobie', 'active', 0, FALSE),
-('janedoe', 'Jane Doe', 'securepassword', NULL, 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
-('adminuser', 'Admin User', 'adminpass', NULL, 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
-('samsmith', 'Sam Smith', 'samspassword', NULL, 'samsmith@example.com', 'code monkey', 'active', 20, FALSE),
-('lindajones', 'Linda Jones', 'lindapass', 9, 'lindajones@example.com', 'noobie', 'active', 250, FALSE),
-('mikebrown', 'Mike Brown', 'mikepassword', NULL, 'mikebrown@example.com', '10x developer', 'active', 500, FALSE),
-('emilywhite', 'Emily White', 'emilypass', 10, 'emilywhite@example.com', 'code monkey', 'blocked', -15, FALSE),
-('davidjohnson', 'David Johnson', 'davidpass', NULL, 'davidjohnson@example.com', 'noobie', 'active', 80, FALSE),
-('sarahlee', 'Sarah Lee', 'sarahpassword', NULL, 'sarahlee@example.com', 'noobie', 'active', 30, FALSE),
-('alexmartin', 'Alex Martin', 'alexpass', 11, 'alexmartin@example.com', 'noobie', 'pending', 200, FALSE);
+('johndoe', 'John Doe', 'password123', 'johndoe@example.com', 'noobie', 'active', 0, FALSE),
+('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
+('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
+('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'active', 20, FALSE),
+('lindajones', 'Linda Jones', 'lindapass', 'lindajones@example.com', 'noobie', 'active', 250, FALSE),
+('mikebrown', 'Mike Brown', 'mikepassword', 'mikebrown@example.com', '10x developer', 'active', 500, FALSE),
+('emilywhite', 'Emily White', 'emilypass', 'emilywhite@example.com', 'code monkey', 'blocked', -15, FALSE),
+('davidjohnson', 'David Johnson', 'davidpass', 'davidjohnson@example.com', 'noobie', 'active', 80, FALSE),
+('sarahlee', 'Sarah Lee', 'sarahpassword', 'sarahlee@example.com', 'noobie', 'active', 30, FALSE),
+('alexmartin', 'Alex Martin', 'alexpass', 'alexmartin@example.com', 'noobie', 'pending', 200, FALSE);
 
 
---
--- Inserting tags
---
 INSERT INTO tag (name)
 VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
 
 
---
--- Inserting news_post
---
 INSERT INTO news_post (title, created_at, changed_at, content, for_followers, upvotes, downvotes, author_id)
 VALUES
 ('Breaking News in AI', NOW() - INTERVAL '7 days', NULL, 'Artificial Intelligence is transforming industries across the globe.', TRUE, 150, 3, 1),
@@ -60,9 +36,25 @@ VALUES
 ('Developments in 5G Technology', NOW(), NULL, '5G is set to become more prevalent, offering faster connectivity.', TRUE, 400, 6, 8);
 
 
---
--- Inserting comment
---
+INSERT INTO image (path, image_type, news_post_id, user_id)
+VALUES
+('/images/news/ai_news.jpg', 'PostTitle', 1, NULL),
+('/images/news/ai_image1.jpg', 'PostContent', 1, NULL),
+('/images/news/ai_image2.jpg', 'PostContent', 1, NULL),
+('/images/news/cloud_news.jpg', 'PostTitle', 2, NULL),
+('/images/news/python_tips.jpg', 'PostTitle', 3, NULL),
+('/images/news/python_image1.jpg', 'PostContent', 3, NULL),
+('/images/news/python_image2.jpg', 'PostContent', 3, NULL),
+('/images/news/cybersecurity_threats.jpg', 'PostTitle', 4, NULL),
+('/images/news/ml_breakthroughs.jpg', 'PostTitle', 5, NULL),
+('/images/news/health_tech.jpg', 'PostTitle', 6, NULL),
+('/images/news/quantum_computing.jpg', 'PostTitle', 7, NULL),
+('/images/news/5g_tech.jpg', 'PostTitle', 8, NULL),
+('/images/users/johndoe.jpg', 'Profile', NULL, 1),
+('/images/users/janedoe.jpg', 'Profile', NULL, 2),
+('/images/users/adminuser.jpg', 'Profile', NULL, 3);
+
+
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
 (NOW() - INTERVAL '5 days', 'This is great news!', 2, 1, NULL),
@@ -82,9 +74,6 @@ VALUES
 (NOW(), 'Following up on the discussion.', 6, NULL, 12);
 
 
---
--- Inserting vote
---
 INSERT INTO vote (created_at, vote_type, is_upvote, user_id, news_post_id, comment_id)
 VALUES
 (NOW() - INTERVAL '2 days', 'PostVote', TRUE,  3, 1, NULL),
@@ -104,9 +93,6 @@ VALUES
 (NOW(), 'CommentVote', FALSE, 7, NULL, 8);
 
 
---
--- Inserting notification
---
 INSERT INTO notification (is_viewed, created_at, notification_type, user_id, news_post_id, vote_id, follower_id, comment_id)
 VALUES
 (FALSE, NOW() - INTERVAL '1 days', 'PostNotification', 1, 1, NULL, NULL, NULL),
@@ -126,9 +112,6 @@ VALUES
 (FALSE, NOW(), 'CommentNotification', 5, NULL, NULL, NULL, 4);
 
 
---
--- Inserting report
---
 INSERT INTO report (created_at, description, report_type, reporter_id, news_post_id, comment_id, reported_user_id)
 VALUES
 (NOW() - INTERVAL '2 days', 'Inappropriate content in the news post.', 'PostReport', 2, 1, NULL, NULL),
@@ -143,9 +126,6 @@ VALUES
 (NOW(), 'Post contains unauthorized content.', 'PostReport', 1, 4, NULL, NULL);
 
 
---
--- Inserting tag
---
 INSERT INTO tag (name)
 VALUES
 ('Technology'),
@@ -165,9 +145,6 @@ VALUES
 ('History');
 
 
---
--- Inserting news_post_tag
---
 INSERT INTO news_post_tag (news_post_id, tag_id)
 VALUES
 (1, 9),
@@ -187,9 +164,6 @@ VALUES
 (8, 15);
 
 
---
--- Inserting tag_proposal
---
 INSERT INTO tag_proposal (description, is_resolved, proposer_id)
 VALUES
 ('Suggesting a new tag: Innovation', FALSE, 2),
@@ -204,9 +178,6 @@ VALUES
 ('Proposal for new tag: Culinary Arts', FALSE, 1);
 
 
---
--- Inserting unblock_appeal
---
 INSERT INTO unblock_appeal (description, is_resolved, user_id)
 VALUES
 ('I believe my account was blocked in error.', FALSE, 6),
@@ -216,9 +187,6 @@ VALUES
 ('Promise to adhere to rules, please unblock.', FALSE, 9);
 
 
---
--- Inserting follows
---
 INSERT INTO follows (follower_id, followed_id)
 VALUES
 (1, 2),
@@ -238,9 +206,6 @@ VALUES
 (5, 7);
 
 
---
--- Inserting user_tag_subscribes
---
 INSERT INTO user_tag_subscribes (user_id, tag_id)
 VALUES
 (1, 1),
@@ -260,9 +225,6 @@ VALUES
 (5, 15);
 
 
---
--- Inserting bookmarks
---
 INSERT INTO bookmarks (user_id, news_post_id)
 VALUES
 (1, 2),
