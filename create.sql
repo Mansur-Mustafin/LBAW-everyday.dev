@@ -54,7 +54,11 @@ CREATE TABLE image (
     path VARCHAR NOT NULL,
     image_type ImageType NOT NULL,
     news_post_id INTEGER REFERENCES news_post(id),
-    user_id INTEGER REFERENCES "user"(id)
+    user_id INTEGER REFERENCES "user"(id),
+    CHECK (
+        (image_type = 'Profile' AND user_id IS NOT NULL) OR
+        ((image_type = 'PostTitle' OR image_type = 'PostContent') AND news_post_id IS NOT NULL)
+    )
 );
 
 CREATE TABLE comment (
