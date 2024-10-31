@@ -13,7 +13,7 @@ SET search_path TO lbaw2441;
 -- Define enums
 --
 CREATE TYPE Ranking AS ENUM ('noobie', 'code monkey', 'spaghetti code chef', 'rock star', '10x developer', '404 error evader');
-CREATE TYPE UserStatus AS ENUM ('active', 'blocked', 'pending');
+CREATE TYPE UserStatus AS ENUM ('active', 'blocked', 'pending', 'deleted');
 CREATE TYPE VoteType AS ENUM ('PostVote', 'CommentVote');
 CREATE TYPE NotificationType AS ENUM ('PostNotification', 'VoteNotification', 'FollowNotification', 'CommentNotification');
 CREATE TYPE ReportType AS ENUM ('PostReport', 'UserReport', 'CommentReport');
@@ -24,10 +24,10 @@ CREATE TYPE ImageType AS ENUM ('Profile', 'PostTitle', 'PostContent');
 --
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
-    username VARCHAR NOT NULL UNIQUE,
-    public_name VARCHAR NOT NULL,
+    username VARCHAR(256) NOT NULL UNIQUE,
+    public_name VARCHAR(256) NOT NULL,
     password VARCHAR NOT NULL,
-    email VARCHAR NOT NULL UNIQUE,
+    email VARCHAR(256) NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     rank Ranking NOT NULL DEFAULT 'noobie',
     status UserStatus NOT NULL DEFAULT 'active',
@@ -79,7 +79,7 @@ CREATE TABLE vote (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     vote_type VoteType NOT NULL,
     is_upvote BOOLEAN NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES "user"(id),
+    user_id INTEGER NOT NULL REFERENCES "user"(id),     -- vote's author
     news_post_id INTEGER REFERENCES news_post(id),
     comment_id INTEGER REFERENCES comment(id),
     CHECK (
@@ -93,7 +93,7 @@ CREATE TABLE notification (
     is_viewed BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     notification_type NotificationType NOT NULL,
-    user_id INTEGER NOT NULL REFERENCES "user"(id),
+    user_id INTEGER NOT NULL REFERENCES "user"(id),     -- notified user
     news_post_id INTEGER REFERENCES news_post(id),
     vote_id INTEGER REFERENCES vote(id),
     follower_id INTEGER REFERENCES "user"(id),
@@ -127,7 +127,7 @@ CREATE TABLE report (
 
 CREATE TABLE tag (
     id SERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL UNIQUE
+    name VARCHAR(64) NOT NULL UNIQUE
 );
 
 CREATE TABLE news_post_tag (
@@ -151,8 +151,8 @@ CREATE TABLE unblock_appeal (
 );
 
 CREATE TABLE follows (
-    follower_id INTEGER NOT NULL REFERENCES "user"(id),
-    followed_id INTEGER NOT NULL REFERENCES "user"(id),
+    follower_id INTEGER NOT NULL REFERENCES "user"(id),     -- who follows
+    followed_id INTEGER NOT NULL REFERENCES "user"(id),     -- who is followed
     PRIMARY KEY (follower_id, followed_id),
     CHECK (follower_id <> followed_id)
 );
