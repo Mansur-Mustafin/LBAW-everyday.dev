@@ -196,6 +196,14 @@ CREATE UNIQUE INDEX unique_user_comment_vote
 ON vote (user_id, comment_id)
 WHERE vote_type = 'CommentVote';
 
+CREATE UNIQUE INDEX unique_follow_notification 
+ON notification (notification_type, user_id, follower_id)
+WHERE notification_type = 'FollowNotification';
+
+CREATE UNIQUE INDEX unique_post_vote_notification
+ON notification (notification_type, user_id, vote_id)
+WHERE notification_type = 'VoteNotification';
+
 CREATE UNIQUE INDEX unique_user_post_content 
 ON news_post (author_id, title, content);
 
@@ -266,3 +274,12 @@ CREATE TRIGGER news_comment_search_update
 
 CREATE INDEX idx_news_comment_search ON comment USING GIN (tsvectors);
 
+--
+-- Triggers
+--
+-- TODO
+
+--
+-- Transaction
+--
+-- TODO
