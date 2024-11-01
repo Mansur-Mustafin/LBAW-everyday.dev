@@ -51,7 +51,7 @@ CREATE TABLE news_post (
 
 CREATE TABLE image (
     id SERIAL PRIMARY KEY,
-    path VARCHAR NOT NULL,
+    path VARCHAR NOT NULL UNIQUE,
     image_type ImageType NOT NULL,
     news_post_id INTEGER REFERENCES news_post(id),
     user_id INTEGER REFERENCES "user"(id),
@@ -170,8 +170,99 @@ CREATE TABLE bookmarks (
 );
 
 --
--- Indexes
+-- Unique Indexes
 --
 CREATE UNIQUE INDEX unique_title_image_per_post
 ON image (news_post_id)
 WHERE image_type = 'PostTitle';
+
+CREATE UNIQUE INDEX unique_report_post
+ON report (reporter_id, news_post_id)
+WHERE report_type = 'PostReport';
+
+CREATE UNIQUE INDEX unique_report_comment
+ON report (reporter_id, comment_id)
+WHERE report_type = 'CommentReport';
+
+CREATE UNIQUE INDEX unique_report_user
+ON report (reporter_id, reported_user_id)
+WHERE report_type = 'UserReport';
+
+CREATE UNIQUE INDEX unique_user_post_vote
+ON vote (user_id, news_post_id)
+WHERE vote_type = 'PostVote';
+
+CREATE UNIQUE INDEX unique_user_comment_vote
+ON vote (user_id, comment_id)
+WHERE vote_type = 'CommentVote';
+
+CREATE UNIQUE INDEX unique_user_post_content 
+ON news_post (author_id, title, content);
+
+--
+-- Performance Indexes
+--
+
+CREATE INDEX idx_news_post_author_id ON news_post USING btree (author_id);
+
+CREATE INDEX idx_news_post_created_at ON news_post USING btree (created_at);
+
+CREATE INDEX idx_comments_news_post_id ON comment USING hash (news_post_id);
+
+--
+-- Full-Text Search Indexes
+--
+
+ALTER TABLE news_post
+ADD COLUMN tsvectors TSVECTOR;
+
+CREATE FUNCTION news_post_search_update() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+            setweight(to_tsvector('english', NEW.title), 'A') ||
+            setweight(to_tsvector('english', NEW.content), 'B')
+        );
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF (NEW.title <> OLD.title OR NEW.content <> OLD.content) THEN
+            NEW.tsvectors = (
+                setweight(to_tsvector('english', NEW.title), 'A') ||
+                setweight(to_tsvector('english', NEW.content), 'B')
+            );
+        END IF;
+    END IF;
+    RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER news_post_search_update
+    BEFORE INSERT OR UPDATE ON news_post
+    FOR EACH ROW
+    EXECUTE FUNCTION news_post_search_update();
+
+CREATE INDEX idx_news_post_search ON news_post USING GIN (tsvectors);
+
+
+ALTER TABLE comment
+ADD COLUMN tsvectors TSVECTOR;
+
+CREATE FUNCTION news_comment_search_update() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = to_tsvector('english', NEW.content);
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF (NEW.content <> OLD.content) THEN
+            NEW.tsvectors = to_tsvector('english', NEW.content);
+        END IF;
+    END IF;
+    RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER news_comment_search_update
+    BEFORE INSERT OR UPDATE ON comment
+    FOR EACH ROW
+    EXECUTE FUNCTION news_comment_search_update();
+
+CREATE INDEX idx_news_comment_search ON comment USING GIN (tsvectors);
+
