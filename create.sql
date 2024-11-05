@@ -65,6 +65,9 @@ CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     content TEXT NOT NULL,
+    is_omitted BOOLEAN NOT NULL DEFAULT FALSE,
+    upvotes INTEGER NOT NULL DEFAULT 0 CHECK (upvotes >= 0),
+    downvotes INTEGER NOT NULL DEFAULT 0 CHECK (downvotes >= 0),
     author_id INTEGER NOT NULL REFERENCES "user"(id),
     news_post_id INTEGER REFERENCES news_post(id),
     parent_comment_id INTEGER REFERENCES comment(id),
@@ -88,6 +91,8 @@ CREATE TABLE vote (
     )
 );
 
+-- if the vote is deleted or "undo-ed", the notification associated with it is deleted
+
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     is_viewed BOOLEAN NOT NULL DEFAULT FALSE,
@@ -95,7 +100,7 @@ CREATE TABLE notification (
     notification_type NotificationType NOT NULL,
     user_id INTEGER NOT NULL REFERENCES "user"(id),     -- notified user
     news_post_id INTEGER REFERENCES news_post(id),
-    vote_id INTEGER REFERENCES vote(id),
+    vote_id INTEGER REFERENCES vote(id) ON DELETE CASCADE,
     follower_id INTEGER REFERENCES "user"(id),
     comment_id INTEGER REFERENCES comment(id),
     CHECK (
@@ -130,9 +135,11 @@ CREATE TABLE tag (
     name VARCHAR(64) NOT NULL UNIQUE
 );
 
+-- delete news post tag if the tag is deleted
+
 CREATE TABLE news_post_tag (
     news_post_id INTEGER NOT NULL REFERENCES news_post(id),
-    tag_id INTEGER NOT NULL REFERENCES tag(id),
+    tag_id INTEGER NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
     PRIMARY KEY (news_post_id, tag_id)
 );
 
@@ -157,9 +164,11 @@ CREATE TABLE follows (
     CHECK (follower_id <> followed_id)
 );
 
+-- remove subcribe from tag if the tag is deleted
+
 CREATE TABLE user_tag_subscribes (
     user_id INTEGER NOT NULL REFERENCES "user"(id),
-    tag_id INTEGER NOT NULL REFERENCES tag(id),
+    tag_id INTEGER NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, tag_id)
 );
 
@@ -391,6 +400,28 @@ FOR EACH ROW
 EXECUTE FUNCTION prevent_post_deletion_with_references();
 
 -- Trigger 7
+CREATE OR REPLACE FUNCTION prevent_comment_deletion_with_references()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM comment WHERE parent_comment_id = OLD.id) THEN
+        RAISE EXCEPTION 'Cannot delete comment: It has associated replies.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM vote WHERE comment_id = OLD.id) THEN
+        RAISE EXCEPTION 'Cannot delete comment: It has associated votes.';
+    END IF;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_prevent_comment_deletion_with_references
+BEFORE DELETE ON comment
+FOR EACH ROW
+EXECUTE FUNCTION prevent_comment_deletion_with_references();
+
+
+-- Trigger 8
 CREATE OR REPLACE FUNCTION notify_on_comment() RETURNS TRIGGER AS $$
 DECLARE authorid INTEGER;
 BEGIN
@@ -419,7 +450,7 @@ AFTER INSERT ON comment
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_comment();
 
--- Trigger 8
+-- Trigger 9
 CREATE OR REPLACE FUNCTION notify_on_new_post()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -438,7 +469,7 @@ AFTER INSERT ON news_post
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_new_post();
 
--- Trigger 9 -- it works
+-- Trigger 10
 CREATE OR REPLACE FUNCTION notify_on_follow() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO notification ( notification_type, user_id, follower_id) 
@@ -453,7 +484,7 @@ AFTER INSERT ON follows
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_follow();
 
--- Trigger 10
+-- Trigger 11
 CREATE OR REPLACE FUNCTION notify_on_vote() RETURNS TRIGGER AS $$
 DECLARE
     authorid INTEGER;
@@ -482,7 +513,7 @@ FOR EACH ROW
 EXECUTE FUNCTION notify_on_vote();
 
 
--- Trigger 11
+-- Trigger 12
 CREATE OR REPLACE FUNCTION adjust_reputation_on_post_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -518,7 +549,7 @@ FOR EACH ROW
 EXECUTE FUNCTION adjust_reputation_on_post_vote();
 
 
--- Trigger 12
+-- Trigger 13
 CREATE OR REPLACE FUNCTION adjust_reputation_on_comment_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -555,25 +586,25 @@ EXECUTE FUNCTION adjust_reputation_on_comment_vote();
 
 
 
--- Trigger 13
-CREATE OR REPLACE FUNCTION update_reputation_on_post_removal()
+-- Trigger 14
+CREATE OR REPLACE FUNCTION update_reputation_on_post_omit()
 RETURNS TRIGGER AS $$
 BEGIN
     IF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
         UPDATE "user" SET reputation = reputation - 100 WHERE id = OLD.author_id;
-    ELSIF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
+    ELSIF (NEW.is_omitted = FALSE AND OLD.is_omitted = TRUE) THEN
         UPDATE "user" SET reputation = reputation + 100 WHERE id = OLD.author_id;
     END IF;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_reputation_post_removal
+CREATE TRIGGER trigger_reputation_post_omit
 AFTER UPDATE ON news_post
 FOR EACH ROW
-EXECUTE FUNCTION update_reputation_on_post_removal();
+EXECUTE FUNCTION update_reputation_on_post_omit();
 
--- Trigger 14
+-- Trigger 15
 CREATE OR REPLACE FUNCTION adjust_reputation_on_successful_report()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -596,7 +627,7 @@ FOR EACH ROW
 WHEN (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE)
 EXECUTE FUNCTION adjust_reputation_on_successful_report();
 
--- Trigger 15
+-- Trigger 16
 CREATE OR REPLACE FUNCTION adjust_post_votes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -623,3 +654,31 @@ CREATE TRIGGER trigger_adjust_post_votes
 AFTER INSERT OR DELETE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_post_votes();
+
+-- Trigger 17
+CREATE OR REPLACE FUNCTION adjust_comment_votes()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' AND NEW.vote_type = 'PostVote' THEN
+        IF NEW.is_upvote THEN
+            UPDATE comment SET upvotes = upvotes + 1 WHERE id = NEW.comment_id;
+        ELSE
+            UPDATE comment SET downvotes = downvotes + 1 WHERE id = NEW.comment_id;
+        END IF;
+    
+    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'PostVote' THEN
+        IF OLD.is_upvote THEN
+            UPDATE comment SET upvotes = upvotes - 1 WHERE id = OLD.comment_id;
+        ELSE
+            UPDATE comment SET downvotes = downvotes - 1 WHERE id = OLD.comment_id;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_adjust_comment_votes
+AFTER INSERT OR DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION adjust_comment_votes();
