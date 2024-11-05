@@ -623,10 +623,3 @@ CREATE TRIGGER trigger_adjust_post_votes
 AFTER INSERT OR DELETE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_post_votes();
-
-
-
---
--- Transaction
---
--- TODO
