@@ -91,8 +91,6 @@ CREATE TABLE vote (
     )
 );
 
--- if the vote is deleted or "undo-ed", the notification associated with it is deleted
-
 CREATE TABLE notification (
     id SERIAL PRIMARY KEY,
     is_viewed BOOLEAN NOT NULL DEFAULT FALSE,
@@ -135,8 +133,6 @@ CREATE TABLE tag (
     name VARCHAR(64) NOT NULL UNIQUE
 );
 
--- delete news post tag if the tag is deleted
-
 CREATE TABLE news_post_tag (
     news_post_id INTEGER NOT NULL REFERENCES news_post(id),
     tag_id INTEGER NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
@@ -163,8 +159,6 @@ CREATE TABLE follows (
     PRIMARY KEY (follower_id, followed_id),
     CHECK (follower_id <> followed_id)
 );
-
--- remove subcribe from tag if the tag is deleted
 
 CREATE TABLE user_tag_subscribes (
     user_id INTEGER NOT NULL REFERENCES "user"(id),
@@ -204,14 +198,6 @@ WHERE vote_type = 'PostVote';
 CREATE UNIQUE INDEX unique_user_comment_vote
 ON vote (user_id, comment_id)
 WHERE vote_type = 'CommentVote';
-
-CREATE UNIQUE INDEX unique_follow_notification 
-ON notification (notification_type, user_id, follower_id)
-WHERE notification_type = 'FollowNotification';
-
-CREATE UNIQUE INDEX unique_post_vote_notification
-ON notification (notification_type, user_id, vote_id)
-WHERE notification_type = 'VoteNotification';
 
 CREATE UNIQUE INDEX unique_user_post_content 
 ON news_post (author_id, title, content);
@@ -386,7 +372,7 @@ BEGIN
         RAISE EXCEPTION 'Cannot delete post: It has associated comments.';
     END IF;
 
-    IF EXISTS (SELECT 1 FROM vote WHERE news_post_id = OLD.id) THEN
+    IF OLD.upvotes > 0 OR OLD.downvotes > 0 THEN
         RAISE EXCEPTION 'Cannot delete post: It has associated votes.';
     END IF;
 
@@ -407,7 +393,7 @@ BEGIN
         RAISE EXCEPTION 'Cannot delete comment: It has associated replies.';
     END IF;
 
-    IF EXISTS (SELECT 1 FROM vote WHERE comment_id = OLD.id) THEN
+    IF OLD.upvotes > 0 OR OLD.downvotes > 0 THEN
         RAISE EXCEPTION 'Cannot delete comment: It has associated votes.';
     END IF;
 
@@ -450,6 +436,7 @@ AFTER INSERT ON comment
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_comment();
 
+
 -- Trigger 9
 CREATE OR REPLACE FUNCTION notify_on_new_post()
 RETURNS TRIGGER AS $$
@@ -469,6 +456,7 @@ AFTER INSERT ON news_post
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_new_post();
 
+
 -- Trigger 10
 CREATE OR REPLACE FUNCTION notify_on_follow() RETURNS TRIGGER AS $$
 BEGIN
@@ -483,6 +471,7 @@ CREATE TRIGGER trigger_notify_on_follow
 AFTER INSERT ON follows
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_follow();
+
 
 -- Trigger 11
 CREATE OR REPLACE FUNCTION notify_on_vote() RETURNS TRIGGER AS $$
@@ -585,7 +574,6 @@ FOR EACH ROW
 EXECUTE FUNCTION adjust_reputation_on_comment_vote();
 
 
-
 -- Trigger 14
 CREATE OR REPLACE FUNCTION update_reputation_on_post_omit()
 RETURNS TRIGGER AS $$
@@ -603,6 +591,7 @@ CREATE TRIGGER trigger_reputation_post_omit
 AFTER UPDATE ON news_post
 FOR EACH ROW
 EXECUTE FUNCTION update_reputation_on_post_omit();
+
 
 -- Trigger 15
 CREATE OR REPLACE FUNCTION adjust_reputation_on_successful_report()
@@ -626,6 +615,7 @@ AFTER UPDATE OF is_omitted ON news_post
 FOR EACH ROW
 WHEN (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE)
 EXECUTE FUNCTION adjust_reputation_on_successful_report();
+
 
 -- Trigger 16
 CREATE OR REPLACE FUNCTION adjust_post_votes()
@@ -654,6 +644,7 @@ CREATE TRIGGER trigger_adjust_post_votes
 AFTER INSERT OR DELETE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_post_votes();
+
 
 -- Trigger 17
 CREATE OR REPLACE FUNCTION adjust_comment_votes()
