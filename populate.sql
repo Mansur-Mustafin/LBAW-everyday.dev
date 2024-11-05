@@ -93,24 +93,6 @@ VALUES
 (NOW(), 'CommentVote', FALSE, 7, NULL, 8);
 
 
-INSERT INTO notification (is_viewed, created_at, notification_type, user_id, news_post_id, vote_id, follower_id, comment_id)
-VALUES
-(FALSE, NOW() - INTERVAL '1 days', 'PostNotification', 1, 1, NULL, NULL, NULL),
-(FALSE, NOW() - INTERVAL '12 hours', 'VoteNotification', 2, NULL, 1, NULL, NULL),
-(FALSE, NOW() - INTERVAL '6 hours', 'CommentNotification', 3, NULL, NULL, NULL, 1),
-(FALSE, NOW() - INTERVAL '3 hours', 'FollowNotification', 4, NULL, NULL, 2, NULL),
-(FALSE, NOW() - INTERVAL '1 hours', 'PostNotification', 5, 2, NULL, NULL, NULL),
-(FALSE, NOW(), 'VoteNotification', 6, NULL, 2, NULL, NULL),
-(FALSE, NOW(), 'CommentNotification', 7, NULL, NULL, NULL, 2),
-(FALSE, NOW(), 'FollowNotification', 8, NULL, NULL, 3, NULL),
-(FALSE, NOW(), 'PostNotification', 9, 3, NULL, NULL, NULL),
-(FALSE, NOW(), 'VoteNotification', 10, NULL, 3, NULL, NULL),
-(FALSE, NOW(), 'CommentNotification', 1, NULL, NULL, NULL, 3),
-(FALSE, NOW(), 'FollowNotification', 2, NULL, NULL, 4, NULL),
-(FALSE, NOW(), 'PostNotification', 3, 4, NULL, NULL, NULL),
-(FALSE, NOW(), 'VoteNotification', 4, NULL, 4, NULL, NULL),
-(FALSE, NOW(), 'CommentNotification', 5, NULL, NULL, NULL, 4);
-
 
 INSERT INTO report (created_at, description, report_type, reporter_id, news_post_id, comment_id, reported_user_id)
 VALUES

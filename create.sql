@@ -277,7 +277,354 @@ CREATE INDEX idx_news_comment_search ON comment USING GIN (tsvectors);
 --
 -- Triggers
 --
--- TODO
+
+-- Trigger 1
+CREATE OR REPLACE FUNCTION update_changed_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.content <> OLD.content OR NEW.title <> OLD.title THEN
+        NEW.changed_at := CURRENT_TIMESTAMP;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_changed_at
+BEFORE UPDATE ON news_post
+FOR EACH ROW
+EXECUTE FUNCTION update_changed_at();
+
+-- Trigger 2
+CREATE OR REPLACE FUNCTION update_user_ranking()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.reputation <= 999 THEN
+        NEW.rank := 'noobie';
+    ELSIF NEW.reputation BETWEEN 1000 AND 1999 THEN
+        NEW.rank := 'code monkey';
+    ELSIF NEW.reputation BETWEEN 2000 AND 2999 THEN
+        NEW.rank := 'spaghetti code chef';
+    ELSIF NEW.reputation BETWEEN 3000 AND 3999 THEN
+        NEW.rank := 'rock star';
+    ELSIF NEW.reputation BETWEEN 4000 AND 4999 THEN
+        NEW.rank := '10x developer';
+    ELSE
+        NEW.rank := '404 error evader';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_user_ranking
+BEFORE UPDATE OF reputation ON "user"
+FOR EACH ROW
+EXECUTE FUNCTION update_user_ranking();
+
+-- Trigger 3
+CREATE OR REPLACE FUNCTION limit_daily_posts()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (SELECT COUNT(*) FROM news_post WHERE author_id = NEW.author_id AND created_at::DATE = CURRENT_DATE) >= 10  THEN
+        RAISE EXCEPTION 'User cannot create more than 10 posts per day.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_limit_daily_posts
+BEFORE INSERT ON news_post
+FOR EACH ROW
+EXECUTE FUNCTION limit_daily_posts();
+
+-- Trigger 4
+CREATE OR REPLACE FUNCTION omit_post_after_reports()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (SELECT COUNT(*) FROM report WHERE news_post_id = NEW.news_post_id) >= 10 THEN
+        UPDATE news_post SET is_omitted = TRUE WHERE id = NEW.news_post_id AND is_omitted = FALSE;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_omit_post_after_reports
+AFTER INSERT ON report
+FOR EACH ROW
+EXECUTE FUNCTION omit_post_after_reports();
+
+-- Trigger 5
+CREATE OR REPLACE FUNCTION limit_daily_reports()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (SELECT COUNT(*) FROM report WHERE reporter_id = NEW.reporter_id AND created_at::DATE = CURRENT_DATE) >= 3 THEN
+        RAISE EXCEPTION 'User cannot make more than 3 reports per day.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_limit_daily_reports
+BEFORE INSERT ON report
+FOR EACH ROW
+EXECUTE FUNCTION limit_daily_reports();
+
+-- Trigger 6
+CREATE OR REPLACE FUNCTION prevent_post_deletion_with_references()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM comment WHERE news_post_id = OLD.id) THEN
+        RAISE EXCEPTION 'Cannot delete post: It has associated comments.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM vote WHERE news_post_id = OLD.id) THEN
+        RAISE EXCEPTION 'Cannot delete post: It has associated votes.';
+    END IF;
+
+    RETURN OLD;  
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_prevent_post_deletion_with_references
+BEFORE DELETE ON news_post
+FOR EACH ROW
+EXECUTE FUNCTION prevent_post_deletion_with_references();
+
+-- Trigger 7
+CREATE OR REPLACE FUNCTION notify_on_comment() RETURNS TRIGGER AS $$
+DECLARE authorid INTEGER;
+BEGIN
+
+    IF NEW.news_post_id IS NOT NULL THEN 
+        SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
+        IF authorid <> NEW.author_id THEN
+            INSERT INTO notification (notification_type, user_id, comment_id) 
+            VALUES ('CommentNotification', authorid, NEW.id);
+        END IF;
+    
+    ELSEIF NEW.parent_comment_id IS NOT NULL THEN
+        SELECT author_id INTO authorid FROM comment WHERE id = NEW.parent_comment_id;
+        IF authorid <> NEW.author_id THEN
+            INSERT INTO notification (notification_type, user_id, comment_id) 
+            VALUES ('CommentNotification', authorid, NEW.id);
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_notify_on_comment
+AFTER INSERT ON comment
+FOR EACH ROW
+EXECUTE FUNCTION notify_on_comment();
+
+-- Trigger 8
+CREATE OR REPLACE FUNCTION notify_on_new_post()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Insert a notification for each follower of the post author
+    INSERT INTO notification (notification_type, user_id, news_post_id)
+    SELECT 'PostNotification', follower_id, NEW.id
+    FROM follows
+    WHERE followed_id = NEW.author_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_notify_on_new_post
+AFTER INSERT ON news_post
+FOR EACH ROW
+EXECUTE FUNCTION notify_on_new_post();
+
+-- Trigger 9 -- it works
+CREATE OR REPLACE FUNCTION notify_on_follow() RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification ( notification_type, user_id, follower_id) 
+    VALUES ('FollowNotification', NEW.followed_id, NEW.follower_id);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_notify_on_follow
+AFTER INSERT ON follows
+FOR EACH ROW
+EXECUTE FUNCTION notify_on_follow();
+
+-- Trigger 10
+CREATE OR REPLACE FUNCTION notify_on_vote() RETURNS TRIGGER AS $$
+DECLARE
+    authorid INTEGER;
+BEGIN
+
+    IF NEW.vote_type = 'PostVote' THEN
+        SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
+        
+        INSERT INTO notification (notification_type, user_id, vote_id) 
+        VALUES ('VoteNotification', authorid, NEW.id);
+
+    ELSIF NEW.vote_type = 'CommentVote' THEN
+        SELECT author_id INTO authorid FROM comment WHERE id = NEW.comment_id;
+        
+        INSERT INTO notification (notification_type, user_id, vote_id) 
+        VALUES ('VoteNotification', authorid, NEW.id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_notify_on_vote
+AFTER INSERT ON vote
+FOR EACH ROW
+EXECUTE FUNCTION notify_on_vote();
+
+
+-- Trigger 11
+CREATE OR REPLACE FUNCTION adjust_reputation_on_post_vote()
+RETURNS TRIGGER AS $$
+DECLARE
+    post_author_id INTEGER;
+    reputation_change INTEGER;
+BEGIN
+    IF TG_OP = 'INSERT' AND NEW.vote_type = 'PostVote' THEN
+        IF NEW.is_upvote THEN
+            reputation_change := 10;
+        ELSE
+            reputation_change := -10;
+        END IF;
+        SELECT author_id INTO post_author_id FROM news_post WHERE id = NEW.news_post_id;
+        UPDATE "user" SET reputation = reputation + reputation_change WHERE id = post_author_id;
+
+    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'PostVote' THEN
+        IF OLD.is_upvote THEN
+            reputation_change := -10;
+        ELSE
+            reputation_change := 10;
+        END IF;
+        SELECT author_id INTO post_author_id FROM news_post WHERE id = OLD.news_post_id;
+        UPDATE "user" SET reputation = reputation + reputation_change WHERE id = post_author_id;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_adjust_reputation_on_post_vote
+AFTER INSERT OR DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION adjust_reputation_on_post_vote();
+
+
+-- Trigger 12
+CREATE OR REPLACE FUNCTION adjust_reputation_on_comment_vote()
+RETURNS TRIGGER AS $$
+DECLARE
+    comment_author_id INTEGER;
+    reputation_change INTEGER;
+BEGIN
+    IF TG_OP = 'INSERT' AND NEW.vote_type = 'CommentVote' THEN
+        IF NEW.is_upvote THEN
+            reputation_change := 50;
+        ELSE
+            reputation_change := -50;
+        END IF;
+        SELECT author_id INTO comment_author_id FROM comment WHERE id = NEW.comment_id;
+        UPDATE "user" SET reputation = reputation + reputation_change WHERE id = comment_author_id;
+
+    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'CommentVote' THEN
+        IF OLD.is_upvote THEN
+            reputation_change := -50;
+        ELSE
+            reputation_change := 50;
+        END IF;
+        SELECT author_id INTO comment_author_id FROM comment WHERE id = OLD.comment_id;
+        UPDATE "user" SET reputation = reputation + reputation_change WHERE id = comment_author_id;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_adjust_reputation_on_comment_vote
+AFTER INSERT OR DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION adjust_reputation_on_comment_vote();
+
+
+
+-- Trigger 13
+CREATE OR REPLACE FUNCTION update_reputation_on_post_removal()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
+        UPDATE "user" SET reputation = reputation - 100 WHERE id = OLD.author_id;
+    ELSEIF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
+        UPDATE "user" SET reputation = reputation + 100 WHERE id = OLD.author_id;
+    END IF;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_reputation_post_removal
+AFTER UPDATE ON news_post
+FOR EACH ROW
+EXECUTE FUNCTION update_reputation_on_post_removal();
+
+-- Trigger 14
+CREATE OR REPLACE FUNCTION adjust_reputation_on_successful_report()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE "user"
+    SET reputation = reputation + 100
+    FROM (
+        SELECT reporter_id
+        FROM report
+        WHERE news_post_id = NEW.id AND report_type = 'PostReport'
+    ) AS unique_reporters
+    WHERE "user".id = unique_reporters.reporter_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_adjust_reputation_on_successful_report
+AFTER UPDATE OF is_omitted ON news_post
+FOR EACH ROW
+WHEN (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE)
+EXECUTE FUNCTION adjust_reputation_on_successful_report();
+
+-- Trigger 15
+CREATE OR REPLACE FUNCTION adjust_post_votes()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' AND NEW.vote_type = 'PostVote' THEN
+        IF NEW.is_upvote THEN
+            UPDATE news_post SET upvotes = upvotes + 1 WHERE id = NEW.news_post_id;
+        ELSE
+            UPDATE news_post SET downvotes = downvotes + 1 WHERE id = NEW.news_post_id;
+        END IF;
+    
+    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'PostVote' THEN
+        IF OLD.is_upvote THEN
+            UPDATE news_post SET upvotes = upvotes - 1 WHERE id = OLD.news_post_id;
+        ELSE
+            UPDATE news_post SET downvotes = downvotes - 1 WHERE id = OLD.news_post_id;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_adjust_post_votes
+AFTER INSERT OR DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION adjust_post_votes();
+
+
 
 --
 -- Transaction
