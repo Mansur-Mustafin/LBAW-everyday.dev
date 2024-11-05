@@ -124,7 +124,7 @@ CREATE TABLE report (
             (report_type = 'CommentReport' AND comment_id IS NOT NULL) OR
             (report_type = 'UserReport' AND reported_user_id IS NOT NULL)
         ) AND
-        (reporter_id <> reported_user_id)
+        (report_type <> 'UserReport' OR reporter_id <> reported_user_id)
     )
 );
 
@@ -588,8 +588,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_reputation_post_omit
-AFTER UPDATE ON news_post
+AFTER UPDATE OF is_omitted ON news_post
 FOR EACH ROW
+WHEN (OLD.is_omitted IS DISTINCT FROM NEW.is_omitted)
 EXECUTE FUNCTION update_reputation_on_post_omit();
 
 
@@ -650,14 +651,14 @@ EXECUTE FUNCTION adjust_post_votes();
 CREATE OR REPLACE FUNCTION adjust_comment_votes()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF TG_OP = 'INSERT' AND NEW.vote_type = 'PostVote' THEN
+    IF TG_OP = 'INSERT' AND NEW.vote_type = 'CommentVote' THEN
         IF NEW.is_upvote THEN
             UPDATE comment SET upvotes = upvotes + 1 WHERE id = NEW.comment_id;
         ELSE
             UPDATE comment SET downvotes = downvotes + 1 WHERE id = NEW.comment_id;
         END IF;
     
-    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'PostVote' THEN
+    ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'CommentVote' THEN
         IF OLD.is_upvote THEN
             UPDATE comment SET upvotes = upvotes - 1 WHERE id = OLD.comment_id;
         ELSE
