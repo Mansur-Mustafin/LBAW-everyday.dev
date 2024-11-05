@@ -402,7 +402,7 @@ BEGIN
             VALUES ('CommentNotification', authorid, NEW.id);
         END IF;
     
-    ELSEIF NEW.parent_comment_id IS NOT NULL THEN
+    ELSIF NEW.parent_comment_id IS NOT NULL THEN
         SELECT author_id INTO authorid FROM comment WHERE id = NEW.parent_comment_id;
         IF authorid <> NEW.author_id THEN
             INSERT INTO notification (notification_type, user_id, comment_id) 
@@ -561,7 +561,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
         UPDATE "user" SET reputation = reputation - 100 WHERE id = OLD.author_id;
-    ELSEIF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
+    ELSIF (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE) THEN
         UPDATE "user" SET reputation = reputation + 100 WHERE id = OLD.author_id;
     END IF;
     RETURN OLD;
