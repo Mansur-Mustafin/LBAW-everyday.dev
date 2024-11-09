@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -19,8 +20,15 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
+// Redirect root to /home
+Route::redirect('/', '/home');
+
+
 // Home
-Route::redirect('/', '/login');
+Route::controller(NewsController::class)->group(function () {
+    Route::get('/home', 'index')->name('home');
+});
+
 
 // Cards
 Route::controller(CardController::class)->group(function () {
