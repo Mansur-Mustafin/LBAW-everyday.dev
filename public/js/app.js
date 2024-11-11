@@ -137,45 +137,5 @@ function addEventListeners() {
     new_card.querySelector('[type=text]').focus();
   }
   
-  function createCard(card) {
-    let new_card = document.createElement('article');
-    new_card.classList.add('card');
-    new_card.setAttribute('data-id', card.id);
-    new_card.innerHTML = `
-  
-    <header>
-      <h2><a href="cards/${card.id}">${card.name}</a></h2>
-      <a href="#" class="delete">&#10761;</a>
-    </header>
-    <ul></ul>
-    <form class="new_item">
-      <input name="description" type="text">
-    </form>`;
-  
-    let creator = new_card.querySelector('form.new_item');
-    creator.addEventListener('submit', sendCreateItemRequest);
-  
-    let deleter = new_card.querySelector('header a.delete');
-    deleter.addEventListener('click', sendDeleteCardRequest);
-  
-    return new_card;
-  }
-  
-  function createItem(item) {
-    let new_item = document.createElement('li');
-    new_item.classList.add('item');
-    new_item.setAttribute('data-id', item.id);
-    new_item.innerHTML = `
-    <label>
-      <input type="checkbox"> <span>${item.description}</span><a href="#" class="delete">&#10761;</a>
-    </label>
-    `;
-  
-    new_item.querySelector('input').addEventListener('change', sendItemUpdateRequest);
-    new_item.querySelector('a.delete').addEventListener('click', sendDeleteItemRequest);
-  
-    return new_item;
-  }
-  
   addEventListeners();
   

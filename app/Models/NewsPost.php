@@ -6,6 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
+/**
+ * App\Models\NewsPost
+ *
+ * @property-read \App\Models\User|null $author
+ * @property-read mixed $tag_names
+ * @property-read mixed $time_ago
+ * @property-read mixed $title_image_path
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
+ * @property-read \App\Models\Image|null $titleImage
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsPost newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsPost newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NewsPost query()
+ * @mixin \Eloquent
+ */
 class NewsPost extends Model
 {
     use HasFactory;
