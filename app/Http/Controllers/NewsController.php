@@ -14,7 +14,7 @@ class NewsController extends Controller
     {
         $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
 
-        return view('home', compact('newsPosts'));
+        return view('pages.news', compact('newsPosts'));
     }
 
     public function showCreationForm()
