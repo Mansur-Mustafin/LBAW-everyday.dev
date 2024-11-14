@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,4 +27,13 @@ class User extends Authenticatable
     protected $fillable = [
         'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
     ];
+
+    public function getProfileImage() {
+        return FileController::get('profile', $this->id);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'author_id');
+    }
 }

@@ -53,7 +53,7 @@ CREATE TABLE image (
     id SERIAL PRIMARY KEY,
     path VARCHAR NOT NULL UNIQUE,
     image_type ImageType NOT NULL,
-    news_post_id INTEGER REFERENCES news_post(id),
+    news_post_id INTEGER REFERENCES news_post(id) ON DELETE CASCADE,
     user_id INTEGER REFERENCES "user"(id),
     CHECK (
         (image_type = 'Profile' AND user_id IS NOT NULL) OR
@@ -97,7 +97,7 @@ CREATE TABLE notification (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
     notification_type NotificationType NOT NULL,
     user_id INTEGER NOT NULL REFERENCES "user"(id),     -- notified user
-    news_post_id INTEGER REFERENCES news_post(id),
+    news_post_id INTEGER REFERENCES news_post(id) ON DELETE CASCADE,
     vote_id INTEGER REFERENCES vote(id) ON DELETE CASCADE,
     follower_id INTEGER REFERENCES "user"(id),
     comment_id INTEGER REFERENCES comment(id),
