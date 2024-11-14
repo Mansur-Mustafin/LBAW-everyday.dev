@@ -16,4 +16,10 @@ class UserController extends Controller
     {
         return view('pages.user', ['user' => $user]);
     }
+
+    public function showAdmin()
+    {
+        $users = User::get();
+        return view('pages.admin',['users'=> $users]);
+    }
 }
