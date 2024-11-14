@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->tags()->pluck('name')->toArray();
     }
+
+    public function isAdmin() : bool
+    {
+        return $this->is_admin != null;
+    }
 }
