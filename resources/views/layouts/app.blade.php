@@ -23,33 +23,13 @@
 
 <body class="bg-background text-white">
     <main class="flex flex-col h-screen">
-        <header class="py-3 px-5 flex justify-between items-center border-b border-1 border-gray-700">
-            <div>
-                <div>
-                    <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
-                    @if (!Auth::check())
-                        <a class="button" href="{{ route('login') }}">Login</a>
-                        <a class="button" href="{{ route('register') }}">Register</a>
-                    @endif
-                </div>
 
-                @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a>
-                    <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a>
-                @endif
-            </div>
+        @include('layouts.header')
 
-            @if (Auth::check())
-                <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('create') }}">
-                    New post
-                </a>
-            @endif
-        </header>
         <div class="flex flex-grow">
-            <section class="border-r border-solid border-gray-700 w-64">
-                <div>
-                </div>
-            </section>
+
+            @include('layouts.aside')
+
             <section id="content" class="w-full h-full">
                 @yield('content')
             </section>
