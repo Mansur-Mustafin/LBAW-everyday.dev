@@ -12,17 +12,12 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <<<<<<< HEAD @vite('resources/css/app.css')
-        @vite('resources/js/app.js')
-        =======
-        <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <script src="https://cdn.tailwindcss.com"></script>
-        >>>>>>> be11643 (added create/delete posts)
+    @vite('resources/css/app.css')
 
-        <script type="text/javascript">
-            // Fix for Firefox autofocus CSS bug
-            // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-        </script>
+    <script type="text/javascript">
+        // Fix for Firefox autofocus CSS bug
+        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
+    </script>
 </head>
 
 <body class="bg-background text-white">
