@@ -49,7 +49,7 @@ Route::controller(NewsController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/me', 'me')->middleware('auth');
     Route::get('/users/{user}', 'show');
+    Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
+    Route::post('/file/upload', [FileController::class, 'upload']);
+    Route::get('/admin','showAdmin')->middleware('admin');
 });
-
-Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
-Route::post('/file/upload', [FileController::class, 'upload']);
