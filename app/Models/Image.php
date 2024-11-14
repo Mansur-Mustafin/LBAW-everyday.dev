@@ -18,6 +18,7 @@ class Image extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     const TYPE_PROFILE = 'Profile';
     const TYPE_POST_TITLE = 'PostTitle';
     const TYPE_POST_CONTENT = 'PostContent';
