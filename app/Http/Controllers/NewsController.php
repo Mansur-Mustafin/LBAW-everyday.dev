@@ -24,4 +24,9 @@ class NewsController extends Controller
 
         return view('pages.post', ['post' => $post]);
     }
+
+    public function create()
+    {
+        return view('pages.create');
+    }
 }
