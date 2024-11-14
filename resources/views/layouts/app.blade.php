@@ -36,16 +36,4 @@
     </main>
 </body>
 
-@if (Auth::check())
-    <a class="button" href="{{ url('/logout') }}"> Logout </a>
-    <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a>
-    <a class="button" href="{{ url('/news/create-post') }}">New Post</a>
-@endif
-</header>
-<section id="content">
-    @yield('content')
-</section>
-</main>
-</body>
-
 </html>
