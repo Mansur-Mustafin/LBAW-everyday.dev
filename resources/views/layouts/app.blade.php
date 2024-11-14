@@ -12,13 +12,17 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
+    <<<<<<< HEAD @vite('resources/css/app.css')
+        @vite('resources/js/app.js')
+        =======
+        <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+        >>>>>>> be11643 (added create/delete posts)
 
-    <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-    </script>
+        <script type="text/javascript">
+            // Fix for Firefox autofocus CSS bug
+            // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
+        </script>
 </head>
 
 <body class="bg-background text-white">
@@ -35,6 +39,18 @@
             </section>
         </div>
     </main>
+</body>
+
+@if (Auth::check())
+    <a class="button" href="{{ url('/logout') }}"> Logout </a>
+    <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a>
+    <a class="button" href="{{ url('/news/create-post') }}">New Post</a>
+@endif
+</header>
+<section id="content">
+    @yield('content')
+</section>
+</main>
 </body>
 
 </html>
