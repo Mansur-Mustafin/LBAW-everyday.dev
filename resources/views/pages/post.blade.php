@@ -22,6 +22,17 @@
                 <h2 class="text-lg font-semibold">Content</h2>
                 <p>{{ $post->content }}</p>
             </div>
+
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <img src="/{{ $post->title_image_path }}" alt="" class="w-full h-48 object-cover mb-2">
+            </div>
         </div>
+        @if (Auth::user()->id == $post->author_id)
+            <form method="POST" action="/news/{{ $post->id }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Delete post</button>
+            </form>
+        @endif
     </div>
 @endsection

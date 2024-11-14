@@ -27,6 +27,7 @@ class NewsPost extends Model
 
     protected $table = 'news_post';
 
+    public const UPDATED_AT = null;
     protected $fillable = [
         'title',
         'content',
@@ -67,5 +68,10 @@ class NewsPost extends Model
     public function getTimeAgoAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
