@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +11,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Styles -->
-    <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite('resources/css/app.css')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
@@ -21,26 +20,28 @@
     <script type="text/javascript" src={{ url('js/app.js') }} defer>
     </script>
 </head>
+
 <body class="bg-black text-white">
-<main>
-    <header class="p-10">
+    <main>
+        <header class="p-10">
 
-        <div>
-            <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
-            @if (!Auth::check())
-                <a class="button" href="{{ route('login') }}">Login</a>
-                <a class="button" href="{{ route('register') }}">Register</a>
+            <div>
+                <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+                @if (!Auth::check())
+                    <a class="button" href="{{ route('login') }}">Login</a>
+                    <a class="button" href="{{ route('register') }}">Register</a>
+                @endif
+            </div>
+
+            @if (Auth::check())
+                <a class="button" href="{{ url('/logout') }}"> Logout </a>
+                <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a>
             @endif
-        </div>
-
-        @if (Auth::check())
-            <a class="button" href="{{ url('/logout') }}"> Logout </a>
-            <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a> 
-        @endif
-    </header>
-    <section id="content">
-        @yield('content')
-    </section>
-</main>
+        </header>
+        <section id="content">
+            @yield('content')
+        </section>
+    </main>
 </body>
+
 </html>
