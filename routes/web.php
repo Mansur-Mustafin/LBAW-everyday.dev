@@ -38,6 +38,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
+    Route::get('/create', 'create')->middleware('auth')->name('create');
 });
 
 Route::middleware('auth')->controller(UserController::class)->group(function () {

@@ -5,7 +5,12 @@ export default {
     "./resources/**/*.js",
     "./resources/**/*.vue",],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        input: '#1b1f24',
+        background: '#0f1217',
+      }
+    },
   },
   plugins: [],
 }
