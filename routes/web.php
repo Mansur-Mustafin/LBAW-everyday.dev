@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -19,28 +19,8 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-// Home
-Route::redirect('/', '/login');
-
-// Cards
-Route::controller(CardController::class)->group(function () {
-    Route::get('/cards', 'list')->name('cards');
-    Route::get('/cards/{id}', 'show');
-});
-
-
-// API
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
-
-Route::controller(ItemController::class)->group(function () {
-    Route::put('/api/cards/{card_id}', 'create');
-    Route::post('/api/item/{id}', 'update');
-    Route::delete('/api/item/{id}', 'delete');
-});
-
+// Redirect root to /home
+Route::redirect('/', '/home');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -52,4 +32,15 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+});
+
+// Home
+Route::controller(NewsController::class)->group(function () {
+    Route::get('/home', 'index')->name('home');
+    Route::get('/news/{news_post}', 'show')->middleware('auth');
+});
+
+Route::middleware('auth')->controller(UserController::class)->group(function () {
+    Route::get('/me', 'me');
+    Route::get('/users/{user}', 'show');
 });
