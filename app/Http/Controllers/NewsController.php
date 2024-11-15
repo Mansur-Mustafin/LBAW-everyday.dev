@@ -98,3 +98,4 @@ class NewsController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 }
+

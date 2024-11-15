@@ -134,7 +134,7 @@ CREATE TABLE tag (
 );
 
 CREATE TABLE news_post_tag (
-    news_post_id INTEGER NOT NULL REFERENCES news_post(id),
+    news_post_id INTEGER NOT NULL REFERENCES news_post(id) ON DELETE CASCADE,
     tag_id INTEGER NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
     PRIMARY KEY (news_post_id, tag_id)
 );
