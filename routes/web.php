@@ -38,7 +38,7 @@ Route::controller(RegisterController::class)->group(function () {
 // News
 Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
-    Route::get('/news/create-post', 'showCreationForm')->name('create');
+    Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
     Route::post('/news', 'store');
     Route::put('/news/{news_post}', 'store');
