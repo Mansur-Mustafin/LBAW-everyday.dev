@@ -28,10 +28,10 @@
             </div>
         </div>
         @if (Auth::user()->id == $post->author_id)
-            <form method="POST" action="/news/{{ $post->id }}">
+            <form method="POST" action="/news/{{ $post->id }}" class="mt-5">
                 @csrf
                 @method('DELETE')
-                <button type="submit">Delete post</button>
+                <button class="text-input bg-white font-bold rounded-3xl px-6 py-2 self-end" type="submit">Delete post</button>
             </form>
         @endif
     </div>
