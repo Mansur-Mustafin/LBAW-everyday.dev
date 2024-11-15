@@ -13,6 +13,7 @@
 
     <!-- Styles -->
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug

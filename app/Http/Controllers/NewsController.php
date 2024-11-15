@@ -38,6 +38,7 @@ class NewsController extends Controller
 
         return view('pages.post', ['post' => $post]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -97,3 +98,4 @@ class NewsController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 }
+
