@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function me(Request $request)
     {
-        return view('pages.me', ['user' => $request->user()]);
+        return view('pages.user', ['user' => $request->user()]);
     }
 
     public function show(User $user)

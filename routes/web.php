@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,14 +35,21 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-// Home
+// News
 Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
+    Route::get('/news/create-post', 'showCreationForm')->middleware('auth');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
-    Route::get('/create', 'create')->middleware('auth')->name('create');
+    Route::post('/news', 'store');
+    Route::put('/news/{news_post}', 'store');
+    Route::delete('/news/{news_post}', 'destroy');
 });
 
-Route::middleware('auth')->controller(UserController::class)->group(function () {
-    Route::get('/me', 'me');
+// Profile TODO
+Route::controller(UserController::class)->group(function () {
+    Route::get('/me', 'me')->middleware('auth');
     Route::get('/users/{user}', 'show');
 });
+
+Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
+Route::post('/file/upload', [FileController::class, 'upload']);

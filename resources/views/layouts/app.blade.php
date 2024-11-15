@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Styles -->
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 
@@ -39,7 +39,7 @@
             </div>
 
             @if (Auth::check())
-                <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('create') }}">
+                <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ url('/news/create-post') }}">
                     New post
                 </a>
             @endif
@@ -55,5 +55,4 @@
         </div>
     </main>
 </body>
-
 </html>
