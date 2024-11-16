@@ -8,6 +8,7 @@ use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\VoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,11 @@ Route::controller(NewsController::class)->group(function () {
     Route::post('/news', 'store');
     Route::put('/news/{news_post}', 'store');
     Route::delete('/news/{news_post}', 'destroy');
+});
+
+// Votes
+Route::controller(VoteController::class)->group(function () {
+    Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
 });
 
 // Profile TODO
