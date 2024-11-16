@@ -14,6 +14,20 @@ class NewsController extends Controller
     {
         $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
 
+        $user = Auth::user();
+
+        foreach ($newsPosts as $news) {
+            $news->user_vote = null;
+
+            if ($user) {
+                $vote = $news->votes()->where('user_id', $user->id)->first();
+
+                if ($vote) {
+                    $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                }
+            }
+        }
+
         return view('pages.news', compact('newsPosts'));
     }
 

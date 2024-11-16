@@ -48,6 +48,11 @@ class NewsPost extends Model
         return $this->belongsToMany(Tag::class, 'news_post_tag', 'news_post_id', 'tag_id');
     }
 
+    public function votes()
+    {
+        return $this->hasMany(Vote::class, 'news_post_id');
+    }
+
     public function getTagNamesAttribute()
     {
         return $this->tags()->pluck('name')->toArray();
