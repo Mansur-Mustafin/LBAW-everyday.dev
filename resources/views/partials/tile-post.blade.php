@@ -10,10 +10,14 @@
             <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{{$tag}}</span>
         @endforeach
     </div>
-    <div class="mr-4 flex items-center">
+    <div class="vote-container mr-4 flex items-center"
+        data-type="post" 
+        data-id="{{ $news->id }}" 
+        data-vote-id="{{ $news->user_vote_id ?? '' }}" 
+        data-vote="{{ $news->user_vote ?? '' }}"
+        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
         <!-- Upvote Button -->
-        <button type="submit" class="upvote-button flex items-center justify-center mr-1"
-                data-type="post" data-id="{{ $news->id }}" data-vote-id="{{ $news->user_vote_id ?? '' }}" data-vote="{{ $news->user_vote ?? '' }}">
+        <button type="submit" class="upvote-button flex items-center justify-center mr-1">
 
             <svg class="{{$news->user_vote == 'upvote' ? 'hidden' : ''}}" 
                 id="upvote-outline-{{ $news->id }}"
@@ -30,8 +34,7 @@
         <span class="vote-count font-bold">{{ $news->upvotes - $news->downvotes }}</span>
         
         <!-- Downvote Button -->
-        <button type="submit" class="downvote-button flex items-center justify-center ml-1"
-                data-type="post" data-id="{{ $news->id }}" data-vote-id="{{ $news->user_vote_id ?? '' }}" data-vote="{{ $news->user_vote ?? '' }}">
+        <button type="submit" class="downvote-button flex items-center justify-center ml-1">
                 
             <svg class="{{$news->user_vote == 'downvote' ? 'hidden' : ''}}"
                 id="downvote-outline-{{ $news->id }}"

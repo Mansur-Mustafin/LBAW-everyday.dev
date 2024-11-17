@@ -48,9 +48,9 @@ Route::controller(NewsController::class)->group(function () {
 
 // Votes
 Route::controller(VoteController::class)->group(function () {
-    Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
-    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
-    Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
+    Route::post('/vote', 'store')->name('vote.store');
+    Route::delete('/vote/{vote}', 'destroy')->name('vote.destroy');
+    Route::put('/vote/{vote}', 'update')->name('vote.update');
 });
 
 // Profile TODO
