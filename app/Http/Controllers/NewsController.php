@@ -24,6 +24,7 @@ class NewsController extends Controller
 
                 if ($vote) {
                     $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                    $news->user_vote_id = $vote->id;
                 }
             }
         }
@@ -42,15 +43,9 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
-    public function show(int $newsPost)
+    public function show(newsPost $newsPost)
     {
-        $post = NewsPost::findOrFail($newsPost);
-
-        // if ($post->author_id !== Auth::user()->id) {
-        //     return 'Only author can view post';
-        // }
-
-        return view('pages.post', ['post' => $post]);
+        return view('pages.post', ['post' => $newsPost]);
     }
 
     public function store(Request $request)
