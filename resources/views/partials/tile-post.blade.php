@@ -13,7 +13,7 @@
     <div class="mr-4 flex items-center">
         <!-- Upvote Button -->
         <button type="submit" class="upvote-button flex items-center justify-center mr-1"
-                data-type="post" data-id="{{ $news->id }}">
+                data-type="post" data-id="{{ $news->id }}" data-vote-id="{{ $news->user_vote_id ?? '' }}" data-vote="{{ $news->user_vote ?? '' }}">
 
             <svg class="{{$news->user_vote == 'upvote' ? 'hidden' : ''}}" 
                 id="upvote-outline-{{ $news->id }}"
@@ -31,7 +31,7 @@
         
         <!-- Downvote Button -->
         <button type="submit" class="downvote-button flex items-center justify-center ml-1"
-                data-type="post" data-id="{{ $news->id }}">
+                data-type="post" data-id="{{ $news->id }}" data-vote-id="{{ $news->user_vote_id ?? '' }}" data-vote="{{ $news->user_vote ?? '' }}">
                 
             <svg class="{{$news->user_vote == 'downvote' ? 'hidden' : ''}}"
                 id="downvote-outline-{{ $news->id }}"
