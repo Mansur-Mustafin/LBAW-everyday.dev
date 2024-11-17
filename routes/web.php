@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\NewsController;
@@ -51,5 +52,12 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}', 'show');
 });
 
-Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
-Route::post('/file/upload', [FileController::class, 'upload']);
+Route::controller(FileController::class)->group(function() {
+    Route::get('/file/upload', 'index'); // TODO:: delete
+    Route::post('/file/upload', 'upload');
+});
+
+Route::controller(SearchController::class)->group(function () {
+    Route::get('/search','search');
+    Route::get('/search/{search}','search');
+});
