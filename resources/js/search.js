@@ -22,6 +22,9 @@ searchBarDiv.onkeyup = async () => {
       showElements(data["news_posts"],buildPost)
       showElements(data["tags"],buildTag)
       showElements(data["users"],buildUser)
+      if(data["news_posts"].length > 0) {
+        addMorePosts(searchBarDiv.value)
+      }
     }) 
     .catch(error => {
       console.log("Error",error)
@@ -34,6 +37,20 @@ const showElements = (elements,buildFunction) => {
         postResult.innerHTML = buildFunction(element)
         resultsDiv.appendChild(postResult)
     });
+}
+
+const addMorePosts = (searchQuery) => {
+    const morePostsDiv = document.createElement("div")
+    const url = `${baseUrl}/search/posts/${searchQuery}`
+
+    morePostsDiv.innerHTML = `
+        <div class="p-2">
+            <a href=${url} >
+                See more posts
+            </a>
+        </div>
+    `
+    resultsDiv.appendChild(morePostsDiv)
 }
 
 const buildPost = (post) => {
