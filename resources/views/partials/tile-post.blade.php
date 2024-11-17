@@ -1,5 +1,5 @@
 <div class="p-4 rounded shadow-sm">
-    <img src="{{ $news->title_image_path }}" alt="" class="w-full h-48 object-cover mb-2">
+    <img src="{{ url($news->title_image_path) }}" alt="" class="w-full h-48 object-cover mb-2">
     
     <a href="{{ url('/news/' . $news->id) }}">
         <h3 class="text-lg font-bold">{{$news->title}}</h3>

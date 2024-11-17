@@ -58,6 +58,8 @@ Route::controller(FileController::class)->group(function() {
 });
 
 Route::controller(SearchController::class)->group(function () {
+    Route::get('/search/posts','search_post');
+    Route::get('/search/posts/{search}','search_post');
     Route::get('/search','search');
     Route::get('/search/{search}','search');
 });
