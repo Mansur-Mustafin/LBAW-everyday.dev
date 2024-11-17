@@ -14,7 +14,7 @@ class VoteController extends Controller
         if(!Auth::check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-        
+           
         $user = Auth::user();
 
         $validated = $request->validate([
@@ -45,6 +45,10 @@ class VoteController extends Controller
 
     public function destroy(Vote $vote)
     {
+        if(!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         $user = Auth::user();
 
         // TODO: rewrite with Policy
@@ -59,6 +63,10 @@ class VoteController extends Controller
 
     public function update(Request $request, Vote $vote)
     {
+        if(!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         $user = Auth::user();
 
         if ($vote->user_id !== $user->id) {
