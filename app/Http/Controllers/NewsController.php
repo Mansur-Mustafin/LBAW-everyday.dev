@@ -12,11 +12,11 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
+        $news_posts = NewsPost::orderBy('created_at', 'desc')->get();
 
         $user = Auth::user();
 
-        foreach ($newsPosts as $news) {
+        foreach ($news_posts as $news) {
             $news->user_vote = null;
 
             if ($user) {
@@ -29,7 +29,7 @@ class NewsController extends Controller
             }
         }
 
-        return view('pages.news', compact('newsPosts'));
+        return view('pages.news', compact('news_posts'));
     }
 
     public function showCreationForm()
