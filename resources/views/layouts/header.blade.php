@@ -34,10 +34,17 @@
 <script>
     const searchBarDiv = document.getElementById('search-bar')
     const resultsDiv = document.getElementById('search-results')
-    const resultsDivTags = document.getElementById('search-results-tags')
-    const resultsDivUsers = document.getElementById('search-results-users')
     const searchURL = "{{ url('search') }}/"
-
+    
+    searchBarDiv.onkeyup = async () => {
+        resultsDiv.innerHTML = ''
+        const searchQuery = searchURL+searchBarDiv.value
+        const response = await fetch(searchQuery)
+        const data = await response.json()
+        showTags(data["tags"])
+        showPosts(data["news_posts"])
+        showUsers(data["users"])
+    }
 
     const showPosts = (posts) => {
         posts.forEach(element => {
@@ -100,14 +107,5 @@
             `
             resultsDiv.appendChild(postResult)
         });
-    }
-    searchBarDiv.onkeyup = async () => {
-        resultsDiv.innerHTML = ''
-        const searchQuery = searchURL+searchBarDiv.value
-        const response = await fetch(searchQuery)
-        const data = await response.json()
-        showTags(data["tags"])
-        showPosts(data["newsPosts"])
-        showUsers(data["users"])
     }
 </script>
