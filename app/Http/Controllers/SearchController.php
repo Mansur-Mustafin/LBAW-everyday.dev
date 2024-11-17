@@ -16,12 +16,17 @@ class SearchController extends Controller
                 ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC',[$search_query])
                 ->get()
                 ->makeHidden('password');
+
         $tag_query= $search_query == '' ? '' :"%".ucfirst($search_query)."%"; 
         $user_query= $search_query == '' ? '' : $search_query."%"; 
         $tags = Tag::where('name','like',$tag_query)->get();
-        $users = User::where('username','like', $user_query)->get();
+        $users_from_username = User::where('username','like', $user_query)->get();
+        $users_from_public_name = User::where('public_name','like',$user_query)->get();
+
+        $users = $users_from_username->merge($users_from_public_name);
+
         return response()->json([
-            "newsPosts"=>$newsPosts,
+            "news_posts"=>$newsPosts,
             "tags"=>$tags,
             "users"=>$users,
         ],200);
