@@ -14,6 +14,7 @@
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    @vite('resources/js/auth.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
@@ -21,19 +22,31 @@
     </script>
 </head>
 
-<body class="bg-background text-white">
+<body class="@yield('body-class', 'bg-background text-white')">
     <main class="flex flex-col h-screen">
         
-        @include('layouts.header')
-
-        <div class="flex flex-grow">
-            
-            @include('layouts.aside')
-
-            <section id="content" class="w-full h-full">
+        @if (in_array(Route::currentRouteName(), ['login', 'register']))
+            <div class="py-3 px-5">
+                <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+                <a class="button" href="{{ route('login') }}">Login</a>
+                <a class="button" href="{{ route('register') }}">Register</a>
+            </div>
+            <section id="content" class="flex items-center justify-center w-full h-full">
                 @yield('content')
             </section>
-        </div>
+        @else
+            @include('layouts.header')
+            
+            <div class="flex flex-grow">
+                
+                @include('layouts.aside')
+
+                <section id="content" class="w-full h-full">
+                    @yield('content')
+                </section>
+            </div>
+        @endif
+    
     </main>
 </body>
 </html>
