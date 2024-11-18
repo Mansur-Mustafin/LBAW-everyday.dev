@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.login')
 
 @section('content')
 <div class="flex items-center justify-center">
@@ -60,17 +60,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById('toggle-password').addEventListener('click', function () {
-        const passwordField = document.getElementById('password');
-        const eyeIcon = document.getElementById('eye-icon');
-
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-        } else {
-            passwordField.type = 'password';
-        }
-    });
-</script>
 @endsection
