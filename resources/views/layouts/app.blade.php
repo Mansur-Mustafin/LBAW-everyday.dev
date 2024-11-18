@@ -13,11 +13,8 @@
     <!-- Styles -->
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-<<<<<<< HEAD
     @vite('resources/js/vote.js')
-=======
     @vite('resources/js/search.js')
->>>>>>> 5d26d59 (feat:search bar)
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
