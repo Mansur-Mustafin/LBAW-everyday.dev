@@ -28,6 +28,8 @@ class User extends Authenticatable
         'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
     ];
 
+    protected $hidden = ['password', 'remember_token'];
+
     public function getProfileImage() {
         return FileController::get('profile', $this->id);
     }
