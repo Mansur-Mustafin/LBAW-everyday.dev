@@ -40,7 +40,12 @@
             @endif
 
             <label for="password" class="block font-semibold mb-2">Password</label>
-            <input id="password" type="password" name="password" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
+            <div class="relative w-full">
+              <input id="password" type="password" name="password" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
+              <span id="toggle-password" class="material-symbols-outlined cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+                visibility
+              </span>
+            </div>
             @if ($errors->has('password'))
               <span class="text-red-400 text-sm">
                   {{ $errors->first('password') }}
@@ -48,7 +53,12 @@
             @endif
 
             <label for="password-confirm" class="block font-semibold mb-2">Confirm Password</label>
-            <input id="password-confirm" type="password" name="password_confirmation" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
+            <div class="relative w-full">
+              <input id="password-confirm" type="password" name="password_confirmation" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
+              <span id="toggle-password-confirm" class="material-symbols-outlined cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+                visibility
+              </span>
+            </div>
 
             <button type="submit" class="mt-4 w-full bg-[#5a7d99] hover:bg-[#34547c] text-white font-extrabold py-2 rounded transition duration-200">
               Register
@@ -65,10 +75,18 @@
 
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
-            eyeIcon.setAttribute('d', 'M1 12s3-7 11-7 11 7 11 7-3 7-11 7S1 12 1 12z'); // Ícone de olho aberto
         } else {
             passwordField.type = 'password';
-            eyeIcon.setAttribute('d', 'M1 12s3-7 11-7 11 7 11 7-3 7-11 7S1 12 1 12z'); // Ícone de olho fechado
+        }
+    });
+    document.getElementById('toggle-password-confirm').addEventListener('click', function () {
+        const passwordField = document.getElementById('password-confirm');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
         }
     });
 </script>
