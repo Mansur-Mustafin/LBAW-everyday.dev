@@ -26,14 +26,217 @@ VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
 
 INSERT INTO news_post (title, created_at, changed_at, content, for_followers, upvotes, downvotes, author_id)
 VALUES
-('Breaking News in AI', NOW() - INTERVAL '7 days', NULL, 'Artificial Intelligence is transforming industries across the globe.', TRUE, 150, 3, 1),
-('The Future of Cloud Computing', NOW() - INTERVAL '6 days', NOW() - INTERVAL '1 day', 'Cloud services continue to evolve with exciting new trends.', FALSE, 100, 2, 2),
-('Top Python Tips for Developers', NOW() - INTERVAL '5 days', NULL, 'Here are some of the best Python tips to improve your coding skills.', TRUE, 200, 5, 3),
-('Cybersecurity Threats in 2024', NOW() - INTERVAL '4 days', NULL, 'New threats emerge in the digital world, learn how to protect yourself.', FALSE, 175, 8, 4),
-('Machine Learning Breakthroughs', NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days', 'The latest machine learning algorithms are pushing boundaries.', TRUE, 300, 1, 5),
-('Innovations in Health Tech', NOW() - INTERVAL '2 days', NULL, 'Health technologies are making it easier to diagnose and treat diseases.', TRUE, 250, 4, 6),
-('Exploring Quantum Computing', NOW() - INTERVAL '1 day', NULL, 'Quantum computing could revolutionize data processing.', FALSE, 350, 2, 7),
-('Developments in 5G Technology', NOW(), NULL, '5G is set to become more prevalent, offering faster connectivity.', TRUE, 400, 6, 8);
+('Breaking News in AI', NOW() - INTERVAL '7 days', NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+TRUE, 150, 3, 1),
+
+('The Future of Cloud Computing', NOW() - INTERVAL '6 days', NOW() - INTERVAL '1 day', 
+'
+
+Looking at brain cells closely has shown some interesting patterns. Over the past five years, techniques that enable scientists to catalogue the genes expressed in a single cell have been revealing the many different types of cell that make up a brain — at a level of detail much higher than anything achieved before.
+
+Last year, a team based at the Allen Institute for Brain Science in Seattle, Washington, reported the most-comprehensive atlases yet of cell types in both the mouse and human brain. As part of an international effort called the BRAIN Initiative Cell Census Network (BICCN), researchers catalogued the whole mouse brain, finding 5,300 cell types2; the human atlas is unfinished but so far includes more than 3,300 types from 100 locations3; researchers expect to find many more.
+
+Some regions do have distinct cell types — for instance, the human visual cortex contained several types of neuron that were exclusive to that area4. But in general, human-specific cell types are rare.
+
+The overall impression, when comparing the cell types of the human brain with other species, is one of similarity. “I was expecting bigger differences,” says Ed Lein, a neuroscientist at the Allen Institute, who is involved in efforts to catalogue cells in human, mouse and other brains. “The basic cellular architecture is remarkably conserved until you get down to the finer details”, he says.
+
+Most human brain regions differ from primates and mice in the relative proportions of cell types that appear5, and in the ways those cells express their genes: its not the ingredients that are different, but the recipe.
+
+Take these two comparable regions of the human and mouse cortex, which both process auditory information. The mouse area contains a higher proportion of excitatory neurons, which propagate signals, relative to inhibitory neurons, which dampen activity. The human region had a much greater proportion of non-neuronal cells, such as astrocytes, oligodendrocytes and microglia. These cells support neurons and also help to prune and refine their connections during development. The ratio of these cells to neurons was five times that of mice.',
+FALSE, 100, 2, 2),
+
+('Top Python Tips for Developers', NOW() - INTERVAL '5 days', NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+TRUE, 200, 5, 3),
+
+('Cybersecurity Threats in 2024', NOW() - INTERVAL '4 days', NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+FALSE, 175, 8, 4),
+
+('Machine Learning Breakthroughs', NOW() - INTERVAL '3 days', NOW() - INTERVAL '2 days', 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+TRUE, 300, 1, 5),
+
+('Innovations in Health Tech', NOW() - INTERVAL '2 days', NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+TRUE, 250, 4, 6),
+
+('Exploring Quantum Computing', NOW() - INTERVAL '1 day', NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+FALSE, 350, 2, 7),
+
+('Developments in 5G Technology', NOW(), NULL, 
+'Johnson did not return requests for comment. Similar requests to those who spread the false assassination attempt story went mostly unanswered. Those who responded defended their posts and videos. 
+
+“We reported it as potentially being a hoax,” Dore said. 
+
+Andrew Kolvet, a representative for Kirk and a producer of his podcast, said Kirk noted at the time that it wasn’t possible to verify the claim. 
+
+"Frankly we’re glad to know that Ukraine wasn’t orchestrating an assassination attempt against Tucker,” Kolvet said of the former Fox News host. “That’s a good thing."
+
+Storm-1516’s video production team likely operates out of an office in St. Petersburg and appears to recruit actors from diaspora communities there, researchers at Microsoft said. Based on an analysis of methods and personnel, the researchers believe the group is in part a vestige of the Internet Research Agency, a disinformation factory founded by Yevgeny Prigozhin that meddled in the 2016 U.S. presidential election. Prigozhin, a onetime ally of Russian President Vladimir Putin, led a quickly quashed rebellion against the Russian military in June 2023 and died months later in a plane crash. 
+
+Storm-1516 is loosely tied to the Kremlin by people, products and tactics; Microsoft researchers believe it’s directed by the Center for Geopolitical Expertise, an anti-liberal think tank that, according to Estonian intelligence, organized press tours of Ukraine for Western pro-Putin propagandists. The Foundation for Battling Injustice, a former Prigozhin propaganda operation that imitates a human rights organization, has amplified Storm-1516’s fake videos, researchers say.
+
+Other groups have similar goals but different methods. Storm-1099 is known for its “Doppelganger” operation, which uses fake news websites — dozens of which were recently seized by the Justice Department — and a bot network to push disinformation. Storm-1679 trades in feature-length films that mimic American documentaries and political thrillers, including on the Paris Olympics. 
+
+Storm-1516’s cheap videos echo Cold War-era propaganda techniques. The most memorable may be the KGB-designed “Operation Denver,” which concocted and spread the false conspiracy theory that the AIDS virus had been engineered by the Pentagon. 
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+A known launderer of KGB disinformation, the Indian newspaper Patriot seeds a lie about AIDS on July 17, 1983. (Archive.org)
+
+That campaign began with a letter from an anonymous but “well-known” scientist with insider information published in 1983 in the Patriot, a pro-Soviet Indian newspaper.  
+
+In 2024, Russia’s strategies have evolved, with the creation of more legitimate-looking fake news websites, more sophisticated bot networks and the increasing use of AI. Some of Russia’s disinformation projects are professional productions involving paid actors, while others are slick documentaries with AI-fabricated celebrity hosts. Some target Russian citizens and others the outside world. 
+
+The Storm-1516 videos initially relied on real people, like a Cameroonian woman in St. Petersburg who journalists revealed had posed as a Cartier intern in a viral TikTok video falsely smearing Olena Zelenska, the first lady of Ukraine, from October 2023.',
+TRUE, 400, 6, 8);
 
 
 INSERT INTO image (path, image_type, news_post_id, user_id)
