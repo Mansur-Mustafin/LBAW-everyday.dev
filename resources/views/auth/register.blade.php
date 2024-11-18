@@ -1,4 +1,6 @@
-@extends('layouts.login')
+@extends('layouts.app')
+
+@section('body-class', "bg-[url('/public/assets/backg.svg')] bg-cover text-white")
 
 @section('content')
 <div class="flex items-center justify-center">
