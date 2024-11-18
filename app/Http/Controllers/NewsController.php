@@ -44,22 +44,26 @@ class NewsController extends Controller
         $request->validate([
             'title' => 'required|string|max:40',
             'content' => 'required|string|max:1000',
-            'for_followers' => 'nullable|boolean',
+            //   'for_followers' => 'nullable|boolean',
             'title_photo' => 'required|file|mimes:jpg,png|max:2048',
-            'tags' => 'array'
+            'tags' => 'string'
         ]);
+
+        $tags = explode(',', $request->tags);
 
         $post = NewsPost::create([
             'title' => $request->title,
             'content' => $request->input('content'),
-            'for_followers' => $request->for_followers ?? false,
+            //   'for_followers' => $request->for_followers ?? false,
             'author_id' => Auth::user()->id,
         ]);
+
 
         FileController::upload($request, $post);
 
         if ($request->has('tags')) {
-            $post->tags()->attach($request->tags);
+            $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
+            $post->tags()->attach($tagIds);
         }
 
         return redirect()->route('home')

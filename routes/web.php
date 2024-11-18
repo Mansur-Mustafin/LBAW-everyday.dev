@@ -40,7 +40,7 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
-    Route::post('/news', 'store');
+    Route::post('/news', 'store')->name('news');
     Route::put('/news/{news_post}', 'store');
     Route::delete('/news/{news_post}', 'destroy');
 });

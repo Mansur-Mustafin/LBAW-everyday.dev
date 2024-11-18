@@ -3,6 +3,7 @@ const fileInput = document.getElementById('realFileInput')
 const deleteThumbnailButton = document.getElementById('deleteThumbnail')
 const tagSelector = document.getElementById('tagSelector')
 const selectedTags = document.getElementById('selectedTags')
+const createForm = document.getElementById('createForm')
 
 thumbnailButton.addEventListener('click', function (evt) {
    evt.preventDefault()
@@ -28,10 +29,12 @@ deleteThumbnailButton.addEventListener('click', function (evt) {
 
 tagSelector.addEventListener('change', function () {
    const selectedTag = tagSelector.value
+
    if (selectedTag) {
       const tagElement = document.createElement('div')
+      tagElement.dataset.tag = selectedTag;
       tagElement.textContent = '#' + selectedTag.toLowerCase()
-      tagElement.className = 'bg-input rounded-2xl p-3'
+      tagElement.className = 'bg-white rounded-xl p-2 text-input font-semibold text-sm'
       selectedTags.appendChild(tagElement)
 
       for (let i = 0; i < tagSelector.options.length; i++) {
@@ -42,4 +45,19 @@ tagSelector.addEventListener('change', function () {
          }
       }
    }
+})
+
+createForm.addEventListener('submit', function (evt) {
+   evt.preventDefault()
+   let post_tags = [];
+
+   Array.from(selectedTags.children).forEach((child) => {
+      post_tags.push(child.dataset.tag);
+   });
+
+   console.log(post_tags)
+
+   document.getElementById('tagsInput').value = post_tags.join(',');
+
+   createForm.submit()
 })
