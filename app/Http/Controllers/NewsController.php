@@ -10,13 +10,10 @@ use App\Models\Tag;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function show_news_posts($news_posts)
     {
-        $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
-
         $user = Auth::user();
-
-        foreach ($newsPosts as $news) {
+        foreach ($news_posts as $news) {
             $news->user_vote = null;
 
             if ($user) {
@@ -28,9 +25,34 @@ class NewsController extends Controller
                 }
             }
         }
-
-        return view('pages.news', compact('newsPosts'));
+        return view('pages.news', compact('news_posts'));
     }
+
+    public function index()
+    {
+        $news_posts = NewsPost::all();
+        return view('pages.news',compact('news_posts'));
+    }
+
+    public function recent_feed()
+    {
+        $news_posts = NewsPost::orderBy('created_at', 'desc')->get();
+        return NewsController::show_news_posts($news_posts);
+    }
+
+    public function top_feed()
+    {
+        $news_posts = NewsPost::orderBy('upvotes','desc')->get();
+        return NewsController::show_news_posts($news_posts);
+    }
+
+    public function my_feed()
+    {
+        // TODO: Change when there is follow
+        $news_posts = NewsPost::all();
+        return NewsController::show_news_posts($news_posts);
+    }
+
 
     public function showCreationForm()
     {
