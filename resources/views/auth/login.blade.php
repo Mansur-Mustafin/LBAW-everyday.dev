@@ -27,8 +27,13 @@
                 @endif
 
                 <label for="password" class="block font-semibold mb-2">Password</label>
-                <input id="password" type="password" name="password" required
+                <div class="relative w-full">
+                    <input id="password" type="password" name="password" required
                         class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
+                    <span id="toggle-password" class="material-symbols-outlined cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+                        visibility
+                    </span>
+                </div>
                 @if ($errors->has('password'))
                     <span class="text-red-400 text-sm">
                         {{ $errors->first('password') }}
@@ -55,4 +60,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('toggle-password').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+    });
+</script>
 @endsection
