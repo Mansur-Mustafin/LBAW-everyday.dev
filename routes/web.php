@@ -51,7 +51,6 @@ Route::controller(NewsController::class)->group(function () {
     Route::post('/news', 'store');
     Route::put('/news/{news_post}', 'store');
     Route::delete('/news/{news_post}', 'destroy');
-
 });
 
 // Votes

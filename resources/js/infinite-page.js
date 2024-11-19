@@ -3,6 +3,7 @@ const postContainer = document.getElementById('news-posts-container')
 if(postContainer) {
   let lastPage = postContainer.dataset.last_page
   let newsPageURL = postContainer.dataset.url
+  let loading = false;
 
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   let page = 1;
@@ -16,12 +17,12 @@ if(postContainer) {
       if(scrollTop + windowHeight >= documentHeight - 100) {
           // TODO: Refactor this in the future
           endPage++;
-          console.log(`endPage: ${endPage}`);
+          console.log(`endPage: ${endPage} page: ${page} lastPage: ${lastPage}`);
           if(endPage > 4) {
-            page++;
             endPage = 0;
-            if (page <= lastPage) {
-                console.log(`page ${page}`)
+            if (page <= lastPage && loading == false) {
+                page++;
+                console.log(`Will load page: ${page}`)
                 loadMoreData(page);
             }
           }
@@ -29,6 +30,9 @@ if(postContainer) {
   })
 
   function loadMoreData(page) {
+      if (loading) return;
+      loading = true;
+
       fetch(newsPageURL+`?page=${page}`, {
           method: 'GET',
           headers: {
@@ -37,6 +41,7 @@ if(postContainer) {
           },
       })
       .then(response => {
+          loading = false;
           return response.json();
       })
       .then(data => {
@@ -44,6 +49,7 @@ if(postContainer) {
               return;
           }
           postContainer.innerHTML += data.news_posts
+          console.log(data)
       })
   }
 }
