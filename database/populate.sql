@@ -93,7 +93,29 @@ VALUES
 ('The Role of AI in Education', NOW() - INTERVAL '7 days', NULL, 'Artificial Intelligence is changing the way students learn.', TRUE, 180, 6, 25),
 ('Green Building Innovations', NOW() - INTERVAL '6 days', NULL, 'Sustainable architecture is redefining urban landscapes.', TRUE, 200, 1, 26),
 ('Challenges in Robotics Development', NOW() - INTERVAL '5 days', NOW() - INTERVAL '4 days', 'Developers face technical and ethical hurdles in advancing robotics.', FALSE, 310, 5, 27),
-('The Evolution of Social Media', NOW() - INTERVAL '4 days', NULL, 'Social media platforms are introducing new features and challenges.', TRUE, 220, 2, 28);
+('The Evolution of Social Media', NOW() - INTERVAL '4 days', NULL, 'Social media platforms are introducing new features and challenges.', TRUE, 220, 2, 28),
+('Revolutionizing Transportation Infrastructure', NOW() - INTERVAL '7 days', NULL, 'Advancements in transportation infrastructure are set to redefine urban mobility.', TRUE, 320, 4, 29),
+('The Impact of AI on Job Markets', NOW() - INTERVAL '6 days', NULL, 'Artificial Intelligence is reshaping employment trends worldwide.', FALSE, 270, 6, 30),
+('How 6G Could Change Connectivity', NOW() - INTERVAL '5 days', NULL, '6G networks promise even faster connectivity and groundbreaking applications.', TRUE, 400, 2, 31),
+('Advances in Biotechnology', NOW() - INTERVAL '4 days', NOW() - INTERVAL '2 days', 'Biotechnology innovations are paving the way for better healthcare solutions.', FALSE, 290, 3, 32),
+('The Rise of Green Hydrogen', NOW() - INTERVAL '3 days', NULL, 'Green hydrogen is emerging as a promising energy source for the future.', TRUE, 360, 1, 33),
+('AI in Creative Industries', NOW() - INTERVAL '2 days', NOW() - INTERVAL '1 day', 'AI is increasingly being used in arts, music, and other creative fields.', TRUE, 280, 2, 34),
+('Exploring Underwater Robotics', NOW() - INTERVAL '1 day', NULL, 'Underwater robots are transforming marine exploration and industries.', FALSE, 340, 5, 35),
+('The Future of Smart Cities', NOW(), NULL, 'Smart cities are blending technology and urban planning for a better future.', TRUE, 410, 4, 36),
+('Ethical Dilemmas in Biotechnology', NOW() - INTERVAL '7 days', NULL, 'Biotechnology raises new ethical challenges as it advances.', TRUE, 270, 8, 37),
+('Breakthroughs in Energy Storage', NOW() - INTERVAL '6 days', NULL, 'New battery technologies are enabling efficient energy storage solutions.', FALSE, 300, 6, 38),
+('Satellite Internet Revolution', NOW() - INTERVAL '5 days', NOW() - INTERVAL '4 days', 'Satellite internet is bringing connectivity to remote regions worldwide.', TRUE, 290, 2, 39),
+('AI-Powered Healthcare Diagnostics', NOW() - INTERVAL '4 days', NULL, 'AI tools are improving diagnostics accuracy in healthcare.', FALSE, 320, 1, 40),
+('3D Printing in Manufacturing', NOW() - INTERVAL '3 days', NULL, '3D printing technology is making manufacturing faster and more efficient.', TRUE, 380, 3, 41),
+('Exploring Edge Computing', NOW() - INTERVAL '2 days', NULL, 'Edge computing is reducing latency and improving real-time data processing.', TRUE, 310, 5, 42),
+('AI-Generated Content', NOW() - INTERVAL '1 day', NULL, 'AI-generated content is becoming increasingly indistinguishable from human work.', FALSE, 340, 7, 43),
+('Sustainable Urban Agriculture', NOW(), NULL, 'Urban farming techniques are being adopted to feed growing populations.', TRUE, 270, 2, 44),
+('The Ethics of Autonomous Drones', NOW() - INTERVAL '7 days', NOW() - INTERVAL '6 days', 'Autonomous drones are raising new ethical and legal concerns.', TRUE, 300, 3, 45),
+('Fusion Energy: The Next Frontier', NOW() - INTERVAL '6 days', NULL, 'Fusion energy could provide a near-limitless source of clean power.', FALSE, 390, 5, 46),
+('Challenges in Human Augmentation', NOW() - INTERVAL '5 days', NULL, 'Human augmentation technologies are pushing the limits of ethics and science.', TRUE, 350, 1, 47),
+('The Future of E-Waste Recycling', NOW() - INTERVAL '4 days', NULL, 'New recycling technologies are tackling the growing problem of electronic waste.', TRUE, 290, 4, 48);
+
+
 
 
 INSERT INTO image (path, image_type, news_post_id, user_id)
@@ -116,7 +138,6 @@ VALUES
 ('/images/news/renewable_energy.jpg', 'PostTitle', 8, NULL),
 ('/images/news/electric_vehicles.jpg', 'PostTitle', 9, NULL),
 ('/images/news/javascript_frameworks.jpg', 'PostTitle', 10, NULL),
-('/images/news/javascript_tutorial.jpg', 'PostContent', 10, NULL),
 ('/images/news/data_privacy.jpg', 'PostTitle', 11, NULL),
 ('/images/news/blockchain_apps.jpg', 'PostTitle', 12, NULL),
 ('/images/news/space_exploration.jpg', 'PostTitle', 13, NULL),
@@ -133,7 +154,27 @@ VALUES
 ('/images/news/ai_education.jpg', 'PostTitle', 24, NULL),
 ('/images/news/green_buildings.jpg', 'PostTitle', 25, NULL),
 ('/images/news/robotics_challenges.jpg', 'PostTitle', 26, NULL),
-('/images/news/social_media.jpg', 'PostTitle', 27, NULL);
+('/images/news/social_media.jpg', 'PostTitle', 27, NULL),
+('/images/news/javascript_tutorial.jpg', 'PostTitle', 28, NULL),
+('/images/news/transportation_infra.jpg', 'PostTitle', 29, NULL),
+('/images/news/ai_jobs.jpg', 'PostTitle', 30, NULL),
+('/images/news/6g_connectivity.jpg', 'PostTitle', 31, NULL),
+('/images/news/biotech_advances.jpg', 'PostTitle', 32, NULL),
+('/images/news/green_hydrogen.jpg', 'PostTitle', 33, NULL),
+('/images/news/ai_creative.jpg', 'PostTitle', 34, NULL),
+('/images/news/underwater_robotics.jpg', 'PostTitle', 35, NULL),
+('/images/news/smart_cities.jpg', 'PostTitle', 36, NULL),
+('/images/news/biotech_ethics.jpg', 'PostTitle', 37, NULL),
+('/images/news/energy_storage.jpg', 'PostTitle', 38, NULL),
+('/images/news/satellite_internet.jpg', 'PostTitle', 39, NULL),
+('/images/news/ai_diagnostics.jpg', 'PostTitle', 40, NULL),
+('/images/news/3d_printing.jpg', 'PostTitle', 41, NULL),
+('/images/news/edge_computing.jpg', 'PostTitle', 42, NULL),
+('/images/news/ai_content.jpg', 'PostTitle', 43, NULL),
+('/images/news/urban_agriculture.jpg', 'PostTitle', 44, NULL),
+('/images/news/autonomous_drones.jpg', 'PostTitle', 45, NULL),
+('/images/news/fusion_energy.jpg', 'PostTitle', 46, NULL),
+('/images/news/human_augmentation.jpg', 'PostTitle', 47, NULL);
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
