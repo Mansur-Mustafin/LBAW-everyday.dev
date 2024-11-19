@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,11 +25,11 @@
 
 <body class="bg-background text-white">
     <main class="flex flex-col h-screen">
-        
+
         @include('layouts.header')
 
         <div class="flex flex-grow">
-            
+
             @include('layouts.aside')
 
             <section id="content" class="w-full h-full">
@@ -37,4 +38,5 @@
         </div>
     </main>
 </body>
+
 </html>
