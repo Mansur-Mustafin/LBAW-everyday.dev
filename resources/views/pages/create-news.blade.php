@@ -19,8 +19,8 @@
       </div>
       <input class="hidden" type="file" id="realFileInput" name="title_photo">
 
-      <input name="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*" required>
-      <textarea name="content" class="rounded-2xl bg-input outline-none p-3"
+      <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*">
+      <textarea name="content" class="rounded-2xl bg-input outline-none p-3 min-h-40"
          placeholder="Share your thoughts"></textarea>
       <div class="flex items-center gap-3">
          <select class="bg-input rounded-2xl p-3 w-40" id="tagSelector">
