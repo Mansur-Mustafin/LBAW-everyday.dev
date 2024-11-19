@@ -39,6 +39,8 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
+    Route::get('/news/page','index'); // Get news_post page
+
     Route::get('/news/my-feed','my_feed')->middleware('auth');
     Route::get('/news/top-feed','top_feed');
     Route::get('/news/recent-feed','recent_feed');
