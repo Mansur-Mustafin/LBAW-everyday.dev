@@ -31,7 +31,8 @@ class NewsController extends Controller
             return response()->json([
                 'news_posts' => view('partials.posts',compact('news_posts'))->render(),
                 'next_page'  => $news_posts->currentPage() + 1,
-                'last_page'  => $news_posts->lastPage() 
+                'last_page'  => $news_posts->lastPage(),
+                'all' => $news_posts
             ]);
         }
 
@@ -63,13 +64,11 @@ class NewsController extends Controller
     {
         $user = Auth::user();
         $title = "Your News";
-        $following = $user->following()->pluck('followed_id')->map(function (int $value) {
-            return strval($value);
-        })->all();
-        $news_posts = NewsPost::whereIn('author_id',$following);
+        $following = $user->following()->pluck('id');
+        $news_posts = NewsPost::whereIn('author_id',$following)
+            ->orderBy('created_at', 'desc');
         return NewsController::news_post_page($news_posts,$title,$request);
     }
-
 
     public function showCreationForm()
     {
