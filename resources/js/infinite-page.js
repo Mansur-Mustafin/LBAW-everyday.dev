@@ -47,7 +47,6 @@ if(postContainer) {
               return;
           }
           postContainer.innerHTML += data.news_posts
-          console.log(data)
       })
   }
 }

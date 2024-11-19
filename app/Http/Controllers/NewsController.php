@@ -32,8 +32,7 @@ class NewsController extends Controller
             return response()->json([
                 'news_posts' => view('partials.posts', compact('news_posts'))->render(),
                 'next_page'  => $news_posts->currentPage() + 1,
-                'last_page'  => $news_posts->lastPage(),
-                'all' => $news_posts
+                'last_page'  => $news_posts->lastPage()
             ]);
         }
 
