@@ -7,16 +7,15 @@ use App\Models\NewsPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null)
     {
-        $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
-
+        $news_posts = $news_posts->paginate(10);
         $user = Auth::user();
-
-        foreach ($newsPosts as $news) {
+        foreach ($news_posts as $news) {
             $news->user_vote = null;
 
             if ($user) {
@@ -29,7 +28,53 @@ class NewsController extends Controller
             }
         }
 
-        return view('pages.news', compact('newsPosts'));
+        if ($request->ajax()) {
+            return response()->json([
+                'news_posts' => view('partials.posts', compact('news_posts'))->render(),
+                'next_page'  => $news_posts->currentPage() + 1,
+                'last_page'  => $news_posts->lastPage()
+            ]);
+        }
+
+        if (is_null($baseUrl)) {
+            $baseUrl = $request->url();
+        }
+
+        return view('pages.news', compact('news_posts', 'title', 'baseUrl'));
+    }
+
+    public function index(Request $request)
+    {
+        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        $title = "Recent News";
+        return NewsController::news_post_page($news_posts, $title, $request);
+    }
+
+    public function recent_feed(Request $request)
+    {
+        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        $title = "Recent News";
+        $baseUrl = '/news/recent-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
+    }
+
+    public function top_feed(Request $request)
+    {
+        $news_posts = NewsPost::orderBy(DB::raw('upvotes - downvotes'), 'desc');
+        $title = "Top News";
+        $baseUrl = '/news/top-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
+    }
+
+    public function my_feed(Request $request)
+    {
+        $user = Auth::user();
+        $title = "Your News";
+        $following = $user->following()->pluck('id');
+        $news_posts = NewsPost::whereIn('author_id', $following)
+            ->orderBy('created_at', 'desc');
+        $baseUrl = '/news/my-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
     }
 
     public function showCreationForm()
