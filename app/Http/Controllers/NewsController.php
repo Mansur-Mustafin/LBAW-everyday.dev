@@ -44,27 +44,28 @@ class NewsController extends Controller
         $request->validate([
             'title' => 'required|string|max:40',
             'content' => 'required|string|max:1000',
-            //   'for_followers' => 'nullable|boolean',
+            'for_followers' => 'required|string',
             'title_photo' => 'required|file|mimes:jpg,png|max:2048',
-            'tags' => 'string'
+            'tags' => 'nullable|string'
         ]);
 
-        $tags = explode(',', $request->tags);
 
         $post = NewsPost::create([
             'title' => $request->title,
-            'content' => $request->input('content'),
-            //   'for_followers' => $request->for_followers ?? false,
+            'content' => $request->content,
+            'for_followers' => $request->for_followers,
             'author_id' => Auth::user()->id,
         ]);
 
 
         FileController::upload($request, $post);
 
-        if ($request->has('tags')) {
+        if ($request->tags != null) {
+            $tags = explode(',', $request->tags);
             $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
             $post->tags()->attach($tagIds);
         }
+
 
         return redirect()->route('home')
             ->withSuccess('You have successfully created post!');
@@ -102,4 +103,3 @@ class NewsController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 }
-
