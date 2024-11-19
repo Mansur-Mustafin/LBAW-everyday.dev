@@ -6,6 +6,7 @@ if(postContainer) {
 
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   let page = 1;
+  let endPage = 1;
 
   document.addEventListener('scroll',function () {
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -13,10 +14,16 @@ if(postContainer) {
       let documentHeight = document.documentElement.scrollHeight;
 
       if(scrollTop + windowHeight >= documentHeight - 100) {
-          page++;
-          if (page <= lastPage) {
-              console.log(`page ${page}`)
-              loadMoreData(page);
+          // TODO: Refactor this in the future
+          endPage++;
+          console.log(`endPage: ${endPage}`);
+          if(endPage > 4) {
+            page++;
+            endPage = 0;
+            if (page <= lastPage) {
+                console.log(`page ${page}`)
+                loadMoreData(page);
+            }
           }
       }
   })
