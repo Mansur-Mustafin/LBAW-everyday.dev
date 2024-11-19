@@ -10,8 +10,9 @@ use App\Models\Tag;
 
 class NewsController extends Controller
 {
-    public function show_news_posts($news_posts)
+    public function news_post_page($news_posts,Request $request)
     {
+        $news_posts = $news_posts->paginate(10);
         $user = Auth::user();
         foreach ($news_posts as $news) {
             $news->user_vote = null;
@@ -25,32 +26,41 @@ class NewsController extends Controller
                 }
             }
         }
-        return view('pages.news', compact('news_posts'));
-    }
 
-    public function index()
-    {
-        $news_posts = NewsPost::all();
+        if($request->ajax()) {
+            return response()->json([
+                'news_posts' => view('partials.posts',compact('news_posts'))->render(),
+                'next_page'  => $news_posts->currentPage() + 1,
+                'last_page'  => $news_posts->lastPage() 
+            ]);
+        }
+
         return view('pages.news',compact('news_posts'));
     }
 
-    public function recent_feed()
+    public function index(Request $request)
     {
-        $news_posts = NewsPost::orderBy('created_at', 'desc')->get();
-        return NewsController::show_news_posts($news_posts);
+        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        return NewsController::news_post_page($news_posts,$request);
     }
 
-    public function top_feed()
+    public function recent_feed(Request $request)
     {
-        $news_posts = NewsPost::orderBy('upvotes','desc')->get();
-        return NewsController::show_news_posts($news_posts);
+        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        return NewsController::news_post_page($news_posts,$request);
     }
 
-    public function my_feed()
+    public function top_feed(Request $request)
+    {
+        $news_posts = NewsPost::orderBy('upvotes','desc');
+        return NewsController::news_post_page($news_posts,$request);
+    }
+
+    public function my_feed(Request $request)
     {
         // TODO: Change when there is follow
         $news_posts = NewsPost::all();
-        return NewsController::show_news_posts($news_posts);
+        return NewsController::news_post_page($news_posts,$request);
     }
 
 
