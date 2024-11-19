@@ -10,7 +10,7 @@ use App\Models\Tag;
 
 class NewsController extends Controller
 {
-    public function news_post_page($news_posts,Request $request)
+    public function news_post_page($news_posts,string $title,Request $request)
     {
         $news_posts = $news_posts->paginate(10);
         $user = Auth::user();
@@ -35,32 +35,39 @@ class NewsController extends Controller
             ]);
         }
 
-        return view('pages.news',compact('news_posts'));
+        return view('pages.news',compact('news_posts','title'));
     }
 
     public function index(Request $request)
     {
         $news_posts = NewsPost::orderBy('created_at', 'desc');
-        return NewsController::news_post_page($news_posts,$request);
+        $title = "Recent News";
+        return NewsController::news_post_page($news_posts,$title,$request);
     }
 
     public function recent_feed(Request $request)
     {
         $news_posts = NewsPost::orderBy('created_at', 'desc');
-        return NewsController::news_post_page($news_posts,$request);
+        $title = "Recent News";
+        return NewsController::news_post_page($news_posts,$title,$request);
     }
 
     public function top_feed(Request $request)
     {
         $news_posts = NewsPost::orderBy('upvotes','desc');
-        return NewsController::news_post_page($news_posts,$request);
+        $title = "Top News";
+        return NewsController::news_post_page($news_posts,$title,$request);
     }
 
     public function my_feed(Request $request)
     {
-        // TODO: Change when there is follow
-        $news_posts = NewsPost::all();
-        return NewsController::news_post_page($news_posts,$request);
+        $user = Auth::user();
+        $title = "Your News";
+        $following = $user->following()->pluck('followed_id')->map(function (int $value) {
+            return strval($value);
+        })->all();
+        $news_posts = NewsPost::whereIn('author_id',$following);
+        return NewsController::news_post_page($news_posts,$title,$request);
     }
 
 
