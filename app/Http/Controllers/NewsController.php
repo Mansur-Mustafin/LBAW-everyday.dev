@@ -14,6 +14,21 @@ class NewsController extends Controller
     {
         $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
 
+        $user = Auth::user();
+
+        foreach ($newsPosts as $news) {
+            $news->user_vote = null;
+
+            if ($user) {
+                $vote = $news->votes()->where('user_id', $user->id)->first();
+
+                if ($vote) {
+                    $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                    $news->user_vote_id = $vote->id;
+                }
+            }
+        }
+
         return view('pages.news', compact('newsPosts'));
     }
 
@@ -28,15 +43,9 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
-    public function show(int $newsPost)
+    public function show(newsPost $newsPost)
     {
-        $post = NewsPost::findOrFail($newsPost);
-
-        // if ($post->author_id !== Auth::user()->id) {
-        //     return 'Only author can view post';
-        // }
-
-        return view('pages.post', ['post' => $post]);
+        return view('pages.post', ['post' => $newsPost]);
     }
 
     public function store(Request $request)
