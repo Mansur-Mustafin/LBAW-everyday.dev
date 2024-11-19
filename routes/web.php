@@ -39,13 +39,12 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
-    Route::get('/news/page','index'); // Get news_post page
-
+    // Route::get('/news/page','index'); // Get news_post page
+    Route::get('/home', 'recent_feed')->name('home');
     Route::get('/news/my-feed','my_feed')->middleware('auth');
     Route::get('/news/top-feed','top_feed');
     Route::get('/news/recent-feed','recent_feed');
 
-    Route::get('/home', 'index')->name('home');
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
     Route::post('/news', 'store');
