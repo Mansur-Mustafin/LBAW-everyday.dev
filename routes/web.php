@@ -39,7 +39,6 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
-    // Route::get('/news/page','index'); // Get news_post page
     Route::get('/home', 'recent_feed')->name('home');
     Route::get('/news/my-feed','my_feed')->middleware('auth');
     Route::get('/news/top-feed','top_feed');
@@ -61,8 +60,8 @@ Route::controller(VoteController::class)->group(function () {
 
 // Profile TODO
 Route::controller(UserController::class)->group(function () {
-    Route::get('/me', 'me')->middleware('auth');
-    Route::get('/users/{user}', 'show');
+    Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
+    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
 });
 
 // Files

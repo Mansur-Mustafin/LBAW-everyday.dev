@@ -8,40 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\NewsPostPaginationTrait;
 
 class NewsController extends Controller
 {
-    public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null)
-    {
-        $news_posts = $news_posts->paginate(10);
-        $user = Auth::user();
-        foreach ($news_posts as $news) {
-            $news->user_vote = null;
-
-            if ($user) {
-                $vote = $news->votes()->where('user_id', $user->id)->first();
-
-                if ($vote) {
-                    $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
-                    $news->user_vote_id = $vote->id;
-                }
-            }
-        }
-
-        if ($request->ajax()) {
-            return response()->json([
-                'news_posts' => view('partials.posts', compact('news_posts'))->render(),
-                'next_page'  => $news_posts->currentPage() + 1,
-                'last_page'  => $news_posts->lastPage()
-            ]);
-        }
-
-        if (is_null($baseUrl)) {
-            $baseUrl = $request->url();
-        }
-
-        return view('pages.news', compact('news_posts', 'title', 'baseUrl'));
-    }
+    use NewsPostPaginationTrait;
 
     public function index(Request $request)
     {
