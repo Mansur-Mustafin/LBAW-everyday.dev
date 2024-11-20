@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex items-center justify-center">
-    <div class="flex items-center justify-center flex-col md:flex-row rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden">
+    <div class="flex items-center justify-center md:flex-row rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden">
         
         <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center text-white">
             <h2 class="text-3xl font-bold mb-4">Where developers suffer together</h2>
@@ -13,7 +13,7 @@
             </p>
         </div>
 
-        <div class="md:w-1/2 p-8">
+        <div class="md:w-1/2 p-8 w-full">
             <form method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
                 
@@ -32,7 +32,7 @@
                 <div class="relative w-full">
                     <input id="password" type="password" name="password" required
                         class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-                    <span id="toggle-password" class="material-symbols-outlined cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+                    <span id="toggle-password" class="material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
                         visibility_off
                     </span>
                 </div>
