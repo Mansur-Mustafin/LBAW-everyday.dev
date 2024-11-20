@@ -10,7 +10,7 @@
 
         @if (Auth::check())
             <a class="button" href="{{ url('/logout') }}"> Logout </a>
-            <a class="button" href="{{ url('/me') }}"> {{ Auth::user()->username }} </a>
+            <a class="button" href="{{ url('/users/' . Auth::id()) . '/posts' }}"> {{ Auth::user()->username }} </a>
         @endif
     </div>
 

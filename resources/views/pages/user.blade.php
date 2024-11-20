@@ -4,7 +4,30 @@
 
 <section class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
     <main class="order-2 tablet:order-none flex-1">
-        Main
+        @php
+            $isPostsActive = Route::currentRouteNamed('user.posts');
+            $isUpvotesActive = Route::currentRouteNamed('user.upvotes');
+        @endphp
+        <ul class="flex flex-wrap text-sm font-medium border-b border-gray-800 text-gray-400">
+            <li class="me-2">
+                <a href="{{url('/users/'.$user->id.'/posts')}}" class="inline-block px-4 py-2 rounded-lg hover:bg-gray-800 hover:text-white {{$isPostsActive ? 'text-white' : ''}}">Posts</a>
+                <div class="{{$isPostsActive ? '' : 'hidden'}} border-b border-white border-1 w-4 rounded-xl mx-auto"></div>
+            </li>
+            <li class="me-2">
+                <a href="{{url('/users/'.$user->id.'/upvotes')}}" class="inline-block px-4 py-2 rounded-lg hover:bg-gray-800 hover:text-white {{$isUpvotesActive ? 'text-white' : ''}}">Upvotes</a>
+                <div class="{{$isUpvotesActive ? '' : 'hidden'}} border-b border-white border-1 w-4 rounded-xl mx-auto"></div>
+            </li>
+        </ul>
+
+        <div class="container tablet:mx-auto w-full">
+            <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
+            <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container" class="grid grid-cols-1 gap-4">
+                @foreach ($news_posts as $news)
+                    @include('partials.tile-post', ['news' => $news])
+                @endforeach
+            </div>
+        </div>
+
     </main>
 
     <aside class="order-1 tablet:order-none border-l border-gray-700">
