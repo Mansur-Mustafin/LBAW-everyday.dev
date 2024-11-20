@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,6 +16,7 @@
     @vite('resources/js/app.js')
     @vite('resources/js/vote.js')
     @vite('resources/js/search.js')
+    @vite('resources/js/infinite-page.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
@@ -24,11 +26,11 @@
 
 <body class="bg-background text-white">
     <main class="flex flex-col h-screen">
-        
+
         @include('layouts.header')
 
         <div class="flex flex-grow">
-            
+
             @include('layouts.aside')
 
             <section id="content" class="w-full h-full">
