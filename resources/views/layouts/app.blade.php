@@ -13,17 +13,16 @@
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-<<<<<<< HEAD
     @vite('resources/js/vote.js')
     @vite('resources/js/infinite-page.js')
-=======
->>>>>>> 88c7ddd0d33ff0dcae801308537df9ef4fa18f04
     @vite('resources/js/auth.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="@yield('body-class', 'bg-background text-white')">
