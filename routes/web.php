@@ -25,13 +25,14 @@ use App\Http\Controllers\VoteController;
 // Redirect root to /home
 Route::redirect('/', '/home');
 
-// Authentication
+// Login
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->name('logout');
 });
 
+// Register
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
@@ -39,10 +40,15 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
-    Route::get('/home', 'index')->name('home');
-    Route::get('/news/create-post', 'showCreationForm')->middleware('auth');
+    // Route::get('/news/page','index'); // Get news_post page
+    Route::get('/home', 'recent_feed')->name('home');
+    Route::get('/news/my-feed','my_feed')->middleware('auth');
+    Route::get('/news/top-feed','top_feed');
+    Route::get('/news/recent-feed','recent_feed');
+
+    Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
-    Route::post('/news', 'store');
+    Route::post('/news', 'store')->name('news');
     Route::put('/news/{news_post}', 'store');
     Route::delete('/news/{news_post}', 'destroy');
 });
@@ -60,11 +66,13 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}', 'show');
 });
 
+// Files
 Route::controller(FileController::class)->group(function() {
     Route::get('/file/upload', 'index'); // TODO:: delete
     Route::post('/file/upload', 'upload');
 });
 
+// Search
 Route::controller(SearchController::class)->group(function () {
     Route::get('/search/posts','search_post');
     Route::get('/search/posts/{search}','search_post');

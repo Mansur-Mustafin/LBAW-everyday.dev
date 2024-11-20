@@ -2,7 +2,7 @@
     <img src="{{ url($news->title_image_path) }}" alt="" class="w-full h-48 object-cover mb-2">
     
     <a href="{{ url('/news/' . $news->id) }}">
-        <h3 class="text-lg font-bold">{{$news->title}}</h3>
+        <h3 class="text-lg font-bold">{{$news->title . ' #' .$news->id}}</h3>
     </a> 
 
     <div class="flex flex-wrap gap-2 mb-2 mt-1">
