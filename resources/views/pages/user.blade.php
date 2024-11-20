@@ -19,16 +19,27 @@
             </li>
         </ul>
 
-        <div class="container tablet:mx-auto w-full">
-            <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
-            <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container" class="grid grid-cols-1 gap-4">
-                @foreach ($news_posts as $news)
-                    @include('partials.tile-post', ['news' => $news])
-                @endforeach
+        @if ($news_posts->isEmpty())
+            <p class="text-gray-500 text-center mt-10">
+                @if ($isPostsActive)
+                    {{ $user->public_name }} hasn't posted yet.
+                @elseif ($isUpvotesActive)
+                    {{ $user->public_name }} hasn't upvoted any posts yet.
+                @else
+                    No content available.
+                @endif
+            </p>
+        @else
+            <div class="container tablet:mx-auto w-full">
+                <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
+                <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container" class="grid grid-cols-1 gap-4">
+                    @foreach ($news_posts as $news)
+                        @include('partials.tile-post', ['news' => $news])
+                    @endforeach
+                </div>
             </div>
-        </div>
-
-    </main>
+        @endif
+    </main> 
 
     <aside class="order-1 tablet:order-none border-l border-gray-700">
         <header class="flex items-center p-4">
