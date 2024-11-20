@@ -25,9 +25,13 @@ class Tag extends Model
         'name',
     ];
 
-    // Define inverse relationship
     public function newsPosts()
     {
         return $this->belongsToMany(NewsPost::class, 'news_post_tag', 'tag_id', 'news_post_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_tag_subscribes', 'tag_id', 'user_id');
     }
 }

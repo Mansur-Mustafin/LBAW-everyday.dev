@@ -30,8 +30,13 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
-    public function getProfileImage() {
-        return FileController::get('profile', $this->id);
+    public function getProfileImagePathAttribute() {
+        return $this->profileImage ? $this->profileImage->getPath() : Image::DEFAULT_IMAGES[Image::TYPE_PROFILE];
+    }
+
+    public function profileImage() {
+        return $this->hasOne(Image::class, 'user_id')
+                    ->where('image_type', Image::TYPE_PROFILE);
     }
 
     public function comments()
@@ -47,5 +52,15 @@ class User extends Authenticatable
     public function following()
     {
         return $this->belongsToMany(self::class, 'follows', 'follower_id', 'followed_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
+    }
+
+    public function getTagNamesAttribute()
+    {
+        return $this->tags()->pluck('name')->toArray();
     }
 }
