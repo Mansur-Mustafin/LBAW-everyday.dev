@@ -41,6 +41,17 @@
                 <a>Share</a>
             </div>
         </div>
+        
+        <div class="mt-10">
+            <h2 class="text-xl font-bold mb-4">Comments</h2>
+            @forelse ($post->comments->where('parent_comment_id', null) as $comment)
+                @include('partials.comment', ['comment' => $comment, 'level' => 0])
+            @empty
+                <div class="text-gray-400">
+                    No comments yet. Be the first to comment!
+                </div>
+            @endforelse
+        </div>
     </section>
     <section class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[20rem]">
         <input/>
