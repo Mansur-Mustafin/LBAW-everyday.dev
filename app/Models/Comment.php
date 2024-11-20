@@ -26,6 +26,11 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_comment_id')->orderBy('created_at');
     }
 }
