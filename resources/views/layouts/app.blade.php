@@ -13,8 +13,11 @@
 
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+<<<<<<< HEAD
     @vite('resources/js/vote.js')
     @vite('resources/js/infinite-page.js')
+=======
+>>>>>>> 88c7ddd0d33ff0dcae801308537df9ef4fa18f04
     @vite('resources/js/auth.js')
 
     <script type="text/javascript">
