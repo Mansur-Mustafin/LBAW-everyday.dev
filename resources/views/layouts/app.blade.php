@@ -16,6 +16,7 @@
     @vite('resources/js/vote.js')
     @vite('resources/js/infinite-page.js')
     @vite('resources/js/auth.js')
+    @vite('resources/js/edit-profile.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
