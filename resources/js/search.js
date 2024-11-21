@@ -44,7 +44,7 @@ const addMorePosts = (searchQuery) => {
     const url = `${baseUrl}/search/posts/${searchQuery}`
 
     morePostsDiv.innerHTML = `
-        <div class="p-2">
+        <div class="p-2 hover:bg-gray-700 hover:text-white">
             <a href=${url} >
                 See more posts
             </a>
@@ -56,7 +56,7 @@ const addMorePosts = (searchQuery) => {
 const buildPost = (post) => {
     const url = `${baseUrl}/news/${post.id}`
     return `
-            <div class="p-2">
+            <div class="p-2 hover:bg-gray-700 hover:text-white">
                 <a href="${url}" class="">
                     <p>
                         ${post.title}
@@ -73,7 +73,7 @@ const buildTag = (tag) => {
     console.log(tag.name)
     const url = `${baseUrl}/search/tags/${tag.name}`
     return `
-        <div class="p-2">
+        <div class="p-2 hover:bg-gray-700 hover:text-white">
             <a href="${url}" class="">
                 <p>
                     ${tag.name}
@@ -87,7 +87,7 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
     const url = `${baseUrl}/users/${user.id}/posts`
     return `
-        <div class="p-2">
+        <div class="p-2 hover:bg-gray-700 hover:text-white">
             <a href="${url}" class="">
                 <div class="flex gap-1">
                     <p class="align-middle">
