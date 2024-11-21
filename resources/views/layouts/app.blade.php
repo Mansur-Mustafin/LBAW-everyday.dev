@@ -38,7 +38,6 @@
             <section id="content" class="flex items-center justify-center w-full h-full">
                 @yield('content')
             </section>
-        </div>
         @else
             @include('layouts.header')
             
@@ -51,9 +50,6 @@
                 </section>
             </div>
         @endif
-
-
-    </header>
-</main>
+    </main>
 </body>
 </html>
