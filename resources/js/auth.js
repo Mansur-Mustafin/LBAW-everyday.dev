@@ -8,16 +8,13 @@ function togglePasswordVisibility(passwordField, toggleIcon) {
     }
 }
 
-const togglePassword = document.getElementById('toggle-password');
-const passwordField = document.getElementById('password');
-const togglePasswordConfirm = document.getElementById('toggle-password-confirm');
-const passwordFieldConfirm = document.getElementById('password-confirm');
+const toggleIcons = document.querySelectorAll('.toggle-password');
 
-togglePassword.addEventListener('click', () => {
-    togglePasswordVisibility(passwordField, togglePassword);
+toggleIcons.forEach((toggleIcon) => {
+    console.log("hello")
+    const passwordField = toggleIcon.previousElementSibling; 
+
+    toggleIcon.addEventListener('click', () => {
+        togglePasswordVisibility(passwordField, toggleIcon);
+    });
 });
-
-togglePasswordConfirm.addEventListener('click', () => {
-    togglePasswordVisibility(passwordFieldConfirm, togglePasswordConfirm);
-});
-

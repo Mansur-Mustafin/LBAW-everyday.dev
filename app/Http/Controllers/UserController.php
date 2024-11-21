@@ -7,6 +7,10 @@ use App\Models\Vote;
 use App\Models\NewsPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NewsPostPaginationTrait;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Image;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -36,5 +40,57 @@ class UserController extends Controller
         $baseUrl = "/users/{$user->id}/upvotes";
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
+    }
+
+    public function showEditForm(User $user, Request $request)
+    {
+        if (!Auth::check() && Auth::user()->id != $user->id) {
+            return redirect('/');
+        }
+
+        return view('pages.edit-user', ['user' => $user]);
+    }
+
+    public function update(User $user, Request $request)
+    {
+        $request->validate([
+            'public_name' => 'required|string|max:250',
+            'username' => 'required|string|max:40',
+            'email' => [
+                'required',
+                'email',
+                'max:250',
+                Rule::unique('user')->ignore($user->id),
+            ],
+            'image' => 'nullable|image|max:2048',
+            'old_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:4|confirmed',
+        ]);
+
+        $user->public_name = $request->input('public_name');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->save();
+
+        if ($request->has('image')) {
+            Image::query()
+                ->where('user_id', '=', $user->id)
+                ->where('image_type', '=', Image::TYPE_PROFILE)
+                ->delete();
+
+            FileController::upload($request, $user, Image::TYPE_PROFILE);
+        }
+
+        if ($request->filled('old_password') && $request->filled('new_password')) {
+            if (!Hash::check($request->input('old_password'), $user->password)) {
+                return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+            }
+    
+            $user->password = Hash::make($request->input('new_password'));
+            $user->save();
+        }
+
+        return redirect()->route('user.posts', ['user' => $user->id])
+            ->withSuccess('You have successfully updated!');
     }
 }
