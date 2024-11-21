@@ -10,6 +10,7 @@ use App\Http\Controllers\NewsPostPaginationTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -62,6 +63,8 @@ class UserController extends Controller
                 Rule::unique('user')->ignore($user->id),
             ],
             'image' => 'nullable|image|max:2048',
+            'old_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:4|confirmed',
         ]);
 
         $user->public_name = $request->input('public_name');
@@ -76,6 +79,15 @@ class UserController extends Controller
                 ->delete();
 
             FileController::upload($request, $user, Image::TYPE_PROFILE);
+        }
+
+        if ($request->filled('old_password') && $request->filled('new_password')) {
+            if (!Hash::check($request->input('old_password'), $user->password)) {
+                return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+            }
+    
+            $user->password = Hash::make($request->input('new_password'));
+            $user->save();
         }
 
         return redirect()->route('user.posts', ['user' => $user->id])
