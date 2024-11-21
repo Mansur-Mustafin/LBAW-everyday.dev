@@ -14,6 +14,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @vite('resources/js/vote.js')
+    @vite('resources/js/search.js')
     @vite('resources/js/infinite-page.js')
     @vite('resources/js/auth.js')
     @vite('resources/js/edit-profile.js')
@@ -50,8 +51,6 @@
                 </section>
             </div>
         @endif
-    
     </main>
 </body>
-
 </html>
