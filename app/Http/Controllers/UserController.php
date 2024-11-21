@@ -7,6 +7,7 @@ use App\Models\Vote;
 use App\Models\NewsPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NewsPostPaginationTrait;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -36,5 +37,14 @@ class UserController extends Controller
         $baseUrl = "/users/{$user->id}/upvotes";
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
+    }
+
+    public function showEditForm(User $user, Request $request)
+    {
+        if (!Auth::check() && Auth::user()->id != $user->id) {
+            return redirect('/');
+        }
+
+        return view('pages.edit-user', ['user' => $user]);
     }
 }
