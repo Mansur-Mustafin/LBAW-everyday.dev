@@ -34,14 +34,16 @@
                 </a>
                 <label class="hidden tablet:inline group-hover:text-cyan-400 cursor-pointer">Comments</label>
             </div>
-            <div class="flex gap-1 group items-center">
-                <a class="p-2 rounded-xl group-hover:text-rose-400 cursor-pointer group-hover:bg-rose-700 group-hover:bg-opacity-50">
+            <div class="flex gap-1 group items-center cursor-pointer">
+                <a class="p-2 rounded-xl group-hover:text-rose-400 group-hover:bg-rose-700 group-hover:bg-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark-plus"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" x2="12" y1="7" y2="13"/><line x1="15" x2="9" y1="10" y2="10"/></svg>                </a>
+                </a>
                 <label class="hidden tablet:inline group-hover:text-rose-400 cursor-pointer">Bookmark</label>
             </div>
             <div class="flex gap-1 group items-center cursor-pointer">
                 <a class="p-2 rounded-xl group-hover:text-purple-400 group-hover:bg-purple-700 group-hover:bg-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>                </a>
+                </a>
                 <label class="hidden tablet:inline group-hover:text-purple-400 cursor-pointer">Share</label>
             </div>
         </div>
@@ -50,16 +52,18 @@
             <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
         </div>
 
-        <div class="mt-10">
-            <h2 class="text-xl font-bold mb-4">Comments</h2>
-            @forelse ($post->comments->where('parent_comment_id', null) as $comment)
-                @include('partials.comment', ['comment' => $comment, 'level' => 0])
-            @empty
-                <div class="text-gray-400">
-                    No comments yet. Be the first to comment!
-                </div>
-            @endforelse
-        </div>
+        <section class="mt-10">
+            <div class="flex flex-col gap-3">
+
+                @forelse ($comments->where('parent_comment_id', null) as $comment)
+                    @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post])
+                @empty
+                    <div class="text-gray-400">
+                        No comments yet. Be the first to comment!
+                    </div>
+                @endforelse
+            </div>
+        </section>
     </section>
     <section class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[20rem]">
         <input/>
