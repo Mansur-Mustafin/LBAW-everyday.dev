@@ -62,6 +62,7 @@ Route::controller(VoteController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
+    Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
 });
 
 // Files
