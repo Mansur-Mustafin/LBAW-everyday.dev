@@ -39,6 +39,19 @@
                 @yield('content')
             </section>
         </div>
+        @else
+            @include('layouts.header')
+            
+            <div class="flex flex-grow">
+                
+                @include('layouts.aside')
+
+                <section id="content" class="w-full h-full">
+                    @yield('content')
+                </section>
+            </div>
+        @endif
+
 
     </header>
 </main>
