@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\NewsController;
@@ -74,8 +75,7 @@ Route::controller(FileController::class)->group(function() {
 
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/posts','search_post');
+    Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
-    Route::get('/search','search');
     Route::get('/search/{search}','search');
 });

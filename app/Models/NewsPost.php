@@ -66,7 +66,7 @@ class NewsPost extends Model
 
     public function getTitleImagePathAttribute()
     {
-        return $this->titleImage->getPath();
+        return $this->profileImage ? $this->profileImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_POST_TITLE]);
     }
 
     // time_ago shows time in readable format
