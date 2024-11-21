@@ -33,4 +33,9 @@ class Comment extends Model
     {
         return $this->hasMany(Comment::class, 'parent_comment_id')->orderBy('created_at');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_comment_id');
+    }
 }
