@@ -4,12 +4,9 @@
     <a href="{{ url('/news/' . $news->id) }}">
         <h3 class="text-lg font-bold">{{$news->title . ' #' .$news->id}}</h3>
     </a> 
+ 
+    @include('partials.tags', ['tags' => $news->tag_names])
 
-    <div class="flex flex-wrap gap-2 mb-2 mt-1">
-        @foreach ($news->tag_names as $tag)
-            <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{{$tag}}</span>
-        @endforeach
-    </div>
     <div class="vote-container mr-4 flex items-center"
         data-type="post" 
         data-id="{{ $news->id }}" 
