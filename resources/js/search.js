@@ -9,6 +9,11 @@ searchBarDiv.onkeyup = async () => {
         return
     }
 
+    if (searchBarDiv.value == ''){
+        resultsDiv.innerHTML = ''
+        return
+    }
+
     resultsDiv.innerHTML = ''
     const searchQuery = `${baseUrl}/search/${searchBarDiv.value}`
     loading = true
@@ -93,17 +98,17 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
     const url = `${baseUrl}/users/${user.id}/posts`
     return `
-        <div class="p-2 hover:bg-gray-700 hover:text-white">
+        <div class="p-2 text-gray-600 hover:bg-gray-700 hover:text-white">
             <a href="${url}" class="">
                 <div class="flex gap-1">
                     <p class="align-middle">
                         ${user.public_name}
-                        <span class="text-sm text-gray-600 text-nowrap text-ellipsis overflow-hidden align-middle">
+                        <span class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
                             ${user.username}
                         </span>
                     </p>
                 </div>
-                <p class="text-sm text-gray-600 text-nowrap text-ellipsis overflow-hidden">
+                <p class="text-sm  text-nowrap text-ellipsis overflow-hidden">
                     ${user.email}
                 </p>
             </a>
