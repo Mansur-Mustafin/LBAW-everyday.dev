@@ -43,9 +43,13 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
+    public function showSingleThread(newsPost $newsPost, comment $comment){
+        return view('pages.post', ['post' => $newsPost, 'comments' => $comment]);
+    }
+
     public function show(newsPost $newsPost)
     {
-        return view('pages.post', ['post' => $newsPost]);
+        return view('pages.post', ['post' => $newsPost, 'comments' => $newsPost->comments]);
     }
 
     public function store(Request $request)
