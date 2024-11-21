@@ -70,6 +70,11 @@ VALUES
 (NOW() - INTERVAL '4 days', 'Replying to your comment.', 3, NULL, 1),
 (NOW() - INTERVAL '2 days', 'I have a different opinion.', 4, NULL, 6),
 (NOW() - INTERVAL '1 days', 'Agreed!', 5, NULL, 7),
+(NOW() - INTERVAL '1 days', 'Agreed 2 times!', 5, NULL, 13),
+(NOW() - INTERVAL '1 days', 'Agreed 3 times!', 5, NULL, 14),
+(NOW() - INTERVAL '1 days', 'Agreed 4 times!', 5, NULL, 7),
+(NOW() - INTERVAL '1 days', 'Agreed 5 times!', 5, NULL, 7),
+(NOW() - INTERVAL '1 days', 'Agreed 5 times!', 5, NULL, 16),
 (NOW() - INTERVAL '30 minutes', 'This is a reply to your reply.', 2, NULL, 11),
 (NOW(), 'Following up on the discussion.', 6, NULL, 12);
 
