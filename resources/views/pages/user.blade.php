@@ -65,10 +65,10 @@
             @endif
         </div>
         <div class="p-4 mt-4">
-            <p>
+            {{-- <p>
                 <span class="mr-4">{{ $user->following()->count() }} <span class="text-gray-500">following</span></span>
                 <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
-            </p>
+            </p> --}}
             <p>
                 <span class="mr-4">{{$user->rank}} <span class="text-gray-500">rank</span> </span>
                 @if(Auth::check() and (Auth::id() == $user->id))
