@@ -57,6 +57,43 @@
             @enderror
         </div>
 
+        <h3 class="font-bold text-lg flex-1">Reset Password</h3>
+
+        <p class="text-sm text-gray-500">Leave the password fields empty if you do not wish to reset your password.</p>
+
+        <div class="flex flex-col relative w-full">
+            <label class="font-bold text-sm">Old Password</label>
+            <input name="old_password" type="password" class="rounded-2xl bg-input outline-none p-3" placeholder="Old Password*">
+            <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
+                visibility_off
+            </span>
+            @error('old_password')
+                <span class="text-red-400 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="flex flex-col relative w-full">
+            <label class="font-bold text-sm">New Password</label>
+            <input name="new_password" type="password" class="rounded-2xl bg-input outline-none p-3" placeholder="New Password*">
+            <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
+                visibility_off
+            </span>
+            @error('new_password')
+                <span class="text-red-400 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="flex flex-col relative w-full">
+            <label class="font-bold text-sm">Confirm Password</label>
+            <input name="new_password_confirmation" type="password" class="rounded-2xl bg-input outline-none p-3" placeholder="Confirm Password*">
+            <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
+                visibility_off
+            </span>
+            @error('new_password_confirmation')
+                <span class="text-red-400 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
         <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Save Changes</button>
     </form>
 
