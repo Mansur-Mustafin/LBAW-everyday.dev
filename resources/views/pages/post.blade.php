@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="mt-10 flex items-center">
-            <input type="text" class="p-4 w-full border border-solid border-gray-700 bg-input rounded-xl" placeholder="Share your thoughts">
+            <input type="text" class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl" placeholder="Share your thoughts">
             <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
         </div>
 
