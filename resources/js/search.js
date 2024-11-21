@@ -2,11 +2,16 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const searchBarDiv = document.getElementById('search-bar')
 const resultsDiv = document.getElementById('search-results')
 const baseUrl = searchBarDiv.dataset.url
+let loading = false
 
 searchBarDiv.onkeyup = async () => {
+    if (loading) {
+        return
+    }
+
     resultsDiv.innerHTML = ''
     const searchQuery = `${baseUrl}/search/${searchBarDiv.value}`
-
+    loading = true
     fetch(searchQuery, {
       method: 'GET',
       headers: {
@@ -14,6 +19,7 @@ searchBarDiv.onkeyup = async () => {
       }
     })
     .then(response => {
+      loading = false
       if (response.ok) {
         return response.json();
       } 
@@ -57,11 +63,11 @@ const buildPost = (post) => {
     const url = `${baseUrl}/news/${post.id}`
     return `
             <div class="p-2 hover:bg-gray-700 hover:text-white">
-                <a href="${url}" class="">
+                <a href="${url}" class="hover:text-white">
                     <p>
                         ${post.title}
                     </p>
-                    <p class="text-sm text-gray-600 text-nowrap text-ellipsis overflow-hidden">
+                    <p class="text-sm text-nowrap text-ellipsis overflow-hidden">
                         ${post.content}
                     </p>
                 </a>
