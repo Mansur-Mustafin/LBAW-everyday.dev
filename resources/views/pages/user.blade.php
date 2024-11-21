@@ -81,6 +81,12 @@
             @include('partials.tags', ['tags' => $user->tag_names])
         </div>
 
+        <div class="p-4">
+        @if (Auth::check() and (Auth::id() == $user->id))
+            <a href="{{ url('/logout') }}" class="text-input bg-red-400 font-bold rounded-xl px-4 py-1 self-end">Logout</a>
+        @endif
+        </div>
+
         <!-- More info (only admin) -->
         @if(Auth::check() and (Auth::user()->is_admin))
             <div class="p-4">

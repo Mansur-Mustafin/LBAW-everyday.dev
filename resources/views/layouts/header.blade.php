@@ -1,5 +1,5 @@
-<header class="py-3 px-5 flex justify-between items-center border-b border-1 border-gray-700">
-    <div>
+<header class="py-3 px-5 flex items-center border-b border-1 border-gray-700">
+    <div class="flex-1">
         <div>
             <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
             @if (!Auth::check())
@@ -7,16 +7,14 @@
                 <a class="button" href="{{ route('register') }}">Register</a>
             @endif
         </div>
-
-        @if (Auth::check())
-            <a class="button" href="{{ url('/logout') }}"> Logout </a>
-            <a class="button" href="{{ url('/users/' . Auth::id()) . '/posts' }}"> {{ Auth::user()->username }} </a>
-        @endif
     </div>
 
     @if (Auth::check())
-        <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ url('/news/create-post') }}">
+        <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold mr-2" href="{{ url('/news/create-post') }}">
             New post
+        </a>
+        <a type="button" class="bg-white text-black rounded-xl px-2 py-2 font-bold" href="{{ url('/users/' . Auth::id()) . '/posts' }}">
+            <img class="w-6 h-6" src="{{Auth::user()->profile_image_path}}" alt="">
         </a>
     @endif
 </header>
