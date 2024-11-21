@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\NewsPost;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class NewsController extends Controller
 {
@@ -43,13 +46,18 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
-    public function showSingleThread(newsPost $newsPost, comment $comment){
-        return view('pages.post', ['post' => $newsPost, 'comments' => $comment]);
+    public function showSingleThread(newsPost $newsPost, comment $comment)
+    {
+        if (Gate::inspect('belongsToPost', [$comment, $newsPost])->allowed()) {
+            $comment = new Collection([$comment]);
+            return view('pages.post', ['post' => $newsPost, 'comments' => $comment, 'thread' => 'single']);
+        }
+        return redirect()->to('news/' . $newsPost->id)->withErrors('Comment does not belong to the correspondent news');
     }
 
     public function show(newsPost $newsPost)
     {
-        return view('pages.post', ['post' => $newsPost, 'comments' => $newsPost->comments]);
+        return view('pages.post', ['post' => $newsPost, 'comments' => $newsPost->comments, 'thread' => 'multi']);
     }
 
     public function store(Request $request)
