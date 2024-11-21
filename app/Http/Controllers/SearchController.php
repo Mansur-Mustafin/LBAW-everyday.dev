@@ -33,11 +33,11 @@ class SearchController extends Controller
         $tag_query = $search_query == '' ? '' : "%{$search_query}%"; 
         $user_query= $search_query == '' ? '' : "%{$search_query}%"; 
         
-        $tags = Tag::whereRaw("LOWER(name) like ?",[$tag_query])->take(3)->get();
-        $users_from_username = User::whereRaw("LOWER(username) like ?",[$user_query])->take(3)->get();
-        $users_from_public_name = User::whereRaw("LOWER(public_name) like ?",[$user_query])->take(3)->get();
+        $tags = Tag::whereRaw("LOWER(name) like ?",[strtolower($tag_query)])->take(3)->get();
+        $users_from_username = User::whereRaw("LOWER(username) like ?",[strtolower($user_query)])->take(3)->get();
+        $users_from_public_name = User::whereRaw("LOWER(public_name) like ?",[strtolower($user_query)])->take(3)->get();
 
-        $users = $users_from_username->merge($users_from_public_name);
+        $users = $users_from_username->merge($users_from_public_name)->unique('id');
 
         return response()->json([
             "news_posts"=>$news_posts,
