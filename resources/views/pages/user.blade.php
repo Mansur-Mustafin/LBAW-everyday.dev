@@ -76,10 +76,10 @@
                 @endif
             </p>
         </div>
-        <div class="p-4 mt-4">
+        {{-- <div class="p-4 mt-4">
             <h3 class="font-bold text-lg">Favorite Tags</h3>
             @include('partials.tags', ['tags' => $user->tag_names])
-        </div>
+        </div> --}}
 
         <div class="p-4">
         @if (Auth::check() and (Auth::id() == $user->id))
