@@ -84,14 +84,14 @@ class NewsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:250',
-            'content' => 'required|string|max:40',
-            'for_followers' => 'nullable|boolean'
+            'content' => 'required|string|max:2000', 
+            'for_followers' => 'nullable|boolean',
         ]);
 
         $newsPost->update([
             'title' => $request->title,
             'content' => $request->input('content'),
-            'for_followers' => $request->for_followers ?? false
+            'for_followers' => $request->input('for_followers', false), 
         ]);
 
         if ($request->has('title_photo')) {
@@ -102,8 +102,10 @@ class NewsController extends Controller
 
             FileController::upload($request, $newsPost);
         }
-    }
 
+        return redirect()->route('news.show', ['newsPost' => $newsPost->id])
+            ->with('message', 'Post atualizado com sucesso!');
+    }
     public function destroy(newsPost $newsPost)
     {
         $newsPost->delete();
