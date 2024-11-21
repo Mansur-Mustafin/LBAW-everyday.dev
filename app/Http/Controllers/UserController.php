@@ -8,6 +8,8 @@ use App\Models\NewsPost;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NewsPostPaginationTrait;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Image;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -46,5 +48,37 @@ class UserController extends Controller
         }
 
         return view('pages.edit-user', ['user' => $user]);
+    }
+
+    public function update(User $user, Request $request)
+    {
+        $request->validate([
+            'public_name' => 'required|string|max:250',
+            'username' => 'required|string|max:40',
+            'email' => [
+                'required',
+                'email',
+                'max:250',
+                Rule::unique('user')->ignore($user->id),
+            ],
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        $user->public_name = $request->input('public_name');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->save();
+
+        if ($request->has('image')) {
+            Image::query()
+                ->where('user_id', '=', $user->id)
+                ->where('image_type', '=', Image::TYPE_PROFILE)
+                ->delete();
+
+            FileController::upload($request, $user, Image::TYPE_PROFILE);
+        }
+
+        return redirect()->route('user.posts', ['user' => $user->id])
+            ->withSuccess('You have successfully updated!');
     }
 }

@@ -8,6 +8,8 @@ const title = document.getElementById('title')
 const followersToggle = document.getElementById('toggleTwo')
 const hiddenToggle = document.getElementById('hiddenToggle')
 
+if (createForm) {
+
 thumbnailButton.addEventListener('click', function (evt) {
   evt.preventDefault()
   fileInput.click()
@@ -91,3 +93,6 @@ createForm.addEventListener('submit', function (evt) {
   console.log("value:", hiddenToggle.value);
   createForm.submit()
 })
+
+
+}

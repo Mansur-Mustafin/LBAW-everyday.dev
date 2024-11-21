@@ -14,7 +14,7 @@
             New post
         </a>
         <a type="button" class="bg-white text-black rounded-xl px-2 py-2 font-bold" href="{{ url('/users/' . Auth::id()) . '/posts' }}">
-            <img class="w-6 h-6" src="{{Auth::user()->profile_image_path}}" alt="">
+            <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profile_image_path}}" alt="">
         </a>
     @endif
 </header>
