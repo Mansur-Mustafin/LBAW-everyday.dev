@@ -16,7 +16,7 @@
         </div>
         <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-lg font-semibold">Author</h2>
-            <a href="{{ url('/users/' . $post->author->id) }}"> {{ Auth::user()->username }} </a>
+            <a href="{{ url('/users/' . $post->author->id . '/posts') }}"> {{ Auth::user()->username }} </a>
         </div>
         <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-lg font-semibold">Content</h2>
