@@ -73,8 +73,7 @@ Route::controller(FileController::class)->group(function() {
 
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/posts','search_post');
+    Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
-    Route::get('/search','search');
     Route::get('/search/{search}','search');
 });

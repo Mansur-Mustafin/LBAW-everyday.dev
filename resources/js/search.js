@@ -70,7 +70,8 @@ const buildPost = (post) => {
 }
 
 const buildTag = (tag) => {
-    const url = "/#" // TODO: Redirect somewhere
+    console.log(tag.name)
+    const url = `${baseUrl}/search/tags/${tag.name}`
     return `
         <div class="p-2">
             <a href="${url}" class="">
@@ -84,7 +85,7 @@ const buildTag = (tag) => {
 }
 
 const buildUser = (user) => {
-    const url = `${baseUrl}/users/${user.id}`
+    const url = `${baseUrl}/users/${user.id}/posts`
     return `
         <div class="p-2">
             <a href="${url}" class="">
