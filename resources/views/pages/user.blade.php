@@ -37,6 +37,9 @@
                         @include('partials.tile-post', ['news' => $news])
                     @endforeach
                 </div>
+                <div id="loading-icon" style="display: none;" class="my-6">
+                    <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
+                </div>  
             </div>
         @endif
     </main> 
@@ -45,7 +48,7 @@
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
             @if(Auth::check() and (Auth::id() == $user->id))
-                <a href="" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
+                <a href="{{url('/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
             @endif
         </header>
         <div class="rounded flex justify-center m-5">
@@ -76,10 +79,10 @@
                 @endif
             </p>
         </div>
-        <div class="p-4 mt-4">
+        {{-- <div class="p-4 mt-4">
             <h3 class="font-bold text-lg">Favorite Tags</h3>
             @include('partials.tags', ['tags' => $user->tag_names])
-        </div>
+        </div> --}}
 
         <div class="p-4">
         @if (Auth::check() and (Auth::id() == $user->id))

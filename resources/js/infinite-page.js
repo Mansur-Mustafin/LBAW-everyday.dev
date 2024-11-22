@@ -1,4 +1,5 @@
 const postContainer = document.getElementById('news-posts-container')
+const loadingIcon = document.getElementById('loading-icon');
 
 if(postContainer) {
   let lastPage = postContainer.dataset.last_page
@@ -23,6 +24,9 @@ if(postContainer) {
                 page++;
                 loadMoreData(page);
             }
+            if (page > lastPage){
+                if(loadingIcon) loadingIcon.style.display = 'none';
+            }
           }
       }
   })
@@ -30,6 +34,8 @@ if(postContainer) {
   function loadMoreData(page) {
       if (loading) return;
       loading = true;
+
+      if(loadingIcon) loadingIcon.style.display = 'block';
 
       fetch(newsPageURL+`?page=${page}`, {
           method: 'GET',
@@ -40,6 +46,7 @@ if(postContainer) {
       })
       .then(response => {
           loading = false;
+          if(loadingIcon) loadingIcon.style.display = 'none';
           return response.json();
       })
       .then(data => {
