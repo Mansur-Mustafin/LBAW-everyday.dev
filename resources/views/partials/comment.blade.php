@@ -3,7 +3,8 @@
 @endphp
 
 @if($level == 0)
-    <div class="border border-solid border-gray-700 rounded-xl flex flex-col">
+    <div class="border border-solid border-gray-700 rounded-xl flex flex-col" id="{{ 'comment-' . $comment->id }}"
+        data-replies="{{count($comment->replies) == 0 ? 'false' : 'true'}}">
         <div class="{{ count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700'}} rounded-xl p-4">
             <div class="text-sm text-gray-400 flex gap-2">
                 <img src="{$user->getProfileImage()}">
@@ -15,10 +16,11 @@
                 </div>
             </div>
             <div class="mt-4">
-                {{ $comment->content }}
+                {{ $comment->content . $comment->id}}
             </div>
             <div class="mt-3 text-sm flex gap-3">
-                <a class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50">
+                <a
+                    class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-message-circle">
@@ -57,7 +59,7 @@
     </a>
 
 @else
-    <div
+    <div id="{{ 'comment-' . $comment->id }}"
         class="{{ count($comment->parent->replies) > 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : ''}} flex flex-col ml-3 tablet:ml-8">
         <div
             class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'}} {{count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}}  p-4">
@@ -71,10 +73,11 @@
                 </div>
             </div>
             <div class="mt-4">
-                {{ $comment->content }}
+                {{ $comment->content . $comment->id}}
             </div>
             <div class="mt-3 text-sm flex gap-3">
-                <a class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50">
+                <a
+                    class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-message-circle">

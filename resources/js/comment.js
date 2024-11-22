@@ -1,3 +1,4 @@
+
 document.getElementById('commentForm').addEventListener('submit', function (e) {
    e.preventDefault()
 
@@ -72,4 +73,33 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
    }
 
    request.send('content=' + encodeURIComponent(commentValue) + '&post_id=' + encodeURIComponent(post_id));
+})
+
+document.querySelectorAll('.sub-comment').forEach(function (element) {
+   element.addEventListener('click', function (e) {
+      const commentSection = element.parentElement.parentElement.parentElement
+      const form = document.createElement('form')
+      form.classList.add('flex', 'items-center', '-mt-2')
+      form.id = 'form-' + commentSection.getAttribute('id')
+
+      form.innerHTML = `
+         <input type="text" data-post_id="${'TODO'}"
+            class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+            placeholder="Share your thoughts" id="commentInput" />
+         <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+      `
+
+      commentSection.children[0].style.borderBottom = 0
+      commentSection.children[0].style.borderRadius = 0
+
+      commentSection.dataset.replies == 'false' ? commentSection.style.borderBottom = 0 : {} // removes bottom border for comment with no replies (level 0) due to overflow
+
+      if (commentSection.children.length > 1) { // this adds as a second element, once the first element is always the content
+         commentSection.insertBefore(form, commentSection.children[1])
+      } else {
+         commentSection.appendChild(form)
+      }
+
+      element.style.pointerEvents = 'none'
+   })
 })
