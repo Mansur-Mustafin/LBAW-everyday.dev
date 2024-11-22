@@ -9,14 +9,12 @@
         </div>
     </div>
 
-    <div>
-        <div class="flex text-black bg-white rounded-t p-1 w-96">
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30"  viewBox="0 0 30 30" class="">
-                <path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"></path>
-            </svg>                
-            <input data-url="{{ url('') }}" id="search-bar" type="text" class=" h-full p-2 outline-none rounded-t w-full">
+    <div class="">
+        <div id="search-container" class="flex rounded-2xl bg-input p-3 laptop:w-96 desktop:w-96 w-80" >
+            <svg class="h-8 w-8 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            <input data-url="{{ url('') }}" id="search-bar" type="text" class="bg-input outline-none w-full" placeholder="Type to search...">
         </div>
-        <div id="search-results" class=" text-black bg-white divide-y z-20 absolute w-96"></div>
+        <div id="search-results" class="bg-input z-20 absolute laptop:w-96 desktop:w-96 w-80"></div>
     </div>
 
     <div class="flex gap-2">
