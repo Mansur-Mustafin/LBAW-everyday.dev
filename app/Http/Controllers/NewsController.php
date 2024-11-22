@@ -43,9 +43,19 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
-    public function show(newsPost $newsPost)
+    public function show(newsPost $news_post)
     {
-        return view('pages.post', ['post' => $newsPost]);
+        $tags = Tag::all();
+        $existingTags = $news_post->tags->pluck('name')->toArray();
+        $stillAvailableTags = $tags->filter(function ($tag) use ($existingTags) {
+            return !in_array($tag->name, $existingTags);
+        });
+
+        return view('pages.post', [
+            'post' => $news_post,
+            'tags' => $tags,
+            'availableTags' => $stillAvailableTags,
+        ]);
     }
 
     public function store(Request $request)
@@ -86,6 +96,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:250',
             'content' => 'required|string|max:2000', 
             'for_followers' => 'nullable|boolean',
+            'tags' => 'nullable|string',
         ]);
 
         $newsPost->update([
@@ -103,9 +114,16 @@ class NewsController extends Controller
             FileController::upload($request, $newsPost);
         }
 
-        return redirect()->route('news.show', ['newsPost' => $newsPost->id])
+        if ($request->tags != null) {
+            $tags = explode(',', $request->tags);
+            $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
+            $newsPost->tags()->attach($tagIds);
+        }
+
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
             ->with('message', 'Post atualizado com sucesso!');
     }
+
     public function destroy(newsPost $newsPost)
     {
         $newsPost->delete();
