@@ -61,6 +61,7 @@ CREATE TABLE image (
     )
 );
 
+
 CREATE TABLE comment (
     id SERIAL PRIMARY KEY,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP CHECK (created_at <= CURRENT_TIMESTAMP),
