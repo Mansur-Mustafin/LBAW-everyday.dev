@@ -57,22 +57,47 @@ class UserController extends Controller
         return view('pages.edit-user', ['user' => $user]);
     }
 
+    public function showEditFormAdmin(User $user, Request $request)
+    {
+        return view('pages.admin-edit-user', ['user' => $user]);
+    }
+    
+    public function showCreateFormAdmin(Request $request)
+    {
+        return view('pages.admin-create-user');
+    }
+
     public function update(User $user, Request $request)
     {
         $request->validate([
             'public_name' => 'required|string|max:250',
-            'username' => 'required|string|max:40',
+            'username' => [
+                'required',
+                'string',
+                'max:40',
+                Rule::unique('user')->ignore($user->id),
+            ],
             'email' => [
                 'required',
                 'email',
                 'max:250',
                 Rule::unique('user')->ignore($user->id),
             ],
+            'reputation'=>'nullable',
+            'is_admin'=>'nullable',
             'image' => 'nullable|image|max:2048',
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
         ]);
 
+        if($request->user()->isAdmin()) {
+            if($request->filled('reputation')) {
+                $user->reputation = $request->input('reputation');
+            }
+            if($request->filled('is_admin')) {
+                $user->is_admin = $request->input('is_admin');
+            }
+        }
         $user->public_name = $request->input('public_name');
         $user->username = $request->input('username');
         $user->email = $request->input('email');
@@ -88,7 +113,7 @@ class UserController extends Controller
         }
 
         if ($request->filled('old_password') && $request->filled('new_password')) {
-            if (!Hash::check($request->input('old_password'), $user->password)) {
+            if (!Hash::check($request->input('old_password'), $user->password) && !$request->user()->isAdmin()) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
     

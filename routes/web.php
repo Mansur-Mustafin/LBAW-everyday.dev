@@ -36,6 +36,7 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+    Route::post('/admin/register', 'registerByAdmin')->middleware('admin');
 });
 
 // News
@@ -65,7 +66,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
-    Route::get('/admin','showAdmin')->middleware('admin');
+
+    Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
+    Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
+    Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
 });
 
 // Search
