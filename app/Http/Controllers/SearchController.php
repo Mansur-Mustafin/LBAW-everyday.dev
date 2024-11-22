@@ -65,4 +65,14 @@ class SearchController extends Controller
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl);
     }
+    
+    public function search_user(Request $request)
+    {
+        $search_query = "%".strtolower($request->search)."%";
+
+        $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query,$search_query])->take(50)->get();
+        return response()->json([
+            "users"=> $users
+        ]);
+    }
 }

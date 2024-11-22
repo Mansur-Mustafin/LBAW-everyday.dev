@@ -1,4 +1,4 @@
-<div class="flex flex-col border border-gray-700 rounded">
+<div class="flex flex-col laptop:border laptop:border-gray-700 rounded">
     <div class="flex justify-between p-2">
       <div>
         <h2 class="text-2xl flex gap-1">
@@ -19,6 +19,7 @@
           </span>
           @endif
         </h1>
+        <h3 class="text-gray-400 hidden">{{ $user->rank }}</h3>
         <h3 class="text-gray-400">{{ $user->username }}</h3>
         <h3 class="text-gray-400">{{ $user->email }}</h3>
       </div>
