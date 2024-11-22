@@ -70,11 +70,12 @@
                 <label class="hidden tablet:inline group-hover:text-purple-400 cursor-pointer">Share</label>
             </div>
         </div>
-        <div class="mt-10 flex items-center">
-            <input type="text" class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl"
-                placeholder="Share your thoughts">
-            <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
-        </div>
+        <form class="mt-10 flex items-center" id="commentForm">
+            <input type="text" data-post_id="{{ $post->id }}"
+                class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                placeholder="Share your thoughts" id="commentInput" />
+            <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+        </form>
 
         <section class="mt-10">
 
@@ -90,7 +91,7 @@
 
             @endif
 
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-3" id="comment-section">
 
                 @forelse ($comments->where('parent_comment_id', null) as $comment)
                     @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])

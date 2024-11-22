@@ -11,12 +11,15 @@ class Comment extends Model
 
     protected $table = 'comment';
 
+    public const UPDATED_AT = null;
+
     protected $fillable = [
         'content',
         'is_omitted',
         'upvotes',
         'downvotes',
         'author_id',
+        'news_post_id',
     ];
 
     public function post()
