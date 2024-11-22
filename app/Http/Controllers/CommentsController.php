@@ -12,15 +12,20 @@ class CommentsController extends Controller
     {
         $request->validate([
             'content' => 'required|string|max:40',
+            'news_post_id' => 'nullable|int',
+            'parent_comment_id' => 'nullable|int'
         ]);
 
-        Comment::create([
+        $comment = Comment::create([
             'content' => $request->content,
             'news_post_id' => $request->post_id,
+            'parent_comment_id' => $request->parent_comment_id,
             'author_id' => Auth::user()->id
         ]);
 
-        return response()->json(['comment' => $request->content, 'user' => Auth::user()], 201);
+        $type = $request->post_id ? 'non-nested' : 'nested';
+
+        return response()->json(['comment' => $request->content, 'user' => Auth::user(), 'type' => $type, 'parent_id' => $request->parent_comment_id, 'id' => $comment->id], 201);
     }
 
     public function update(Request $request, Comment $comment)
