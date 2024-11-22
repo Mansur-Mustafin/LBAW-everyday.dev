@@ -11,7 +11,6 @@ function togglePasswordVisibility(passwordField, toggleIcon) {
 const toggleIcons = document.querySelectorAll('.toggle-password');
 
 toggleIcons.forEach((toggleIcon) => {
-    console.log("hello")
     const passwordField = toggleIcon.previousElementSibling; 
 
     toggleIcon.addEventListener('click', () => {

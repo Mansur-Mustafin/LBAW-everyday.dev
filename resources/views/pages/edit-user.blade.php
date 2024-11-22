@@ -94,7 +94,11 @@
             @enderror
         </div>
 
-        <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Save Changes</button>
+        <div class="flex gap-2 self-end">
+            <a href="{{ url('/users/'.$user->id.'/posts') }}" class="text-input bg-white font-bold rounded-xl px-6 py-2">Cancel</a>
+            <button class="text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Save Changes</button>
+        </div>
+        
     </form>
 
 </section>

@@ -80,7 +80,6 @@ createForm.addEventListener('submit', function (evt) {
     }
 
     if (!title.value.length) {
-      console.log('teste')
       title.style.borderWidth = '1px'
       title.style.borderColor = 'red'
     }
@@ -88,9 +87,9 @@ createForm.addEventListener('submit', function (evt) {
     return
   }
 
-  console.log("File Input Value:", fileInput.files);
-  console.log("Title:", title.value);
-  console.log("value:", hiddenToggle.value);
+  // console.log("File Input Value:", fileInput.files);
+  // console.log("Title:", title.value);
+  // console.log("value:", hiddenToggle.value);
   createForm.submit()
 })
 

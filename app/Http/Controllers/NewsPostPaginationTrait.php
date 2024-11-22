@@ -9,7 +9,7 @@ trait NewsPostPaginationTrait
 {
     public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
     {
-        $news_posts = $news_posts->paginate(10);
+        $news_posts = $news_posts->paginate(12);
         $user = Auth::user();
         foreach ($news_posts as $news) {
             $news->user_vote = null;
@@ -23,6 +23,7 @@ trait NewsPostPaginationTrait
                 }
             }
         }
+
 
         if ($request->ajax()) {
             return response()->json([
