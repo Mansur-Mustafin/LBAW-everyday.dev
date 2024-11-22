@@ -59,18 +59,12 @@ Route::controller(VoteController::class)->group(function () {
     Route::put('/vote/{vote}', 'update')->name('vote.update');
 });
 
-// Profile TODO
+// Profile
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
-});
-
-// Files
-Route::controller(FileController::class)->group(function() {
-    Route::get('/file/upload', 'index'); // TODO:: delete
-    Route::post('/file/upload', 'upload');
 });
 
 // Search
