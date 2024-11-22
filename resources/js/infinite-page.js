@@ -18,7 +18,6 @@ if(postContainer) {
       if(scrollTop + windowHeight >= documentHeight - 100) {
           // TODO: Refactor this in the future
           endPage++;
-          console.log(`page: ${page} endPage: ${endPage}`)
           if(endPage > 4) {
             endPage = 0;
             if (page <= lastPage && loading == false) {

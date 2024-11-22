@@ -24,7 +24,6 @@ trait NewsPostPaginationTrait
             }
         }
 
-        sleep(1);
 
         if ($request->ajax()) {
             return response()->json([

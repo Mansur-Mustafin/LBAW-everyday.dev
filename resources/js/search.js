@@ -92,7 +92,6 @@ const buildPost = (post) => {
 }
 
 const buildTag = (tag) => {
-    console.log(tag.name)
     const url = `${baseUrl}/search/tags/${tag.name}`
     return `
         <div class="p-2 hover:bg-gray-700">
