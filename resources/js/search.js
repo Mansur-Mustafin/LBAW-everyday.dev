@@ -1,20 +1,26 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const searchBarDiv = document.getElementById('search-bar')
+const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results')
 const baseUrl = searchBarDiv.dataset.url
 let loading = false
 
 searchBarDiv.onkeyup = async () => {
+    resultsDiv.style.display = 'block';
+    if (searchBarDiv.value === '') {
+        searchContainer.classList.remove('rounded-t-2xl');
+        searchContainer.classList.add('rounded-2xl');
+        resultsDiv.innerHTML = '';
+        return;
+    } else {
+        searchContainer.classList.remove('rounded-2xl');
+        searchContainer.classList.add('rounded-t-2xl');
+    }
+
     if (loading) {
         return
     }
 
-    if (searchBarDiv.value == ''){
-        resultsDiv.innerHTML = ''
-        return
-    }
-
-    resultsDiv.innerHTML = ''
     const searchQuery = `${baseUrl}/search/${searchBarDiv.value}`
     loading = true
     fetch(searchQuery, {
@@ -30,6 +36,7 @@ searchBarDiv.onkeyup = async () => {
       } 
     })
     .then(data => {
+      resultsDiv.innerHTML = ''
       showElements(data["news_posts"],buildPost)
       showElements(data["tags"],buildTag)
       showElements(data["users"],buildUser)
@@ -45,6 +52,7 @@ searchBarDiv.onkeyup = async () => {
 const showElements = (elements,buildFunction) => {
     elements.forEach(element => {
         const postResult = document.createElement("div");
+        postResult.classList.add("shadow-4xl"); postResult.classList.add("shadow-white")
         postResult.innerHTML = buildFunction(element)
         resultsDiv.appendChild(postResult)
     });
@@ -67,14 +75,17 @@ const addMorePosts = (searchQuery) => {
 const buildPost = (post) => {
     const url = `${baseUrl}/news/${post.id}`
     return `
-            <div class="p-2 hover:bg-gray-700 hover:text-white">
-                <a href="${url}" class="hover:text-white">
-                    <p>
-                        ${post.title}
-                    </p>
-                    <p class="text-sm text-nowrap text-ellipsis overflow-hidden">
-                        ${post.content}
-                    </p>
+            <div class="p-2 hover:bg-gray-700">
+                <a href="${url}" class="flex items-center">
+                    <p class="bg-red-400 px-3 py-1 h-7 mr-1 rounded-full text-sm">Post</p>
+                    <div class="flex-1 min-w-0">
+                        <p>
+                            ${post.title}
+                        </p>
+                        <p class="text-sm text-nowrap text-ellipsis overflow-hidden">
+                            ${post.content}
+                        </p>
+                    </div>
                 </a>
             </div>
     ` 
@@ -84,11 +95,14 @@ const buildTag = (tag) => {
     console.log(tag.name)
     const url = `${baseUrl}/search/tags/${tag.name}`
     return `
-        <div class="p-2 hover:bg-gray-700 hover:text-white">
-            <a href="${url}" class="">
-                <p>
-                    ${tag.name}
-                </p>
+        <div class="p-2 hover:bg-gray-700">
+            <a href="${url}" class="flex items-center">
+                <p class="bg-gray-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">Tag</p>
+                <div class="flex-1 min-w-0">
+                    <p>
+                        ${tag.name}
+                    </p>
+                </div>
             </a>
         </div>
     
@@ -98,20 +112,32 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
     const url = `${baseUrl}/users/${user.id}/posts`
     return `
-        <div class="p-2 text-gray-600 hover:bg-gray-700 hover:text-white">
-            <a href="${url}" class="">
-                <div class="flex gap-1">
+        <div class="p-2 hover:bg-gray-700">
+            <a href="${url}" class="flex items-center">
+                <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
+                <div class="flex-1 min-w-0">
                     <p class="align-middle">
                         ${user.public_name}
-                        <span class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
-                            ${user.username}
-                        </span>
+                    </p>
+                    <p class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
+                        ${user.username}
                     </p>
                 </div>
-                <p class="text-sm  text-nowrap text-ellipsis overflow-hidden">
-                    ${user.email}
-                </p>
             </a>
         </div>
     `
 }
+
+// Da para fazer isso melhor?
+searchBarDiv.addEventListener('blur', () => {
+        resultsDiv.style.display = 'none'; 
+        searchContainer.classList.remove('rounded-t-2xl');
+        searchContainer.classList.add('rounded-2xl');
+    }
+);
+searchBarDiv.addEventListener('focus', () => {
+        resultsDiv.style.display = 'block';
+        searchContainer.classList.add('rounded-t-2xl');
+        searchContainer.classList.remove('rounded-2xl');
+    }
+);
