@@ -1,18 +1,18 @@
+
 @extends('layouts.app')
 
 @section('content')
 
 <section class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
-
-    <form method="POST" action="{{ url('users/' . $user->id) }}" enctype="multipart/form-data" 
+    <form method="POST" action="{{ url('/admin/register') }}" enctype="multipart/form-data" 
         class="px-3 flex flex-col gap-4 mt-4" id="admin-edit-profile">
         @csrf
-        @method('PUT')
+
         <h3 class="font-bold text-lg flex-1">Profile Picture</h3>
 
         <div class="flex">
             <button type="button" class="rounded flex justify-center m-5" id="personalizedFileInput" title="Click to upload Image">
-                <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="{{$user->profile_image_path}}" alt="Current Profile Image">
+                <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="" alt="">
             </button>
             <button type="button" id="deleteThumbnail" class="self-start hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -33,7 +33,7 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm">Public Name</label>
-            <input name="public_name" class="rounded-2xl bg-input outline-none p-3" placeholder="Public Name*" value="{{ old('public_name', $user->public_name) }}">
+            <input name="public_name" class="rounded-2xl bg-input outline-none p-3" placeholder="Public Name*" value="">
             @error('public_name')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
@@ -41,7 +41,7 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm">Username</label>
-            <input name="username" class="rounded-2xl bg-input outline-none p-3" placeholder="Username*" value="{{ old('username', $user->username) }}">
+            <input name="username" class="rounded-2xl bg-input outline-none p-3" placeholder="Username*" value="">
             @error('username')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
@@ -49,7 +49,7 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm">Email</label>
-            <input name="email" class="rounded-2xl bg-input outline-none p-3" placeholder="Email*" value="{{ old('email', $user->email) }}">
+            <input name="email" class="rounded-2xl bg-input outline-none p-3" placeholder="Email*" value="">
             @error('email')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
@@ -57,65 +57,45 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm">Reputation</label>
-            <input name="reputation" class="rounded-2xl bg-input outline-none p-3" placeholder="Reputation*" value="{{ old('reputation', $user->reputation) }}">
+            <input name="reputation" class="rounded-2xl bg-input outline-none p-3" placeholder="Reputation*" value="">
             @error('reputation')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
 
         <div class="flex flex-col relative w-full">
-            <label class="font-bold text-sm">New Password</label>
-            <input name="new_password" type="password" class="rounded-2xl bg-input outline-none p-3" placeholder="New Password*">
+            <label class="font-bold text-sm">Password</label>
+            <input name="password" type="password" class="rounded-2xl bg-input outline-none p-3" placeholder="New Password*">
             <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
                 visibility_off
             </span>
-            @error('new_password')
+            @error('password')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
-
-
-        <div class="flex justify-between items-center">
-          {{--CREATE TYPE UserStatus AS ENUM ('active', 'blocked', 'pending', 'deleted'); --}}
-          <div class="flex flex-col">
-              <label class="font-bold text-sm">User Status</label>
-              <select class="bg-input rounded-2xl p-3 w-40" id="tagSelector">
-                  <option selected disabled></option>
-                  <option value='active'>active</option>
-                  <option value='blocked'>blocked</option>
-                  <option value='pending'>pending</option>
-                  <option value='deleted'>deleted</option>
-              </select>
-              @error('user-status')
-                  <span class="text-red-400 text-sm">{{ $message }}</span>
-              @enderror
-          </div>
-
-
-          <div>
-              <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
-              <label
-              for="toggleTwoAdmin"
-              class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm"
-              >
-              <div class="relative">
-                  <input
-                      type="checkbox"
-                      id="toggleTwoAdmin"
-                      class="peer sr-only"
-                          />
-                  <div
-                      class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"
-                      ></div>
-                  <div
-                      class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900"
-                      ></div>
-              </div>
-              <span class="font-bold text-sm">
-                Admin
-              </span>
-              </label>
-          </div>
+        <div>
+            <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
+            <label
+            for="toggleTwoAdmin"
+            class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm"
+            >
+            <div class="relative">
+                <input
+                    type="checkbox"
+                    id="toggleTwoAdmin"
+                    class="peer sr-only"
+                        />
+                <div
+                    class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"
+                    ></div>
+                <div
+                    class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900"
+                    ></div>
+            </div>
+            <span class="font-bold text-sm">
+              Admin
+            </span>
+            </label>
         </div>
         <input class="hidden" type="text" id="hiddenToggle" name="is_admin" value='false'>
         <div class="flex gap-2 self-end">

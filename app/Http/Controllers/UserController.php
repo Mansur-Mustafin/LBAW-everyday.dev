@@ -45,7 +45,7 @@ class UserController extends Controller
     public function showAdmin()
     {
         $users = User::get();
-        return view('pages.admin',['users'=> $users]);
+        return view('pages.admin.admin',['users'=> $users]);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -59,12 +59,12 @@ class UserController extends Controller
 
     public function showEditFormAdmin(User $user, Request $request)
     {
-        return view('pages.admin-edit-user', ['user' => $user]);
+        return view('pages.admin.edit-user', ['user' => $user]);
     }
     
     public function showCreateFormAdmin(Request $request)
     {
-        return view('pages.admin-create-user');
+        return view('pages.admin.create-user');
     }
 
     public function update(User $user, Request $request)

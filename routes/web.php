@@ -76,5 +76,9 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(SearchController::class)->group(function () {
     Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
+
+    Route::get('/search/users','search_user')->middleware('admin');
+    Route::get('/search/users/{search}','search_user')->middleware('admin');
+
     Route::get('/search/{search}','search');
 });
