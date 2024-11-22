@@ -37,6 +37,9 @@
                         @include('partials.tile-post', ['news' => $news])
                     @endforeach
                 </div>
+                <div id="loading-icon" style="display: none;" class="my-6">
+                    <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
+                </div>  
             </div>
         @endif
     </main> 
