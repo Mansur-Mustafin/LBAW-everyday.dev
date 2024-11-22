@@ -44,7 +44,7 @@
             <label for="password" class="block font-semibold mb-2">Password</label>
             <div class="relative w-full">
               <input id="password" type="password" name="password" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-              <span id="toggle-password" class="material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+              <span class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
                 visibility_off
               </span>
             </div>
@@ -57,7 +57,7 @@
             <label for="password-confirm" class="block font-semibold mb-2">Confirm Password</label>
             <div class="relative w-full">
               <input id="password-confirm" type="password" name="password_confirmation" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-              <span id="toggle-password-confirm" class="material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
+              <span class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
                 visibility_off
               </span>
             </div>

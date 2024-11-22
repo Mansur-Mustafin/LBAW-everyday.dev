@@ -70,7 +70,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:40',
             'content' => 'required|string|max:1000',
             'for_followers' => 'required|string',
-            'title_photo' => 'required|file|mimes:jpg,png|max:2048',
+            'image' => 'required|file|mimes:jpg,png|max:2048',
             'tags' => 'nullable|string'
         ]);
 
@@ -82,8 +82,7 @@ class NewsController extends Controller
             'author_id' => Auth::user()->id,
         ]);
 
-
-        FileController::upload($request, $post);
+        FileController::upload($request, $post, Image::TYPE_POST_TITLE);
 
         if ($request->tags != null) {
             $tags = explode(',', $request->tags);
@@ -110,7 +109,7 @@ class NewsController extends Controller
             'for_followers' => $request->for_followers ?? false
         ]);
 
-        if ($request->has('title_photo')) {
+        if ($request->has('image')) {
             Image::query()
                 ->where('news_post_id', '=', $newsPost->id)
                 ->where('image_type', '=', "PostTitle")

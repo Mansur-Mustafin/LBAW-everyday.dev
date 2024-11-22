@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\NewsController;
@@ -58,23 +59,18 @@ Route::controller(VoteController::class)->group(function () {
     Route::put('/vote/{vote}', 'update')->name('vote.update');
 });
 
-// Profile TODO
+// Profile
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
+    Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
+    Route::put('/users/{user}', 'update')->name('user.update');
     Route::get('/admin','showAdmin')->middleware('admin');
-});
-
-// Files
-Route::controller(FileController::class)->group(function() {
-    Route::get('/file/upload', 'index'); // TODO:: delete
-    Route::post('/file/upload', 'upload');
 });
 
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/posts','search_post');
+    Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
-    Route::get('/search','search');
     Route::get('/search/{search}','search');
 });
