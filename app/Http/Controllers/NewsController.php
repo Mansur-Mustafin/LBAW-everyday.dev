@@ -51,6 +51,16 @@ class NewsController extends Controller
             return !in_array($tag->name, $existingTags);
         });
 
+        $user = Auth::user();
+        if ($user) {
+            $vote = $news_post->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $news_post->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $news_post->user_vote_id = $vote->id;
+            }
+        }
+
         return view('pages.post', [
             'post' => $news_post,
             'tags' => $tags,
