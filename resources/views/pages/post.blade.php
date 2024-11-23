@@ -123,7 +123,7 @@
         </div>
     </section>
     <section class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
-        @if (Auth::check() && (Auth::user()->id == $post->author_id))
+        @if (Auth::check() && ((Auth::user()->id == $post->author_id) || Auth::user()->is_admin))
             <button id="edit-button" onclick="toggleEdit()" class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl">
                 Edit
             </button>
