@@ -76,7 +76,6 @@ class NewsController extends Controller
             'author_id' => Auth::user()->id,
         ]);
 
-
         FileController::upload($request, $post);
 
         if ($request->tags != null) {
@@ -117,7 +116,7 @@ class NewsController extends Controller
         if ($request->tags != null) {
             $tags = explode(',', $request->tags);
             $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
-            $newsPost->tags()->attach($tagIds);
+            $newsPost->tags()->sync($tagIds);
         }
 
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
