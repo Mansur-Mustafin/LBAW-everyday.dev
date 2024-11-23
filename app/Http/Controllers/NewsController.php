@@ -61,8 +61,8 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:40',
-            'content' => 'required|string|max:1000',
+            'title' => 'required|string|max:250',
+            'content' => 'required|string',
             'for_followers' => 'required|string',
             'title_photo' => 'required|file|mimes:jpg,png|max:2048',
             'tags' => 'nullable|string'
@@ -94,7 +94,7 @@ class NewsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:250',
-            'content' => 'required|string|max:2000', 
+            'content' => 'required|string', 
             'for_followers' => 'nullable|boolean',
             'tags' => 'nullable|string',
         ]);
