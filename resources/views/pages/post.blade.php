@@ -66,12 +66,9 @@
                     <textarea name="content" id="content" rows="5"
                         class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">{{ $post->content }}</textarea>
                 </div>
-                <div class="flex flex-wrap items-center mt-5 gap-2">
-                    @foreach ($post->tags as $tag)
-                        <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ $tag->name }}</span>
-                    @endforeach
-                    <div class="flex gap-2" id="selectedTags"></div>
-                    <button id="toggleTagSelector" type="button" class="ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">+</button>
+
+                <div class="flex flex-wrap items-center mt-5 gap-2" id="selectedTags">
+                    <button id="toggleTagSelector" type="button" class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">+</button>
                 </div>
                 
                 <div class='flex gap-2' id="tagSelectorContainer" style="display: none;">
@@ -155,5 +152,7 @@
     </section>
 </section>
 
-
+<script>
+    const tags = @json($post->tags->pluck('name'));
+</script>
 @endsection
