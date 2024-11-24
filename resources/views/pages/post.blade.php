@@ -16,7 +16,7 @@
         </div>
         <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-lg font-semibold">Author</h2>
-            <a href="{{ url('/users/' . $post->author->id . '/posts') }}"> {{ Auth::user()->username }} </a>
+            <a href="{{ url('/users/' . $post->author->id . '/posts') }}"> {{ $post->author->username }} </a>
         </div>
         <div class="bg-white shadow-md rounded-lg p-4">
             <h2 class="text-lg font-semibold">Content</h2>
@@ -27,12 +27,12 @@
             <img src="{{ $post->title_image_path }}" alt="" class="w-full h-48 object-cover mb-2">
         </div>
     </div>
-    @if (Auth::user()->id == $post->author_id)
+    @can('delete', $post)
         <form method="POST" action="/news/{{ $post->id }}" class="mt-5">
             @csrf
             @method('DELETE')
             <button class="text-input bg-white font-bold rounded-3xl px-6 py-2 self-end" type="submit">Delete post</button>
         </form>
-    @endif
+    @endcan
 </div>
 @endsection
