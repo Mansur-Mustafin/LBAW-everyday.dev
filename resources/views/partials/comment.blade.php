@@ -48,15 +48,9 @@
         </div>
 
         @foreach ($comment->replies as $reply)
-            @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $comment])
+            @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $comment, 'thread' => $thread])
         @endforeach
     </div>
-
-@elseif($level > 2 && $thread == 'multi')
-    <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}" class="mt-3 ml-3 text-sm hover:underline"
-        id="showMore">
-        Show {{ count($comment->parent->replies)}} more {{count($comment->parent->replies) == 1 ? 'answer' : 'answers' }}
-    </a>
 
 @else
     <div id="{{ 'comment-' . $comment->id }}"
@@ -104,8 +98,16 @@
             </div>
         </div>
 
-        @foreach ($comment->replies as $reply)
-            @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $parent])
-        @endforeach
+        @if($level > 2 && $thread == 'multi' && count($comment->replies))
+            <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}"
+                class="mt-3 ml-3 text-sm hover:underline show-more">
+                Show {{ count($comment->replies)}} more
+                {{count($comment->replies) == 1 ? 'answer' : 'answers' }}
+            </a>
+        @else
+            @foreach ($comment->replies as $reply)
+                @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $parent, 'thread' => $thread])
+            @endforeach
+        @endif
     </div>
 @endif

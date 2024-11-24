@@ -15,13 +15,14 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
 
    const data = {
       content: commentValue,
-      post_id: post_id,
+      news_post_id: post_id,
    }
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 })
 
 function addCommentHandler() {
+   console.log(this.responseText)
    const response = JSON.parse(this.responseText)
    const thread = response.thread_id
    const threadHTML = response.thread
@@ -30,8 +31,16 @@ function addCommentHandler() {
 
    const threadDiv = commentSection.querySelector(`#comment-${thread}`);
 
+   const commentInput = document.getElementById(`subCommentInput-${commentSection.id.split('-')[1]}`)
+
+   if (commentInput) commentInput.innerHTML = ''
+
    if (threadDiv) {
       threadDiv.outerHTML = threadHTML;
+   } else {
+      const div = document.createElement('div')
+      div.innerHTML = threadHTML
+      commentSection.prepend(div)
    }
 
    addButtonsBehaviour()
@@ -47,7 +56,7 @@ function addButtonsBehaviour() {
          form.innerHTML = `
             <input type="text"
                class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-               placeholder="Share your thoughts" id="subCommentInput" />
+               placeholder="Share your thoughts" id="subCommentInput-${commentSection.id.split('-')[1]}" />
             <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
          `
 
@@ -74,7 +83,7 @@ function addButtonsBehaviour() {
 
 
 function addNestedComment(parent_id) {
-   const subCommentInput = document.getElementById('subCommentInput')
+   const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
    const subCommentInputValue = subCommentInput.value
 
    const data = {
