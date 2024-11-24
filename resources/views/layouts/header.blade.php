@@ -19,6 +19,11 @@
 
     <div class="flex gap-2">
     @if (Auth::check())
+        @if(Auth::user()->isAdmin())
+            <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ url('/admin') }}">
+                Dashboard
+            </a>
+        @endif
         <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ url('/news/create-post') }}">
             New post
         </a>

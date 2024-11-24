@@ -36,6 +36,7 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+    Route::post('/admin/register', 'registerByAdmin')->middleware('admin');
 });
 
 // News
@@ -59,17 +60,25 @@ Route::controller(VoteController::class)->group(function () {
     Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
 });
 
-// Profile
+// User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->middleware('auth')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->middleware('auth')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
     Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
+
+    Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
+    Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
+    Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
 });
 
 // Search
 Route::controller(SearchController::class)->group(function () {
     Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
+
+    Route::get('/search/users','search_user')->middleware('admin');
+    Route::get('/search/users/{search}','search_user')->middleware('admin');
+
     Route::get('/search/{search}','search');
 });

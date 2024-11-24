@@ -8,12 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\NewsPostPaginationTrait;
+use App\Http\Controllers\PaginationTrait;
 use App\Models\User;
+
 
 class NewsController extends Controller
 {
-    use NewsPostPaginationTrait;
+    use PaginationTrait;
 
     public function recent_feed(Request $request)
     {
