@@ -133,7 +133,32 @@ function updateVoteUI(container, isUpvote, message) {
     const downvoteOutline = container.querySelector(`#downvote-outline-${postId}`);
     const downvoteFill = container.querySelector(`#downvote-fill-${postId}`);
     const voteCountElement = container.querySelector('.vote-count');
-    let currentCount = parseInt(voteCountElement.textContent);
+
+    if (!voteCountElement) {
+        console.warn(`Vote count element not found for container with ID: ${postId}`);
+    } else {
+        let currentCount = parseInt(voteCountElement.textContent);
+
+        if (message === 'Saved') {
+            if (isUpvote) {
+                voteCountElement.textContent = currentCount + 1;
+            } else {
+                voteCountElement.textContent = currentCount - 1;
+            }
+        } else if (message === 'Vote updated') {
+            if (isUpvote) {
+                voteCountElement.textContent = currentCount + 2;
+            } else {
+                voteCountElement.textContent = currentCount - 2;
+            }
+        } else if (message === 'Vote removed') {
+            if (container.dataset.vote === 'upvote') {
+                voteCountElement.textContent = currentCount - 1;
+            } else if (container.dataset.vote === 'downvote') {
+                voteCountElement.textContent = currentCount + 1;
+            }
+        }
+    }
 
     // Reset icons
     upvoteOutline.classList.remove('hidden');
@@ -143,29 +168,19 @@ function updateVoteUI(container, isUpvote, message) {
 
     if (message === 'Saved') {
         if (isUpvote) {
-            upvoteOutline.classList.add('hidden');
-            upvoteFill.classList.remove('hidden');
-            voteCountElement.textContent = currentCount + 1;
+            upvoteOutline?.classList.add('hidden');
+            upvoteFill?.classList.remove('hidden');
         } else {
-            downvoteOutline.classList.add('hidden');
-            downvoteFill.classList.remove('hidden');
-            voteCountElement.textContent = currentCount - 1;
+            downvoteOutline?.classList.add('hidden');
+            downvoteFill?.classList.remove('hidden');
         }
     } else if (message === 'Vote updated') {
         if (isUpvote) {
-            upvoteOutline.classList.add('hidden');
-            upvoteFill.classList.remove('hidden');
-            voteCountElement.textContent = currentCount + 2; 
+            upvoteOutline?.classList.add('hidden');
+            upvoteFill?.classList.remove('hidden');
         } else {
-            downvoteOutline.classList.add('hidden');
-            downvoteFill.classList.remove('hidden');
-            voteCountElement.textContent = currentCount - 2;
-        }
-    } else if (message === 'Vote removed') {
-        if (container.dataset.vote === 'upvote') {
-            voteCountElement.textContent = currentCount - 1;
-        } else if (container.dataset.vote === 'downvote') {
-            voteCountElement.textContent = currentCount + 1;
+            downvoteOutline?.classList.add('hidden');
+            downvoteFill?.classList.remove('hidden');
         }
     }
 }

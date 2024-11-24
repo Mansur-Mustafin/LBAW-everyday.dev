@@ -52,6 +52,7 @@ class NewsController extends Controller
         });
 
         $user = Auth::user();
+        $news_post->user_vote = null;
         if ($user) {
             $vote = $news_post->votes()->where('user_id', $user->id)->first();
 
