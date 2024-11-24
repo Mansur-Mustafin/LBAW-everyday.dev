@@ -20,9 +20,19 @@ class CommentsController extends Controller
         return $comment;
     }
 
+    function buildNestedComment($comment)
+    {
+        $thread_parent = $this->findMostParentComment($comment->id);
+
+        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $thread_parent->id]);
+    }
+    function buildComment($comment)
+    {
+        return response()->json(['thread' => view('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => NewsPost::find($comment->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $comment->id]);
+    }
+
     public function store(Request $request)
     {
-
         $request->validate([
             'content' => 'required|string|max:40',
             'news_post_id' => 'nullable|string',
@@ -36,9 +46,11 @@ class CommentsController extends Controller
             'author_id' => Auth::user()->id
         ]);
 
-        $thread_parent = $this->findMostParentComment($comment->id);
-
-        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $thread_parent->id]);
+        if ($request->news_post_id) {
+            return $this->buildComment($comment);
+        } else {
+            return $this->buildNestedComment($comment);
+        }
     }
 
     public function update(Request $request, Comment $comment)
