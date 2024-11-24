@@ -40,4 +40,15 @@ trait NewsPostPaginationTrait
 
         return view($view, $data);
     }
+
+    public function paginate_users($users, Request $request)
+    {
+        $users = $users->paginate(10);
+        
+        return response()->json([
+            'users'     => $users,
+            'next-page' => $users->currentPage() + 1,
+            'last_page' => $users->lastPage()
+        ]);
+    }
 }
