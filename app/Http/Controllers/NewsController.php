@@ -9,17 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\NewsPostPaginationTrait;
+use App\Models\User;
 
 class NewsController extends Controller
 {
     use NewsPostPaginationTrait;
-
-    public function index(Request $request)
-    {
-        $news_posts = NewsPost::orderBy('created_at', 'desc');
-        $title = "Recent News";
-        return NewsController::news_post_page($news_posts, $title, $request);
-    }
 
     public function recent_feed(Request $request)
     {
@@ -50,10 +44,6 @@ class NewsController extends Controller
 
     public function showCreationForm()
     {
-        if (!Auth::check()) {
-            return redirect('/');
-        }
-
         $tags = Tag::all();
 
         return view('pages.create-news', ['tags' => $tags]);
@@ -97,6 +87,8 @@ class NewsController extends Controller
 
     public function update(Request $request, newsPost $newsPost)
     {
+        $this->authorize('update', $newsPost);
+
         $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string|max:40',
@@ -112,15 +104,17 @@ class NewsController extends Controller
         if ($request->has('image')) {
             Image::query()
                 ->where('news_post_id', '=', $newsPost->id)
-                ->where('image_type', '=', "PostTitle")
+                ->where('image_type', '=', Image::TYPE_POST_TITLE)
                 ->delete();
 
-            FileController::upload($request, $newsPost);
+            FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);
         }
     }
 
     public function destroy(newsPost $newsPost)
     {
+        $this->authorize('delete', $newsPost);
+
         $newsPost->delete();
 
         return redirect()->route('home')

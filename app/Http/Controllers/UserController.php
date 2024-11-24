@@ -30,11 +30,11 @@ class UserController extends Controller
     public function showUserUpvotes(User $user, Request $request)
     {
         $upvotedPostIds = Vote::where('user_id', $user->id)
-                          ->where('is_upvote', true)
-                          ->where('vote_type', 'PostVote')
-                          ->pluck('news_post_id');
+            ->where('is_upvote', true)
+            ->where('vote_type', 'PostVote')
+            ->pluck('news_post_id');
         $news_posts = NewsPost::whereIn('id', $upvotedPostIds)
-                    ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc');
 
         $title = "{$user->public_name}'s Upvoted Posts";
         $baseUrl = "/users/{$user->id}/upvotes";
@@ -50,9 +50,7 @@ class UserController extends Controller
 
     public function showEditForm(User $user, Request $request)
     {
-        if (!Auth::check() && Auth::user()->id != $user->id) {
-            return redirect('/');
-        }
+        $this->authorize('update', $user);
 
         return view('pages.edit-user', ['user' => $user]);
     }
@@ -69,6 +67,8 @@ class UserController extends Controller
 
     public function update(User $user, Request $request)
     {
+        $this->authorize('update', $user);
+
         $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => [
@@ -116,7 +116,7 @@ class UserController extends Controller
             if (!Hash::check($request->input('old_password'), $user->password) && !$request->user()->isAdmin()) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
-    
+
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
         }
