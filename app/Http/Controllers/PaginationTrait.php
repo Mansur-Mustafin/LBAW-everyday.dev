@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-trait NewsPostPaginationTrait
+trait PaginationTrait
 {
     public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
     {
@@ -24,7 +24,6 @@ trait NewsPostPaginationTrait
             }
         }
 
-
         if ($request->ajax()) {
             return response()->json([
                 'news_posts' => view('partials.posts', compact('news_posts'))->render(),
@@ -40,5 +39,16 @@ trait NewsPostPaginationTrait
         $data = array_merge(compact('news_posts', 'title', 'baseUrl'), $additionalData);
 
         return view($view, $data);
+    }
+
+    public function paginate_users($users, Request $request)
+    {
+        $users = $users->paginate(10);
+        
+        return response()->json([
+            'users'     => $users,
+            'next-page' => $users->currentPage() + 1,
+            'last_page' => $users->lastPage()
+        ]);
     }
 }

@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/search.js',
                 'resources/js/utils.js',
                 'resources/js/vote.js', 
+                'resources/js/admin.js',
             ],
             refresh: true,
         }),

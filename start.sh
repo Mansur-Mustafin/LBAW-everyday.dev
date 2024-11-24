@@ -1,4 +1,4 @@
 #!/bin/bash
 
 (npm run dev &)
-php artisan serve
+php artisan serve --verbose
