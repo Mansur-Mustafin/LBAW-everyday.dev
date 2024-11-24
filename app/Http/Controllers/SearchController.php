@@ -70,9 +70,9 @@ class SearchController extends Controller
     {
         $search_query = "%".strtolower($request->search)."%";
 
-        $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query,$search_query])->take(50)->get();
-        return response()->json([
-            "users"=> $users
-        ]);
+        $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query,$search_query]);
+        return $this->paginate_users($users,$request);
     }
+
+    
 }

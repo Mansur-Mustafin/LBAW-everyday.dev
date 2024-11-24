@@ -129,11 +129,13 @@ const buildUser = (user) => {
 
 // Da para fazer isso melhor?
 searchBarDiv.addEventListener('blur', () => {
+    setTimeout(() => {
         resultsDiv.style.display = 'none'; 
         searchContainer.classList.remove('rounded-t-2xl');
         searchContainer.classList.add('rounded-2xl');
-    }
-);
+    }, 100); // Delay for links 
+});
+
 searchBarDiv.addEventListener('focus', () => {
         resultsDiv.style.display = 'block';
         searchContainer.classList.add('rounded-t-2xl');

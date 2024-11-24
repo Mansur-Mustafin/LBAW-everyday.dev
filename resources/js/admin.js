@@ -1,5 +1,5 @@
+// UPLOAD IMAGES
 const editForm = document.getElementById("admin-edit-profile")
-
 if (editForm) {
   const thumbnailButton = document.getElementById("personalizedFileInput");
   const fileInput = document.getElementById("realFileInput");
@@ -34,18 +34,23 @@ if (editForm) {
   });
 }
 
+// INFINITE SCROLLING
 const searchBar = document.getElementById("admin-search-bar")
 if(searchBar) {
   const resultsDiv = document.getElementById("admin-search-users-results")
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const baseUrl = searchBar.dataset.url
+  let loading = false
+  let endPage = 1
+  let page = 1
+  let lastPage = 0
+  const loadingIcon = document.getElementById('loading-icon');
 
   const adminBadge = `
             <span class="">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
             </span>
   `
-
 
   const buildUser = (user) => {
     const pageUrl = `${baseUrl}/users/${user.id}/posts`
@@ -68,8 +73,9 @@ if(searchBar) {
                   ? adminBadge
                   : ''}
               </h1>
-              <h3 class="text-gray-400 hidden">${user.username}</h3>
-              <h3 class="text-gray-400">${user.rank}</h3>
+              <h3 class="text-gray-400 hidden">${user.rank}</h3>
+              <h3 class="text-gray-400 hidden">${user.status}</h3>
+              <h3 class="text-gray-400">${user.username}</h3>
               <h3 class="text-gray-400">${user.email}</h3>
             </div>
             <a class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
@@ -80,32 +86,77 @@ if(searchBar) {
     `
   }
 
-  let loading = false
-  searchBar.onkeyup = async () => {
+
+  const buildByRequest = async (url) => {
     if(loading) return
-    const searchQuery = `${baseUrl}/search/users/${searchBar.value}`
-    resultsDiv.innerHTML = '';
     loading = true
-    fetch(searchQuery, {
-      method: 'GET',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      }
-    })
-    .then(response => {
-      loading = false
-      if (response.ok) {
-        return response.json();
-      } 
-    })
-    .then(data => {
-      data["users"].forEach(user => {
-        resultsDiv.innerHTML += buildUser(user)
-      });
-    }) 
-    .catch(error => {
-      console.log("Error",error)
-    }) 
+    loadingIcon.style.display = 'block'
+    fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken,
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+      .then(response => {
+        loading = false
+        loadingIcon.style.display = 'none'
+        if (response.ok) {
+          return response.json();
+        } 
+      })
+      .then(data => {
+        lastPage = data.last_page
+        data.users.data.forEach(user => {
+          resultsDiv.innerHTML += buildUser(user)
+        });
+      }) 
+      .catch(error => {
+        console.log("Error",error)
+      }) 
+    }
+
+  window.onload = async () => {
+    const searchQuery = `${baseUrl}/search/users/`
+    resultsDiv.innerHTML = '';
+    endPage = 1
+    page = 1
+    buildByRequest(searchQuery)
   }
 
+  searchBar.onkeyup = async () => {
+    const searchQuery = `${baseUrl}/search/users/${searchBar.value}`
+    resultsDiv.innerHTML = '';
+    endPage = 1
+    page = 1
+    buildByRequest(searchQuery)
+  }
+
+  const loadMoreData = async (page) => {
+    const searchQuery = `${baseUrl}/search/users/${searchBar.value}?page=${page}`
+    endPage = 1
+    buildByRequest(searchQuery)
+  }
+
+  document.addEventListener('scroll',function () {
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      let windowHeight = window.innerHeight;
+      let documentHeight = document.documentElement.scrollHeight;
+      loading = false
+
+      if(scrollTop + windowHeight >= documentHeight - 100) {
+          // TODO: Refactor this in the future
+          endPage++;
+          if(endPage > 4) {
+            endPage = 0;
+            if (page <= lastPage && loading == false) {
+                page++;
+                loadMoreData(page);
+            }
+            if (page > lastPage){
+                if(loadingIcon) loadingIcon.style.display = 'none';
+            }
+          }
+      }
+  })
 }

@@ -42,17 +42,15 @@ class UserController extends Controller
         return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
     }
 
-    public function showAdmin()
+    public function showAdmin(Request $request)
     {
-        $users = User::get();
-        return view('pages.admin.admin', ['users' => $users]);
+        $users = User::take(10)->get();
+        return view('pages.admin.admin',['users'=> $users]);
     }
 
     public function showEditForm(User $user, Request $request)
     {
-        if (!Auth::check() && Auth::user()->id != $user->id) {
-            return redirect('/');
-        }
+        $this->authorize('update', $user);
 
         return view('pages.edit-user', ['user' => $user]);
     }
@@ -69,6 +67,8 @@ class UserController extends Controller
 
     public function update(User $user, Request $request)
     {
+        $this->authorize('update', $user);
+
         $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => [
@@ -116,6 +116,7 @@ class UserController extends Controller
             if (!Hash::check($request->input('old_password'), $user->password) && !$request->user()->isAdmin()) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
+
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
         }
