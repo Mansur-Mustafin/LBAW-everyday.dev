@@ -60,7 +60,7 @@ Route::controller(VoteController::class)->group(function () {
     Route::put('/vote/{vote}', 'update')->name('vote.update');
 });
 
-// Profile
+// User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');

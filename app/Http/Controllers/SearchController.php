@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\User;
-use App\Http\Controllers\NewsPostPaginationTrait;
+use App\Http\Controllers\PaginationTrait;
 
 class SearchController extends Controller
 {
-    use NewsPostPaginationTrait;
+    use PaginationTrait;
 
     public function get_posts($search_query)
     {
