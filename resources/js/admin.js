@@ -9,7 +9,6 @@ if (editForm) {
 
   adminToggle.addEventListener('change', function (evt) {
     hiddenToggle.value = this.checked ? 'true' : 'false'
-    console.log(hiddenToggle.value)
   })
 
   thumbnailButton.addEventListener("click", function (evt) {
