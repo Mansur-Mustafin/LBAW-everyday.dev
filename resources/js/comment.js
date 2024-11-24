@@ -46,13 +46,15 @@ function createCommentElement(user, comment) {
    return newComment
 }
 
-function createNestedCommentElement(user, comment, parent_id, id) {
+function createNestedCommentElement(user, comment, parent, id) {
 
    const newComment = document.createElement('div');
+   newComment.id = 'comment-' + id
    newComment.classList.add('p-4');
-   newComment.className += ` ${comment.level == 1 && comment.replies.length == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'} ${comment.parent.replies.length <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}`;
+   newComment.className += ` ${parent.replies > 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : ''} flex flex-col ml-3 tablet:ml-8`;
 
    newComment.innerHTML = `
+   <div class="${parent.replies <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}  p-4">
        <div class="text-sm text-gray-400 flex gap-2">
            <img src="${'#TODO'}">
            <div class="flex flex-col">
@@ -83,6 +85,7 @@ function createNestedCommentElement(user, comment, parent_id, id) {
                </svg>
            </a>
        </div>
+   </div>
    `;
    return newComment;
 }
@@ -96,7 +99,7 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
 
    const data = {
       content: commentValue,
-      post_id: post_id
+      post_id: post_id,
    }
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
@@ -107,11 +110,17 @@ function addCommentHandler() {
       const response = JSON.parse(this.responseText)
       const user = response.user
       const comment = response.comment
-      const parent_id = response.parent_id
+      const parent = response.parent
       const id = response.id
 
-      const newComment = response.type == 'non-nested' ? createCommentElement(user, comment) : createNestedCommentElement(user, comment, parent_id, id)
-      document.getElementById('comment-section').prepend(newComment)
+
+      if (response.type == 'non-nested') {
+         document.getElementById('comment-section').prepend(createCommentElement(user, comment))
+      } else {
+         const parentElem = document.getElementById('comment-' + parent.id)
+
+         parentElem.appendChild(createNestedCommentElement(user, comment, parent, id))
+      }
 
       commentInput.value = ''
    }
@@ -146,7 +155,7 @@ document.querySelectorAll('.sub-comment').forEach(function (element) {
 
       form.addEventListener('submit', function (e) {
          e.preventDefault()
-         addNestedComment()
+         addNestedComment(commentSection.id.split('-')[1])
       })
    })
 })
@@ -157,7 +166,7 @@ function addNestedComment(parent_id) {
 
    const data = {
       content: subCommentInputValue,
-      parent_id: parent_id
+      parent_comment_id: parent_id,
    }
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
