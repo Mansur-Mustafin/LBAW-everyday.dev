@@ -89,7 +89,7 @@
                 <p class="text-sm text-gray-500">{{ '@' . $post->author->username }}</p>
             </div>
 
-            <button class="ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none">
+            <button class="hidden ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none">
                 Subscribe
             </button>
         </div>
