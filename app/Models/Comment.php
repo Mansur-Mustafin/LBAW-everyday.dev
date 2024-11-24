@@ -20,6 +20,7 @@ class Comment extends Model
         'downvotes',
         'author_id',
         'news_post_id',
+        'parent_comment_id'
     ];
 
     public function post()
