@@ -82,31 +82,81 @@ if(searchBar) {
   }
 
   let loading = false
-  searchBar.onkeyup = async () => {
+  let endPage = 1
+  let page = 1
+  let lastPage = 0
+  const loadingIcon = document.getElementById('loading-icon');
+
+  const buildByRequest = async (url) => {
     if(loading) return
-    const searchQuery = `${baseUrl}/search/users/${searchBar.value}`
-    resultsDiv.innerHTML = '';
     loading = true
-    fetch(searchQuery, {
-      method: 'GET',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      }
-    })
-    .then(response => {
-      loading = false
-      if (response.ok) {
-        return response.json();
-      } 
-    })
-    .then(data => {
-      data["users"].forEach(user => {
-        resultsDiv.innerHTML += buildUser(user)
-      });
-    }) 
-    .catch(error => {
-      console.log("Error",error)
-    }) 
+    fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken,
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+      .then(response => {
+        loading = false
+        if (response.ok) {
+          return response.json();
+        } 
+      })
+      .then(data => {
+        lastPage = data.last_page
+        data.users.data.forEach(user => {
+          resultsDiv.innerHTML += buildUser(user)
+        });
+      }) 
+      .catch(error => {
+        console.log("Error",error)
+      }) 
+    }
+
+  window.onload = async () => {
+    const searchQuery = `${baseUrl}/search/users/`
+    resultsDiv.innerHTML = '';
+    endPage = 1
+    page = 1
+    buildByRequest(searchQuery)
   }
 
+  searchBar.onkeyup = async () => {
+    const searchQuery = `${baseUrl}/search/users/${searchBar.value}`
+    resultsDiv.innerHTML = '';
+    endPage = 1
+    page = 1
+    buildByRequest(searchQuery)
+  }
+
+  const loadMoreData = async (page) => {
+    const searchQuery = `${baseUrl}/search/users/${searchBar.value}?page=${page}`
+    endPage = 1
+    buildByRequest(searchQuery)
+  }
+
+  document.addEventListener('scroll',function () {
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      let windowHeight = window.innerHeight;
+      let documentHeight = document.documentElement.scrollHeight;
+      loading = false
+
+      if(scrollTop + windowHeight >= documentHeight - 100) {
+          // TODO: Refactor this in the future
+          endPage++;
+          if(endPage > 4) {
+            endPage = 0;
+            console.log(`${page} ${lastPage} ${loading}`)
+            if (page <= lastPage && loading == false) {
+                page++;
+                console.log("bottom of the page")
+                loadMoreData(page);
+            }
+            if (page > lastPage){
+                if(loadingIcon) loadingIcon.style.display = 'none';
+            }
+          }
+      }
+  })
 }

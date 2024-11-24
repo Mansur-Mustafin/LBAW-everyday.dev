@@ -42,9 +42,9 @@ class UserController extends Controller
         return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
     }
 
-    public function showAdmin()
+    public function showAdmin(Request $request)
     {
-        $users = User::get();
+        $users = User::take(10)->get();
         return view('pages.admin.admin',['users'=> $users]);
     }
 
