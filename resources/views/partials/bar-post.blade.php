@@ -20,6 +20,8 @@
             </svg>
         </button>
 
+        <span class="vote-count font-bold mt-1.5">{{ $post->upvotes - $post->downvotes }}</span>
+
         <!-- Downvote Button -->
         <button type="submit" class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400">  
             <svg class="{{$post->user_vote == 'downvote' ? 'hidden' : ''}}"
