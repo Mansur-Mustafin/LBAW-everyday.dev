@@ -101,12 +101,13 @@ class NewsController extends Controller
     }
 
     public function update(Request $request, newsPost $newsPost)
-    {
+    {   
         $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string', 
             'for_followers' => 'nullable|boolean',
             'tags' => 'nullable|string',
+            'title_photo' => 'required|file|mimes:jpg,png|max:2048',
         ]);
 
         $newsPost->update([

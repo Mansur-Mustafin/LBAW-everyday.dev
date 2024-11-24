@@ -13,6 +13,9 @@
             <div class="mt-5 text-sm text-gray-400">
                 {{ $post->created_at->diffForHumans() }} • By {{ $post->author->username }}
             </div>
+
+            <img src="{{ $post->title_image_path }}" alt="" class="rounded-xl w-full h-48 mt-3">
+
             <div class="mt-10">
             {{ $post->content }}
             </div>
@@ -26,7 +29,7 @@
         </div>
 
         <div id="edit-section" class="hidden">
-            <form id="editForm" method="POST" action="{{ route('news.update', $post->id) }}">
+            <form id="editForm" method="POST" action="{{ route('news.update', $post->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-5">
@@ -53,7 +56,21 @@
                     </select>
                 </div>
 
+                <div class="flex mt-8">
+                    <button class="bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="personalizedFileInputEdit">Click to upload a new image!</button>
+                    <button id="deleteThumbnailEdit" class="self-start hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-circle-x">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="m15 9-6 6" />
+                        <path d="m9 9 6 6" />
+                        </svg>
+                    </button>
+                </div>
+
                 <input class="hidden" name="tags" id="tagsInput">
+                <input class="hidden" type="file" id="realFileInputEdit" name="title_photo">
             </form>
 
             @include('partials.bar-post', ['post' => $post])
