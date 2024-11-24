@@ -3,11 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\NewsPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+
+    function findMostParentComment($comment_id)
+    {
+        $comment = Comment::find($comment_id);
+
+        while ($comment->parent_comment_id !== null) {
+            $comment = Comment::find($comment->parent_comment_id);
+        }
+        return $comment;
+    }
+
     public function store(Request $request)
     {
 
@@ -23,27 +35,10 @@ class CommentsController extends Controller
             'parent_comment_id' => $request->parent_comment_id ? (int) $request->parent_comment_id : null,
             'author_id' => Auth::user()->id
         ]);
-        $type = $request->post_id ? 'non-nested' : 'nested';
 
-        $parentComment = null;
-        $repliesCount = 0;
-        if ($request->parent_comment_id) {
-            $parentComment = Comment::where('id', $request->parent_comment_id)->first();
-            if ($parentComment) {
-                $repliesCount = Comment::where('parent_comment_id', $parentComment->id)->count();
-            }
-        }
+        $thread_parent = $this->findMostParentComment($comment->id);
 
-        return response()->json([
-            'comment' => $request->content,
-            'user' => Auth::user(),
-            'type' => $type,
-            'parent' => $parentComment ? [
-                'id' => $parentComment->id,
-                'replies' => $repliesCount
-            ] : null,
-            'id' => $comment->id
-        ], 201);
+        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $thread_parent->id]);
     }
 
     public function update(Request $request, Comment $comment)
