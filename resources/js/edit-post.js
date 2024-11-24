@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedTags = document.getElementById('selectedTags');
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
+    const thumbnailButtonEdit = document.getElementById('personalizedFileInputEdit')
+    const fileInputEdit = document.getElementById('realFileInputEdit')
+    const deleteThumbnailButtonEdit = document.getElementById('deleteThumbnailEdit')
 
     window.toggleEdit = function() {
         const editButton = document.getElementById('edit-button');
@@ -51,6 +54,30 @@ document.addEventListener('DOMContentLoaded', function() {
             tagSelectorContainer.style.display = 'none';
         }
     });
+
+    thumbnailButtonEdit.addEventListener('click', function (evt) {
+        evt.preventDefault()
+        fileInputEdit.click()
+    })
+    
+    fileInputEdit.addEventListener('change', () => {
+        const [file] = fileInputEdit.files
+        if (file) {
+            thumbnailButtonEdit.style.backgroundImage = `url(${URL.createObjectURL(file)})`
+            thumbnailButtonEdit.style.backgroundSize = 'cover'
+            thumbnailButtonEdit.style.borderWidth = '0px'
+            thumbnailButtonEdit.innerHTML = ''
+            deleteThumbnailButtonEdit.style.display = 'block'
+        }
+    })
+    
+    deleteThumbnailButtonEdit.addEventListener('click', function (evt) {
+        evt.preventDefault()
+        thumbnailButtonEdit.style.backgroundImage = ''
+        thumbnailButtonEdit.innerHTML = 'Thumbnail'
+        deleteThumbnailButtonEdit.style.display = 'none'
+        fileInputEdit.value = ''
+    })
 
     tagSelector.addEventListener('change', function () {
         const selectedTag = tagSelector.value;
@@ -104,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (post_tags.length > 0) {
             document.getElementById('tagsInput').value = post_tags.join(',');
         }
-    
+
         form.submit();
     });
 });
