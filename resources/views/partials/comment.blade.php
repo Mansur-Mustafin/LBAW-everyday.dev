@@ -28,6 +28,16 @@
                             </svg>
                         </button>
 
+                        <button class="abort-edit hidden" id="{{'abort_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-circle-x">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m15 9-6 6" />
+                                <path d="m9 9 6 6" />
+                            </svg>
+                        </button>
+
                         <button class="hidden" id="{{'save_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -49,29 +59,14 @@
                                 <line x1="14" x2="14" y1="11" y2="17" />
                             </svg>
                         </button>
-
-                        @if (count($comment->votes) > 0 || count($comment->replies) > 0)
-                            <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-eye-off">
-                                    <path
-                                        d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
-                                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
-                                    <path
-                                        d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
-                                    <path d="m2 2 20 20" />
-                                </svg>
-                            </button>
-                        @endif
                     @endif
                 </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                                            {{ trim($comment->content) }}
-                                                                        </textarea>
+                                                                                                                                        {{ trim($comment->content) }}
+                                                                                                                                    </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
@@ -146,7 +141,7 @@
         class="{{ count($comment->parent->replies) > 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : ''}} flex flex-col ml-3 tablet:ml-8">
         <div
             class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'}} {{count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}}  p-4">
-            <div class="text-sm text-gray-400 flex justify-between">
+            <div class="text-sm text-gray-400 flex justify-between items-start">
                 <div class="flex gap-2 flex-grow">
                     <img src="{$user->getProfileImage()}">
                     <div class="flex flex-col">
@@ -168,6 +163,15 @@
                             </svg>
                         </button>
 
+                        <button class="abort-edit hidden" id="{{'abort_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-circle-x">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m15 9-6 6" />
+                                <path d="m9 9 6 6" />
+                            </svg>
+                        </button>
                         <button class="hidden" id="{{'save_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -189,29 +193,14 @@
                                 <line x1="14" x2="14" y1="11" y2="17" />
                             </svg>
                         </button>
-
-                        @if (count($comment->votes) > 0 || count($comment->replies) > 0)
-                            <button class="omit-comment" id="{{'omit-' . $comment->id}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-eye-off">
-                                    <path
-                                        d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
-                                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
-                                    <path
-                                        d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
-                                    <path d="m2 2 20 20" />
-                                </svg>
-                            </button>
-                        @endif
                     @endif
                 </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                    {{ trim($comment->content) }}
-                                                </textarea>
+                                                                                                                {{ trim($comment->content) }}
+                                                                                                            </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
