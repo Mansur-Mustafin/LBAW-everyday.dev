@@ -141,8 +141,11 @@ function addButtonsBehaviour() {
    document.querySelectorAll('.comment-upvote').forEach(function (element) {
       element.addEventListener('click', function (event) {
          event.preventDefault()
-         const comment_id = element.dataset.comment
+         const comment_id = element.id.split('-')[1]
          const alreadyVoted = element.dataset.vote
+
+         const otherVote = document.getElementById("downvote_comment-" + comment_id).dataset.vote
+
 
          const data = {
             is_upvote: true,
@@ -151,11 +154,64 @@ function addButtonsBehaviour() {
          }
 
          if (alreadyVoted) {
-            sendAjaxRequest('DELETE', '/vote/' + alreadyVoted, data, removeVoteHandler)
+            removeVote(data, element, alreadyVoted)
          } else {
+            if (otherVote) {
+               const _data = {
+                  is_upvote: false,
+                  id: comment_id,
+                  type: "comment"
+               }
+
+               removeVote(_data, document.getElementById("downvote_comment-" + comment_id), otherVote)
+            }
             addVote(data, element)
          }
       })
+   })
+
+   document.querySelectorAll('.comment-downvote').forEach(function (element) {
+      element.addEventListener('click', function (event) {
+         event.preventDefault()
+         const comment_id = element.id.split('-')[1]
+         const alreadyVoted = element.dataset.vote
+
+         console.log("upvote_comment" + comment_id)
+
+         const otherVote = document.getElementById("upvote_comment-" + comment_id).dataset.vote
+
+         const data = {
+            is_upvote: false,
+            id: comment_id,
+            type: "comment"
+         }
+
+         if (alreadyVoted) {
+            removeVote(data, element, alreadyVoted)
+         }
+         else {
+            if (otherVote) {
+               const _data = {
+                  is_upvote: true,
+                  id: comment_id,
+                  type: "comment"
+               }
+
+               removeVote(_data, document.getElementById("upvote_comment-" + comment_id), otherVote)
+            }
+            addVote(data, element)
+         }
+      })
+   })
+}
+
+
+function removeVote(data, element, alreadyVoted) {
+   sendAjaxRequest('DELETE', '/vote/' + alreadyVoted, data, function () {
+      element.children[1].style.display = 'none'
+      element.children[0].style.display = 'block'
+
+      element.dataset.vote = ''
    })
 }
 
@@ -164,10 +220,9 @@ function addVote(data, element) {
       const response = JSON.parse(this.responseText)
       element.dataset.vote = response.vote_id
 
-      element.children[0].classList += 'hidden'
+      element.children[0].style.display = 'none'
 
       element.children[1].style.display = 'block'
    })
-
 }
 
