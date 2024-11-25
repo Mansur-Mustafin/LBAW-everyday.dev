@@ -36,6 +36,7 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+    Route::post('/admin/register', 'registerByAdmin')->middleware('admin');
 });
 
 // News
@@ -46,31 +47,39 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/news/recent-feed','recent_feed');
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
-    Route::get('/news/{news_post}', 'show')->middleware('auth')->name('news.show');
-    Route::post('/news', 'store')->name('news');
-    Route::put('/news/{news_post}', 'store');
+    Route::get('/news/{news_post}', 'show')->name('news.show');
+    Route::post('/news', 'store')->middleware('auth')->name('news');
+    // Route::put('/news/{news_post}', 'store')->middleware('auth');
     Route::put('/news/{news_post}', 'update')->middleware('auth')->name('news.update');
-    Route::delete('/news/{news_post}', 'destroy');
+    Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
 });
 
 // Votes
 Route::controller(VoteController::class)->group(function () {
-    Route::post('/vote', 'store')->name('vote.store');
-    Route::delete('/vote/{vote}', 'destroy')->name('vote.destroy');
-    Route::put('/vote/{vote}', 'update')->name('vote.update');
+    Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
+    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
+    Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
 });
 
-// Profile
+// User
 Route::controller(UserController::class)->group(function () {
-    Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
-    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
-    Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
-    Route::put('/users/{user}', 'update')->name('user.update');
+    Route::get('/users/{user}/posts', 'showUserPosts')->middleware('auth')->name('user.posts');
+    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->middleware('auth')->name('user.upvotes');
+    Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
+    Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
+
+    Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
+    Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
+    Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
 });
 
 // Search
 Route::controller(SearchController::class)->group(function () {
     Route::get('/search/tags/{search}','search_tag');
     Route::get('/search/posts/{search}','search_post');
+
+    Route::get('/search/users','search_user')->middleware('admin');
+    Route::get('/search/users/{search}','search_user')->middleware('admin');
+
     Route::get('/search/{search}','search');
 });

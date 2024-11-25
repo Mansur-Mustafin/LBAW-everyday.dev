@@ -19,6 +19,7 @@
     @vite('resources/js/infinite-page.js')
     @vite('resources/js/auth.js')
     @vite('resources/js/edit-profile.js')
+    @vite('resources/js/admin.js')
 
 
     <script type="text/javascript">
