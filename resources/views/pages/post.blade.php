@@ -42,12 +42,6 @@
             <form id="editForm" method="POST" action="{{ route('news.update', $post->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="mb-5">
-                    <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
-                    <input type="text" name="title" id="title" value="{{ $post->title }}" 
-                        class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
-                </div>
-
                 <p class="block text-sm font-medium text-gray-300">Title Image</p>
                 <div class="flex mt-4 mb-5" id="edit-image">
                     <button class="rounded flex justify-center m-5" id="personalizedFileInput" title="Click to upload new Image">
@@ -68,6 +62,12 @@
                 </div>
                 <input class="hidden" type="file" id="realFileInput" name="image">
                 <input class="hidden" id="fileRemoved" name="remove_image" value="false">
+                
+                <div class="mb-5">
+                    <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
+                    <input type="text" name="title" id="title" value="{{ $post->title }}" 
+                        class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
+                </div>
 
                 <div class="mb-5">
                     <label for="content" class="block text-sm font-medium text-gray-300">Content</label>
