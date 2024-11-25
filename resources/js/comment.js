@@ -6,35 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // TODO: profile image
 
-document.querySelectorAll('.edit-comment').forEach(function (element) {
-   element.addEventListener('click', function () {
-      const comment_id = element.id.split('-')[1]
-
-      const editForm = document.getElementById("comment-form-" + comment_id)
-      const saveButton = document.getElementById("save_button-" + comment_id)
-      const commentContent = document.getElementById("comment-content-" + comment_id)
-      const editButton = document.getElementById("edit_button-" + comment_id)
-      const commentInput = document.getElementById("comment-input-" + comment_id)
-
-      commentContent.style.display = 'none'
-      editForm.style.display = 'block'
-
-      editButton.style.display = 'none'
-      saveButton.style.display = 'block'
-
-      saveButton.addEventListener('click', function () {
-         const newComment = commentInput.value.trim()
-
-         const data = {
-            content: newComment,
-            comment_id: comment_id
-         }
-
-         sendAjaxRequest('POST', '/comments/edit', data, editCommentHandler)
-      })
-   })
-})
-
 function editCommentHandler() {
    const response = JSON.parse(this.responseText)
 
@@ -137,4 +108,66 @@ function addButtonsBehaviour() {
          })
       })
    })
+
+   document.querySelectorAll('.edit-comment').forEach(function (element) {
+      element.addEventListener('click', function () {
+         const comment_id = element.id.split('-')[1]
+
+         const editForm = document.getElementById("comment-form-" + comment_id)
+         const saveButton = document.getElementById("save_button-" + comment_id)
+         const commentContent = document.getElementById("comment-content-" + comment_id)
+         const editButton = document.getElementById("edit_button-" + comment_id)
+         const commentInput = document.getElementById("comment-input-" + comment_id)
+
+         commentContent.style.display = 'none'
+         editForm.style.display = 'block'
+
+         editButton.style.display = 'none'
+         saveButton.style.display = 'block'
+
+         saveButton.addEventListener('click', function () {
+            const newComment = commentInput.value.trim()
+
+            const data = {
+               content: newComment,
+               comment_id: comment_id
+            }
+
+            sendAjaxRequest('POST', '/comments/edit', data, editCommentHandler)
+         })
+      })
+   })
+
+   document.querySelectorAll('.comment-upvote').forEach(function (element) {
+      element.addEventListener('click', function (event) {
+         event.preventDefault()
+         const comment_id = element.dataset.comment
+         const alreadyVoted = element.dataset.vote
+
+         const data = {
+            is_upvote: true,
+            id: comment_id,
+            type: "comment"
+         }
+
+         if (alreadyVoted) {
+            sendAjaxRequest('DELETE', '/vote/' + alreadyVoted, data, removeVoteHandler)
+         } else {
+            addVote(data, element)
+         }
+      })
+   })
 }
+
+function addVote(data, element) {
+   sendAjaxRequest('POST', '/vote', data, function () {
+      const response = JSON.parse(this.responseText)
+      element.dataset.vote = response.vote_id
+
+      element.children[0].classList += 'hidden'
+
+      element.children[1].style.display = 'block'
+   })
+
+}
+
