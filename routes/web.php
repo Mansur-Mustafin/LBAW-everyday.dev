@@ -51,6 +51,7 @@ Route::controller(NewsController::class)->group(function () {
 // Comments
 Route::controller(CommentsController::class)->group(function () {
     Route::post('/comments', 'store')->middleware('auth');
+    Route::post('/comments/edit', 'update')->middleware('auth');
 });
 
 // Votes

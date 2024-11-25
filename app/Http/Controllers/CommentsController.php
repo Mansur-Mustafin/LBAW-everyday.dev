@@ -53,19 +53,24 @@ class CommentsController extends Controller
         }
     }
 
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:250',
-            'content' => 'required|string|max:40',
-            'for_followers' => 'required|email|max:250|unique:user'
+            'content' => 'nullable|string|max:250',
+            'comment_id' => 'required|string'
         ]);
 
+        $comment = Comment::find((int) $request->comment_id);
+
+        if (!$comment) {
+            return response()->json(['error' => 'Comment not found'], 404);
+        }
+
         $comment->update([
-            'title' => $request->title,
-            'content' => $request->input('content'),
-            'for_followers' => $request->for_followers
+            'content' => $request->content,
         ]);
+
+        return response()->json(['comment' => $comment]);
     }
 
     public function destroy(Comment $comment)
