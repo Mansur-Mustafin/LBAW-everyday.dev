@@ -55,8 +55,30 @@ class NewsController extends Controller
         return redirect()->to('news/' . $newsPost->id)->withErrors('Comment does not belong to the correspondent news');
     }
 
+    static function processComments($comments, $user)
+    {
+        foreach ($comments as $comment) {
+            $comment->user_vote = null;
+
+            $vote = $comment->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $comment->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $comment->user_vote_id = $vote->id;
+            }
+
+            if ($comment->replies) {
+                self::processComments($comment->replies, $user);
+            }
+        }
+    }
+
     public function show(newsPost $newsPost)
     {
+        $user = Auth::user();
+
+        $this->processComments($newsPost->comments, $user);
+
         return view('pages.post', ['post' => $newsPost, 'comments' => $newsPost->comments, 'thread' => 'multi']);
     }
 

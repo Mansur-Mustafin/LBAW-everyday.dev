@@ -24,6 +24,8 @@ class CommentsController extends Controller
     {
         $thread_parent = $this->findMostParentComment($comment->id);
 
+        NewsController::processComments([$thread_parent], Auth::user());
+
         return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $thread_parent->id]);
     }
     function buildComment($comment)
@@ -33,6 +35,8 @@ class CommentsController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
             'content' => 'required|string|max:40',
             'news_post_id' => 'nullable|string',
@@ -43,7 +47,7 @@ class CommentsController extends Controller
             'content' => $request->content,
             'news_post_id' => $request->news_post_id ? (int) $request->news_post_id : null,
             'parent_comment_id' => $request->parent_comment_id ? (int) $request->parent_comment_id : null,
-            'author_id' => Auth::user()->id
+            'author_id' => $user->id
         ]);
 
         if ($request->news_post_id) {

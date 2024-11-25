@@ -37,21 +37,29 @@
                 @endif
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
-                <textarea id="{{'comment-input-' . $comment->id}}" class=" bg-input w-full p-3 mt-5 rounded-xl border
-                                            border-solid border-white-200 outline-none">
+                <textarea id="{{'comment-input-' . $comment->id}}"
+                    class=" bg-input w-full p-3 mt-5 rounded-xl border
+                                                                                                                                                            border-solid border-white-200 outline-none">
 
-                                                                        </textarea>
+                                                                                                                                                                                        </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content . $comment->id}}
             </div>
             <div class="mt-3 text-sm flex gap-2">
-                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400">
-                    <svg rpl="" fill="currentColor" width=20 icon-name="upvote-outline" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
+                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
+                    data-comment="{{$comment->id}}" data-vote="{{$comment->user_vote_id ?? ''}}">
+                    <svg rpl="" class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" fill=" currentColor" width="20"
+                        icon-name="upvote" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z">
                         </path>
+                    </svg>
+                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" rpl="" fill="currentColor"
+                        icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z">
+                        </path><!--?-->
                     </svg>
                 </a>
                 <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400">
@@ -126,15 +134,23 @@
                 {{ $comment->content . $comment->id}}
             </div>
             <div class="mt-3 text-sm flex gap-2">
-                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400">
-                    <svg rpl="" fill="currentColor" width=20 icon-name="upvote-outline" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
+                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
+                    data-comment="{{$comment->id}}" data-vote="{{$comment->user_vote_id ?? ''}}">
+                    <svg rpl="" class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" fill=" currentColor" width="20"
+                        icon-name="upvote" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z">
                         </path>
                     </svg>
+                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" rpl="" fill="currentColor"
+                        icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z">
+                        </path>
+                    </svg>
                 </a>
-                <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400">
+                <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote"
+                    data-comment="{{$comment->id}}">
                     <svg rpl="" fill="currentColor" icon-name="downvote-outline" viewBox="0 0 20 20" width=20
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -170,7 +186,7 @@
             </div>
         </div>
 
-        @if($level > 2 && $thread == 'multi' && count($comment->replies))
+        @if($level > 1 && $thread == 'multi' && count($comment->replies))
             <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}"
                 class="mt-3 ml-3 text-sm hover:underline show-more">
                 Show {{ count($comment->replies)}} more

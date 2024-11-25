@@ -11,11 +11,16 @@ class VoteController extends Controller
 {
     public function store(Request $request)
     {
-        if(!Auth::check()) {
+        if (!Auth::check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-           
+
         $user = Auth::user();
+
+        $request->merge([
+            'id' => (int) $request->id,
+            'is_upvote' => $request->is_upvote == 'true' ? true : false
+        ]);
 
         $validated = $request->validate([
             'type' => 'required|string|in:post,comment',
@@ -45,7 +50,7 @@ class VoteController extends Controller
 
     public function destroy(Vote $vote)
     {
-        if(!Auth::check()) {
+        if (!Auth::check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
@@ -63,7 +68,7 @@ class VoteController extends Controller
 
     public function update(Request $request, Vote $vote)
     {
-        if(!Auth::check()) {
+        if (!Auth::check()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
