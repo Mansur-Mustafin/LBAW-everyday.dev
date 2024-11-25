@@ -16,30 +16,32 @@
                         </h3>
                     </div>
                 </div>
-                @if (Auth::user()->id == $comment->author_id)
-                    <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-pencil">
-                            <path
-                                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                            <path d="m15 5 4 4" />
-                        </svg>
-                    </button>
+                <div>
+                    @if (Auth::user()->id == $comment->author_id)
+                        <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-pencil">
+                                <path
+                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                                <path d="m15 5 4 4" />
+                            </svg>
+                        </button>
 
-                    <button class="hidden" id="{{'save_button-' . $comment->id}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-check">
-                            <path d="M20 6 9 17l-5-5" />
-                        </svg>
-                    </button>
-                @endif
+                        <button class="hidden" id="{{'save_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-check">
+                                <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                        </button>
+                    @endif
+                </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}" class=" bg-input w-full p-3 mt-5 rounded-xl border
-                                                border-solid border-white-200 outline-none">
-                                                </textarea>
+                                                                    border-solid border-white-200 outline-none">
+                                                                    </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content . $comment->id}}

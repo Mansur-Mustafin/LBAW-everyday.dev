@@ -43,9 +43,9 @@ Route::controller(RegisterController::class)->group(function () {
 // News
 Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'recent_feed')->name('home');
-    Route::get('/news/my-feed','my_feed')->middleware('auth');
-    Route::get('/news/top-feed','top_feed');
-    Route::get('/news/recent-feed','recent_feed');
+    Route::get('/news/my-feed', 'my_feed')->middleware('auth');
+    Route::get('/news/top-feed', 'top_feed');
+    Route::get('/news/recent-feed', 'recent_feed');
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->middleware('auth');
@@ -75,23 +75,21 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
     Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
 
-    Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
-    Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
-    Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
+    Route::get('/admin', 'showAdmin')->middleware('admin')->name('admin');
+    Route::get('/admin/users/{user}/edit', 'showEditFormAdmin')->middleware('admin');
+    Route::get('/admin/users/create', 'showCreateFormAdmin')->middleware('admin');
 });
 
-<<<<<<< routes/web.php
 Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
 Route::post('/file/upload', [FileController::class, 'upload']);
-=======
+
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/tags/{search}','search_tag');
-    Route::get('/search/posts/{search}','search_post');
+    Route::get('/search/tags/{search}', 'search_tag');
+    Route::get('/search/posts/{search}', 'search_post');
 
-    Route::get('/search/users','search_user')->middleware('admin');
-    Route::get('/search/users/{search}','search_user')->middleware('admin');
+    Route::get('/search/users', 'search_user')->middleware('admin');
+    Route::get('/search/users/{search}', 'search_user')->middleware('admin');
 
-    Route::get('/search/{search}','search');
+    Route::get('/search/{search}', 'search');
 });
->>>>>>> routes/web.php
