@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserController extends Controller
 {
@@ -123,5 +124,31 @@ class UserController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
+    }
+
+    public function follow(User $user)
+    {
+        try {
+            $this->authorize('follow', $user);
+
+            Auth::user()->following()->attach($user->id);
+
+            return response()->json(['message' => 'Successfully followed user']);
+        } catch (AuthorizationException $e) {
+            return response()->json(['message' => 'Cannot follow this user'], 403);
+        }
+    }
+
+    public function unfollow(User $user)
+    {
+        try {
+            $this->authorize('unfollow', $user);
+
+            Auth::user()->following()->detach($user->id);
+
+            return response()->json(['message' => 'Successfully unfollowed user']);
+        } catch (AuthorizationException $e) {
+            return response()->json(['message' => 'Cannot follow this user'], 403);
+        }
     }
 }

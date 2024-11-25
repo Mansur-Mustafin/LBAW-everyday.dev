@@ -70,6 +70,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
     Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
     Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
+
+    // Follow
+    Route::post('/users/{user}/follow', 'follow')->middleware('auth')->name('users.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
 });
 
 // Search

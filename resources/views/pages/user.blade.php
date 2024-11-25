@@ -50,6 +50,14 @@
             @can('edit', $user)
                 <a href="{{url('/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
             @endcan
+            @can('follow', $user)
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end" 
+                    data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
+            @endcan
+            @can('unfollow', $user)
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end" 
+                    data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
+            @endcan
             @if (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
             @endif
@@ -71,10 +79,10 @@
             @endif
         </div>
         <div class="p-4 mt-4">
-            {{-- <p>
+            <p>
                 <span class="mr-4">{{ $user->following()->count() }} <span class="text-gray-500">following</span></span>
                 <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
-            </p> --}}
+            </p>
             <p>
                 <span class="mr-4">{{$user->rank}} <span class="text-gray-500">rank</span> </span>
                 @if(Auth::check() and (Auth::id() == $user->id))
