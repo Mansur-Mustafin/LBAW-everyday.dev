@@ -1,15 +1,12 @@
 <div class="p-4 rounded shadow-sm">
-    <img src="{{ $news->title_image_path }}" alt="" class="w-full h-48 object-cover mb-2">
+    <img src="{{ url($news->title_image_path) }}" alt="" class="w-full h-48 object-cover mb-2">
     
     <a href="{{ url('/news/' . $news->id) }}">
-        <h3 class="text-lg font-bold">{{$news->title}}</h3>
+        <h3 class="text-lg font-bold">{{$news->title . ' #' .$news->id}}</h3>
     </a> 
+ 
+    @include('partials.tags', ['tags' => $news->tag_names])
 
-    <div class="flex flex-wrap gap-2 mb-2 mt-1">
-        @foreach ($news->tag_names as $tag)
-            <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm">{{$tag}}</span>
-        @endforeach
-    </div>
     <div class="vote-container mr-4 flex items-center"
         data-type="post" 
         data-id="{{ $news->id }}" 

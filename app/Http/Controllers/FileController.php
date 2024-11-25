@@ -58,27 +58,22 @@ class FileController extends Controller
         return self::defaultAsset($type);
     }
 
-   public static function upload(Request $request, User|NewsPost $model) {
+    public static function upload(Request $request, User|NewsPost $model, string $imageType) {
         // Parameters
-        $file = $request->file('title_photo');
-        //$file = $request->file('file');
-        $type = 'post';//$request->type;
-        $id = $request->id;
+        $type = $model instanceof User ? 'profile' : 'post';
+        $file = $request->file('image');
         $extension = $file->getClientOriginalExtension();
-        $imageType = "PostTitle";//$request->image_type;
+        // dd($request);
 
-        //dd($file);
         // Hashing
-        $fileName = $file->hashName(); // generate a random unique id
-//dd($type, $fileName, self::$diskName);
+        $fileName = $file->hashName(); 
         // Save in correct folder and disk
         $file = $file->storeAs($type, $fileName, self::$diskName);
 
         Image::create([
             'path' => $file,
             'image_type' => $imageType,
-            'news_post_id' => $model->id,
-            //'user_id' => $model->id,
+            $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
         ]);
 
         return redirect()->back();

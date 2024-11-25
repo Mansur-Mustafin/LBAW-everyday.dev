@@ -41,9 +41,9 @@ class Image extends Model
     public function getPath()
     {
         if ($this->path && Storage::disk('public_uploads')->exists($this->path)) {
-            return $this->path;
+            return asset($this->path);
         } else {
-            return self::DEFAULT_IMAGES[$this->image_type];
+            return asset(self::DEFAULT_IMAGES[$this->image_type]);
         }
     }
 }

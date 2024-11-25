@@ -28,12 +28,39 @@ class User extends Authenticatable
         'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
     ];
 
-    public function getProfileImage() {
-        return FileController::get('profile', $this->id);
+    protected $hidden = ['password', 'remember_token'];
+
+    public function getProfileImagePathAttribute() {
+        return $this->profileImage ? $this->profileImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_PROFILE]);
+    }
+
+    public function profileImage() {
+        return $this->hasOne(Image::class, 'user_id')
+                    ->where('image_type', Image::TYPE_PROFILE);
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class, 'author_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(self::class, 'follows', 'followed_id', 'follower_id');
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(self::class, 'follows', 'follower_id', 'followed_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
+    }
+
+    public function getTagNamesAttribute()
+    {
+        return $this->tags()->pluck('name')->toArray();
     }
 }
