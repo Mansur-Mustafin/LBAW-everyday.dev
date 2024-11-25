@@ -90,24 +90,12 @@ createForm.addEventListener('submit', function (evt) {
 
   if (post_tags.length >= 0) document.getElementById('tagsInput').value = post_tags.join(',');
 
-  if (!fileInput.files.length || !title.value.length) {
-
-    if (!fileInput.files.length) {
-      thumbnailButton.style.borderWidth = '1px'
-      thumbnailButton.style.borderColor = 'red'
-    }
-
-    if (!title.value.length) {
-      title.style.borderWidth = '1px'
-      title.style.borderColor = 'red'
-    }
-
+  if ( !title.value.length) {
+    title.style.borderWidth = '1px'
+    title.style.borderColor = 'red'
     return
   }
 
-  // console.log("File Input Value:", fileInput.files);
-  // console.log("Title:", title.value);
-  // console.log("value:", hiddenToggle.value);
   createForm.submit()
 })
 
