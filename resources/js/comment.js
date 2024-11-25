@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './app.js'
+import { sendAjaxRequest } from '../../public/js/app.js'
 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
