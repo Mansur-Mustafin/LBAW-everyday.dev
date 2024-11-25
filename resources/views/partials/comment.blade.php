@@ -65,8 +65,8 @@
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                        {{ trim($comment->content) }}
-                                                    </textarea>
+                                                            {{ trim($comment->content) }}
+                                                        </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
@@ -199,8 +199,8 @@
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                                                                                                                                {{ trim($comment->content) }}
-                                                                                                                                                            </textarea>
+                                                                                                                                                                    {{ trim($comment->content) }}
+                                                                                                                                                                </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
@@ -268,7 +268,7 @@
 
         @if($level > 1 && $thread == 'multi' && count($comment->replies))
             <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}"
-                class="mt-3 ml-3 text-sm hover:underline show-more">
+                class="my-3 ml-3 text-sm hover:underline show-more">
                 Show {{ count($comment->replies)}} more
                 {{count($comment->replies) == 1 ? 'answer' : 'answers' }}
             </a>

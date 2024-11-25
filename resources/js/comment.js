@@ -219,8 +219,6 @@ function addButtonsBehaviour() {
          const comment_id = element.id.split('-')[1]
          const alreadyVoted = element.dataset.vote
 
-         console.log("upvote_comment" + comment_id)
-
          const otherVote = document.getElementById("upvote_comment-" + comment_id).dataset.vote
 
          const data = {
