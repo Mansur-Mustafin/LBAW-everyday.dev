@@ -55,9 +55,14 @@ class NewsController extends Controller
     public function showSingleThread(newsPost $newsPost, comment $comment)
     {
         if (Gate::inspect('belongsToPost', [$comment, $newsPost])->allowed()) {
+
+            $this->processComments([$comment], Auth::user());
+
             $comment = new Collection([$comment]);
+
             return view('pages.post', ['post' => $newsPost, 'comments' => $comment, 'thread' => 'single']);
         }
+
         return redirect()->to('news/' . $newsPost->id)->withErrors('Comment does not belong to the correspondent news');
     }
 
