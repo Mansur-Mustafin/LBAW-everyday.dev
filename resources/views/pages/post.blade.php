@@ -11,9 +11,15 @@
                 @endforeach
             </div>
             @if (Auth::check())
-                <div class="mt-5 text-sm text-gray-400">
-                    {{ $post->created_at->diffForHumans() }} • By {{ $post->author->username }}
-                </div>
+                @if ($post->changed_at)
+                    <div class="mt-5 text-sm text-gray-400">
+                        Edited {{ $post->changed_at->diffForHumans() }} • By {{ $post->author->username }}
+                    </div>
+                @else
+                    <div class="mt-5 text-sm text-gray-400">
+                        Posted {{ $post->created_at->diffForHumans() }} • By {{ $post->author->username }}
+                    </div>
+                @endif
             @endif
             
             <img src="{{ $post->title_image_path }}" alt="" class="rounded-xl mt-3">
@@ -170,6 +176,11 @@
                     Subscribe
                 </button>
             </div>
+            {{-- @if ($post->for_followers)
+                <div class="flex mt-4">
+                    <p class="bg-red-400 text-gray-800 px-3 py-1 ml-2 rounded-full text-sm ">Followers only</p>
+                </div>
+            @endif --}}
         @endif
     </section>
 </section>

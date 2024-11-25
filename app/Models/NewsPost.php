@@ -37,6 +37,10 @@ class NewsPost extends Model
         'downvotes',
         'is_omitted'
     ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'changed_at' => 'datetime', 
+    ];
 
     public function author()
     {
