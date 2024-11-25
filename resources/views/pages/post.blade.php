@@ -80,6 +80,7 @@
                 <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
             </div>
         </div>
+<<<<<<< HEAD
     </section>
     <section class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
         @if (Auth::check() && ((Auth::user()->id == $post->author_id) || Auth::user()->is_admin))
@@ -117,4 +118,15 @@
 <script>
     const tags = @json($post->tags->pluck('name'));
 </script>
+=======
+    </div>
+    @can('delete', $post)
+        <form method="POST" action="/news/{{ $post->id }}" class="mt-5">
+            @csrf
+            @method('DELETE')
+            <button class="text-input bg-white font-bold rounded-3xl px-6 py-2 self-end" type="submit">Delete post</button>
+        </form>
+    @endcan
+</div>
+>>>>>>> main
 @endsection

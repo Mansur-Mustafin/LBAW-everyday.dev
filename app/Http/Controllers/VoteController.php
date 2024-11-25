@@ -11,10 +11,6 @@ class VoteController extends Controller
 {
     public function store(Request $request)
     {
-        if(!Auth::check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-           
         $user = Auth::user();
 
         $validated = $request->validate([
@@ -45,16 +41,7 @@ class VoteController extends Controller
 
     public function destroy(Vote $vote)
     {
-        if(!Auth::check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
-        $user = Auth::user();
-
-        // TODO: rewrite with Policy
-        if ($vote->user_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('delete', $vote);
 
         $vote->delete();
 
@@ -63,15 +50,7 @@ class VoteController extends Controller
 
     public function update(Request $request, Vote $vote)
     {
-        if(!Auth::check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
-        $user = Auth::user();
-
-        if ($vote->user_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('update', $vote);
 
         $validated = $request->validate([
             'is_upvote' => 'required|boolean',
@@ -90,7 +69,7 @@ class VoteController extends Controller
             $newVote = new Vote();
             $newVote->vote_type = $vote->vote_type;
             $newVote->is_upvote = $isUpvote;
-            $newVote->user_id = $user->id;
+            $newVote->user_id = Auth::user()->id;
 
             if ($vote->vote_type === 'PostVote') {
                 $newVote->news_post_id = $vote->news_post_id;
