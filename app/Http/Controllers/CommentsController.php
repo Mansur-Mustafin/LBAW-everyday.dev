@@ -79,6 +79,12 @@ class CommentsController extends Controller
 
     public function destroy(Comment $comment)
     {
-        return $comment->delete();
+        try {
+            $comment->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+
     }
 }

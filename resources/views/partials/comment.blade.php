@@ -16,7 +16,7 @@
                         </h3>
                     </div>
                 </div>
-                <div>
+                <div class="flex gap-2 items-center">
                     @if (Auth::user()->id == $comment->author_id)
                         <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -36,15 +36,45 @@
                             </svg>
                         </button>
                     @endif
+
+                    @if (Auth::user()->isAdmin())
+                        <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-trash-2">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                <line x1="10" x2="10" y1="11" y2="17" />
+                                <line x1="14" x2="14" y1="11" y2="17" />
+                            </svg>
+                        </button>
+
+                        @if (count($comment->votes) > 0 || count($comment->replies) > 0)
+                            <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-eye-off">
+                                    <path
+                                        d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                                    <path
+                                        d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                                    <path d="m2 2 20 20" />
+                                </svg>
+                            </button>
+                        @endif
+                    @endif
                 </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
-                <textarea id="{{'comment-input-' . $comment->id}}" class=" bg-input w-full p-3 mt-5 rounded-xl border
-                                                                    border-solid border-white-200 outline-none">
-                                                                    </textarea>
+                <textarea id="{{'comment-input-' . $comment->id}}"
+                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
+                                                                            {{ trim($comment->content) }}
+                                                                        </textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
-                {{ $comment->content . $comment->id}}
+                {{ $comment->content}}
             </div>
             <div class="mt-3 text-sm flex gap-2">
                 <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
@@ -63,8 +93,8 @@
                     </svg>
                 </a>
                 <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote"
-                    id="{{ "downvote_comment-" . $comment->id }}">
-                    <svg class="{{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" rpl="" fill="currentColor"
+                    id="{{ "downvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
+                    <svg class=" {{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" rpl="" fill="currentColor"
                         icon-name="downvote-outline" viewBox="0 0 20 20" width=20 xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Zm0 17.193 7.315-7.264a.251.251 0 0 0-.177-.429H12.5V5.184A2.631 2.631 0 0 0 10.136 2.5a2.441 2.441 0 0 0-1.856.682A2.478 2.478 0 0 0 7.5 5v5.5H2.861a.251.251 0 0 0-.176.429L10 18.193Z">
@@ -126,20 +156,65 @@
                         </h3>
                     </div>
                 </div>
-                @if (Auth::user()->id == $comment->author_id)
-                    <a>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-pencil">
-                            <path
-                                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                            <path d="m15 5 4 4" />
-                        </svg>
-                    </a>
-                @endif
+                <div class="flex gap-2 items-center">
+                    @if (Auth::user()->id == $comment->author_id)
+                        <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-pencil">
+                                <path
+                                    d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                                <path d="m15 5 4 4" />
+                            </svg>
+                        </button>
+
+                        <button class="hidden" id="{{'save_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-check">
+                                <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                        </button>
+                    @endif
+
+                    @if (Auth::user()->isAdmin())
+                        <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-trash-2">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                <line x1="10" x2="10" y1="11" y2="17" />
+                                <line x1="14" x2="14" y1="11" y2="17" />
+                            </svg>
+                        </button>
+
+                        @if (count($comment->votes) > 0 || count($comment->replies) > 0)
+                            <button class="omit-comment" id="{{'omit-' . $comment->id}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-eye-off">
+                                    <path
+                                        d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                                    <path
+                                        d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                                    <path d="m2 2 20 20" />
+                                </svg>
+                            </button>
+                        @endif
+                    @endif
+                </div>
             </div>
-            <div class="mt-4">
-                {{ $comment->content . $comment->id}}
+            <form class="hidden" id="{{'comment-form-' . $comment->id}}">
+                <textarea id="{{'comment-input-' . $comment->id}}"
+                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
+                                                    {{ trim($comment->content) }}
+                                                </textarea>
+            </form>
+            <div class="mt-4" id={{'comment-content-' . $comment->id}}>
+                {{ $comment->content}}
             </div>
             <div class="mt-3 text-sm flex gap-2">
                 <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
@@ -158,8 +233,8 @@
                     </svg>
                 </a>
                 <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote"
-                    id="{{ "downvote_comment-" . $comment->id }}">
-                    <svg class="{{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" id="downvote-outline" rpl=""
+                    id="{{ "downvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
+                    <svg class=" {{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" id="downvote-outline" rpl=""
                         fill="currentColor" height="20" icon-name="downvote-outline" viewBox="0 0 20 20" width="20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path

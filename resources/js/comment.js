@@ -138,6 +138,21 @@ function addButtonsBehaviour() {
       })
    })
 
+   document.querySelectorAll('.delete-comment').forEach(function (element) {
+      element.addEventListener('click', function (event) {
+         event.preventDefault()
+         const comment_id = element.id.split('-')[1]
+         sendAjaxRequest('DELETE', '/comments/' + comment_id, {}, function () {
+            const comment = document.getElementById('comment-' + comment_id)
+            const response = JSON.parse(this.responseText)
+
+            if (response.success) {
+               comment.remove()
+            }
+         })
+      })
+   })
+
    document.querySelectorAll('.comment-upvote').forEach(function (element) {
       element.addEventListener('click', function (event) {
          event.preventDefault()
