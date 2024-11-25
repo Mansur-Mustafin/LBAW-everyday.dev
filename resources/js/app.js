@@ -44,24 +44,41 @@ deleteThumbnailButton.addEventListener('click', function (evt) {
 })
 
 tagSelector.addEventListener('change', function () {
-  const selectedTag = tagSelector.value
-
+  const selectedTag = tagSelector.value;
   if (selectedTag) {
-    const tagElement = document.createElement('div')
-    tagElement.dataset.tag = selectedTag;
-    tagElement.textContent = '#' + selectedTag.toLowerCase()
-    tagElement.className = 'bg-white rounded-xl p-2 text-input font-semibold text-sm'
-    selectedTags.appendChild(tagElement)
+      const newTagElement = document.createElement('div');
+      newTagElement.dataset.tag = selectedTag;
+      newTagElement.classList.add('relative', 'inline-block', 'mr-2');
+      newTagElement.innerHTML = `
+          <span class="text-md text-input font-medium lowercase bg-white p-2 rounded-md">#${selectedTag.toLowerCase()}</span>
+          <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600">
+              ×
+          </button>
+      `;
 
-    for (let i = 0; i < tagSelector.options.length; i++) {
-      if (tagSelector.options[i].value === selectedTag) {
-        tagSelector.remove(i);
-        tagSelector.value = ''
-        break;
+      const removeButton = newTagElement.querySelector('button');
+      removeButton.addEventListener('click', function () {
+          selectedTags.removeChild(newTagElement); 
+
+          const newOption = document.createElement('option');
+          newOption.value = selectedTag;
+          newOption.textContent = selectedTag;
+          tagSelector.appendChild(newOption);
+
+          delete newTagElement.dataset.tag;
+      });
+
+      selectedTags.appendChild(newTagElement);
+
+      for (let i = 0; i < tagSelector.options.length; i++) {
+          if (tagSelector.options[i].value === selectedTag) {
+              tagSelector.remove(i);
+              tagSelector.value = '';
+              break;
+          }
       }
-    }
   }
-})
+});
 
 createForm.addEventListener('submit', function (evt) {
   evt.preventDefault()

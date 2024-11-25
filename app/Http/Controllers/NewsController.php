@@ -86,7 +86,6 @@ class NewsController extends Controller
             'tags' => 'nullable|string'
         ]);
 
-
         $post = NewsPost::create([
             'title' => $request->title,
             'content' => $request->content,
