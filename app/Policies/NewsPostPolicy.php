@@ -21,6 +21,12 @@ class NewsPostPolicy
      */
     public function delete(User $user, NewsPost $newsPost): bool
     {
+        if($newsPost->upvotes != 0) return false;
+
+        if($newsPost->downvotes != 0) return false;
+
+        // TODO: Add here check for comments
+
         return $user->id === $newsPost->author_id;
     }
 }

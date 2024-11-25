@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
     saveButton.addEventListener('click', function(evt) {
         evt.preventDefault()
     
-    
         const selectedTags = document.getElementById('selectedTags')
     
         let post_tags = [];
