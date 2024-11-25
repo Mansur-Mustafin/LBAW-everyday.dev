@@ -5,6 +5,7 @@ const tagSelector = document.getElementById('tagSelector')
 const selectedTags = document.getElementById('selectedTags')
 const createForm = document.getElementById('createForm')
 const title = document.getElementById('title')
+
 const followersToggle = document.getElementById('toggleTwo')
 const hiddenToggle = document.getElementById('hiddenToggle')
 

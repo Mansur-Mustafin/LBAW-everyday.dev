@@ -110,13 +110,14 @@ class NewsController extends Controller
     public function update(Request $request, newsPost $newsPost)
     {
         $this->authorize('update', $newsPost);
-        dd($request);
+        
         $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string', 
-            'for_followers' => 'nullable|boolean',
+            'for_followers' => 'nullable|string',
             'tags' => 'nullable|string',
-            'image' => 'required|file|mimes:jpg,png|max:2048',
+            'image' => 'nullable|image|max:2048',
+            'remove_image' => 'required|string',
         ]);
         
         $newsPost->update([
@@ -125,12 +126,13 @@ class NewsController extends Controller
             'for_followers' => $request->input('for_followers', false), 
         ]);
 
-        if ($request->has('image')) {
+        if ($request->has('image') || $request->input('remove_image') == "true") {
             Image::query()
                 ->where('news_post_id', '=', $newsPost->id)
                 ->where('image_type', '=', Image::TYPE_POST_TITLE)
                 ->delete();
-
+        }
+        if ($request->has('image')) {
             FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);
         }
 

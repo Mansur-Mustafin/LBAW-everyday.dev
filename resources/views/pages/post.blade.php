@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-bold">{{ $post->title }}</h1>
             <div class="flex flex-wrap mt-5 gap-2">
                 @foreach ($post->tags as $tag)
-                    <span class="text-md text-gray-400 font-medium lowercase bg-input px-3  rounded-md">#{{ $tag->name }}</span>
+                    <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ $tag->name }}</span>
                 @endforeach
             </div>
             @if (Auth::check())
@@ -43,9 +43,14 @@
                 </div>
 
                 <p class="block text-sm font-medium text-gray-300">Title Image</p>
-                <div class="flex mt-4 mb-5">
-                    <button class="bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="personalizedFileInputEdit">Click to upload a new image!</button>
-                    <button id="deleteThumbnailEdit" class="self-start hidden">
+                <div class="flex mt-4 mb-5" id="edit-image">
+                    <button class="rounded flex justify-center m-5" id="personalizedFileInput" title="Click to upload new Image">
+                        <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="{{$post->title_image_path}}" alt="Current Title Image">
+                    </button>
+                    <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage" title="Click to upload new Image">
+                        Upload Post Title Image
+                    </button>
+                    <button id="deleteThumbnail" class="self-start">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-circle-x">
@@ -55,6 +60,8 @@
                         </svg>
                     </button>
                 </div>
+                <input class="hidden" type="file" id="realFileInput" name="image">
+                <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
                 <div class="mb-5">
                     <label for="content" class="block text-sm font-medium text-gray-300">Content</label>
@@ -87,16 +94,15 @@
                                 type="checkbox"
                                 id="toggleTwo"
                                 class="peer sr-only"
-                                checked='{{$post->for_followers ? 'true' : 'false'}}'/>
+                                {{$post->for_followers ? 'checked' : ''}}/>
                             <div class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"></div>
                             <div class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900"></div>
                         </div>
                         Followers only
                     </label>
                 </div>
-
+                {{-- <p>{{dd($post->for_followers);}}</p> --}}
                 <input class="hidden" name="tags" id="tagsInput">
-                <input class="hidden" type="file" id="realFileInputEdit" name="image">
                 <input class="hidden" type="text" id="hiddenToggle" name="for_followers" value='{{$post->for_followers ? 'true' : 'false'}}'>
             </form>
 
@@ -164,7 +170,4 @@
     const tags = @json($post->tags->pluck('name'));
 </script>
     
-    @can('delete', $post)
-        
-    @endcan
 @endsection
