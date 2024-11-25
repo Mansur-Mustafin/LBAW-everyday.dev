@@ -5,6 +5,7 @@ const tagSelector = document.getElementById('tagSelector')
 const selectedTags = document.getElementById('selectedTags')
 const createForm = document.getElementById('createForm')
 const title = document.getElementById('title')
+
 const followersToggle = document.getElementById('toggleTwo')
 const hiddenToggle = document.getElementById('hiddenToggle')
 
@@ -43,24 +44,41 @@ deleteThumbnailButton.addEventListener('click', function (evt) {
 })
 
 tagSelector.addEventListener('change', function () {
-  const selectedTag = tagSelector.value
-
+  const selectedTag = tagSelector.value;
   if (selectedTag) {
-    const tagElement = document.createElement('div')
-    tagElement.dataset.tag = selectedTag;
-    tagElement.textContent = '#' + selectedTag.toLowerCase()
-    tagElement.className = 'bg-white rounded-xl p-2 text-input font-semibold text-sm'
-    selectedTags.appendChild(tagElement)
+      const newTagElement = document.createElement('div');
+      newTagElement.dataset.tag = selectedTag;
+      newTagElement.classList.add('relative', 'inline-block', 'mr-2');
+      newTagElement.innerHTML = `
+          <span class="text-md text-input font-medium lowercase bg-white px-2 py-1 rounded-md">#${selectedTag.toLowerCase()}</span>
+          <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600">
+              ×
+          </button>
+      `;
 
-    for (let i = 0; i < tagSelector.options.length; i++) {
-      if (tagSelector.options[i].value === selectedTag) {
-        tagSelector.remove(i);
-        tagSelector.value = ''
-        break;
+      const removeButton = newTagElement.querySelector('button');
+      removeButton.addEventListener('click', function () {
+          selectedTags.removeChild(newTagElement); 
+
+          const newOption = document.createElement('option');
+          newOption.value = selectedTag;
+          newOption.textContent = selectedTag;
+          tagSelector.appendChild(newOption);
+
+          delete newTagElement.dataset.tag;
+      });
+
+      selectedTags.appendChild(newTagElement);
+
+      for (let i = 0; i < tagSelector.options.length; i++) {
+          if (tagSelector.options[i].value === selectedTag) {
+              tagSelector.remove(i);
+              tagSelector.value = '';
+              break;
+          }
       }
-    }
   }
-})
+});
 
 createForm.addEventListener('submit', function (evt) {
   evt.preventDefault()
@@ -72,24 +90,12 @@ createForm.addEventListener('submit', function (evt) {
 
   if (post_tags.length >= 0) document.getElementById('tagsInput').value = post_tags.join(',');
 
-  if (!fileInput.files.length || !title.value.length) {
-
-    if (!fileInput.files.length) {
-      thumbnailButton.style.borderWidth = '1px'
-      thumbnailButton.style.borderColor = 'red'
-    }
-
-    if (!title.value.length) {
-      title.style.borderWidth = '1px'
-      title.style.borderColor = 'red'
-    }
-
+  if ( !title.value.length) {
+    title.style.borderWidth = '1px'
+    title.style.borderColor = 'red'
     return
   }
 
-  // console.log("File Input Value:", fileInput.files);
-  // console.log("Title:", title.value);
-  // console.log("value:", hiddenToggle.value);
   createForm.submit()
 })
 

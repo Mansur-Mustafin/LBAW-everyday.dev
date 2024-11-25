@@ -88,6 +88,7 @@ class UserController extends Controller
             'image' => 'nullable|image|max:2048',
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
+            'remove_image' => 'required|string',
         ]);
 
         if ($request->user()->isAdmin()) {
@@ -103,12 +104,13 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        if ($request->has('image')) {
+        if ($request->has('image') || $request->input('remove_image') == "true") {
             Image::query()
                 ->where('user_id', '=', $user->id)
                 ->where('image_type', '=', Image::TYPE_PROFILE)
                 ->delete();
-
+        }
+        if ($request->has('image')) {
             FileController::upload($request, $user, Image::TYPE_PROFILE);
         }
 
