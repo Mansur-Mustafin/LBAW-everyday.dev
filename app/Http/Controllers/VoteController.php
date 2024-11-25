@@ -108,6 +108,4 @@ class VoteController extends Controller
             return response()->json(['message' => 'An error occurred'], 500);
         }
     }
-
-
 }

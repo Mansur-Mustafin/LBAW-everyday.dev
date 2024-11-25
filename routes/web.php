@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\NewsController;
@@ -24,13 +25,14 @@ use App\Http\Controllers\VoteController;
 // Redirect root to /home
 Route::redirect('/', '/home');
 
-// Authentication
+// Login
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->name('logout');
 });
 
+// Register
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
@@ -38,7 +40,11 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
-    Route::get('/home', 'index')->name('home');
+    Route::get('/home', 'recent_feed')->name('home');
+    Route::get('/news/my-feed','my_feed')->middleware('auth');
+    Route::get('/news/top-feed','top_feed');
+    Route::get('/news/recent-feed','recent_feed');
+
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->middleware('auth')->name('news.show');
     Route::post('/news', 'store')->name('news');
@@ -54,11 +60,17 @@ Route::controller(VoteController::class)->group(function () {
     Route::put('/vote/{vote}', 'update')->name('vote.update');
 });
 
-// Profile TODO
+// Profile
 Route::controller(UserController::class)->group(function () {
-    Route::get('/me', 'me')->middleware('auth');
-    Route::get('/users/{user}', 'show');
+    Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
+    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
+    Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
+    Route::put('/users/{user}', 'update')->name('user.update');
 });
 
-Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
-Route::post('/file/upload', [FileController::class, 'upload']);
+// Search
+Route::controller(SearchController::class)->group(function () {
+    Route::get('/search/tags/{search}','search_tag');
+    Route::get('/search/posts/{search}','search_post');
+    Route::get('/search/{search}','search');
+});

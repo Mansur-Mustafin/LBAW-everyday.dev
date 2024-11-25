@@ -57,7 +57,7 @@
         <div id="selectedTags" class="flex gap-1 flex-wrap"></div>
 
         <input class="hidden" name="tags" id="tagsInput">
-        <input class="hidden" type="file" id="realFileInput" name="title_photo">
+        <input class="hidden" type="file" id="realFileInput" name="image">
         <input class="hidden" type="text" id="hiddenToggle" name="for_followers" value='false'>
         <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Post</button>
     </form>
