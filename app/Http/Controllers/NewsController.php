@@ -10,37 +10,43 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\PaginationTrait;
+use App\Models\User;
 
 class NewsController extends Controller
 {
-    public function index()
+    use PaginationTrait;
+
+    public function recent_feed(Request $request)
     {
-        $newsPosts = NewsPost::orderBy('created_at', 'desc')->get();
+        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        $title = "Recent News";
+        $baseUrl = '/news/recent-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
+    }
 
+    public function top_feed(Request $request)
+    {
+        $news_posts = NewsPost::orderBy(DB::raw('upvotes - downvotes'), 'desc');
+        $title = "Top News";
+        $baseUrl = '/news/top-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
+    }
+
+    public function my_feed(Request $request)
+    {
         $user = Auth::user();
-
-        foreach ($newsPosts as $news) {
-            $news->user_vote = null;
-
-            if ($user) {
-                $vote = $news->votes()->where('user_id', $user->id)->first();
-
-                if ($vote) {
-                    $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
-                    $news->user_vote_id = $vote->id;
-                }
-            }
-        }
-
-        return view('pages.news', compact('newsPosts'));
+        $title = "Your News";
+        $following = $user->following()->pluck('id');
+        $news_posts = NewsPost::whereIn('author_id', $following)
+            ->orderBy('created_at', 'desc');
+        $baseUrl = '/news/my-feed';
+        return NewsController::news_post_page($news_posts, $title, $request, $baseUrl);
     }
 
     public function showCreationForm()
     {
-        if (!Auth::check()) {
-            return redirect('/');
-        }
-
         $tags = Tag::all();
 
         return view('pages.create-news', ['tags' => $tags]);
@@ -88,7 +94,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:40',
             'content' => 'required|string|max:1000',
             'for_followers' => 'required|string',
-            'title_photo' => 'required|file|mimes:jpg,png|max:2048',
+            'image' => 'required|file|mimes:jpg,png|max:2048',
             'tags' => 'nullable|string'
         ]);
 
@@ -100,8 +106,7 @@ class NewsController extends Controller
             'author_id' => Auth::user()->id,
         ]);
 
-
-        FileController::upload($request, $post);
+        FileController::upload($request, $post, Image::TYPE_POST_TITLE);
 
         if ($request->tags != null) {
             $tags = explode(',', $request->tags);
@@ -116,6 +121,8 @@ class NewsController extends Controller
 
     public function update(Request $request, newsPost $newsPost)
     {
+        $this->authorize('update', $newsPost);
+
         $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string|max:40',
@@ -128,18 +135,20 @@ class NewsController extends Controller
             'for_followers' => $request->for_followers ?? false
         ]);
 
-        if ($request->has('title_photo')) {
+        if ($request->has('image')) {
             Image::query()
                 ->where('news_post_id', '=', $newsPost->id)
-                ->where('image_type', '=', "PostTitle")
+                ->where('image_type', '=', Image::TYPE_POST_TITLE)
                 ->delete();
 
-            FileController::upload($request, $newsPost);
+            FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);
         }
     }
 
     public function destroy(newsPost $newsPost)
     {
+        $this->authorize('delete', $newsPost);
+
         $newsPost->delete();
 
         return redirect()->route('home')
