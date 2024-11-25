@@ -32,7 +32,8 @@ CREATE TABLE "user" (
     rank Ranking NOT NULL DEFAULT 'noobie',
     status UserStatus NOT NULL DEFAULT 'active',
     reputation INTEGER NOT NULL DEFAULT 0,
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+    remember_token VARCHAR
 );
 
 CREATE TABLE news_post (
