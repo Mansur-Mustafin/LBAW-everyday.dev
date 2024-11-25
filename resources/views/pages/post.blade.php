@@ -96,7 +96,7 @@
                 @forelse ($comments->where('parent_comment_id', null) as $comment)
                     @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
                 @empty
-                    <div class="text-gray-400">
+                    <div class="text-gray-400" id="no-comments">
                         No comments yet. Be the first to comment!
                     </div>
                 @endforelse

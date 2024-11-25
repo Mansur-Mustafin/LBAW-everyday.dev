@@ -15,13 +15,17 @@ function editCommentHandler() {
    const saveButton = document.getElementById("save_button-" + comment_id)
    const commentContent = document.getElementById("comment-content-" + comment_id)
    const editButton = document.getElementById("edit_button-" + comment_id)
+   const abortButton = document.getElementById("abort_button-" + comment_id)
+
 
    editForm.style.display = 'none'
    saveButton.style.display = 'none'
+   abortButton.style.display = 'none'
 
    editButton.style.display = 'block'
    commentContent.innerHTML = response.comment.content
    commentContent.style.display = 'block'
+
 }
 
 document.getElementById('commentForm').addEventListener('submit', function (e) {
@@ -62,7 +66,10 @@ function addCommentHandler() {
 
    const commentInput = document.getElementById(`subCommentInput-${commentSection.id.split('-')[1]}`)
 
+   const noComments = document.getElementById('no-comments')
+
    if (commentInput) commentInput.innerHTML = ''
+   if (noComments) noComments.style.display = 'none'
 
    if (threadDiv) {
       threadDiv.outerHTML = threadHTML;
@@ -118,6 +125,20 @@ function addButtonsBehaviour() {
          const commentContent = document.getElementById("comment-content-" + comment_id)
          const editButton = document.getElementById("edit_button-" + comment_id)
          const commentInput = document.getElementById("comment-input-" + comment_id)
+
+         const abortButton = document.getElementById("abort_button-" + comment_id)
+
+         abortButton.style.display = 'block'
+
+         abortButton.addEventListener('click', function () {
+            editForm.style.display = 'none'
+            saveButton.style.display = 'none'
+
+            editButton.style.display = 'block'
+            commentContent.style.display = 'block'
+
+            abortButton.style.display = 'none'
+         })
 
          commentContent.style.display = 'none'
          editForm.style.display = 'block'
