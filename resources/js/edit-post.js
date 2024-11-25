@@ -5,10 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedTags = document.getElementById('selectedTags');
     const saveButton = document.getElementById('saveButton');
     const form = document.getElementById('editForm');
-    const thumbnailButtonEdit = document.getElementById('personalizedFileInputEdit')
-    const fileInputEdit = document.getElementById('realFileInputEdit')
-    const deleteThumbnailButtonEdit = document.getElementById('deleteThumbnailEdit')
 
+    // TODO: make as a class
+    const followersToggle = document.getElementById('toggleTwo')
+    const hiddenToggle = document.getElementById('hiddenToggle')
+
+    if (form) {
+    
+    // TODO: make as a class
+    followersToggle.addEventListener('change', function (evt) {
+        hiddenToggle.value = this.checked ? 'true' : 'false'
+    })
+    
     window.toggleEdit = function() {
         const editButton = document.getElementById('edit-button');
         const saveCancelButtons = document.getElementById('save-cancel-buttons');
@@ -21,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editSection.classList.toggle('hidden');
         editButton.classList.toggle('hidden'); 
         saveCancelButtons.classList.toggle('hidden'); 
+
+        // selectedTags.innerHTML = '';
 
         tags.forEach(tagValue => {
             const newTagElement = document.createElement('div');
@@ -55,30 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    thumbnailButtonEdit.addEventListener('click', function (evt) {
-        evt.preventDefault()
-        fileInputEdit.click()
-    })
-    
-    fileInputEdit.addEventListener('change', () => {
-        const [file] = fileInputEdit.files
-        if (file) {
-            thumbnailButtonEdit.style.backgroundImage = `url(${URL.createObjectURL(file)})`
-            thumbnailButtonEdit.style.backgroundSize = 'cover'
-            thumbnailButtonEdit.style.borderWidth = '0px'
-            thumbnailButtonEdit.innerHTML = ''
-            deleteThumbnailButtonEdit.style.display = 'block'
-        }
-    })
-    
-    deleteThumbnailButtonEdit.addEventListener('click', function (evt) {
-        evt.preventDefault()
-        thumbnailButtonEdit.style.backgroundImage = ''
-        thumbnailButtonEdit.innerHTML = 'Thumbnail'
-        deleteThumbnailButtonEdit.style.display = 'none'
-        fileInputEdit.value = ''
-    })
-
     tagSelector.addEventListener('change', function () {
         const selectedTag = tagSelector.value;
         if (selectedTag) {
@@ -86,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newTagElement.dataset.tag = selectedTag;
             newTagElement.classList.add('relative', 'inline-block', 'mr-2');
             newTagElement.innerHTML = `
-                <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#${selectedTag.toLowerCase()}</span>
+                <span class="text-md text-gray-400 font-medium lowercase bg-input rounded-md">#${selectedTag.toLowerCase()}</span>
                 <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600">
                     ×
                 </button>
@@ -133,4 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         form.submit();
     });
+
+    }
+
 });

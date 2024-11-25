@@ -7,16 +7,19 @@
     <h2 class="text-2xl font-semibold my-4 mx-4">Edit Profile</h2>
 
     <form method="POST" action="{{ url('users/' . $user->id) }}" enctype="multipart/form-data" 
-        class="px-3 flex flex-col gap-4 mt-4" id="edit-profile">
+        class="px-3 flex flex-col gap-4 mt-4">
         @csrf
         @method('PUT')
         <h3 class="font-bold text-lg flex-1">Profile Picture</h3>
 
-        <div class="flex">
+        <div class="flex" id="edit-image">
             <button type="button" class="rounded flex justify-center m-5" id="personalizedFileInput" title="Click to upload Image">
                 <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="{{$user->profile_image_path}}" alt="Current Profile Image">
             </button>
-            <button type="button" id="deleteThumbnail" class="self-start hidden">
+            <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage" title="Click to upload new Image">
+                Upload Post Title Image
+            </button>
+            <button type="button" id="deleteThumbnail" class="self-start">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-circle-x">
@@ -30,6 +33,7 @@
             @enderror
         </div>
         <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <h3 class="font-bold text-lg flex-1">User Information</h3>
 
