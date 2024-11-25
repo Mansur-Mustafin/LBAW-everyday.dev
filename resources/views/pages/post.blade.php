@@ -73,6 +73,14 @@
 
                 <div class="flex flex-wrap items-center mt-5 gap-2" id="selectedTags">
                     <button id="toggleTagSelector" type="button" class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">+</button>
+                    @foreach ($post->tags as $tag)
+                        <div data-tag="{{ $tag->name }}" class="relative inline-block mr-2">
+                            <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ strtolower($tag->name) }}</span>
+                            <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600" data-tag="{{ $tag->name }}">
+                                ×
+                            </button>
+                        </div>
+                    @endforeach
                 </div>
                 
                 <div class='flex gap-2' id="tagSelectorContainer" style="display: none;">

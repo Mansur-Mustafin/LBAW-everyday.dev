@@ -30,29 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.classList.toggle('hidden'); 
         saveCancelButtons.classList.toggle('hidden'); 
 
-        // selectedTags.innerHTML = '';
-
-        tags.forEach(tagValue => {
-            const newTagElement = document.createElement('div');
-            newTagElement.dataset.tag =  tagValue;
-            newTagElement.classList.add('relative', 'inline-block', 'mr-2');
-            newTagElement.innerHTML = `
-                <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#${tagValue.toLowerCase()}</span>
-                <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600" data-tag="${tagValue}">
-                    ×
-                </button>
-            `;
-            selectedTags.appendChild(newTagElement);
-
-            const removeButton = newTagElement.querySelector('button');
-            removeButton.addEventListener('click', function () {
-                selectedTags.removeChild(newTagElement); 
-
+        const existingTagRemoveButtons = selectedTags.querySelectorAll('button[data-tag]');
+        existingTagRemoveButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                const tagValue = this.dataset.tag;
+                const tagElement = this.parentElement;
+                selectedTags.removeChild(tagElement);
+        
                 const newOption = document.createElement('option');
+                newOption.value = tagValue;
                 newOption.textContent = tagValue;
                 tagSelector.appendChild(newOption);
-
-                delete newTagElement.dataset.tag;
             });
         });
     };
