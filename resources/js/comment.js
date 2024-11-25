@@ -4,7 +4,54 @@ document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
 });
 
-// TODO: profile image, add comment interaction when a comment is just added
+// TODO: profile image
+
+document.querySelectorAll('.edit-comment').forEach(function (element) {
+   element.addEventListener('click', function () {
+      const comment_id = element.id.split('-')[1]
+
+      const editForm = document.getElementById("comment-form-" + comment_id)
+      const saveButton = document.getElementById("save_button-" + comment_id)
+      const commentContent = document.getElementById("comment-content-" + comment_id)
+      const editButton = document.getElementById("edit_button-" + comment_id)
+      const commentInput = document.getElementById("comment-input-" + comment_id)
+
+      commentContent.style.display = 'none'
+      editForm.style.display = 'block'
+
+      editButton.style.display = 'none'
+      saveButton.style.display = 'block'
+
+      saveButton.addEventListener('click', function () {
+         const newComment = commentInput.value.trim()
+
+         const data = {
+            content: newComment,
+            comment_id: comment_id
+         }
+
+         sendAjaxRequest('POST', '/comments/edit', data, editCommentHandler)
+      })
+   })
+})
+
+function editCommentHandler() {
+   const response = JSON.parse(this.responseText)
+
+   const comment_id = response.comment.id
+
+   const editForm = document.getElementById("comment-form-" + comment_id)
+   const saveButton = document.getElementById("save_button-" + comment_id)
+   const commentContent = document.getElementById("comment-content-" + comment_id)
+   const editButton = document.getElementById("edit_button-" + comment_id)
+
+   editForm.style.display = 'none'
+   saveButton.style.display = 'none'
+
+   editButton.style.display = 'block'
+   commentContent.innerHTML = response.comment.content
+   commentContent.style.display = 'block'
+}
 
 document.getElementById('commentForm').addEventListener('submit', function (e) {
    e.preventDefault()
@@ -21,8 +68,19 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 })
 
+function addNestedComment(parent_id) {
+   const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
+   const subCommentInputValue = subCommentInput.value
+
+   const data = {
+      content: subCommentInputValue,
+      parent_comment_id: parent_id,
+   }
+
+   sendAjaxRequest('POST', '/comments', data, addCommentHandler)
+}
+
 function addCommentHandler() {
-   console.log(this.responseText)
    const response = JSON.parse(this.responseText)
    const thread = response.thread_id
    const threadHTML = response.thread
@@ -79,17 +137,4 @@ function addButtonsBehaviour() {
          })
       })
    })
-}
-
-
-function addNestedComment(parent_id) {
-   const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
-   const subCommentInputValue = subCommentInput.value
-
-   const data = {
-      content: subCommentInputValue,
-      parent_comment_id: parent_id,
-   }
-
-   sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 }
