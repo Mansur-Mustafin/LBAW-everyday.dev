@@ -47,10 +47,9 @@
     <aside class="order-1 tablet:order-none border-l border-gray-700">
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
-            @can('edit', $user)
+            @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
-            @endcan
-            @if (Auth::user()->is_admin)
+            @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
             @endif
         </header>
