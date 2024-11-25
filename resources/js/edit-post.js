@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newTagElement.dataset.tag = selectedTag;
             newTagElement.classList.add('relative', 'inline-block', 'mr-2');
             newTagElement.innerHTML = `
-                <span class="text-md text-input font-medium lowercase bg-white px-2 py-1 rounded-md">#${selectedTag.toLowerCase()} hello</span>
+                <span class="text-md text-input font-medium lowercase bg-white px-2 py-1 rounded-md">#${selectedTag.toLowerCase()}</span>
                 <button type="button" class="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-600">
                     ×
                 </button>
