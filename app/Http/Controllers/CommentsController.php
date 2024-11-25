@@ -20,17 +20,17 @@ class CommentsController extends Controller
         return $comment;
     }
 
-    function buildNestedComment($comment)
+    function buildNestedComment($comment, $thread)
     {
         $thread_parent = $this->findMostParentComment($comment->id);
 
         NewsController::processComments([$thread_parent], Auth::user());
 
-        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $thread_parent->id]);
+        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => $thread])->render(), "thread_id" => $thread_parent->id]);
     }
-    function buildComment($comment)
+    function buildComment($comment, $thread)
     {
-        return response()->json(['thread' => view('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => NewsPost::find($comment->news_post_id), 'thread' => 'multi'])->render(), "thread_id" => $comment->id]);
+        return response()->json(['thread' => view('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => NewsPost::find($comment->news_post_id), 'thread' => $thread])->render(), "thread_id" => $comment->id]);
     }
 
     public function store(Request $request)
@@ -40,7 +40,8 @@ class CommentsController extends Controller
         $request->validate([
             'content' => 'required|string|max:40',
             'news_post_id' => 'nullable|string',
-            'parent_comment_id' => 'nullable|string'
+            'parent_comment_id' => 'nullable|string',
+            'thread' => 'required|string'
         ]);
 
         $comment = Comment::create([
@@ -51,9 +52,9 @@ class CommentsController extends Controller
         ]);
 
         if ($request->news_post_id) {
-            return $this->buildComment($comment);
+            return $this->buildComment($comment, $request->thread);
         } else {
-            return $this->buildNestedComment($comment);
+            return $this->buildNestedComment($comment, $request->thread);
         }
     }
 

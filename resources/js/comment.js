@@ -35,21 +35,28 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
    const commentValue = commentInput.value
    const post_id = commentInput.dataset.post_id
 
+   const threadType = commentInput.dataset.thread
+
    const data = {
       content: commentValue,
       news_post_id: post_id,
+      thread: threadType
    }
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 })
 
 function addNestedComment(parent_id) {
+   const commentInput = document.getElementById('commentInput')
+   const threadType = commentInput.dataset.thread
+
    const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
    const subCommentInputValue = subCommentInput.value
 
    const data = {
       content: subCommentInputValue,
       parent_comment_id: parent_id,
+      thread: threadType
    }
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
