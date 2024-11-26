@@ -21,7 +21,7 @@
             </button>
             <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
                 title="Click to upload new Image">
-                Upload Post Title Image
+                Click to Upload Image
             </button>
             <button type="button" id="deleteThumbnail" class="self-start">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
