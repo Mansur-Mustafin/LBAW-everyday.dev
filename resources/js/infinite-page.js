@@ -200,7 +200,7 @@ if (usersList) {
     let lastPage = 0
 
     const buildUser = (user) => {
-        let hmtl = `
+        let html = `
             <div class="flex items-center border border-gray-700 rounded-xl px-5 py-4 mt-4">
                 <img src="${user.profile_image_path}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
                 
@@ -220,13 +220,13 @@ if (usersList) {
                 `
             }
             else if (user.can_unfollow) {
-                hmtl += `
+                html += `
                     <button class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none" 
                         data-user-id="${user.id}" data-action="unfollow">Unfollow</button>
                 `
             }
-            hmtl += `</div>`
-        return hmtl
+            html += `</div>`
+        return html
     }
     
     const buildByRequest = async (url) => {
