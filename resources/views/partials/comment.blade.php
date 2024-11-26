@@ -71,38 +71,46 @@
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
             </div>
-            <div class="mt-3 text-sm flex gap-2">
-                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
-                    id="{{ "upvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
-                    <svg rpl="" class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" fill=" currentColor" width="20"
-                        icon-name="upvote" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z">
-                        </path>
+
+            <div class="vote-container mt-3 text-sm flex gap-2"
+                data-type="comment" 
+                data-id="{{ $comment->id }}" 
+                data-vote-id="{{ $comment->user_vote_id ?? '' }}" 
+                data-vote="{{ $comment->user_vote ?? '' }}"
+                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+
+                <button type="submit" class="upvote-button hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote">
+
+                    <svg class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" 
+                        id="comment-upvote-outline-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="upvote-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z"></path>
                     </svg>
-                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" rpl="" fill="currentColor"
-                        icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z">
-                        </path><!--?-->
+                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" 
+                        id="comment-upvote-fill-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z"></path><!--?-->
                     </svg>
-                </a>
-                <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote"
-                    id="{{ "downvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
-                    <svg class=" {{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" rpl="" fill="currentColor"
-                        icon-name="downvote-outline" viewBox="0 0 20 20" width=20 xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Zm0 17.193 7.315-7.264a.251.251 0 0 0-.177-.429H12.5V5.184A2.631 2.631 0 0 0 10.136 2.5a2.441 2.441 0 0 0-1.856.682A2.478 2.478 0 0 0 7.5 5v5.5H2.861a.251.251 0 0 0-.176.429L10 18.193Z">
-                        </path>
+                </button>
+        
+                <span class="vote-count font-bold">{{ $comment->upvotes - $comment->downvotes }}</span>
+                
+                <!-- Downvote Button -->
+                <button type="submit" class="downvote-button hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote">
+                        
+                    <svg class="{{$comment->user_vote == 'downvote' ? 'hidden' : ''}}"
+                        id="comment-downvote-outline-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="downvote-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Zm0 17.193 7.315-7.264a.251.251 0 0 0-.177-.429H12.5V5.184A2.631 2.631 0 0 0 10.136 2.5a2.441 2.441 0 0 0-1.856.682A2.478 2.478 0 0 0 7.5 5v5.5H2.861a.251.251 0 0 0-.176.429L10 18.193Z"></path>
                     </svg>
-                    <svg class="{{$comment->user_vote == 'downvote' ? '' : 'hidden'}}" id="downvote-fill" rpl=""
-                        fill="currentColor" height="20" icon-name="downvote-fill" viewBox="0 0 20 20" width="20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Z">
-                        </path>
+                    <svg class="{{$comment->user_vote == 'downvote' ? '' : 'hidden'}}" 
+                        id="comment-downvote-fill-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="downvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Z"></path><!--?-->
                     </svg>
-                </a>
+                </button>
+                
+                <!-- Resto -->
                 <a
                     class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
                     <svg xmlns=" http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -205,39 +213,46 @@
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
             </div>
-            <div class="mt-3 text-sm flex gap-2">
-                <a href="" class="hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote"
-                    id="{{ "upvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
-                    <svg rpl="" class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" fill=" currentColor" width="20"
-                        icon-name="upvote" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z">
-                        </path>
+
+            <div class="vote-container mt-3 text-sm flex gap-2"
+                data-type="comment" 
+                data-id="{{ $comment->id }}" 
+                data-vote-id="{{ $comment->user_vote_id ?? '' }}" 
+                data-vote="{{ $comment->user_vote ?? '' }}"
+                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+
+                <button type="submit" class="upvote-button hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400 comment-upvote">
+
+                    <svg class="{{$comment->user_vote == 'upvote' ? 'hidden' : ''}}" 
+                        id="comment-upvote-outline-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="upvote-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Zm0-17.193L2.685 9.071a.251.251 0 0 0 .177.429H7.5v5.316A2.63 2.63 0 0 0 9.864 17.5a2.441 2.441 0 0 0 1.856-.682A2.478 2.478 0 0 0 12.5 15V9.5h4.639a.25.25 0 0 0 .176-.429L10 1.807Z"></path>
                     </svg>
-                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" rpl="" fill="currentColor"
-                        icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z">
-                        </path>
+                    <svg class="{{$comment->user_vote == 'upvote' ? '' : 'hidden'}}" 
+                        id="comment-upvote-fill-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="upvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z"></path><!--?-->
                     </svg>
-                </a>
-                <a href="" class="hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote"
-                    id="{{ "downvote_comment-" . $comment->id }}" data-vote="{{$comment->user_vote_id ?? ''}}">
-                    <svg class=" {{$comment->user_vote == 'downvote' ? 'hidden' : ''}}" id="downvote-outline" rpl=""
-                        fill="currentColor" height="20" icon-name="downvote-outline" viewBox="0 0 20 20" width="20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Zm0 17.193 7.315-7.264a.251.251 0 0 0-.177-.429H12.5V5.184A2.631 2.631 0 0 0 10.136 2.5a2.441 2.441 0 0 0-1.856.682A2.478 2.478 0 0 0 7.5 5v5.5H2.861a.251.251 0 0 0-.176.429L10 18.193Z">
-                        </path>
+                </button>
+        
+                <span class="vote-count font-bold">{{ $comment->upvotes - $comment->downvotes }}</span>
+                
+                <!-- Downvote Button -->
+                <button type="submit" class="downvote-button hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400 comment-downvote">
+                        
+                    <svg class="{{$comment->user_vote == 'downvote' ? 'hidden' : ''}}"
+                        id="comment-downvote-outline-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="downvote-outline" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Zm0 17.193 7.315-7.264a.251.251 0 0 0-.177-.429H12.5V5.184A2.631 2.631 0 0 0 10.136 2.5a2.441 2.441 0 0 0-1.856.682A2.478 2.478 0 0 0 7.5 5v5.5H2.861a.251.251 0 0 0-.176.429L10 18.193Z"></path>
                     </svg>
-                    <svg class="{{$comment->user_vote == 'downvote' ? '' : 'hidden'}}" id="downvote-fill" rpl=""
-                        fill="currentColor" height="20" icon-name="downvote-fill" viewBox="0 0 20 20" width="20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Z">
-                        </path>
+                    <svg class="{{$comment->user_vote == 'downvote' ? '' : 'hidden'}}" 
+                        id="comment-downvote-fill-{{ $comment->id }}"
+                        rpl="" fill="currentColor" icon-name="downvote-fill" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1c.072 0 .145 0 .218.006A4.1 4.1 0 0 1 14 5.184V9h3.138a1.751 1.751 0 0 1 1.234 2.993L10.59 19.72a.836.836 0 0 1-1.18 0l-7.782-7.727A1.751 1.751 0 0 1 2.861 9H6V5.118a4.134 4.134 0 0 1 .854-2.592A3.99 3.99 0 0 1 10 1Z"></path><!--?-->
                     </svg>
-                </a>
+                </button>
+                
+                <!-- Resto -->
                 <a
                     class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
