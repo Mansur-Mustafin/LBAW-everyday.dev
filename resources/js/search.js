@@ -21,7 +21,7 @@ searchBarDiv.onkeyup = async () => {
         return
     }
 
-    const searchQuery = `${baseUrl}/search/${searchBarDiv.value}`
+    const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`
     loading = true
     fetch(searchQuery, {
       method: 'GET',

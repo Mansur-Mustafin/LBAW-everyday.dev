@@ -142,7 +142,7 @@ if(resultsDiv) {
     }
 
   window.onload = async () => {
-    const searchQuery = `${baseUrl}/search/users/`
+    const searchQuery = `${baseUrl}/api/search/users/`
     resultsDiv.innerHTML = '';
     endPage = 1
     page = 1
@@ -150,7 +150,7 @@ if(resultsDiv) {
   }
 
   searchBar.onkeyup = async () => {
-    const searchQuery = `${baseUrl}/search/users/${searchBar.value}`
+    const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}`
     resultsDiv.innerHTML = '';
     endPage = 1
     page = 1
@@ -158,7 +158,7 @@ if(resultsDiv) {
   }
 
   const loadMoreData = async (page) => {
-    const searchQuery = `${baseUrl}/search/users/${searchBar.value}?page=${page}`
+    const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}?page=${page}`
     endPage = 1
     buildByRequest(searchQuery)
   }
