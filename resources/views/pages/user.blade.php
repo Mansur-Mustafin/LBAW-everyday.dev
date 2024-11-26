@@ -53,13 +53,6 @@
     <aside class="order-1 tablet:order-none border-l border-gray-700">
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
-            @if (Auth::user()->id === $user->id)
-                <a href="{{url('/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
-            @elseif (Auth::user()->is_admin)
-                <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
-            @endif
             @can('follow', $user)
                 <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
                     data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
@@ -108,10 +101,17 @@
             @include('partials.tags', ['tags' => $user->tag_names])
         </div> --}}
 
-        <div class="p-4">
+        <div class="p-4 flex items-center gap-2 justify-center">
+            @if (Auth::user()->id === $user->id)
+                <a href="{{url('/users/' . $user->id . '/edit')}}"
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+            @elseif (Auth::user()->is_admin)
+                <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+            @endif
             @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/logout') }}"
-                    class="text-input bg-red-400 font-bold rounded-xl px-4 py-1 self-end">Logout</a>
+                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1 self-end">Logout</a>
             @endif
         </div>
 
