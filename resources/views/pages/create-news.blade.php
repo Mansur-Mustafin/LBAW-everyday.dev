@@ -35,7 +35,7 @@
                 <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
                 <label
                 for="toggleTwo"
-                class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm"
+                class="hidden flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm"
                 >
                 <div class="relative">
                     <input
