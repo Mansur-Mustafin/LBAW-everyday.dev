@@ -58,15 +58,15 @@ Route::controller(NewsController::class)->group(function () {
 // Comments
 Route::controller(CommentsController::class)->group(function () {
     Route::post('/comments', 'store')->middleware('auth');
-    Route::post('/comments/edit', 'update')->middleware('auth');
-    Route::delete('/comments/{comment}', 'destroy')->middleware('admin');
+    Route::put('/comments/{comment}', 'update')->middleware('auth');
+    Route::delete('/comments/{comment}', 'destroy')->middleware('auth');
 });
 
 // Votes
 Route::controller(VoteController::class)->group(function () {
     Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
-    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
     Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
+    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
 });
 
 // User
@@ -84,13 +84,9 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
     Route::get('users/{user}/followers', 'showFollowers')->middleware('auth')->name('users.followers');
     Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
-    // TODO: isso esta bem?
     Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
     Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
 });
-
-Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
-Route::post('/file/upload', [FileController::class, 'upload']);
 
 // Search
 Route::controller(SearchController::class)->group(function () {

@@ -18,7 +18,8 @@
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
-                    @if (Auth::user() && Auth::user()->id == $comment->author_id)
+                    
+                    @can('update', $comment)
                         <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -46,9 +47,10 @@
                                 <path d="M20 6 9 17l-5-5" />
                             </svg>
                         </button>
-                    @endif
-
-                    @if (Auth::user() && Auth::user()->isAdmin())
+                    @endcan
+                    
+                    
+                    @can('delete', $comment)
                         <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -60,7 +62,7 @@
                                 <line x1="14" x2="14" y1="11" y2="17" />
                             </svg>
                         </button>
-                    @endif
+                    @endcan
                 </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
@@ -115,9 +117,8 @@
                         </path><!--?-->
                     </svg>
                 </button>
-
-                <!-- Resto -->
-                <!-- <a
+                @if (Auth::check())
+                    <a
                         class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
                         <svg xmlns=" http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -125,6 +126,10 @@
                             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                         </svg>
                     </a>
+                @endif
+                
+                <!-- Resto -->
+                <!-- 
                     <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -166,7 +171,7 @@
                     </div>
                 </div>
                 <div class="flex gap-2 items-center">
-                    @if (Auth::user() && Auth::user()->id == $comment->author_id)
+                    @can('update', $comment)
                         <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -193,9 +198,9 @@
                                 <path d="M20 6 9 17l-5-5" />
                             </svg>
                         </button>
-                    @endif
+                    @endcan
 
-                    @if (Auth::user() && Auth::user()->isAdmin())
+                    @can('delete', $comment)
                         <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -207,7 +212,7 @@
                                 <line x1="14" x2="14" y1="11" y2="17" />
                             </svg>
                         </button>
-                    @endif
+                    @endcan
                 </div>
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
@@ -237,7 +242,7 @@
                         viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M10 19c-.072 0-.145 0-.218-.006A4.1 4.1 0 0 1 6 14.816V11H2.862a1.751 1.751 0 0 1-1.234-2.993L9.41.28a.836.836 0 0 1 1.18 0l7.782 7.727A1.751 1.751 0 0 1 17.139 11H14v3.882a4.134 4.134 0 0 1-.854 2.592A3.99 3.99 0 0 1 10 19Z">
-                        </path><!--?-->
+                        </path>
                     </svg>
                 </button>
 
@@ -262,16 +267,19 @@
                         </path><!--?-->
                     </svg>
                 </button>
+                
+                @if (Auth::check())
+                    <a
+                        class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-circle">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                        </svg>
+                    </a>
+                @endif
 
-
-                <!-- <a
-                            class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-message-circle">
-                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-                            </svg>
-                        </a>
+                <!-- 
                         <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
