@@ -12,7 +12,6 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
     @vite('resources/js/comment.js')
