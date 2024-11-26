@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\NewsPost;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PaginationTrait;
 use App\Models\User;
-
 
 class NewsController extends Controller
 {
@@ -50,6 +52,41 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
+    public function showSingleThread(newsPost $newsPost, comment $comment)
+    {
+        if (Gate::inspect('belongsToPost', [$comment, $newsPost])->allowed()) {
+
+            $this->processComments([$comment], Auth::user());
+
+            $comment = new Collection([$comment]);
+
+            return view('pages.post', ['post' => $newsPost, 'comments' => $comment, 'thread' => 'single']);
+        }
+
+        return redirect()->to('news/' . $newsPost->id)->withErrors('Comment does not belong to the correspondent news');
+    }
+
+    static function processComments($comments, $user)
+    {
+        if (!$user)
+            return;
+
+        foreach ($comments as $comment) {
+            $comment->user_vote = null;
+
+            $vote = $comment->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $comment->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $comment->user_vote_id = $vote->id;
+            }
+
+            if ($comment->replies) {
+                self::processComments($comment->replies, $user);
+            }
+        }
+    }
+
     public function show(newsPost $news_post)
     {
         $tags = Tag::all();
@@ -69,10 +106,14 @@ class NewsController extends Controller
             }
         }
 
+        $this->processComments($news_post->comments, $user);
+
         return view('pages.post', [
             'post' => $news_post,
             'tags' => $tags,
             'availableTags' => $stillAvailableTags,
+            'thread' => 'multi',
+            'comments' => $news_post->comments
         ]);
     }
 
@@ -95,7 +136,7 @@ class NewsController extends Controller
         if ($request->has('image')) {
             FileController::upload($request, $post, Image::TYPE_POST_TITLE);
         }
-        
+
         if ($request->tags != null) {
             $tags = explode(',', $request->tags);
             $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
@@ -110,20 +151,20 @@ class NewsController extends Controller
     public function update(Request $request, newsPost $newsPost)
     {
         $this->authorize('update', $newsPost);
-        
+
         $request->validate([
             'title' => 'required|string|max:250',
-            'content' => 'required|string', 
+            'content' => 'required|string',
             'for_followers' => 'nullable|string',
             'tags' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
             'remove_image' => 'required|string',
         ]);
-        
+
         $newsPost->update([
             'title' => $request->title,
             'content' => $request->input('content'),
-            'for_followers' => $request->input('for_followers', false), 
+            'for_followers' => $request->input('for_followers', false),
         ]);
 
         if ($request->has('image') || $request->input('remove_image') == "true") {

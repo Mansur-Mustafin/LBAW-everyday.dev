@@ -1,25 +1,31 @@
-const voteContainers = document.querySelectorAll('.vote-container');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-voteContainers.forEach(container => {
-    const authenticated = container.dataset.authenticated === 'true';
-    const upvoteButton = container.querySelector('.upvote-button');
-    const downvoteButton = container.querySelector('.downvote-button');
-    const voteCountElement = container.querySelector('.vote-count');
-
-    if (!authenticated) {
-        upvoteButton.addEventListener('click', redirectToLogin);
-        downvoteButton.addEventListener('click', redirectToLogin);
-    } else {
-        upvoteButton.addEventListener('click', function() {
-            handleVote(container, true);
-        });
-
-        downvoteButton.addEventListener('click', function() {
-            handleVote(container, false);
-        });
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    addVoteButtonBehaviour();
 });
+
+export function addVoteButtonBehaviour() {
+    const voteContainers = document.querySelectorAll('.vote-container');
+
+    voteContainers.forEach(container => {
+        const authenticated = container.dataset.authenticated === 'true';
+        const upvoteButton = container.querySelector('.upvote-button');
+        const downvoteButton = container.querySelector('.downvote-button');
+
+        if (!authenticated) {
+            upvoteButton.addEventListener('click', redirectToLogin);
+            downvoteButton.addEventListener('click', redirectToLogin);
+        } else {
+            upvoteButton.addEventListener('click', function () {
+                handleVote(container, true);
+            });
+
+            downvoteButton.addEventListener('click', function () {
+                handleVote(container, false);
+            });
+        }
+    });
+}
 
 function handleVote(container, isUpvote) {
     const type = container.dataset.type;
@@ -39,6 +45,7 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container) {
+    console.log(type, id, isUpvote)
     fetch('/vote', {
         method: 'POST',
         headers: {
@@ -51,52 +58,56 @@ function submitVote(type, id, isUpvote, container) {
             is_upvote: isUpvote,
         }),
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else if (response.status === 401) {
-            redirectToLogin();
-        }
-    })
-    .then(data => {
-        if (data.message === 'Saved') {
-            container.dataset.voteId = data.vote_id;
-            container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-            updateVoteUI(container, isUpvote, 'Saved');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                redirectToLogin();
+            }
+        })
+        .then(data => {
+            console.log(data)
+            if (data.message === 'Saved') {
+                container.dataset.voteId = data.vote_id;
+                container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+                updateVoteUI(container, isUpvote, 'Saved');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function removeVote(voteId, container) {
+    console.log(voteId)
     fetch(`/vote/${voteId}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': csrfToken,
         },
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else if (response.status === 401) {
-            redirectToLogin();
-        }
-    })
-    .then(data => {
-        if (data.message === 'Vote removed') {
-            updateVoteUI(container, null, 'Vote removed');
-            container.dataset.voteId = '';
-            container.dataset.vote = '';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                redirectToLogin();
+            }
+        })
+        .then(data => {
+            console.log(data)
+            if (data.message === 'Vote removed') {
+                updateVoteUI(container, null, 'Vote removed');
+                container.dataset.voteId = '';
+                container.dataset.vote = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function updateVote(voteId, isUpvote, container) {
+    console.log(voteId, isUpvote)
     fetch(`/vote/${voteId}`, {
         method: 'PUT',
         headers: {
@@ -107,31 +118,33 @@ function updateVote(voteId, isUpvote, container) {
             is_upvote: isUpvote,
         }),
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else if (response.status === 401) {
-            redirectToLogin();
-        }
-    })
-    .then(data => {
-        if (data.message === 'Vote updated') {
-            container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-            container.dataset.voteId = data.vote_id;
-            updateVoteUI(container, isUpvote, 'Vote updated');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                redirectToLogin();
+            }
+        })
+        .then(data => {
+            console.log(data)
+            if (data.message === 'Vote updated') {
+                container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+                container.dataset.voteId = data.vote_id;
+                updateVoteUI(container, isUpvote, 'Vote updated');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function updateVoteUI(container, isUpvote, message) {
     const postId = container.dataset.id;
-    const upvoteOutline = container.querySelector(`#upvote-outline-${postId}`);
-    const upvoteFill = container.querySelector(`#upvote-fill-${postId}`);
-    const downvoteOutline = container.querySelector(`#downvote-outline-${postId}`);
-    const downvoteFill = container.querySelector(`#downvote-fill-${postId}`);
+    const type = container.dataset.type;
+    const upvoteOutline = container.querySelector(`#${type}-upvote-outline-${postId}`);
+    const upvoteFill = container.querySelector(`#${type}-upvote-fill-${postId}`);
+    const downvoteOutline = container.querySelector(`#${type}-downvote-outline-${postId}`);
+    const downvoteFill = container.querySelector(`#${type}-downvote-fill-${postId}`);
     const voteCountElement = container.querySelector('.vote-count');
     let currentCount = parseInt(voteCountElement.textContent);
 
@@ -155,7 +168,7 @@ function updateVoteUI(container, isUpvote, message) {
         if (isUpvote) {
             upvoteOutline.classList.add('hidden');
             upvoteFill.classList.remove('hidden');
-            voteCountElement.textContent = currentCount + 2; 
+            voteCountElement.textContent = currentCount + 2;
         } else {
             downvoteOutline.classList.add('hidden');
             downvoteFill.classList.remove('hidden');
@@ -170,7 +183,7 @@ function updateVoteUI(container, isUpvote, message) {
     }
 }
 
-function redirectToLogin() {
+export function redirectToLogin() {
     const currentUrl = window.location.href;
 
     const loginUrl = `/login?redirect=${encodeURIComponent(currentUrl)}`;

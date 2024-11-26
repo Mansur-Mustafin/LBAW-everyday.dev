@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SearchController;
@@ -42,16 +43,23 @@ Route::controller(RegisterController::class)->group(function () {
 // News
 Route::controller(NewsController::class)->group(function () {
     Route::get('/home', 'recent_feed')->name('home');
-    Route::get('/news/my-feed','my_feed')->middleware('auth');
-    Route::get('/news/top-feed','top_feed');
-    Route::get('/news/recent-feed','recent_feed');
+    Route::get('/news/my-feed', 'my_feed')->middleware('auth');
+    Route::get('/news/top-feed', 'top_feed');
+    Route::get('/news/recent-feed', 'recent_feed');
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->name('news.show');
+    Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread')->middleware('auth');
     Route::post('/news', 'store')->middleware('auth')->name('news');
-    // Route::put('/news/{news_post}', 'store')->middleware('auth');
     Route::put('/news/{news_post}', 'update')->middleware('auth')->name('news.update');
     Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
+});
+
+// Comments
+Route::controller(CommentsController::class)->group(function () {
+    Route::post('/comments', 'store')->middleware('auth');
+    Route::post('/comments/edit', 'update')->middleware('auth');
+    Route::delete('/comments/{comment}', 'destroy')->middleware('admin');
 });
 
 // Votes
@@ -68,18 +76,21 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
     Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
 
-    Route::get('/admin','showAdmin')->middleware('admin')->name('admin');
-    Route::get('/admin/users/{user}/edit','showEditFormAdmin')->middleware('admin');
-    Route::get('/admin/users/create','showCreateFormAdmin')->middleware('admin');
+    Route::get('/admin', 'showAdmin')->middleware('admin')->name('admin');
+    Route::get('/admin/users/{user}/edit', 'showEditFormAdmin')->middleware('admin');
+    Route::get('/admin/users/create', 'showCreateFormAdmin')->middleware('admin');
 });
+
+Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
+Route::post('/file/upload', [FileController::class, 'upload']);
 
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/tags/{search}','search_tag');
-    Route::get('/search/posts/{search}','search_post');
+    Route::get('/search/tags/{search}', 'search_tag');
+    Route::get('/search/posts/{search}', 'search_post');
 
-    Route::get('/search/users','search_user')->middleware('admin');
-    Route::get('/search/users/{search}','search_user')->middleware('admin');
+    Route::get('/search/users', 'search_user')->middleware('admin');
+    Route::get('/search/users/{search}', 'search_user')->middleware('admin');
 
-    Route::get('/search/{search}','search');
+    Route::get('/search/{search}', 'search');
 });
