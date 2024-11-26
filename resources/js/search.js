@@ -14,8 +14,10 @@ searchBarDiv.onkeyup = async () => {
         resultsDiv.innerHTML = '';
         return;
     } else {
-        searchContainer.classList.remove('rounded-2xl');
-        searchContainer.classList.add('rounded-t-2xl');
+        if (searchBarDiv.dataset.auth) {
+            searchContainer.classList.remove('rounded-2xl');
+            searchContainer.classList.add('rounded-t-2xl');
+        }
     }
 
     if (loading) {
@@ -25,34 +27,34 @@ searchBarDiv.onkeyup = async () => {
     const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`
     loading = true
     fetch(searchQuery, {
-      method: 'GET',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken
-      }
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
     })
-    .then(response => {
-      loading = false
-      if (response.ok) {
-        return response.json();
-      } 
-    })
-    .then(data => {
-      resultsDiv.innerHTML = ''
-      showElements(data["news_posts"],buildPost)
-      if(isAuth) {
-        showElements(data["tags"],buildTag)
-        showElements(data["users"],buildUser)
-      }
-      if(data["news_posts"].length > 0) {
-        addMorePosts(searchBarDiv.value)
-      }
-    }) 
-    .catch(error => {
-      console.log("Error",error)
-    }) 
+        .then(response => {
+            loading = false
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(data => {
+            resultsDiv.innerHTML = ''
+            showElements(data["news_posts"], buildPost)
+            if (isAuth) {
+                showElements(data["tags"], buildTag)
+                showElements(data["users"], buildUser)
+            }
+            if (data["news_posts"].length > 0) {
+                addMorePosts(searchBarDiv.value)
+            }
+        })
+        .catch(error => {
+            console.log("Error", error)
+        })
 }
 
-const showElements = (elements,buildFunction) => {
+const showElements = (elements, buildFunction) => {
     elements.forEach(element => {
         const postResult = document.createElement("div");
         postResult.classList.add("shadow-4xl"); postResult.classList.add("shadow-white")
@@ -91,7 +93,7 @@ const buildPost = (post) => {
                     </div>
                 </a>
             </div>
-    ` 
+    `
 }
 
 const buildTag = (tag) => {
@@ -147,8 +149,10 @@ searchBarDiv.addEventListener('blur', () => {
 
 
 searchBarDiv.addEventListener('focus', () => {
+    if (searchBarDiv.dataset.auth) {
         resultsDiv.style.display = 'block';
         searchContainer.classList.add('rounded-t-2xl');
         searchContainer.classList.remove('rounded-2xl');
     }
+}
 );
