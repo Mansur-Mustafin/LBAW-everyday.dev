@@ -39,6 +39,7 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container) {
+    console.log(type, id, isUpvote)
     fetch('/vote', {
         method: 'POST',
         headers: {
@@ -59,6 +60,7 @@ function submitVote(type, id, isUpvote, container) {
         }
     })
     .then(data => {
+        console.log(data)
         if (data.message === 'Saved') {
             container.dataset.voteId = data.vote_id;
             container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
@@ -71,6 +73,7 @@ function submitVote(type, id, isUpvote, container) {
 }
 
 function removeVote(voteId, container) {
+    console.log(voteId)
     fetch(`/vote/${voteId}`, {
         method: 'DELETE',
         headers: {
@@ -85,6 +88,7 @@ function removeVote(voteId, container) {
         }
     })
     .then(data => {
+        console.log(data)
         if (data.message === 'Vote removed') {
             updateVoteUI(container, null, 'Vote removed');
             container.dataset.voteId = '';
@@ -97,6 +101,7 @@ function removeVote(voteId, container) {
 }
 
 function updateVote(voteId, isUpvote, container) {
+    console.log(voteId, isUpvote)
     fetch(`/vote/${voteId}`, {
         method: 'PUT',
         headers: {
@@ -115,6 +120,7 @@ function updateVote(voteId, isUpvote, container) {
         }
     })
     .then(data => {
+        console.log(data)
         if (data.message === 'Vote updated') {
             container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
             container.dataset.voteId = data.vote_id;
@@ -128,10 +134,11 @@ function updateVote(voteId, isUpvote, container) {
 
 function updateVoteUI(container, isUpvote, message) {
     const postId = container.dataset.id;
-    const upvoteOutline = container.querySelector(`#upvote-outline-${postId}`);
-    const upvoteFill = container.querySelector(`#upvote-fill-${postId}`);
-    const downvoteOutline = container.querySelector(`#downvote-outline-${postId}`);
-    const downvoteFill = container.querySelector(`#downvote-fill-${postId}`);
+    const type = container.dataset.type;
+    const upvoteOutline = container.querySelector(`#${type}-upvote-outline-${postId}`);
+    const upvoteFill = container.querySelector(`#${type}-upvote-fill-${postId}`);
+    const downvoteOutline = container.querySelector(`#${type}-downvote-outline-${postId}`);
+    const downvoteFill = container.querySelector(`#${type}-downvote-fill-${postId}`);
     const voteCountElement = container.querySelector('.vote-count');
     let currentCount = parseInt(voteCountElement.textContent);
 
