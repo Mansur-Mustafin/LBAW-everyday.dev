@@ -3,6 +3,7 @@ const searchBarDiv = document.getElementById('search-bar')
 const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results')
 const baseUrl = searchBarDiv.dataset.url
+const isAuth = searchBarDiv.dataset.auth
 let loading = false
 
 searchBarDiv.onkeyup = async () => {
@@ -38,8 +39,10 @@ searchBarDiv.onkeyup = async () => {
     .then(data => {
       resultsDiv.innerHTML = ''
       showElements(data["news_posts"],buildPost)
-      showElements(data["tags"],buildTag)
-      showElements(data["users"],buildUser)
+      if(isAuth) {
+        showElements(data["tags"],buildTag)
+        showElements(data["users"],buildUser)
+      }
       if(data["news_posts"].length > 0) {
         addMorePosts(searchBarDiv.value)
       }
