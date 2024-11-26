@@ -51,11 +51,8 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/news/{news_post}', 'show')->name('news.show');
     Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread')->middleware('auth');
     Route::post('/news', 'store')->middleware('auth')->name('news');
-    Route::put('/news/{news_post}', 'store')->middleware('auth');
-    Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
-    // Route::put('/news/{news_post}', 'store')->middleware('auth');
     Route::put('/news/{news_post}', 'update')->middleware('auth')->name('news.update');
-
+    Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
 });
 
 // Comments

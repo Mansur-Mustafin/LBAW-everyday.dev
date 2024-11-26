@@ -9,7 +9,7 @@
         <div class="{{ count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700'}} rounded-xl p-4">
             <div class="text-sm text-gray-400 flex justify-between items-start">
                 <div class="flex gap-2 flex-grow">
-                    <img src="{{ $comment->user->getProfileImagePathAttribute() }}" class="max-w-8 max-h-8">
+                    <img src="{{ $comment->user->profile_image_path }}" class="max-w-8 max-h-8">
                     <div class="flex flex-col">
                         <h2 class="text-white text-sm font-semibold">{{$comment->user->public_name}}</h2>
                         <h3 class="text-xs text-gray-500">{{'@' . $comment->user->username}} ·
@@ -65,9 +65,7 @@
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
-                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                                                                                                                            {{ trim($comment->content) }}
-                                                                                                                                                        </textarea>
+                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
@@ -159,7 +157,7 @@
             class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'}} {{count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}}  p-4">
             <div class="text-sm text-gray-400 flex justify-between items-start">
                 <div class="flex gap-2 flex-grow">
-                    <img src="{{ $comment->user->getProfileImagePathAttribute() }}" class="max-w-8 max-h-8">
+                    <img src="{{ $comment->user->profile_image_path }}" class="max-w-8 max-h-8">
                     <div class="flex flex-col">
                         <h2 class="text-white text-sm font-semibold">{{$comment->user->public_name}}</h2>
                         <h3 class="text-xs text-gray-500">{{'@' . $comment->user->username}} ·
@@ -214,9 +212,7 @@
             </div>
             <form class="hidden" id="{{'comment-form-' . $comment->id}}">
                 <textarea id="{{'comment-input-' . $comment->id}}"
-                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">
-                                                                                                                                                                                                                                                                    {{ trim($comment->content) }}
-                                                                                                                                                                                                                                                                </textarea>
+                    class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
             <div class="mt-4" id={{'comment-content-' . $comment->id}}>
                 {{ $comment->content}}
