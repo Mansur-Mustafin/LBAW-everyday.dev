@@ -30,7 +30,7 @@ Route::redirect('/', '/home');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout');
+    Route::get('/logout', 'logout')->middleware('auth')->name('logout');
 });
 
 // Register
@@ -49,7 +49,7 @@ Route::controller(NewsController::class)->group(function () {
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->name('news.show');
-    Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread')->middleware('auth');
+    Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread');
     Route::post('/news', 'store')->middleware('auth')->name('news');
     Route::put('/news/{news_post}', 'update')->middleware('auth')->name('news.update');
     Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
