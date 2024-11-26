@@ -1,3 +1,6 @@
+const checkbox = document.getElementById('ageCheckbox');
+const errorMessage = document.getElementById('checkboxError');
+
 function togglePasswordVisibility(passwordField, toggleIcon) {
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
@@ -16,4 +19,13 @@ toggleIcons.forEach((toggleIcon) => {
     toggleIcon.addEventListener('click', () => {
         togglePasswordVisibility(passwordField, toggleIcon);
     });
+});
+
+document.getElementById('submitButton').addEventListener('click', function (event) {
+    if (!checkbox.checked) {
+        event.preventDefault(); 
+        errorMessage.classList.remove('hidden'); 
+    } else {
+        errorMessage.classList.add('hidden');
+    }
 });
