@@ -10,6 +10,7 @@ INSERT INTO "user" (username, public_name, password, email, rank, status, reputa
 VALUES
 ('johndoe', 'John Doe', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'johndoe@example.com', 'noobie', 'active', 0, TRUE),
 ('rubem', 'Rubem Neto', '$2y$10$ICGiPHxxCcFA8tFC.YR69OcYynMlf93xbHY3XjBHZY.4MZ43JTamS', 'rubem@example.com', 'noobie', 'active', 0, FALSE),
+('mansur', 'Mansur Mustafin', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'mansur@example.com', 'noobie', 'active', 0, FALSE),
 ('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
 ('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
 ('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'active', 20, FALSE),

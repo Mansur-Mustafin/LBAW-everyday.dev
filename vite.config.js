@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/utils.js',
                 'resources/js/vote.js', 
                 'resources/js/admin.js',
+                'resources/js/follow.js',
                 'resources/js/post.js',
             ],
             refresh: true,

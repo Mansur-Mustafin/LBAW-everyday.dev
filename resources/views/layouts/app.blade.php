@@ -21,6 +21,7 @@
     @vite('resources/js/auth.js')
     @vite('resources/js/edit-profile.js')
     @vite('resources/js/admin.js')
+    @vite('resources/js/follow.js')
 
 
     <script type="text/javascript">

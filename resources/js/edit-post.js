@@ -90,23 +90,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    saveButton.addEventListener('click', function(evt) {
-        evt.preventDefault()
-    
-        const selectedTags = document.getElementById('selectedTags')
-    
-        let post_tags = [];
-    
-        Array.from(selectedTags.children).forEach((child) => {
-            post_tags.push(child.dataset.tag);
-        });
-    
-        if (post_tags.length > 0) {
-            document.getElementById('tagsInput').value = post_tags.join(',');
-        }
+    if(saveButton) {
+        saveButton.addEventListener('click', function(evt) {
+            evt.preventDefault()
+        
+            const selectedTags = document.getElementById('selectedTags')
+        
+            let post_tags = [];
+        
+            Array.from(selectedTags.children).forEach((child) => {
+                post_tags.push(child.dataset.tag);
+            });
+        
+            if (post_tags.length > 0) {
+                document.getElementById('tagsInput').value = post_tags.join(',');
+            }
 
-        form.submit();
-    });
+            form.submit();
+        });
+    }
 
     }
 
