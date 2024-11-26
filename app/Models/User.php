@@ -30,6 +30,8 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected $appends = ['profile_image_path'];
+
     public function getProfileImagePathAttribute() {
         return $this->profileImage ? $this->profileImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_PROFILE]);
     }

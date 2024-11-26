@@ -79,8 +79,12 @@
         </div>
         <div class="p-4 mt-4">
             <p>
-                <span class="mr-4">{{ $user->following()->count() }} <span class="text-gray-500">following</span></span>
-                <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
+                <a href="{{route('users.following', $user->id)}}">
+                    <span class="mr-4">{{ $user->following()->count() }} <span class="text-gray-500">following</span></span>
+                </a>
+                <a href="{{route('users.followers', $user->id)}}">
+                    <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
+                </a>
             </p>
             <p>
                 <span class="mr-4">{{$user->rank}} <span class="text-gray-500">rank</span> </span>

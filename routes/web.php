@@ -75,6 +75,11 @@ Route::controller(UserController::class)->group(function () {
     // Follow
     Route::post('/users/{user}/follow', 'follow')->middleware('auth')->name('users.follow');
     Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
+    Route::get('users/{user}/followers', 'showFollowers')->middleware('auth')->name('users.followers');
+    Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
+    // TODO: isso esta bem?
+    Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
+    Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
 });
 
 // Search

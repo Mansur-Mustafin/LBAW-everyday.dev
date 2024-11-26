@@ -35,9 +35,10 @@ if (editForm) {
 }
 
 // INFINITE SCROLLING
-const searchBar = document.getElementById("admin-search-bar")
-if(searchBar) {
-  const resultsDiv = document.getElementById("admin-search-users-results")
+
+/* const resultsDiv = document.getElementById("admin-search-users-results")
+if(resultsDiv) {
+  const searchBar = document.getElementById("admin-search-bar")
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const baseUrl = searchBar.dataset.url
   let loading = false
@@ -159,4 +160,4 @@ if(searchBar) {
           }
       }
   })
-}
+} */
