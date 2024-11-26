@@ -127,14 +127,21 @@ const buildUser = (user) => {
     `
 }
 
-// Da para fazer isso melhor?
+let clickedInsideResults = false;
+resultsDiv.addEventListener('mousedown', () => {
+    clickedInsideResults = true;
+});
 searchBarDiv.addEventListener('blur', () => {
     setTimeout(() => {
-        resultsDiv.style.display = 'none'; 
-        searchContainer.classList.remove('rounded-t-2xl');
-        searchContainer.classList.add('rounded-2xl');
-    }, 100); // Delay for links 
+        if (!clickedInsideResults) {
+            resultsDiv.style.display = 'none';
+            searchContainer.classList.remove('rounded-t-2xl');
+            searchContainer.classList.add('rounded-2xl');
+        }
+        clickedInsideResults = false;
+    }, 100); // Delay for links
 });
+
 
 searchBarDiv.addEventListener('focus', () => {
         resultsDiv.style.display = 'block';
