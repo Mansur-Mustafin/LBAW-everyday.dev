@@ -46,7 +46,7 @@ class UserController extends Controller
     public function showAdmin(Request $request)
     {
         $users = User::take(10)->get(); // TODO: para o que isso?
-        return view('pages.admin.admin',['users'=> $users]);
+        return view('pages.admin.admin', ['users' => $users]);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -156,25 +156,24 @@ class UserController extends Controller
 
     public function showFollowers(User $user)
     {
-        return view('pages.users', ['title' => "Followers"]);
+        return view('pages.users', ['title' => "Followers", 'user' => $user]);
     }
 
     public function showFollowing(User $user)
-    {   
-        return view('pages.users', ['title' => "Following"]);
+    {
+        return view('pages.users', ['title' => "Following", 'user' => $user]);
     }
 
     public function getFollowers(User $user, Request $request)
     {
         $following = $user->followers()->paginate(10);
-        
+
         $following->getCollection()->transform(function ($followedUser) {
             $followedUser->can_follow = auth()->user()->can('follow', $followedUser);
             $followedUser->can_unfollow = auth()->user()->can('unfollow', $followedUser);
             return $followedUser;
         });
 
-        sleep(1);
         return response()->json([
             'users'     => $following,
             'next-page' => $following->currentPage() + 1,
@@ -185,14 +184,13 @@ class UserController extends Controller
     public function getFollowing(User $user, Request $request)
     {
         $following = $user->following()->paginate(10);
-        
+
         $following->getCollection()->transform(function ($followedUser) {
             $followedUser->can_follow = auth()->user()->can('follow', $followedUser);
             $followedUser->can_unfollow = auth()->user()->can('unfollow', $followedUser);
             return $followedUser;
         });
 
-        sleep(1);
         return response()->json([
             'users'     => $following,
             'next-page' => $following->currentPage() + 1,
