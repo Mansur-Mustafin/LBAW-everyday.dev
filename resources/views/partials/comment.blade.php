@@ -165,6 +165,7 @@
         <div
             class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'}} {{count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}}  p-4">
             <div class="text-sm text-gray-400 flex justify-between items-start">
+                @if(Auth::user())
                 <div class="flex gap-2 flex-grow">
                     <img src="{{ $comment->user->profile_image_path }}" class="max-w-8 max-h-8">
                     <div class="flex flex-col">
@@ -174,6 +175,14 @@
                         </h3>
                     </div>
                 </div>
+                @else
+                <div class="flex gap-2 flex-grow">
+                    <div class="flex flex-col">
+                        <h2 class="text-white text-sm font-semibold">Anonymous</h2>
+                        <h3 class="text-xs text-gray-500">{{'@'.'anonymous'}}</h3>
+                    </div>
+                </div>
+                @endif
                 <div class="flex gap-2 items-center">
                     @if (Auth::user() && Auth::user()->id == $comment->author_id)
                         <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
