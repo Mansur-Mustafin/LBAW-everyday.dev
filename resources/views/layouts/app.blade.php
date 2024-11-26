@@ -16,11 +16,13 @@
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
     @vite('resources/js/comment.js')
+    @vite('resources/js/edit-post.js')
     @vite('resources/js/search.js')
     @vite('resources/js/infinite-page.js')
     @vite('resources/js/auth.js')
     @vite('resources/js/edit-profile.js')
     @vite('resources/js/admin.js')
+
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
@@ -32,7 +34,7 @@
 
 <body class="@yield('body-class', 'bg-background text-white')">
     <main class="flex flex-col h-screen">
-        
+
         @if (in_array(Route::currentRouteName(), ['login', 'register']))
             <div class="py-3 px-5">
                 <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
@@ -44,9 +46,9 @@
             </section>
         @else
             @include('layouts.header')
-            
+
             <div class="flex flex-grow">
-                
+
                 @include('layouts.aside')
 
                 <section id="content" class="w-full h-full">
@@ -56,4 +58,5 @@
         @endif
     </main>
 </body>
+
 </html>

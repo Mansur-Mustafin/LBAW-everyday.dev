@@ -1,5 +1,5 @@
 import { sendAjaxRequest } from '../../public/js/app.js'
-import { redirectToLogin } from './vote.js';
+import { redirectToLogin, addVoteButtonBehaviour } from './vote.js';
 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
@@ -93,6 +93,7 @@ function addCommentHandler() {
    }
 
    addButtonsBehaviour()
+   addVoteButtonBehaviour()
 }
 
 function addButtonsBehaviour() {
