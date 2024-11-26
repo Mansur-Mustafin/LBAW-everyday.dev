@@ -70,6 +70,8 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
+        $admin_edit = $request->user()->isAdmin() && $request->user()->id != $user->id;
+
         $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => [
@@ -92,7 +94,9 @@ class UserController extends Controller
             'remove_image' => 'required|string',
         ]);
 
-        if ($request->user()->isAdmin()) {
+        // dd($request);
+
+        if ($admin_edit) {
             if ($request->filled('reputation')) {
                 $user->reputation = $request->input('reputation');
             }
