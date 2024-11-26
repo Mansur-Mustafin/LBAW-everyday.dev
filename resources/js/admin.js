@@ -36,7 +36,7 @@ if (editForm) {
 
 // INFINITE SCROLLING
 const searchBar = document.getElementById("admin-search-bar")
-if(searchBar) {
+if (searchBar) {
   const resultsDiv = document.getElementById("admin-search-users-results")
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const baseUrl = searchBar.dataset.url
@@ -69,9 +69,9 @@ if(searchBar) {
                 <span class="hidden">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
                 </span>
-                ${user.is_admin == true 
-                  ? adminBadge
-                  : ''}
+                ${user.is_admin == true
+        ? adminBadge
+        : ''}
               </h1>
               <h3 class="text-gray-400 hidden">${user.rank}</h3>
               <h3 class="text-gray-400 hidden">${user.status}</h3>
@@ -88,33 +88,33 @@ if(searchBar) {
 
 
   const buildByRequest = async (url) => {
-    if(loading) return
+    if (loading) return
     loading = true
     loadingIcon.style.display = 'block'
     fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-CSRF-TOKEN': csrfToken,
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      })
+      method: 'GET',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest',
+      }
+    })
       .then(response => {
         loading = false
         loadingIcon.style.display = 'none'
         if (response.ok) {
           return response.json();
-        } 
+        }
       })
       .then(data => {
         lastPage = data.last_page
         data.users.data.forEach(user => {
           resultsDiv.innerHTML += buildUser(user)
         });
-      }) 
+      })
       .catch(error => {
-        console.log("Error",error)
-      }) 
-    }
+        console.log("Error", error)
+      })
+  }
 
   window.onload = async () => {
     const searchQuery = `${baseUrl}/search/users/`
@@ -138,25 +138,25 @@ if(searchBar) {
     buildByRequest(searchQuery)
   }
 
-  document.addEventListener('scroll',function () {
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      let windowHeight = window.innerHeight;
-      let documentHeight = document.documentElement.scrollHeight;
-      loading = false
+  document.addEventListener('scroll', function () {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let windowHeight = window.innerHeight;
+    let documentHeight = document.documentElement.scrollHeight;
+    loading = false
 
-      if(scrollTop + windowHeight >= documentHeight - 100) {
-          // TODO: Refactor this in the future
-          endPage++;
-          if(endPage > 4) {
-            endPage = 0;
-            if (page <= lastPage && loading == false) {
-                page++;
-                loadMoreData(page);
-            }
-            if (page > lastPage){
-                if(loadingIcon) loadingIcon.style.display = 'none';
-            }
-          }
+    if (scrollTop + windowHeight >= documentHeight - 100) {
+      // TODO: Refactor this in the future
+      endPage++;
+      if (endPage > 4) {
+        endPage = 0;
+        if (page <= lastPage && loading == false) {
+          page++;
+          loadMoreData(page);
+        }
+        if (page > lastPage) {
+          if (loadingIcon) loadingIcon.style.display = 'none';
+        }
       }
+    }
   })
 }
