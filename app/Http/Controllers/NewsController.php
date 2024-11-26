@@ -50,21 +50,41 @@ class NewsController extends Controller
         return view('pages.create-news', ['tags' => $tags]);
     }
 
-    public function show(newsPost $newsPost)
+    public function show(newsPost $news_post)
     {
-        return view('pages.post', ['post' => $newsPost]);
+        $tags = Tag::all();
+        $existingTags = $news_post->tags->pluck('name')->toArray();
+        $stillAvailableTags = $tags->filter(function ($tag) use ($existingTags) {
+            return !in_array($tag->name, $existingTags);
+        });
+
+        $user = Auth::user();
+        $news_post->user_vote = null;
+        if ($user) {
+            $vote = $news_post->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $news_post->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $news_post->user_vote_id = $vote->id;
+            }
+        }
+
+        return view('pages.post', [
+            'post' => $news_post,
+            'tags' => $tags,
+            'availableTags' => $stillAvailableTags,
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:40',
-            'content' => 'required|string|max:1000',
+            'title' => 'required|string|max:250',
+            'content' => 'required|string',
             'for_followers' => 'required|string',
-            'image' => 'required|file|mimes:jpg,png|max:2048',
+            'image' => 'nullable|image|max:2048',
             'tags' => 'nullable|string'
         ]);
-
 
         $post = NewsPost::create([
             'title' => $request->title,
@@ -72,9 +92,10 @@ class NewsController extends Controller
             'for_followers' => $request->for_followers,
             'author_id' => Auth::user()->id,
         ]);
-
-        FileController::upload($request, $post, Image::TYPE_POST_TITLE);
-
+        if ($request->has('image')) {
+            FileController::upload($request, $post, Image::TYPE_POST_TITLE);
+        }
+        
         if ($request->tags != null) {
             $tags = explode(',', $request->tags);
             $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
@@ -89,27 +110,40 @@ class NewsController extends Controller
     public function update(Request $request, newsPost $newsPost)
     {
         $this->authorize('update', $newsPost);
-
+        
         $request->validate([
             'title' => 'required|string|max:250',
-            'content' => 'required|string|max:40',
-            'for_followers' => 'nullable|boolean'
+            'content' => 'required|string', 
+            'for_followers' => 'nullable|string',
+            'tags' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
+            'remove_image' => 'required|string',
         ]);
-
+        
         $newsPost->update([
             'title' => $request->title,
             'content' => $request->input('content'),
-            'for_followers' => $request->for_followers ?? false
+            'for_followers' => $request->input('for_followers', false), 
         ]);
 
-        if ($request->has('image')) {
+        if ($request->has('image') || $request->input('remove_image') == "true") {
             Image::query()
                 ->where('news_post_id', '=', $newsPost->id)
                 ->where('image_type', '=', Image::TYPE_POST_TITLE)
                 ->delete();
-
+        }
+        if ($request->has('image')) {
             FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);
         }
+
+        if ($request->tags != null) {
+            $tags = explode(',', $request->tags);
+            $tagIds = Tag::whereIn('name', $tags)->pluck('id')->toArray();
+            $newsPost->tags()->sync($tagIds);
+        }
+
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
+            ->with('message', 'Post atualizado com sucesso!');
     }
 
     public function destroy(newsPost $newsPost)

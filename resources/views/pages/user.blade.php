@@ -47,9 +47,11 @@
     <aside class="order-1 tablet:order-none border-l border-gray-700">
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
-            @can('edit', $user)
+            @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
-            @endcan
+            @elseif (Auth::user()->is_admin)
+                <a href="{{url('/admin/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
+            @endif
             @can('follow', $user)
                 <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end" 
                     data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
@@ -58,9 +60,6 @@
                 <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end" 
                     data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
             @endcan
-            @if (Auth::user()->is_admin)
-                <a href="{{url('/admin/users/'.$user->id.'/edit')}}" class="text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end">Edit Profile</a>
-            @endif
         </header>
         <div class="rounded flex justify-center m-5">
             <img src="{{$user->profile_image_path}}" alt="Your profile image" class="rounded-full w-48 h-48 object-cover border-2 border-white">

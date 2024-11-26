@@ -1,4 +1,3 @@
-
 <aside class="border-r border-solid border-gray-700 hidden laptop:h-full laptop:flex laptop:flex-col laptop:min-w-48 laptop:items-center">
     <a href="{{url('/news/my-feed')}}" class="block p-2 rounded-md hover:bg-gray-700 mt-4">Your News</a>
     <a href="{{url('/news/top-feed')}}" class="block p-2 rounded-md hover:bg-gray-700">Top News</a>
