@@ -75,10 +75,18 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->middleware('auth')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
     Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
-
     Route::get('/admin', 'showAdmin')->middleware('admin')->name('admin');
     Route::get('/admin/users/{user}/edit', 'showEditFormAdmin')->middleware('admin');
     Route::get('/admin/users/create', 'showCreateFormAdmin')->middleware('admin');
+
+    // Follow
+    Route::post('/users/{user}/follow', 'follow')->middleware('auth')->name('users.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
+    Route::get('users/{user}/followers', 'showFollowers')->middleware('auth')->name('users.followers');
+    Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
+    // TODO: isso esta bem?
+    Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
+    Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
 });
 
 Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete

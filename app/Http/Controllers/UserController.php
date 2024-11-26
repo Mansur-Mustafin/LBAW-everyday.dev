@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UserController extends Controller
 {
@@ -44,8 +45,8 @@ class UserController extends Controller
 
     public function showAdmin(Request $request)
     {
-        $users = User::take(10)->get();
-        return view('pages.admin.admin',['users'=> $users]);
+        $users = User::take(10)->get(); // TODO: para o que isso?
+        return view('pages.admin.admin', ['users' => $users]);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -125,5 +126,75 @@ class UserController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
+    }
+
+    public function follow(User $user)
+    {
+        try {
+            $this->authorize('follow', $user);
+
+            Auth::user()->following()->attach($user->id);
+
+            return response()->json(['message' => 'Successfully followed user']);
+        } catch (AuthorizationException $e) {
+            return response()->json(['message' => 'Cannot follow this user'], 403);
+        }
+    }
+
+    public function unfollow(User $user)
+    {
+        try {
+            $this->authorize('unfollow', $user);
+
+            Auth::user()->following()->detach($user->id);
+
+            return response()->json(['message' => 'Successfully unfollowed user']);
+        } catch (AuthorizationException $e) {
+            return response()->json(['message' => 'Cannot follow this user'], 403);
+        }
+    }
+
+    public function showFollowers(User $user)
+    {
+        return view('pages.users', ['title' => "Followers", 'user' => $user]);
+    }
+
+    public function showFollowing(User $user)
+    {
+        return view('pages.users', ['title' => "Following", 'user' => $user]);
+    }
+
+    public function getFollowers(User $user, Request $request)
+    {
+        $following = $user->followers()->paginate(10);
+
+        $following->getCollection()->transform(function ($followedUser) {
+            $followedUser->can_follow = auth()->user()->can('follow', $followedUser);
+            $followedUser->can_unfollow = auth()->user()->can('unfollow', $followedUser);
+            return $followedUser;
+        });
+
+        return response()->json([
+            'users'     => $following,
+            'next-page' => $following->currentPage() + 1,
+            'last_page' => $following->lastPage()
+        ]);
+    }
+
+    public function getFollowing(User $user, Request $request)
+    {
+        $following = $user->following()->paginate(10);
+
+        $following->getCollection()->transform(function ($followedUser) {
+            $followedUser->can_follow = auth()->user()->can('follow', $followedUser);
+            $followedUser->can_unfollow = auth()->user()->can('unfollow', $followedUser);
+            return $followedUser;
+        });
+
+        return response()->json([
+            'users'     => $following,
+            'next-page' => $following->currentPage() + 1,
+            'last_page' => $following->lastPage()
+        ]);
     }
 }

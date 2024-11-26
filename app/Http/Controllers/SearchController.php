@@ -74,5 +74,4 @@ class SearchController extends Controller
         return $this->paginate_users($users,$request);
     }
 
-    
 }

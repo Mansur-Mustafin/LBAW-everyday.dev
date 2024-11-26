@@ -102,8 +102,8 @@
                     </select>
                 </div>
 
-                <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p>
-                <div class="mt-4">
+                {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
+                <div class="hidden mt-4">
                     <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
                     <label for="toggleTwo" title="Make post vidible only for followers."
                         class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm">
@@ -215,11 +215,14 @@
                         <p class="text-sm text-gray-500">{{ '@' . $post->author->username }}</p>
                     </div>
                 </a>
-
-                <button
-                    class="hidden ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none">
-                    Subscribe
-                </button>
+                @can('follow', $post->author)
+                    <button class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none" 
+                        data-user-id="{{ $post->author->id }}" data-action="follow">Follow</button>
+                @endcan
+                @can('unfollow', $post->author)
+                    <button class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none" 
+                        data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
+                @endcan
             </div>
             {{-- @if ($post->for_followers)
             <div class="flex mt-4">
