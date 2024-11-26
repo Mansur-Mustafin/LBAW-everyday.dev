@@ -1,16 +1,10 @@
 <header class="py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 ">
     <div>
-        <div>
-            <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
-            @if (!Auth::check())
-                <a class="button" href="{{ route('login') }}">Login</a>
-                <a class="button" href="{{ route('register') }}">Register</a>
-            @endif
-        </div>
+        <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
     </div>
 
     <div>
-        <div id="search-container" class="rounded-2xl bg-input p-3 hidden tablet:flex laptop:w-96 desktop:w-96 w-80">
+        <div id="search-container" class="rounded-2xl bg-input p-3 hidden tablet:flex laptop:w-80 desktop:w-96 w-52">
             <svg class="h-8 w-8 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -50,6 +44,10 @@
                 href="{{ url('/users/' . Auth::id()) . '/posts' }}">
                 <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profile_image_path}}" alt="">
             </a>
+
+        @else
+            <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('login') }}">Login</a>
+            <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('register') }}">Register</a>
         @endif
     </div>
 </header>
