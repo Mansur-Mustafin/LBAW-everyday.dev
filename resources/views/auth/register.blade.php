@@ -65,6 +65,11 @@
             <button type="submit" class="mt-4 w-full bg-[#5a7d99] hover:bg-[#34547c] text-white font-extrabold py-2 rounded transition duration-200">
               Register
             </button>
+
+            <div class="text-center mt-4">
+              <span class="text-gray-400">Back to</span>
+              <a href="{{ route('login') }}" class="text-[#5a7d99] hover:text-[#34547c] font-semibold">Login</a>
+            </div>
           </form>
         </div>
     </div>

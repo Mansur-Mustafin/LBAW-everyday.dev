@@ -176,7 +176,7 @@ function addButtonsBehaviour() {
                comment_id: comment_id
             }
 
-            sendAjaxRequest('POST', '/comments/edit', data, editCommentHandler)
+            sendAjaxRequest('PUT', `/comments/${comment_id}`, data, editCommentHandler)
          })
       })
    })

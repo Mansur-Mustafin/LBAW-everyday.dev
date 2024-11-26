@@ -1,0 +1,1499 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'everyday.dev API'
+
+  description: 'Web Resources Specification (A7) for everyday.dev web application.'
+
+servers:
+- url: http://lbaw.fe.up.pt
+  description: Production server
+
+externalDocs:
+  description: Find more info here.
+  url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24041/-/wikis/eap
+
+tags:
+  - name: M01
+    description: Operations related to user authentication and their profiles.
+
+paths:
+  /register:
+    get:
+      operationId: R101
+      summary: 'R101: Register Form.'
+      description: 'Display the registration form. **Access:** PUB'
+      tags:
+        - M01
+      responses:
+        '200':
+          description: 'OK. Returns the registration form HTML.'
+    post:
+      operationId: R102
+      summary: 'R102: Register Action.'
+      description: 'Register a new user. **Access:** PUB'
+      tags:
+        - M01
+      requestBody:
+        description: 'User registration data.'
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                public_name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+              required:
+                - public_name
+                - username
+                - email
+                - password
+                - password_confirmation
+      responses:
+        '302':
+          description: 'Redirect after processing the new user registration.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                success:
+                  description: 'Successful registration. Redirect to home page.'
+                  value: '/home'
+                failure:
+                  description: 'Failed registration. Redirect back to register form.'
+                  value: '/register'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+
+  /login:
+    get:
+      operationId: R103
+      summary: 'R103: Login Form.'
+      description: 'Display the login form. **Access:** PUB'
+      tags:
+        - M01
+      responses:
+        '200':
+          description: 'OK. Returns the login form HTML.'
+        '302':
+          description: 'User is already authenticated. Redirect to home page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example: '/home'
+
+    post:
+      operationId: R104
+      summary: 'R104: Login Action.'
+      description: 'Authenticate a user and start a session. **Access:** PUB'
+      tags:
+        - M01
+      requestBody:
+        description: 'User login credentials.'
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                remember:
+                  type: string
+                  enum: ['on']
+                  description: 'Optional. Remember me checkbox.'
+              required:
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Redirect after processing login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                success:
+                  description: 'Successful authentication. Redirect to home page or intended page.'
+                  value: '/home'
+                failure:
+                  description: 'Failed authentication. Redirect back to login form.'
+                  value: '/login'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+
+  /logout:
+    get:
+      operationId: R105
+      summary: 'R105: Logout Action.'
+      description: 'Logout the current user. **Access:** USR, ADM'
+      tags:
+        - M01
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example: '/home'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+  
+  /users/{user}/posts:
+    get:
+      operationId: R201
+      summary: 'R201: View User Posts.'
+      description: 'Display the posts of a specific user. **Access:** USR, ADM'
+      tags:
+        - M02
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose posts are to be displayed.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying the users posts.'
+        '403':
+          description: 'Forbidden. Authentication required.'
+
+  /users/{user}/upvotes:
+    get:
+      operationId: R202
+      summary: 'R202: View User Upvotes.'
+      description: 'Display the upvoted posts by a specific user. **Access:** USR, ADM'
+      tags:
+        - M02
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose upvoted posts are to be displayed.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying the users upvoted posts.'
+        '403':
+          description: 'Forbidden. Authentication required.'
+
+  /users/{user}/edit:
+    get:
+      operationId: R203
+      summary: 'R203: Edit User Profile Form.'
+      description: 'Display the form to edit a users profile. **Access:** USR (own profile), ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose profile is to be edited.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML form for editing the users profile.'
+        '403':
+          description: 'Forbidden. User is not authorized to edit this profile.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /users/{user}:
+    put:
+      operationId: R204
+      summary: 'R204: Update User Profile.'
+      description: 'Update a users profile information. **Access:** USR (own profile), ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose profile is to be updated.'
+      requestBody:
+        description: 'User profile data to be updated.'
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                public_name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                reputation:
+                  type: integer
+                  description: 'Only editable by admins.'
+                is_admin:
+                  type: boolean
+                  description: 'Only editable by admins.'
+                image:
+                  type: string
+                  format: binary
+                  description: 'Profile picture.'
+                old_password:
+                  type: string
+                  format: password
+                  description: 'Required when changing password.'
+                new_password:
+                  type: string
+                  format: password
+                  description: 'New password.'
+                new_password_confirmation:
+                  type: string
+                  format: password
+                  description: 'Confirmation of the new password.'
+                remove_image:
+                  type: string
+                  enum: ['true', 'false']
+              required:
+                - public_name
+                - username
+                - email
+                - remove_image
+      responses:
+        '302':
+          description: 'Redirect after processing the profile update.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to the users posts page.'
+                  value: '/users/{user}/posts'
+                302Failure:
+                  description: 'Failed update. Redirect back to the edit form.'
+                  value: '/users/{user}/edit'
+        '403':
+          description: 'Forbidden. User is not authorized to update this profile.'
+
+  /users/{user}/follow:
+    post:
+      operationId: R205
+      summary: 'R205: Follow User.'
+      description: 'Follow a specific user. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user to follow.'
+      responses:
+        '200':
+          description: 'Successfully followed user.'
+        '403':
+          description: 'Forbidden. Cannot follow this user.'
+
+  /users/{user}/unfollow:
+    delete:
+      operationId: R206
+      summary: 'R206: Unfollow User.'
+      description: 'Unfollow a specific user. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user to unfollow.'
+      responses:
+        '200':
+          description: 'Successfully unfollowed user.'
+        '403':
+          description: 'Forbidden. Cannot unfollow this user.'
+
+  /users/{user}/followers:
+    get:
+      operationId: R207
+      summary: 'R207: View Users Followers.'
+      description: 'Display the list of followers of a user. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose followers are to be displayed.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page with the users followers.'
+        '403':
+          description: 'Forbidden. Authentication required.'
+
+  /users/{user}/following:
+    get:
+      operationId: R208
+      summary: 'R208: View Users Following.'
+      description: 'Display the list of users that a user is following. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose following list is to be displayed.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page with the users being followed.'
+        '403':
+          description: 'Forbidden. Authentication required.'
+
+  /api/users/{user}/followers:
+    get:
+      operationId: R209
+      summary: 'R209: Get Users Followers (API).'
+      description: 'Retrieve a paginated JSON list of followers of a user. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose followers are to be retrieved.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns a JSON object with the users followers.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPagination'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/users/{user}/following:
+    get:
+      operationId: R210
+      summary: 'R210: Get Users Following (API).'
+      description: 'Retrieve a paginated JSON list of users that a user is following. **Access:** USR, ADM'
+      tags:
+        - M02
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user whose following list is to be retrieved.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns a JSON object with the users being followed.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPagination'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /home:
+    get:
+      operationId: R301
+      summary: 'R301: View Recent News Feed.'
+      description: 'Display the recent news feed. **Access:** PUB'
+      tags:
+        - M03
+      security: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying recent news posts.'
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<html>...recent news feed...</html>'
+
+  /news/my-feed:
+    get:
+      operationId: R302
+      summary: 'R302: View My News Feed.'
+      description: 'Display the authenticated users personalized news feed. **Access:** USR'
+      tags:
+        - M03
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying the users personalized news feed.'
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<html>...my news feed...</html>'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<html>...login page...</html>'
+
+  /news/top-feed:
+    get:
+      operationId: R303
+      summary: 'R303: View Top News Feed.'
+      description: 'Display the top news feed based on votes. **Access:** PUB'
+      tags:
+        - M03
+      security: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying top news posts.'
+
+  /news/recent-feed:
+    get:
+      operationId: R304
+      summary: 'R304: View Recent News Feed.'
+      description: 'Display the recent news feed. **Access:** PUB'
+      tags:
+        - M03
+      security: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying recent news posts.'
+
+  /news/create-post:
+    get:
+      operationId: R305
+      summary: 'R305: Create News Post Form.'
+      description: 'Display the form to create a new news post. **Access:** USR'
+      tags:
+        - M03
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 'OK. Returns the HTML form for creating a new news post.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /news/{news_post}:
+    get:
+      operationId: R306
+      summary: 'R306: View News Post.'
+      description: 'Display a specific news post along with its comments. **Access:** PUB'
+      tags:
+        - M03
+      security: []
+      parameters:
+        - in: path
+          name: news_post
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the news post to display.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying the news post.'
+        '404':
+          description: 'Not Found. The news post does not exist.'
+
+    put:
+      operationId: R310
+      summary: 'R310: Update News Post.'
+      description: 'Update a specific news post. **Access:** AUT'
+      tags:
+        - M03
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: news_post
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the news post to update.'
+      requestBody:
+        description: 'News post data to be updated.'
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 250
+                content:
+                  type: string
+                for_followers:
+                  type: string
+                  enum: ['true', 'false']
+                  description: 'Whether the post is for followers only.'
+                tags:
+                  type: string
+                  description: 'Comma-separated list of tags.'
+                image:
+                  type: string
+                  format: binary
+                remove_image:
+                  type: string
+                  enum: ['true', 'false']
+              required:
+                - title
+                - content
+                - remove_image
+      responses:
+        '302':
+          description: 'Redirect after updating the news post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/news/{news_post}'
+        '403':
+          description: 'Forbidden. User is not authorized to update this news post.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+
+    delete:
+      operationId: R311
+      summary: 'R311: Delete News Post.'
+      description: 'Delete a specific news post. **Access:**  AUT'
+      tags:
+        - M03
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: news_post
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the news post to delete.'
+      responses:
+        '302':
+          description: 'Redirect after deleting the news post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/home'
+        '403':
+          description: 'Forbidden. User is not authorized to delete this news post.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /news/{news_post}/comment/{comment}:
+    get:
+      operationId: R307
+      summary: 'R307: View Single Comment Thread.'
+      description: 'Display a single comment thread within a news post. **Access:** PUB'
+      tags:
+        - M03
+      parameters:
+        - in: path
+          name: news_post
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the news post.'
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the comment to display.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying the single comment thread.'
+        '403':
+          description: 'Forbidden. User is not authorized to view this comment.'
+        '404':
+          description: 'Not Found. The comment or news post does not exist.'
+
+  /news:
+    post:
+      operationId: R308
+      summary: 'R308: Create News Post.'
+      description: 'Create a new news post. **Access:** USR'
+      tags:
+        - M03
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: 'Data for the new news post.'
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  maxLength: 250
+                content:
+                  type: string
+                for_followers:
+                  type: string
+                  enum: ['true', 'false']
+                image:
+                  type: string
+                  format: binary
+                  description: 'Optional image for the news post.'
+                tags:
+                  type: string
+                  description: 'Comma-separated list of tags.'
+              required:
+                - title
+                - content
+                - for_followers
+      responses:
+        '302':
+          description: 'Redirect after creating the news post.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example: '/home'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /comments:
+    post:
+      operationId: R401
+      summary: 'R401: Create Comment.'
+      description: 'Create a new comment. **Access:** USR'
+      tags:
+        - M04
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: 'Data for the new comment.'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  maxLength: 40
+                news_post_id:
+                  type: integer
+                  nullable: true
+                  description: 'ID of the news post to comment on. Required if replying to a news post.'
+                parent_comment_id:
+                  type: integer
+                  nullable: true
+                  description: 'ID of the parent comment. Required if replying to a comment.'
+                thread:
+                  type: string
+                  description: 'Thread identifier.'
+              required:
+                - content
+                - thread
+      responses:
+        '200':
+          description: 'OK. Returns the rendered comment thread HTML and thread ID.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  thread:
+                    type: string
+                    description: 'Rendered HTML of the comment thread.'
+                  thread_id:
+                    type: integer
+                    description: 'ID of the parent thread.'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /comments/{comment}:
+    put:
+      operationId: R402
+      summary: 'R402: Update Comment.'
+      description: 'Update an existing comment. **Access:** AUT'
+      tags:
+        - M04
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the comment to update.'
+      requestBody:
+        description: 'Updated content for the comment.'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  maxLength: 250
+              required:
+                - content
+      responses:
+        '200':
+          description: 'OK. Returns the updated comment.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: 'Not Found. Comment does not exist.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 'Forbidden. User is not authorized to update this comment.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+    delete:
+      operationId: R403
+      summary: 'R403: Delete Comment.'
+      description: 'Delete an existing comment. **Access:** AUT'
+      tags:
+        - M04
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: comment
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the comment to delete.'
+      responses:
+        '200':
+          description: 'OK. Comment deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '403':
+          description: 'Forbidden. User is not authorized to delete this comment.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 'Internal Server Error. Failed to delete the comment.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+  /vote:
+    post:
+      operationId: R501
+      summary: 'R501: Create Vote.'
+      description: 'Create a new vote on a post or comment. **Access:** USR'
+      tags:
+        - M05
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: 'Data for the new vote.'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ['post', 'comment']
+                  description: 'The type of item being voted on.'
+                id:
+                  type: integer
+                  description: 'The ID of the post or comment being voted on.'
+                is_upvote:
+                  type: boolean
+                  description: 'True for upvote, false for downvote.'
+              required:
+                - type
+                - id
+                - is_upvote
+      responses:
+        '200':
+          description: 'OK. Vote created successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Saved'
+                  vote_id:
+                    type: integer
+                    description: 'ID of the created vote.'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /vote/{vote}:
+    put:
+      operationId: R502
+      summary: 'R502: Update Vote.'
+      description: 'Update an existing vote. **Access:** USR (owner of the vote)'
+      tags:
+        - M05
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: vote
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the vote to update.'
+      requestBody:
+        description: 'Updated data for the vote.'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_upvote:
+                  type: boolean
+                  description: 'True for upvote, false for downvote.'
+              required:
+                - is_upvote
+      responses:
+        '200':
+          description: 'OK. Vote updated successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Vote updated'
+                  vote_id:
+                    type: integer
+                    description: 'ID of the updated vote.'
+        '403':
+          description: 'Forbidden. User is not authorized to update this vote.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: 'Internal Server Error. An error occurred while updating the vote.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      operationId: R503
+      summary: 'R503: Delete Vote.'
+      description: 'Delete an existing vote. **Access:** USR (owner of the vote)'
+      tags:
+        - M05
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: vote
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the vote to delete.'
+      responses:
+        '200':
+          description: 'OK. Vote deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Vote removed'
+        '403':
+          description: 'Forbidden. User is not authorized to delete this vote.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+  /search/tags/{search}:
+    get:
+      operationId: R601
+      summary: 'R601: Search Posts by Tag.'
+      description: 'Retrieve posts associated with a specific tag. **Access:** PUB'
+      tags:
+        - M06
+      security: []
+      parameters:
+        - in: path
+          name: search
+          required: true
+          schema:
+            type: string
+          description: 'The tag name to search for.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying posts with the specified tag.'
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<html>...posts with tag...</html>'
+        '404':
+          description: 'Not Found. The specified tag does not exist.'
+
+  /search/posts/{search}:
+    get:
+      operationId: R602
+      summary: 'R602: Search Posts by Keyword.'
+      description: 'Retrieve posts matching a search query. **Access:** PUB'
+      tags:
+        - M06
+      security: []
+      parameters:
+        - in: path
+          name: search
+          required: true
+          schema:
+            type: string
+          description: 'The search query for posts.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page displaying posts matching the search query.'
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<html>...search results...</html>'
+
+  /api/search/users:
+    get:
+      operationId: R603
+      summary: 'R603: Search Users (API).'
+      description: 'Retrieve a list of users. **Access:** ADM'
+      tags:
+        - M06
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 'OK. Returns the JSON users data.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPagination'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /api/search/users/{search}:
+    get:
+      operationId: R604
+      summary: 'R604: Search Users by Keyword (API)'
+      description: 'Retrieve users matching a search query. **Access:** ADM'
+      tags:
+        - M06
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: search
+          required: true
+          schema:
+            type: string
+          description: 'The search query for users.'
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          description: 'Page number for pagination.'
+      responses:
+        '200':
+          description: 'OK. Returns the JSON users data.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPagination'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /api/search/{search}:
+    get:
+      operationId: R605
+      summary: 'R605: Global Search (API)'
+      description: 'Perform a global search across posts, tags, and users. **Access:** PUB'
+      tags:
+        - M06
+      security: []
+      parameters:
+        - in: path
+          name: search
+          required: true
+          schema:
+            type: string
+          description: 'The global search query.'
+      responses:
+        '200':
+          description: 'OK. Returns a JSON object with search results.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPagination'
+
+  /admin:
+    get:
+      operationId: R701
+      summary: 'R701: Admin Dashboard.'
+      description: 'Display the admin dashboard. **Access:** ADM'
+      tags:
+        - M07
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 'OK. Returns the HTML page for the admin dashboard.'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /admin/users/{user}/edit:
+    get:
+      operationId: R702
+      summary: 'R702: Admin Edit User Profile.'
+      description: 'Display the form to edit a users profile as an admin. **Access:** ADM'
+      tags:
+        - M07
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: integer
+          description: 'ID of the user to edit.'
+      responses:
+        '200':
+          description: 'OK. Returns the HTML form for editing the users profile.'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+
+  /admin/users/create:
+    get:
+      operationId: R703
+      summary: 'R703: Admin Create User Form.'
+      description: 'Display the form to create a new user as an admin. **Access:** ADM'
+      tags:
+        - M07
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 'OK. Returns the HTML form for creating a new user.'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '401':
+          description: 'Unauthorized. User is not authenticated.'
+  
+  /admin/register:
+    post:
+      operationId: R106
+      summary: 'R106: Admin Register Action.'
+      description: 'Administrator registers a new user. **Access:** ADM'
+      tags:
+        - M07
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: 'User registration data by admin.'
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                public_name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                reputation:
+                  type: integer
+                is_admin:
+                  type: string
+                  enum: ['0', '1']
+                  description: 'Set to "1" if the new user should be an admin.'
+              required:
+                - public_name
+                - username
+                - email
+                - password
+                - reputation
+                - is_admin
+      responses:
+        '302':
+          description: 'Redirect after processing the new user registration by admin.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example: '/admin'
+        '403':
+          description: 'Forbidden. User is not authorized to access this resource.'
+        '422':
+          description: 'Validation Error. Input data did not pass validation.'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        public_name:
+          type: string
+        email:
+          type: string
+          format: email
+        reputation:
+          type: integer
+        is_admin:
+          type: boolean
+        picture:
+          type: string
+          format: uri
+        can_follow:
+          type: boolean
+          description: 'Indicates if the authenticated user can follow this user.'
+        can_unfollow:
+          type: boolean
+          description: 'Indicates if the authenticated user can unfollow this user.'
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        author_id:
+          type: integer
+        news_post_id:
+          type: integer
+          nullable: true
+        parent_comment_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Vote:
+      type: object
+      properties:
+        id:
+          type: integer
+        vote_type:
+          type: string
+          enum: ['PostVote', 'CommentVote']
+        is_upvote:
+          type: boolean
+        user_id:
+          type: integer
+        news_post_id:
+          type: integer
+          nullable: true
+        comment_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewsPost:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      
+    UserPagination:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        next-page:
+          type: integer
+          description: 'Next page number.'
+        last-page:
+          type: integer
+          description: 'Last page number.'
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    GlobalSearchResults:
+      type: object
+      properties:
+        news_posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewsPost'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'The given data was invalid.'
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+- bearerAuth: []
