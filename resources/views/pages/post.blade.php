@@ -23,7 +23,7 @@
                 @endif
             @endif
 
-            <img src="{{ $post->title_image_path }}" alt="" class="rounded-xl mt-3">
+            <img src="{{ $post->title_image_path }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
 
             <div class="mt-10">
                 {{ $post->content }}
