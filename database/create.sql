@@ -102,7 +102,7 @@ CREATE TABLE notification (
     news_post_id INTEGER REFERENCES news_post(id) ON DELETE CASCADE,
     vote_id INTEGER REFERENCES vote(id) ON DELETE CASCADE,
     follower_id INTEGER REFERENCES "user"(id),
-    comment_id INTEGER REFERENCES comment(id),
+    comment_id INTEGER REFERENCES comment(id) ON DELETE CASCADE,
     CHECK (
         (notification_type = 'PostNotification' AND news_post_id IS NOT NULL) OR
         (notification_type = 'VoteNotification' AND vote_id IS NOT NULL) OR
