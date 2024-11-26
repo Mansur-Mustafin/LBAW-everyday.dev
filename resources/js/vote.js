@@ -1,25 +1,31 @@
-const voteContainers = document.querySelectorAll('.vote-container');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-voteContainers.forEach(container => {
-    const authenticated = container.dataset.authenticated === 'true';
-    const upvoteButton = container.querySelector('.upvote-button');
-    const downvoteButton = container.querySelector('.downvote-button');
-    const voteCountElement = container.querySelector('.vote-count');
-
-    if (!authenticated) {
-        upvoteButton.addEventListener('click', redirectToLogin);
-        downvoteButton.addEventListener('click', redirectToLogin);
-    } else {
-        upvoteButton.addEventListener('click', function () {
-            handleVote(container, true);
-        });
-
-        downvoteButton.addEventListener('click', function () {
-            handleVote(container, false);
-        });
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    addVoteButtonBehaviour();
 });
+
+export function addVoteButtonBehaviour() {
+    const voteContainers = document.querySelectorAll('.vote-container');
+
+    voteContainers.forEach(container => {
+        const authenticated = container.dataset.authenticated === 'true';
+        const upvoteButton = container.querySelector('.upvote-button');
+        const downvoteButton = container.querySelector('.downvote-button');
+
+        if (!authenticated) {
+            upvoteButton.addEventListener('click', redirectToLogin);
+            downvoteButton.addEventListener('click', redirectToLogin);
+        } else {
+            upvoteButton.addEventListener('click', function () {
+                handleVote(container, true);
+            });
+
+            downvoteButton.addEventListener('click', function () {
+                handleVote(container, false);
+            });
+        }
+    });
+}
 
 function handleVote(container, isUpvote) {
     const type = container.dataset.type;
