@@ -14,7 +14,7 @@
         </div>
 
         <div class="md:w-1/2 p-8 w-full">
-          <form method="POST" action="{{ route('register') }}" class="flex flex-col items-center mx-auto my-auto max-w-md p-6 rounded">
+          <form method="POST" action="{{ route('register') }}" id="registerForm" class="flex flex-col items-center mx-auto my-auto max-w-md p-6 rounded">
             {{ csrf_field() }}
 
             <label for="username" class="block font-semibold mb-2">Username</label>
@@ -62,7 +62,13 @@
               </span>
             </div>
 
-            <button type="submit" class="mt-4 w-full bg-[#5a7d99] hover:bg-[#34547c] text-white font-extrabold py-2 rounded transition duration-200">
+            <label class="inline-flex items-center text-sm mb-4">
+              <input type="checkbox" name="age" id="ageCheckbox" class="bg-gray-600 rounded accent-[#5a7d99]">
+              <span class="ml-2">I confirm that I am over 13 years old</span>
+            </label>
+            <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>
+
+            <button type="submit" id="submitButton" class="mt-4 w-full bg-[#5a7d99] hover:bg-[#34547c] text-white font-extrabold py-2 rounded transition duration-200">
               Register
             </button>
 
