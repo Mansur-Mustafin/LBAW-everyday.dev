@@ -44,7 +44,7 @@
 
                 <div class="flex items-center justify-between mb-4">
                     <label class="inline-flex items-center text-sm">
-                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} class="text-[#b8d0c3] bg-gray-600 rounded border-[#b8d0c3] focus:ring-[#b8d0c3]">
+                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} class="bg-gray-600 rounded accent-[#5a7d99]">
                         <span class="ml-2">Remember Me</span>
                     </label>
                     <a href="">Forgot Password?</a>
