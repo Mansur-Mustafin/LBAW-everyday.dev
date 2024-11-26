@@ -28,6 +28,7 @@ class CommentsController extends Controller
 
         return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => $thread])->render(), "thread_id" => $thread_parent->id]);
     }
+
     function buildComment($comment, $thread)
     {
         return response()->json(['thread' => view('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => NewsPost::find($comment->news_post_id), 'thread' => $thread])->render(), "thread_id" => $comment->id]);
@@ -58,18 +59,13 @@ class CommentsController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, Comment $comment)
     {
+        $this->authorize('update', $comment);
+
         $request->validate([
-            'content' => 'nullable|string|max:250',
-            'comment_id' => 'required|string'
+            'content' => 'nullable|string|max:250'
         ]);
-
-        $comment = Comment::find((int) $request->comment_id);
-
-        if (!$comment) {
-            return response()->json(['error' => 'Comment not found'], 404);
-        }
 
         $comment->update([
             'content' => $request->content,
@@ -81,11 +77,11 @@ class CommentsController extends Controller
     public function destroy(Comment $comment)
     {
         try {
+            $this->authorize('delete', $comment);
             $comment->delete();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false]);
         }
-
     }
 }

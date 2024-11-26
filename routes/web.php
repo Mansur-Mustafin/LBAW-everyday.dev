@@ -30,7 +30,7 @@ Route::redirect('/', '/home');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout');
+    Route::get('/logout', 'logout')->middleware('auth')->name('logout');
 });
 
 // Register
@@ -49,7 +49,7 @@ Route::controller(NewsController::class)->group(function () {
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->name('news.show');
-    Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread')->middleware('auth');
+    Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread');
     Route::post('/news', 'store')->middleware('auth')->name('news');
     Route::put('/news/{news_post}', 'update')->middleware('auth')->name('news.update');
     Route::delete('/news/{news_post}', 'destroy')->middleware('auth');
@@ -58,15 +58,15 @@ Route::controller(NewsController::class)->group(function () {
 // Comments
 Route::controller(CommentsController::class)->group(function () {
     Route::post('/comments', 'store')->middleware('auth');
-    Route::post('/comments/edit', 'update')->middleware('auth');
-    Route::delete('/comments/{comment}', 'destroy')->middleware('admin');
+    Route::put('/comments/{comment}', 'update')->middleware('auth');
+    Route::delete('/comments/{comment}', 'destroy')->middleware('auth');
 });
 
 // Votes
 Route::controller(VoteController::class)->group(function () {
     Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
-    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
     Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
+    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
 });
 
 // User
@@ -84,21 +84,17 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
     Route::get('users/{user}/followers', 'showFollowers')->middleware('auth')->name('users.followers');
     Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
-    // TODO: isso esta bem?
     Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
     Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
 });
-
-Route::get('/file/upload', [FileController::class, 'index']); // TODO:: delete
-Route::post('/file/upload', [FileController::class, 'upload']);
 
 // Search
 Route::controller(SearchController::class)->group(function () {
     Route::get('/search/tags/{search}', 'search_tag');
     Route::get('/search/posts/{search}', 'search_post');
 
-    Route::get('/search/users', 'search_user')->middleware('admin');
-    Route::get('/search/users/{search}', 'search_user')->middleware('admin');
+    Route::get('api/search/users', 'search_user')->middleware('admin');
+    Route::get('api/search/users/{search}', 'search_user')->middleware('admin');
 
-    Route::get('/search/{search}', 'search');
+    Route::get('api/search/{search}', 'search');
 });

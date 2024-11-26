@@ -14,8 +14,8 @@
                         stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </g>
             </svg>
-            <input data-url="{{ url('') }}" id="search-bar" type="text" class="bg-input outline-none w-full"
-                placeholder="Type to search...">
+            <input data-url="{{ url('') }}" data-auth="{{ Auth::check() }}" id="search-bar" type="text"
+                class="bg-input outline-none w-full" placeholder="Type to search...">
         </div>
         <div id="search-results" class="bg-input z-20 absolute laptop:w-96 desktop:w-96 w-80 rounded-b-xl"></div>
     </div>

@@ -40,8 +40,8 @@ class NewsPostPolicy
 
         if($newsPost->downvotes != 0) return false;
 
-        // TODO: Add here check for comments
-
+        if ($newsPost->comments()->exists()) return false;
+        
         return $user->id === $newsPost->author_id;
     }
 }
