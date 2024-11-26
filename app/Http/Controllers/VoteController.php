@@ -13,6 +13,11 @@ class VoteController extends Controller
     {
         $user = Auth::user();
 
+        $request->merge([
+            'id' => (int) $request->id,
+            'is_upvote' => $request->is_upvote == 'true' ? true : false
+        ]);
+
         $validated = $request->validate([
             'type' => 'required|string|in:post,comment',
             'id' => 'required|integer',

@@ -6,7 +6,6 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css', 
-                'resources/js/app.js',
                 'resources/js/auth.js',
                 'resources/js/edit-profile.js',
                 'resources/js/infinite-page.js',
@@ -15,6 +14,7 @@ export default defineConfig({
                 'resources/js/vote.js', 
                 'resources/js/admin.js',
                 'resources/js/follow.js',
+                'resources/js/post.js',
             ],
             refresh: true,
         }),
