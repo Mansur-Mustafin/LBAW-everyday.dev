@@ -68,6 +68,8 @@ class NewsController extends Controller
 
     static function processComments($comments, $user)
     {
+        if (!$user)
+            return;
         foreach ($comments as $comment) {
             $comment->user_vote = null;
 

@@ -1,4 +1,5 @@
 import { sendAjaxRequest } from '../../public/js/app.js'
+import { redirectToLogin } from './vote.js';
 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
@@ -42,6 +43,11 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
       news_post_id: post_id,
       thread: threadType
    }
+
+   const isAuth = this.dataset.auth
+
+   if (!isAuth)
+      redirectToLogin()
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 })
@@ -118,6 +124,14 @@ function addButtonsBehaviour() {
 
          form.addEventListener('submit', function (e) {
             e.preventDefault()
+
+            const isAuth = commentSection.dataset.auth
+
+            console.log(isAuth)
+
+            if (!isAuth)
+               redirectToLogin()
+
             addNestedComment(commentSection.id.split('-')[1])
          })
       })
