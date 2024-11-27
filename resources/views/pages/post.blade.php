@@ -194,7 +194,7 @@
         </div>
 
         @can('update', $post)
-            <div id="save-cancel-buttons" class="hidden justify-between gap-2 mt-2">
+            <div id="save-cancel-buttons" class="hidden flex justify-between gap-2 mt-2">
                 <button id="saveButton" type="submit" form="editForm"
                     class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
                     Save
