@@ -30,12 +30,16 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        if($comment->upvotes != 0) return false;
 
-        if($comment->downvotes != 0) return false;
+        if ($comment->upvotes != 0)
+            return false;
 
-        if ($comment->replies()->exists()) return false;
-        
+        if ($comment->downvotes != 0)
+            return false;
+
+        if (count($comment->replies) > 0)
+            return false;
+
         return $user->id === $comment->author_id;
     }
 }
