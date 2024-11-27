@@ -15,6 +15,8 @@ export default defineConfig({
                 'resources/js/admin.js',
                 'resources/js/follow.js',
                 'resources/js/post.js',
+                'resources/js/comment.js',
+                'resources/js/edit-post.js',
             ],
             refresh: true,
         }),
