@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+@include('partials.success-popup')
+
 <section class="flex w-full h-full laptop:m-auto laptop:max-w-[64rem]">
     <section class="flex flex-col w-full laptop:w-[42rem] px-10 py-12 border-x border-gray-700">
         <div id="display-section">

@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+@include('partials.success-popup')
+
 <div class="container tablet:mx-auto w-full">
     <h1 class="text-2xl font-semibold my-4 ml-4">{{ $title }}</h1>
 
