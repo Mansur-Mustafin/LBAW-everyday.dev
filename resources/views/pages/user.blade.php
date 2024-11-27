@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('partials.success-popup')
+
 <section
     class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
     <main class="order-2 tablet:order-none flex-1">
