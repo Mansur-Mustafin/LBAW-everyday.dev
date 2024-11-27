@@ -28,6 +28,7 @@ class NewsPost extends Model
     protected $table = 'news_post';
 
     public const UPDATED_AT = null;
+    protected $with = ['author', 'tags'];
     protected $fillable = [
         'title',
         'content',
