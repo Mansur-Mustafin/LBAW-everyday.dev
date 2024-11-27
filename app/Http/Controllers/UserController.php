@@ -119,8 +119,8 @@ class UserController extends Controller
             FileController::upload($request, $user, Image::TYPE_PROFILE);
         }
 
-        if ($request->filled('new_password') && ($request->filled('old_password') || $request->user()->isAdmin())) {
-            if (!Hash::check($request->input('old_password'), $user->password) && !$request->user()->isAdmin()) {
+        if ($request->filled('new_password') && ($request->filled('old_password') || $admin_edit)) {
+            if (!Hash::check($request->input('old_password'), $user->password) && !$admin_edit) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
 
@@ -179,7 +179,7 @@ class UserController extends Controller
         });
 
         return response()->json([
-            'users'     => $following,
+            'users' => $following,
             'next-page' => $following->currentPage() + 1,
             'last_page' => $following->lastPage()
         ]);
@@ -196,7 +196,7 @@ class UserController extends Controller
         });
 
         return response()->json([
-            'users'     => $following,
+            'users' => $following,
             'next-page' => $following->currentPage() + 1,
             'last_page' => $following->lastPage()
         ]);
