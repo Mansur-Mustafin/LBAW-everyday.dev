@@ -1,4 +1,5 @@
 // Posts
+import { addVoteButtonBehaviour } from './vote.js';
 
 const postContainer = document.getElementById('news-posts-container')
 
@@ -58,6 +59,7 @@ if (postContainer) {
                     return;
                 }
                 postContainer.innerHTML += data.news_posts
+                addVoteButtonBehaviour();
             })
     }
 }
@@ -250,7 +252,7 @@ if (usersList) {
                 }
             })
             .then(data => {
-                console.log(data.users.data)
+                // console.log(data.users.data)
                 lastPage = data.last_page
                 data.users.data.forEach(user => {
                     usersList.innerHTML += buildUser(user)
@@ -265,7 +267,7 @@ if (usersList) {
         usersList.innerHTML = '';
         endPage = 1
         page = 1
-        console.log(apiUrl);
+        // console.log(apiUrl);
         buildByRequest(apiUrl);
     }
 
