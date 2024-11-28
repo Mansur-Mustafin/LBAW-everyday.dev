@@ -31,30 +31,30 @@ function editCommentHandler() {
 
 const commentForm = document.getElementById('commentForm');
 
-if(commentForm){
+if (commentForm) {
 
-commentForm.addEventListener('submit', function (e) {
-   e.preventDefault()
+   commentForm.addEventListener('submit', function (e) {
+      e.preventDefault()
 
-   const commentInput = document.getElementById('commentInput')
-   const commentValue = commentInput.value
-   const post_id = commentInput.dataset.post_id
+      const commentInput = document.getElementById('commentInput')
+      const commentValue = commentInput.value
+      const post_id = commentInput.dataset.post_id
 
-   const threadType = commentInput.dataset.thread
+      const threadType = commentInput.dataset.thread
 
-   const data = {
-      content: commentValue,
-      news_post_id: post_id,
-      thread: threadType
-   }
+      const data = {
+         content: commentValue,
+         news_post_id: post_id,
+         thread: threadType
+      }
 
-   const isAuth = this.dataset.auth
+      const isAuth = this.dataset.auth
 
-   if (!isAuth)
-      redirectToLogin()
+      if (!isAuth)
+         redirectToLogin()
 
-   sendAjaxRequest('POST', '/comments', data, addCommentHandler)
-})
+      sendAjaxRequest('POST', '/comments', data, addCommentHandler)
+   })
 
 }
 
@@ -83,11 +83,8 @@ function addCommentHandler() {
 
    const threadDiv = commentSection.querySelector(`#comment-${thread}`);
 
-   const commentInput = document.getElementById(`subCommentInput-${commentSection.id.split('-')[1]}`)
-
    const noComments = document.getElementById('no-comments')
 
-   if (commentInput) commentInput.innerHTML = ''
    if (noComments) noComments.style.display = 'none'
 
    if (threadDiv) {
@@ -105,27 +102,17 @@ function addCommentHandler() {
 function addButtonsBehaviour() {
    document.querySelectorAll('.sub-comment').forEach(function (element) {
       element.addEventListener('click', function (e) {
-         const commentSection = element.parentElement.parentElement.parentElement
-         const form = document.createElement('form')
-         form.classList.add('flex', 'items-center', '-mt-2')
 
-         form.innerHTML = `
-            <input type="text"
-               class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-               placeholder="Share your thoughts" id="subCommentInput-${commentSection.id.split('-')[1]}" />
-            <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
-         `
+         const commentSection = element.parentElement.parentElement.parentElement
+
+         const form = document.getElementById(`subCommentForm-${commentSection.id.split('-')[1]}`)
+
+         form.style.display = "flex"
 
          commentSection.children[0].style.borderBottom = 0
          commentSection.children[0].style.borderRadius = 0
 
          commentSection.dataset.replies == 'false' ? commentSection.style.borderBottom = 0 : {} // removes bottom border for comment with no replies (level 0) due to overflow
-
-         if (commentSection.children.length > 1) { // this adds as a second element, once the first element is always the content
-            commentSection.insertBefore(form, commentSection.children[1])
-         } else {
-            commentSection.appendChild(form)
-         }
 
          element.style.pointerEvents = 'none'
 
@@ -142,6 +129,7 @@ function addButtonsBehaviour() {
             addNestedComment(commentSection.id.split('-')[1])
          })
       })
+
    })
 
    document.querySelectorAll('.edit-comment').forEach(function (element) {
