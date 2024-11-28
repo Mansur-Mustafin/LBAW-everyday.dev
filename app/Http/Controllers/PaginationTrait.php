@@ -24,8 +24,6 @@ trait PaginationTrait
             }
         }
 
-        sleep(1);
-
         if ($request->ajax()) {
             return response()->json([
                 'news_posts' => view('partials.posts', compact('news_posts'))->render(),
