@@ -15,5 +15,5 @@ php artisan optimize
 npm run build
 
 # docker buildx build --push --platform linux/amd64 -t $IMAGE_NAME .
-docker build -t $IMAGE_NAME .
+docker build -t $IMAGE_NAME . --provenance=false
 docker push $IMAGE_NAME

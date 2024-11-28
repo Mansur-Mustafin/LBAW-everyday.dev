@@ -29,7 +29,11 @@ function editCommentHandler() {
 
 }
 
-document.getElementById('commentForm').addEventListener('submit', function (e) {
+const commentForm = document.getElementById('commentForm');
+
+if(commentForm){
+
+commentForm.addEventListener('submit', function (e) {
    e.preventDefault()
 
    const commentInput = document.getElementById('commentInput')
@@ -51,6 +55,8 @@ document.getElementById('commentForm').addEventListener('submit', function (e) {
 
    sendAjaxRequest('POST', '/comments', data, addCommentHandler)
 })
+
+}
 
 function addNestedComment(parent_id) {
    const commentInput = document.getElementById('commentInput')
