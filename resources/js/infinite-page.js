@@ -12,27 +12,25 @@ if (postContainer) {
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let page = 1;
-    let endPage = 1;
 
     document.addEventListener('scroll', function () {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         let windowHeight = window.innerHeight;
         let documentHeight = document.documentElement.scrollHeight;
 
+        // console.log(scrollTop + windowHeight, documentHeight - 100);
+
         if (scrollTop + windowHeight >= documentHeight - 100) {
-            // TODO: Refactor this in the future
-            endPage++;
-            if (endPage > 4) {
-                endPage = 0;
+            // console.log(page, endPage)
                 if (page <= lastPage && loading == false) {
                     page++;
                     loadMoreData(page);
+                    // console.log('LOAD MORE DATA', scrollTop + windowHeight, documentHeight - 100)
                 }
                 if (page > lastPage) {
-                    if (loadingIcon) loadingIcon.style.display = 'none';
+                    if (loadingIcon) loadingIcon.classList.add('hidden');
                     if (footer) footer.style.display = 'block'
                 }
-            }
         }
     })
 
@@ -40,7 +38,7 @@ if (postContainer) {
         if (loading) return;
         loading = true;
 
-        if (loadingIcon) loadingIcon.style.display = 'block';
+        if (loadingIcon) loadingIcon.classList.remove('hidden');;
 
         fetch(newsPageURL + `?page=${page}`, {
             method: 'GET',
@@ -51,7 +49,7 @@ if (postContainer) {
         })
             .then(response => {
                 loading = false;
-                if (loadingIcon) loadingIcon.style.display = 'none';
+                if (loadingIcon) loadingIcon.classList.add('hidden');
                 return response.json();
             })
             .then(data => {
@@ -63,6 +61,7 @@ if (postContainer) {
             })
     }
 }
+
 
 // Users
 const resultsDiv = document.getElementById("admin-search-users-results")
@@ -189,7 +188,6 @@ if (resultsDiv) {
         }
     })
 }
-
 
 const usersList = document.getElementById("users-list")
 if (usersList) {

@@ -13,8 +13,44 @@
             @include('partials.tile-post', ['news' => $news])
         @endforeach
     </div>
-    <div id="loading-icon" style="display: none;" class="my-6">
-        <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
+
+    <div id="loading-icon">
+        <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4">
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+            @include('partials.load-tile-post')
+        </div>
+        <img class="w-20 h-20 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading..."> 
     </div>
+    <style>
+        /* 1 col */
+        @media (max-width: 640px) {
+            #loading-icon .loading-box:nth-child(n + 3) {
+                display: none;
+                padding: 10em;
+            }
+        }
+        /* 2 col */
+        @media (max-width: 1024px) {
+            #loading-icon .loading-box:nth-child(n + 5) {
+                display: none;
+                padding: 10em;
+            }
+        }
+        /* 3 col */
+        @media (max-width: 1280px) {
+            #loading-icon .loading-box:nth-child(n + 7) {
+                display: none;
+                padding: 10em;
+            }
+        }
+        /* 4 col: show all */
+    </style>
+
 </div>
 @endsection
