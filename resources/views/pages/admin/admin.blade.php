@@ -27,7 +27,7 @@
   </a>
   <div id="admin-search-users-results" class="laptop:flex laptop:flex-col laptop:gap-2">
   </div>
-  <div id="loading-icon" style="display: none;" class="my-6">
+  <div id="loading-icon" class="my-6">
     <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
   </div>
 </div>

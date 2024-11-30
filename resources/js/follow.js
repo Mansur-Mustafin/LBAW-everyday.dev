@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
                 },
-                credentials: 'same-origin',
+                //credentials: 'same-origin',
             })
             .then(response => {
                 if (response.ok) {
