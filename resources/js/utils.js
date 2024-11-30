@@ -31,24 +31,3 @@ export function redirectToLogin() {
 
     window.location.href = loginUrl;
 }
-
-export function changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage) {
-  const file = fileInput.files[0];
-  if (file) {
-    const imgTag = thumbnailButton.querySelector("img");
-    imgTag.src = URL.createObjectURL(file);
-    deleteThumbnailButton.style.display = "block";
-    imgTag.classList.remove('hidden');
-    buttonAddImage.classList.add('hidden');
-    removeImage.value = 'false';
-  }
-}
-
-export function deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage) {
-  const imgTag = thumbnailButton.querySelector("img");
-  imgTag.src = '';
-  imgTag.classList.add('hidden');
-  buttonAddImage.classList.remove('hidden');
-  removeImage.value = 'true';
-  deleteThumbnailButton.style.display = "none";
-}

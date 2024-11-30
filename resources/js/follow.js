@@ -33,32 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     target.textContent = 'Follow';
                 }
             },method)
-/*             fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                console.log(data);
-                if (action === 'follow') {
-                    target.textContent = 'Unfollow';
-                    target.dataset.action = 'unfollow';
-                } else if (action === 'unfollow') {
-                    target.dataset.action = 'follow';
-                    target.textContent = 'Follow';
-                }
-            })
-            .catch(error => {
-                console.log("Error",error)
-            }); */
         }
     });
 });
