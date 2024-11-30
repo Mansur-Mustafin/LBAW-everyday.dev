@@ -56,11 +56,17 @@ class NewsController extends Controller
     {
         if (Gate::inspect('belongsToPost', [$comment, $newsPost])->allowed()) {
 
+            $tags = Tag::all();
+            $existingTags = $newsPost->tags->pluck('name')->toArray();
+            $stillAvailableTags = $tags->filter(function ($tag) use ($existingTags) {
+                return !in_array($tag->name, $existingTags);
+            });
+
             $this->processComments([$comment], Auth::user());
 
             $comment = new Collection([$comment]);
 
-            return view('pages.post', ['post' => $newsPost, 'comments' => $comment, 'thread' => 'single']);
+            return view('pages.post', ['post' => $newsPost, 'comments' => $comment, 'thread' => 'single', 'availableTags' => $stillAvailableTags]);
         }
 
         return redirect()->to('news/' . $newsPost->id)->withErrors('Comment does not belong to the correspondent news');

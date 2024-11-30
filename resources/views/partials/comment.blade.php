@@ -139,25 +139,31 @@
 
                 <!-- Resto -->
                 <!-- 
-                        <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-bookmark-plus">
-                                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-                                <line x1="12" x2="12" y1="7" y2="13" />
-                                <line x1="15" x2="9" y1="10" y2="10" />
-                            </svg> </a>
-                        </a>
-                        <a class="p-2 rounded-xl cursor-pointer hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-link">
-                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                            </svg> </a>
-                        </a> -->
+                                                                                                            <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                                                                    class="lucide lucide-bookmark-plus">
+                                                                                                                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                                                                                                                    <line x1="12" x2="12" y1="7" y2="13" />
+                                                                                                                    <line x1="15" x2="9" y1="10" y2="10" />
+                                                                                                                </svg> </a>
+                                                                                                            </a>
+                                                                                                            <a class="p-2 rounded-xl cursor-pointer hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                                                                    class="lucide lucide-link">
+                                                                                                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                                                                                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                                                                                                </svg> </a>
+                                                                                                            </a> -->
             </div>
         </div>
+        <form id="subCommentForm-{{$comment->id}}" class="hidden items-center -mt-2">
+            <input type="text"
+                class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                placeholder="Share your thoughts" id="{{"subCommentInput-$comment->id"}}" />
+            <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+        </form>
 
         @foreach ($comment->replies as $reply)
             @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $comment, 'thread' => $thread])
@@ -298,25 +304,31 @@
                 @endif
 
                 <!-- 
-                            <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-bookmark-plus">
-                                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-                                    <line x1="12" x2="12" y1="7" y2="13" />
-                                    <line x1="15" x2="9" y1="10" y2="10" />
-                                </svg> </a>
-                            </a>
-                            <a class="p-2 rounded-xl cursor-pointer hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-link">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                                </svg> </a>
-                            </a> -->
+                                                                                                                <a class="p-2 rounded-xl cursor-pointer hover:text-rose-400 hover:bg-rose-700 hover:bg-opacity-50">
+                                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                                                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                                                                        class="lucide lucide-bookmark-plus">
+                                                                                                                        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                                                                                                                        <line x1="12" x2="12" y1="7" y2="13" />
+                                                                                                                        <line x1="15" x2="9" y1="10" y2="10" />
+                                                                                                                    </svg> </a>
+                                                                                                                </a>
+                                                                                                                <a class="p-2 rounded-xl cursor-pointer hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">
+                                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                                                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                                                                        class="lucide lucide-link">
+                                                                                                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                                                                                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                                                                                                    </svg> </a>
+                                                                                                                </a> -->
             </div>
         </div>
+        <form id="subCommentForm-{{$comment->id}}" class="hidden items-center -mt-2">
+            <input type="text"
+                class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                placeholder="Share your thoughts" id="{{"subCommentInput-$comment->id"}}" />
+            <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+        </form>
 
         @if($level > 1 && $thread == 'multi' && count($comment->replies))
             <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}"
