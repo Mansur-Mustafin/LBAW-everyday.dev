@@ -1,10 +1,38 @@
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+import { sendAjaxRequest } from './utils'
+
+// const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const searchBarDiv = document.getElementById('search-bar')
 const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results')
 const baseUrl = searchBarDiv.dataset.url
 const isAuth = searchBarDiv.dataset.auth
 let loading = false
+
+let clickedInsideResults = false;
+resultsDiv.addEventListener('mousedown', () => {
+    clickedInsideResults = true;
+});
+
+searchBarDiv.addEventListener('blur', () => {
+    setTimeout(() => {
+        if (!clickedInsideResults) {
+            resultsDiv.style.display = 'none';
+            searchContainer.classList.remove('rounded-t-2xl');
+            searchContainer.classList.add('rounded-2xl');
+        }
+        clickedInsideResults = false;
+    }, 100); // Delay for links
+});
+
+
+searchBarDiv.addEventListener('focus', () => {
+        if (searchBarDiv.dataset.auth) {
+            resultsDiv.style.display = 'block';
+            searchContainer.classList.add('rounded-t-2xl');
+            searchContainer.classList.remove('rounded-2xl');
+        }
+    }
+);
 
 searchBarDiv.onkeyup = async () => {
     resultsDiv.style.display = 'block';
@@ -25,33 +53,18 @@ searchBarDiv.onkeyup = async () => {
     }
 
     const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`
-    loading = true
-    fetch(searchQuery, {
-        method: 'GET',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken
+    // loading = true
+    sendAjaxRequest(loading,searchQuery,(data) => {
+        resultsDiv.innerHTML = ''
+        showElements(data["news_posts"], buildPost)
+        if (isAuth) {
+            showElements(data["tags"], buildTag)
+            showElements(data["users"], buildUser)
         }
-    })
-        .then(response => {
-            loading = false
-            if (response.ok) {
-                return response.json();
-            }
-        })
-        .then(data => {
-            resultsDiv.innerHTML = ''
-            showElements(data["news_posts"], buildPost)
-            if (isAuth) {
-                showElements(data["tags"], buildTag)
-                showElements(data["users"], buildUser)
-            }
-            if (data["news_posts"].length > 0) {
-                addMorePosts(searchBarDiv.value)
-            }
-        })
-        .catch(error => {
-            console.log("Error", error)
-        })
+        if (data["news_posts"].length > 0) {
+            addMorePosts(searchBarDiv.value)
+        }
+    },'GET')
 }
 
 const showElements = (elements, buildFunction) => {
@@ -131,28 +144,3 @@ const buildUser = (user) => {
         </div>
     `
 }
-
-let clickedInsideResults = false;
-resultsDiv.addEventListener('mousedown', () => {
-    clickedInsideResults = true;
-});
-searchBarDiv.addEventListener('blur', () => {
-    setTimeout(() => {
-        if (!clickedInsideResults) {
-            resultsDiv.style.display = 'none';
-            searchContainer.classList.remove('rounded-t-2xl');
-            searchContainer.classList.add('rounded-2xl');
-        }
-        clickedInsideResults = false;
-    }, 100); // Delay for links
-});
-
-
-searchBarDiv.addEventListener('focus', () => {
-    if (searchBarDiv.dataset.auth) {
-        resultsDiv.style.display = 'block';
-        searchContainer.classList.add('rounded-t-2xl');
-        searchContainer.classList.remove('rounded-2xl');
-    }
-}
-);
