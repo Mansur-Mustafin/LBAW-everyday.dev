@@ -1,77 +1,16 @@
-import { sendAjaxRequest } from '../../public/js/app.js'
-import { redirectToLogin, addVoteButtonBehaviour } from './vote.js';
+import { redirectToLogin,sendAjaxRequest } from './utils.js';
+import { addVoteButtonBehaviour } from './vote.js';
 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
 });
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 // TODO: profile image
 
-function editCommentHandler() {
-   const response = JSON.parse(this.responseText)
-
-   const comment_id = response.comment.id
-
-   const editForm = document.getElementById("comment-form-" + comment_id)
-   const saveButton = document.getElementById("save_button-" + comment_id)
-   const commentContent = document.getElementById("comment-content-" + comment_id)
-   const editButton = document.getElementById("edit_button-" + comment_id)
-   const abortButton = document.getElementById("abort_button-" + comment_id)
-
-
-   editForm.style.display = 'none'
-   saveButton.style.display = 'none'
-   abortButton.style.display = 'none'
-
-   editButton.style.display = 'block'
-   commentContent.innerHTML = response.comment.content
-   commentContent.style.display = 'block'
-
-}
-
-document.getElementById('commentForm').addEventListener('submit', function (e) {
-   e.preventDefault()
-
-   const commentInput = document.getElementById('commentInput')
-   const commentValue = commentInput.value
-   const post_id = commentInput.dataset.post_id
-
-   const threadType = commentInput.dataset.thread
-
-   const data = {
-      content: commentValue,
-      news_post_id: post_id,
-      thread: threadType
-   }
-
-   const isAuth = this.dataset.auth
-
-   if (!isAuth)
-      redirectToLogin()
-
-   sendAjaxRequest('POST', '/comments', data, addCommentHandler)
-})
-
-function addNestedComment(parent_id) {
-   const commentInput = document.getElementById('commentInput')
-   const threadType = commentInput.dataset.thread
-
-   const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
-   const subCommentInputValue = subCommentInput.value
-
-   const data = {
-      content: subCommentInputValue,
-      parent_comment_id: parent_id,
-      thread: threadType
-   }
-
-   sendAjaxRequest('POST', '/comments', data, addCommentHandler)
-}
-
-function addCommentHandler() {
-   const response = JSON.parse(this.responseText)
-   const thread = response.thread_id
-   const threadHTML = response.thread
+function addCommentHandler(data) {
+   const thread = data.thread_id
+   const threadHTML = data.thread
 
    const commentSection = document.getElementById('comment-section')
 
@@ -95,6 +34,78 @@ function addCommentHandler() {
    addButtonsBehaviour()
    addVoteButtonBehaviour()
 }
+
+function editCommentHandler(data) {
+   const comment_id = data.comment.id
+
+   const editForm = document.getElementById("comment-form-" + comment_id)
+   const saveButton = document.getElementById("save_button-" + comment_id)
+   const commentContent = document.getElementById("comment-content-" + comment_id)
+   const editButton = document.getElementById("edit_button-" + comment_id)
+   const abortButton = document.getElementById("abort_button-" + comment_id)
+
+
+   editForm.style.display = 'none'
+   saveButton.style.display = 'none'
+   abortButton.style.display = 'none'
+
+   editButton.style.display = 'block'
+   commentContent.innerHTML = data.comment.content
+   commentContent.style.display = 'block'
+
+}
+
+document.getElementById('commentForm').addEventListener('submit', function (e) {
+   e.preventDefault()
+
+   const commentInput = document.getElementById('commentInput')
+   const commentValue = commentInput.value
+   const post_id = commentInput.dataset.post_id
+
+   const threadType = commentInput.dataset.thread
+
+   const url = '/comments'
+   const method = 'POST'
+   const headers= {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+   }
+   const body = JSON.stringify({
+      content: commentValue,
+      news_post_id: post_id,
+      thread: threadType
+   })
+
+   const isAuth = this.dataset.auth
+
+   if (!isAuth)
+      redirectToLogin()
+
+   sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
+})
+
+function addNestedComment(parent_id) {
+   const commentInput = document.getElementById('commentInput')
+   const threadType = commentInput.dataset.thread
+
+   const subCommentInput = document.getElementById(`subCommentInput-${parent_id}`)
+   const subCommentInputValue = subCommentInput.value
+
+   const url = '/comments'
+   const method = 'POST'
+   const headers= {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+   }
+   const body = JSON.stringify({
+      content: subCommentInputValue,
+      parent_comment_id: parent_id,
+      thread: threadType
+   })
+
+   sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
+}
+
 
 function addButtonsBehaviour() {
    document.querySelectorAll('.sub-comment').forEach(function (element) {
@@ -151,32 +162,34 @@ function addButtonsBehaviour() {
          const abortButton = document.getElementById("abort_button-" + comment_id)
 
          abortButton.style.display = 'block'
+         editForm.style.display = 'block'
+         saveButton.style.display = 'block'
+
+         commentContent.style.display = 'none'
+         editButton.style.display = 'none'
 
          abortButton.addEventListener('click', function () {
             editForm.style.display = 'none'
+            abortButton.style.display = 'none'
             saveButton.style.display = 'none'
 
             editButton.style.display = 'block'
             commentContent.style.display = 'block'
-
-            abortButton.style.display = 'none'
          })
-
-         commentContent.style.display = 'none'
-         editForm.style.display = 'block'
-
-         editButton.style.display = 'none'
-         saveButton.style.display = 'block'
 
          saveButton.addEventListener('click', function () {
             const newComment = commentInput.value.trim()
-
-            const data = {
+            const url = `/comments/${comment_id}`
+            const method = 'PUT'
+            const headers = {
+               'Content-Type': 'application/json',
+               'X-CSRF-TOKEN': csrfToken,
+            }
+            const body = JSON.stringify({
                content: newComment,
                comment_id: comment_id
-            }
-
-            sendAjaxRequest('PUT', `/comments/${comment_id}`, data, editCommentHandler)
+            })
+            sendAjaxRequest(false,url,editCommentHandler,method,headers,body)
          })
       })
    })
@@ -185,14 +198,14 @@ function addButtonsBehaviour() {
       element.addEventListener('click', function (event) {
          event.preventDefault()
          const comment_id = element.id.split('-')[1]
-         sendAjaxRequest('DELETE', '/comments/' + comment_id, {}, function () {
-            const comment = document.getElementById('comment-' + comment_id)
-            const response = JSON.parse(this.responseText)
 
-            if (response.success) {
-               comment.remove()
-            }
-         })
+         const url = '/comments/' + comment_id
+         const method = 'DELETE'
+         sendAjaxRequest(false,url,(_data) => {
+            // sendAjaxRequest catches errors
+            const comment = document.getElementById('comment-' + comment_id)
+            comment.remove()
+         },method)
       })
    })
 }
