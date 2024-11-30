@@ -1,8 +1,11 @@
 import { redirectToLogin,sendAjaxRequest } from './utils.js';
+import { addVoteButtonBehaviour } from './vote.js';
 
+// Adds Vote Behaviour to Comments 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
 });
+
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 // TODO: profile image
@@ -107,7 +110,7 @@ function addNestedComment(parent_id) {
    sendAjaxRequest(url,addCommentHandler,method,headers,body)
 }
 
-function addVoteButtonBehaviour() {
+/* function addVoteButtonBehaviour() {
     const voteContainers = document.querySelectorAll('.vote-container');
 
     voteContainers.forEach(container => {
@@ -128,7 +131,7 @@ function addVoteButtonBehaviour() {
             });
         }
     });
-}
+} */
 
 function addButtonsBehaviour() {
    document.querySelectorAll('.sub-comment').forEach(function (element) {
