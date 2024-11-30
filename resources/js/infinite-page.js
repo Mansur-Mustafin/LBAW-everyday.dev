@@ -30,7 +30,7 @@ const buildByRequest = async (url,buildUser,resultsDiv) => {
     if (loadingIcon) loadingIcon.classList.remove('hidden')
 
     const method = 'GET'
-    sendAjaxRequest(false,url,(data) => {
+    sendAjaxRequest(url,(data) => {
         loading = false
         if (loadingIcon) loadingIcon.classList.add('hidden')
         lastPage = data.last_page
@@ -60,7 +60,7 @@ if (postContainer) {
 
         const url =  newsPageURL + `?page=${page}`
         const method = 'GET'
-        sendAjaxRequest(false,url,(data) => {
+        sendAjaxRequest(url,(data) => {
             loading = false
             if (loadingIcon) loadingIcon.classList.add('hidden')
             if (data.news_posts == "") {

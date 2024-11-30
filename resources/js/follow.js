@@ -1,3 +1,5 @@
+import { sendAjaxRequest } from "./utils";
+
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -20,14 +22,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 method = 'DELETE';
             }
 
-            fetch(url, {
+
+            sendAjaxRequest(url,(data) => {
+                console.log(data);
+                if (action === 'follow') {
+                    target.textContent = 'Unfollow';
+                    target.dataset.action = 'unfollow';
+                } else if (action === 'unfollow') {
+                    target.dataset.action = 'follow';
+                    target.textContent = 'Follow';
+                }
+            },method)
+/*             fetch(url, {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
                 },
-                //credentials: 'same-origin',
             })
             .then(response => {
                 if (response.ok) {
@@ -46,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.log("Error",error)
-            });
+            }); */
         }
     });
 });

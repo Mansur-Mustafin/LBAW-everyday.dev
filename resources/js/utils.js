@@ -4,16 +4,14 @@ const defaultHeaders = {
           'X-Requested-With': 'XMLHttpRequest',
       }  
 
-export function sendAjaxRequest(loading,url,handler,method,headers=defaultHeaders,body=undefined) {
-  if(loading) return
-  loading = true
+export function sendAjaxRequest(url,handler,method,headers=defaultHeaders,body=undefined) {
+  
   fetch(url,{
     method: method,
     headers: headers,
     body:body
   })
       .then(response => {
-          loading = false;
           if(response.ok) {
             return response.json();
           }

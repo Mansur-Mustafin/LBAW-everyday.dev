@@ -59,7 +59,7 @@ function submitVote(type, id, isUpvote, container) {
         is_upvote: isUpvote,
     })
 
-    sendAjaxRequest(false,url, (data) => {
+    sendAjaxRequest(url, (data) => {
         if (data.message === 'Saved') {
             container.dataset.voteId = data.vote_id;
             container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
@@ -72,7 +72,7 @@ function removeVote(voteId, container) {
     const url = `/vote/${voteId}`
     const method = 'DELETE'
 
-    sendAjaxRequest(false,url, (data) => {
+    sendAjaxRequest(url, (data) => {
         if (data.message === 'Vote removed') {
             updateVoteUI(container, null, 'Vote removed');
             container.dataset.voteId = '';
@@ -92,7 +92,7 @@ function updateVote(voteId, isUpvote, container) {
         is_upvote: isUpvote,
     })
 
-    sendAjaxRequest(false,url,(data) => {
+    sendAjaxRequest(url,(data) => {
         if (data.message === 'Vote updated') {
             container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
             container.dataset.voteId = data.vote_id;
