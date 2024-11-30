@@ -1,5 +1,4 @@
 import { redirectToLogin,sendAjaxRequest } from './utils.js';
-import { addVoteButtonBehaviour } from './vote.js';
 
 document.addEventListener('DOMContentLoaded', function () {
    addButtonsBehaviour();
@@ -55,34 +54,38 @@ function editCommentHandler(data) {
 
 }
 
-document.getElementById('commentForm').addEventListener('submit', function (e) {
-   e.preventDefault()
+const commetForm = document.getElementById('commentForm')
+if (commetForm) {
 
-   const commentInput = document.getElementById('commentInput')
-   const commentValue = commentInput.value
-   const post_id = commentInput.dataset.post_id
+   commetForm.addEventListener('submit', function (e) {
+      e.preventDefault()
 
-   const threadType = commentInput.dataset.thread
+      const commentInput = document.getElementById('commentInput')
+      const commentValue = commentInput.value
+      const post_id = commentInput.dataset.post_id
 
-   const url = '/comments'
-   const method = 'POST'
-   const headers= {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': csrfToken,
-   }
-   const body = JSON.stringify({
-      content: commentValue,
-      news_post_id: post_id,
-      thread: threadType
+      const threadType = commentInput.dataset.thread
+
+      const url = '/comments'
+      const method = 'POST'
+      const headers= {
+         'Content-Type': 'application/json',
+         'X-CSRF-TOKEN': csrfToken,
+      }
+      const body = JSON.stringify({
+         content: commentValue,
+         news_post_id: post_id,
+         thread: threadType
+      })
+
+      const isAuth = this.dataset.auth
+
+      if (!isAuth)
+         redirectToLogin()
+
+      sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
    })
-
-   const isAuth = this.dataset.auth
-
-   if (!isAuth)
-      redirectToLogin()
-
-   sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
-})
+}
 
 function addNestedComment(parent_id) {
    const commentInput = document.getElementById('commentInput')
@@ -106,6 +109,28 @@ function addNestedComment(parent_id) {
    sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
 }
 
+function addVoteButtonBehaviour() {
+    const voteContainers = document.querySelectorAll('.vote-container');
+
+    voteContainers.forEach(container => {
+        const authenticated = container.dataset.authenticated === 'true';
+        const upvoteButton = container.querySelector('.upvote-button');
+        const downvoteButton = container.querySelector('.downvote-button');
+
+        if (!authenticated) {
+            upvoteButton.addEventListener('click', redirectToLogin);
+            downvoteButton.addEventListener('click', redirectToLogin);
+        } else {
+            upvoteButton.addEventListener('click', function () {
+                handleVote(container, true);
+            });
+
+            downvoteButton.addEventListener('click', function () {
+                handleVote(container, false);
+            });
+        }
+    });
+}
 
 function addButtonsBehaviour() {
    document.querySelectorAll('.sub-comment').forEach(function (element) {
