@@ -1,6 +1,5 @@
 import { sendAjaxRequest } from './utils'
 
-// const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const searchBarDiv = document.getElementById('search-bar')
 const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results')
@@ -53,7 +52,6 @@ searchBarDiv.onkeyup = async () => {
     }
 
     const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`
-    // loading = true
     sendAjaxRequest(loading,searchQuery,(data) => {
         resultsDiv.innerHTML = ''
         showElements(data["news_posts"], buildPost)
