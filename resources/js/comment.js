@@ -81,7 +81,7 @@ if (commetForm) {
          redirectToLogin()
 
       commentInput.value = '' // reset input after submit comment
-      sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
+      sendAjaxRequest(url,addCommentHandler,method,headers,body)
    })
 }
 
@@ -104,7 +104,7 @@ function addNestedComment(parent_id) {
       thread: threadType
    })
 
-   sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
+   sendAjaxRequest(url,addCommentHandler,method,headers,body)
 }
 
 function addVoteButtonBehaviour() {
@@ -203,7 +203,7 @@ function addButtonsBehaviour() {
                content: newComment,
                comment_id: comment_id
             })
-            sendAjaxRequest(false,url,editCommentHandler,method,headers,body)
+            sendAjaxRequest(url,editCommentHandler,method,headers,body)
          })
       })
    })
@@ -215,7 +215,7 @@ function addButtonsBehaviour() {
 
          const url = '/comments/' + comment_id
          const method = 'DELETE'
-         sendAjaxRequest(false,url,(_data) => {
+         sendAjaxRequest(url,(_data) => {
             // sendAjaxRequest catches errors
             const comment = document.getElementById('comment-' + comment_id)
             comment.remove()

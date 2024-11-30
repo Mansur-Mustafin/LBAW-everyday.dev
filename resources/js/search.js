@@ -52,7 +52,7 @@ searchBarDiv.onkeyup = async () => {
     }
 
     const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`
-    sendAjaxRequest(loading,searchQuery,(data) => {
+    sendAjaxRequest(searchQuery,(data) => {
         resultsDiv.innerHTML = ''
         showElements(data["news_posts"], buildPost)
         if (isAuth) {
