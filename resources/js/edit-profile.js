@@ -21,6 +21,7 @@ buttonAddImage.addEventListener("click", function (evt) {
 });
 
 fileInput.addEventListener("change", function (evt) {
+  thumbnailButton.classList.remove('hidden')
   changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
 });
 

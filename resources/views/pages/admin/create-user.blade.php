@@ -12,11 +12,15 @@
 
         <h3 class="font-bold text-lg flex-1">Profile Picture</h3>
 
-        <div class="flex">
-            <button type="button" class="rounded flex justify-center m-5" id="personalizedFileInput"
+        <div class="flex" id="edit-image">
+            <button type="button" class="hidden rounded flex justify-center m-5" id="personalizedFileInput"
                 title="Click to upload Image">
-                <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="" alt="">
+                <img class="rounded-full w-48 h-48 object-cover border-2 border-white"
+                    src="" alt="Current Profile Image">
             </button>
+            <button class="bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
+                title="Click to upload new Image">
+                Click to Upload Image
             <button type="button" id="deleteThumbnail" class="self-start hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -31,6 +35,7 @@
             @enderror
         </div>
         <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <h3 class="font-bold text-lg flex-1">User Information</h3>
 
