@@ -7,7 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css', 
                 'resources/js/auth.js',
-                'resources/js/edit-profile.js',
+                'resources/js/edit-image.js',
                 'resources/js/infinite-page.js',
                 'resources/js/search.js',
                 'resources/js/utils.js',
@@ -16,7 +16,6 @@ export default defineConfig({
                 'resources/js/follow.js',
                 'resources/js/post.js',
                 'resources/js/comment.js',
-                'resources/js/edit-post.js',
             ],
             refresh: true,
         }),

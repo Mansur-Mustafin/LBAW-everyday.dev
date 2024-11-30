@@ -1,4 +1,3 @@
-// UPLOAD IMAGES
 const editForm = document.getElementById("admin-edit-profile")
 if (editForm) {
   const adminToggle = document.getElementById("toggleTwoAdmin")

@@ -51,10 +51,10 @@ function editCommentHandler(data) {
 
 }
 
-const commetForm = document.getElementById('commentForm')
-if (commetForm) {
+const commentForm = document.getElementById('commentForm')
+if (commentForm) {
 
-   commetForm.addEventListener('submit', function (e) {
+   commentForm.addEventListener('submit', function (e) {
       e.preventDefault()
 
       const commentInput = document.getElementById('commentInput')
