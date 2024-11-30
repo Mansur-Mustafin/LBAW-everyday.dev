@@ -83,6 +83,7 @@ if (commetForm) {
       if (!isAuth)
          redirectToLogin()
 
+      commentInput.value = '' // reset input after submit comment
       sendAjaxRequest(false,url,addCommentHandler,method,headers,body)
    })
 }
