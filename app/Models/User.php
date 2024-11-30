@@ -24,6 +24,8 @@ class User extends Authenticatable
 
     public const UPDATED_AT = null;
 
+    protected $with = ['profileImage'];
+
     protected $fillable = [
         'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
     ];

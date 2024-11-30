@@ -21,11 +21,15 @@ toggleIcons.forEach((toggleIcon) => {
     });
 });
 
-document.getElementById('submitButton').addEventListener('click', function (event) {
+const submitButton = document.getElementById('submitButton');
+
+if(submitButton){
+submitButton.addEventListener('click', function (event) {
     if (!checkbox.checked) {
         event.preventDefault(); 
         errorMessage.classList.remove('hidden'); 
     } else {
         errorMessage.classList.add('hidden');
     }
-});
+}
+)};
