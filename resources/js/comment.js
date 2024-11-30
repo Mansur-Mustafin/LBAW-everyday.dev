@@ -110,28 +110,6 @@ function addNestedComment(parent_id) {
    sendAjaxRequest(url,addCommentHandler,method,headers,body)
 }
 
-/* function addVoteButtonBehaviour() {
-    const voteContainers = document.querySelectorAll('.vote-container');
-
-    voteContainers.forEach(container => {
-        const authenticated = container.dataset.authenticated === 'true';
-        const upvoteButton = container.querySelector('.upvote-button');
-        const downvoteButton = container.querySelector('.downvote-button');
-
-        if (!authenticated) {
-            upvoteButton.addEventListener('click', redirectToLogin);
-            downvoteButton.addEventListener('click', redirectToLogin);
-        } else {
-            upvoteButton.addEventListener('click', function () {
-                handleVote(container, true);
-            });
-
-            downvoteButton.addEventListener('click', function () {
-                handleVote(container, false);
-            });
-        }
-    });
-} */
 
 function addButtonsBehaviour() {
    document.querySelectorAll('.sub-comment').forEach(function (element) {
