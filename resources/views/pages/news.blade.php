@@ -13,7 +13,7 @@
             @endforeach
         </div>
 
-        <div id="loading-icon">
+        <div id="loading-icon" class="hidden">
             <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4">
                 <div>@include('partials.load-tile-post')</div>
                 <div>@include('partials.load-tile-post')</div>

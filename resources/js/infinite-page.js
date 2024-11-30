@@ -1,28 +1,11 @@
 import { sendAjaxRequest } from "./utils";
+import { addVoteButtonBehaviour } from "./vote";
 
 
-function addVoteButtonBehaviour() {
-    const voteContainers = document.querySelectorAll('.vote-container');
-
-    voteContainers.forEach(container => {
-        const authenticated = container.dataset.authenticated === 'true';
-        const upvoteButton = container.querySelector('.upvote-button');
-        const downvoteButton = container.querySelector('.downvote-button');
-
-        if (!authenticated) {
-            upvoteButton.addEventListener('click', redirectToLogin);
-            downvoteButton.addEventListener('click', redirectToLogin);
-        } else {
-            upvoteButton.addEventListener('click', function () {
-                handleVote(container, true);
-            });
-
-            downvoteButton.addEventListener('click', function () {
-                handleVote(container, false);
-            });
-        }
-    });
-}
+// Adds Vote Behaviour to Post pages
+document.addEventListener('DOMContentLoaded', function () {
+    addVoteButtonBehaviour();
+});
 
 const buildByRequest = async (url,buildUser,resultsDiv) => {
     if (loading) return

@@ -2,11 +2,12 @@ import { redirectToLogin, sendAjaxRequest } from "./utils";
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-document.addEventListener('DOMContentLoaded', function () {
+// Removed due to calling all vote methods twice
+/* document.addEventListener('DOMContentLoaded', function () {
     addVoteButtonBehaviour();
-});
+}); */
 
-function addVoteButtonBehaviour() {
+export function addVoteButtonBehaviour() {
     const voteContainers = document.querySelectorAll('.vote-container');
 
     voteContainers.forEach(container => {
