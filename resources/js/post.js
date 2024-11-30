@@ -1,8 +1,14 @@
+import { changeImage, deleteImage } from "./utils"
+
 const thumbnailButton = document.getElementById('personalizedFileInput')
 const fileInput = document.getElementById('realFileInput')
 const deleteThumbnailButton = document.getElementById('deleteThumbnail')
+const buttonAddImage = document.getElementById("buttonAddImage");
+const removeImage =  document.getElementById("fileRemoved");
+
 const tagSelector = document.getElementById('tagSelector')
 const selectedTags = document.getElementById('selectedTags')
+
 const createForm = document.getElementById('createForm')
 const title = document.getElementById('title')
 
@@ -25,22 +31,12 @@ title.addEventListener('change', function (evt) {
 })
 
 fileInput.addEventListener('change', function (evt) {
-  const [file] = fileInput.files
-  if (file) {
-    thumbnailButton.style.backgroundImage = `url(${URL.createObjectURL(file)})`
-    thumbnailButton.style.backgroundSize = 'cover'
-    thumbnailButton.style.borderWidth = '0px'
-    thumbnailButton.innerHTML = ''
-    deleteThumbnailButton.style.display = 'block'
-  }
+  changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
 })
 
 deleteThumbnailButton.addEventListener('click', function (evt) {
   evt.preventDefault()
-  thumbnailButton.style.backgroundImage = ''
-  thumbnailButton.innerHTML = 'Thumbnail'
-  deleteThumbnailButton.style.display = 'none'
-  fileInput.value = ''
+  deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
 })
 
 tagSelector.addEventListener('change', function () {

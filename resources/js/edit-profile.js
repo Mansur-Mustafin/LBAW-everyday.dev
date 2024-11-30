@@ -1,3 +1,5 @@
+import { changeImage, deleteImage } from "./utils";
+
 const editImage = document.getElementById("edit-image")
 
 if (editImage) {
@@ -19,25 +21,12 @@ buttonAddImage.addEventListener("click", function (evt) {
 });
 
 fileInput.addEventListener("change", function (evt) {
-  const file = fileInput.files[0];
-  if (file) {
-    const imgTag = thumbnailButton.querySelector("img");
-    imgTag.src = URL.createObjectURL(file);
-    deleteThumbnailButton.style.display = "block";
-    imgTag.classList.remove('hidden');
-    buttonAddImage.classList.add('hidden');
-    removeImage.value = 'false';
-  }
+  changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
 });
 
 deleteThumbnailButton.addEventListener("click", function (evt) {
   evt.preventDefault();
-  const imgTag = thumbnailButton.querySelector("img");
-  imgTag.src = '';
-  imgTag.classList.add('hidden');
-  buttonAddImage.classList.remove('hidden');
-  removeImage.value = 'true';
-  deleteThumbnailButton.style.display = "none";
+  deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
 });
 
 }
