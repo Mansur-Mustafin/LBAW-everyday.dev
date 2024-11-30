@@ -1,4 +1,5 @@
 // Posts
+import { addVoteButtonBehaviour } from './vote.js';
 
 const postContainer = document.getElementById('news-posts-container')
 
@@ -11,27 +12,25 @@ if (postContainer) {
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let page = 1;
-    let endPage = 1;
 
     document.addEventListener('scroll', function () {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         let windowHeight = window.innerHeight;
         let documentHeight = document.documentElement.scrollHeight;
 
+        // console.log(scrollTop + windowHeight, documentHeight - 100);
+
         if (scrollTop + windowHeight >= documentHeight - 100) {
-            // TODO: Refactor this in the future
-            endPage++;
-            if (endPage > 4) {
-                endPage = 0;
+            // console.log(page, endPage)
                 if (page <= lastPage && loading == false) {
                     page++;
                     loadMoreData(page);
+                    // console.log('LOAD MORE DATA', scrollTop + windowHeight, documentHeight - 100)
                 }
                 if (page > lastPage) {
-                    if (loadingIcon) loadingIcon.style.display = 'none';
+                    if (loadingIcon) loadingIcon.classList.add('hidden');
                     if (footer) footer.style.display = 'block'
                 }
-            }
         }
     })
 
@@ -39,7 +38,7 @@ if (postContainer) {
         if (loading) return;
         loading = true;
 
-        if (loadingIcon) loadingIcon.style.display = 'block';
+        if (loadingIcon) loadingIcon.classList.remove('hidden');;
 
         fetch(newsPageURL + `?page=${page}`, {
             method: 'GET',
@@ -48,17 +47,18 @@ if (postContainer) {
                 'X-Requested-With': 'XMLHttpRequest',
             },
         })
-            .then(response => {
-                loading = false;
-                if (loadingIcon) loadingIcon.style.display = 'none';
-                return response.json();
-            })
-            .then(data => {
-                if (data.news_posts == "") {
-                    return;
-                }
-                postContainer.innerHTML += data.news_posts
-            })
+        .then(response => {
+            loading = false;
+            if (loadingIcon) loadingIcon.classList.add('hidden');
+            return response.json();
+        })
+        .then(data => {
+            if (data.news_posts == "") {
+                return;
+            }
+            postContainer.innerHTML += data.news_posts
+            addVoteButtonBehaviour();
+        })
     }
 }
 
@@ -69,7 +69,6 @@ if (resultsDiv) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const baseUrl = searchBar.dataset.url
     let loading = false
-    let endPage = 1
     let page = 1
     let lastPage = 0
     const loadingIcon = document.getElementById('loading-icon');
@@ -146,7 +145,6 @@ if (resultsDiv) {
     window.onload = async () => {
         const searchQuery = `${baseUrl}/api/search/users/`
         resultsDiv.innerHTML = '';
-        endPage = 1
         page = 1
         buildByRequest(searchQuery)
     }
@@ -154,14 +152,12 @@ if (resultsDiv) {
     searchBar.onkeyup = async () => {
         const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}`
         resultsDiv.innerHTML = '';
-        endPage = 1
         page = 1
         buildByRequest(searchQuery)
     }
 
     const loadMoreData = async (page) => {
         const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}?page=${page}`
-        endPage = 1
         buildByRequest(searchQuery)
     }
 
@@ -172,32 +168,24 @@ if (resultsDiv) {
         loading = false
 
         if (scrollTop + windowHeight >= documentHeight - 100) {
-            // TODO: Refactor this in the future
-            endPage++;
-            if (endPage > 4) {
-                endPage = 0;
-                if (page <= lastPage && loading == false) {
-                    page++;
-                    loadMoreData(page);
-                }
-                if (page > lastPage) {
-                    if (loadingIcon) loadingIcon.style.display = 'none';
-                }
+            if (page <= lastPage && loading == false) {
+                page++;
+                loadMoreData(page);
             }
+            if (page > lastPage) {
+                if (loadingIcon) loadingIcon.style.display = 'none';
+            }            
         }
     })
 }
-
 
 const usersList = document.getElementById("users-list")
 if (usersList) {
     const loadingIcon = document.getElementById('loading-icon');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     const urlObj = new URL(usersList.dataset.url);
     const apiUrl = '/api' + urlObj.pathname;
     let loading = false
-    let endPage = 1
     let page = 1
     let lastPage = 0
 
@@ -234,7 +222,7 @@ if (usersList) {
     const buildByRequest = async (url) => {
         if (loading) return
         loading = true
-        loadingIcon.style.display = 'block'
+        if (loadingIcon) loadingIcon.classList.remove('hidden')
         fetch(url, {
             method: 'GET',
             headers: {
@@ -242,36 +230,33 @@ if (usersList) {
                 'X-Requested-With': 'XMLHttpRequest',
             }
         })
-            .then(response => {
-                loading = false
-                loadingIcon.style.display = 'none'
-                if (response.ok) {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                console.log(data.users.data)
-                lastPage = data.last_page
-                data.users.data.forEach(user => {
-                    usersList.innerHTML += buildUser(user)
-                });
-            })
-            .catch(error => {
-                console.log("Error", error)
-            })
+        .then(response => {
+            loading = false
+            if (loadingIcon && !loading) loadingIcon.classList.add('hidden')
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(data => {
+            // console.log(data.users.data)
+            lastPage = data.last_page
+            data.users.data.forEach(user => {
+                usersList.innerHTML += buildUser(user)
+            });
+        })
+        .catch(error => {
+            console.log("Error", error)
+        })
     }
 
     window.onload = async () => {
         usersList.innerHTML = '';
-        endPage = 1
         page = 1
-        console.log(apiUrl);
         buildByRequest(apiUrl);
     }
 
     const loadMoreData = async (page) => {
         const searchQuery = `${apiUrl}?page=${page}`
-        endPage = 1
         buildByRequest(searchQuery)
     }
 
@@ -279,22 +264,15 @@ if (usersList) {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         let windowHeight = window.innerHeight;
         let documentHeight = document.documentElement.scrollHeight;
-        loading = false
 
         if (scrollTop + windowHeight >= documentHeight - 100) {
-            // TODO: Refactor this in the future
-            endPage++;
-            if (endPage > 4) {
-                endPage = 0;
-                if (page <= lastPage && loading == false) {
-                    page++;
-                    loadMoreData(page);
-                }
-                if (page > lastPage) {
-                    if (loadingIcon) loadingIcon.style.display = 'none';
-                }
+            if (page <= lastPage && loading == false) {
+                page++;
+                loadMoreData(page);
+            }
+            if (page > lastPage) {
+                if (loadingIcon && !loading) loadingIcon.classList.add('hidden');
             }
         }
     })
-
 }

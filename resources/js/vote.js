@@ -45,7 +45,7 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container) {
-    console.log(type, id, isUpvote)
+    // console.log(type, id, isUpvote)
     fetch('/vote', {
         method: 'POST',
         headers: {
@@ -66,7 +66,7 @@ function submitVote(type, id, isUpvote, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Saved') {
                 container.dataset.voteId = data.vote_id;
                 container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
@@ -79,7 +79,7 @@ function submitVote(type, id, isUpvote, container) {
 }
 
 function removeVote(voteId, container) {
-    console.log(voteId)
+    // console.log(voteId)
     fetch(`/vote/${voteId}`, {
         method: 'DELETE',
         headers: {
@@ -94,7 +94,7 @@ function removeVote(voteId, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Vote removed') {
                 updateVoteUI(container, null, 'Vote removed');
                 container.dataset.voteId = '';
@@ -107,7 +107,7 @@ function removeVote(voteId, container) {
 }
 
 function updateVote(voteId, isUpvote, container) {
-    console.log(voteId, isUpvote)
+    // console.log(voteId, isUpvote)
     fetch(`/vote/${voteId}`, {
         method: 'PUT',
         headers: {
@@ -126,7 +126,7 @@ function updateVote(voteId, isUpvote, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Vote updated') {
                 container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
                 container.dataset.voteId = data.vote_id;

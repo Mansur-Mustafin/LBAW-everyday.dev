@@ -46,8 +46,12 @@
                         @include('partials.tile-post', ['news' => $news])
                     @endforeach
                 </div>
-                <div id="loading-icon" style="display: none;" class="my-6">
-                    <img class="w-12 h-12 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
+                <div id="loading-icon">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>@include('partials.load-tile-post')</div>
+                        <div>@include('partials.load-tile-post')</div>
+                    </div>
+                    <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
                 </div>
             </div>
         @endif
