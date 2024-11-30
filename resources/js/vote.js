@@ -1,10 +1,12 @@
+import { redirectToLogin } from "./utils";
+
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 document.addEventListener('DOMContentLoaded', function () {
     addVoteButtonBehaviour();
 });
 
-export function addVoteButtonBehaviour() {
+function addVoteButtonBehaviour() {
     const voteContainers = document.querySelectorAll('.vote-container');
 
     voteContainers.forEach(container => {
@@ -181,12 +183,4 @@ function updateVoteUI(container, isUpvote, message) {
             voteCountElement.textContent = currentCount + 1;
         }
     }
-}
-
-export function redirectToLogin() {
-    const currentUrl = window.location.href;
-
-    const loginUrl = `/login?redirect=${encodeURIComponent(currentUrl)}`;
-
-    window.location.href = loginUrl;
 }
