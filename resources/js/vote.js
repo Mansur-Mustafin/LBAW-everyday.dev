@@ -1,4 +1,4 @@
-import { redirectToLogin } from "./utils";
+import { redirectToLogin, sendAjaxRequest } from "./utils";
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -47,133 +47,95 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container) {
-    console.log(type, id, isUpvote)
-    fetch('/vote', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-        },
-        body: JSON.stringify({
-            type: type,
-            id: id,
-            is_upvote: isUpvote,
-        }),
+    const url = '/vote'
+    const method = 'POST'
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+    }
+    const body = JSON.stringify({
+        type: type,
+        id: id,
+        is_upvote: isUpvote,
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else if (response.status === 401) {
-                redirectToLogin();
-            }
-        })
-        .then(data => {
-            console.log(data)
-            if (data.message === 'Saved') {
-                container.dataset.voteId = data.vote_id;
-                container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-                updateVoteUI(container, isUpvote, 'Saved');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+    sendAjaxRequest(false,url, (data) => {
+        if (data.message === 'Saved') {
+            container.dataset.voteId = data.vote_id;
+            container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+            updateVoteUI(container, isUpvote, 'Saved');
+        }
+    },method,headers,body)
 }
 
 function removeVote(voteId, container) {
-    console.log(voteId)
-    fetch(`/vote/${voteId}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else if (response.status === 401) {
-                redirectToLogin();
-            }
-        })
-        .then(data => {
-            console.log(data)
-            if (data.message === 'Vote removed') {
-                updateVoteUI(container, null, 'Vote removed');
-                container.dataset.voteId = '';
-                container.dataset.vote = '';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    const url = `/vote/${voteId}`
+    const method = 'DELETE'
+
+    sendAjaxRequest(false,url, (data) => {
+        if (data.message === 'Vote removed') {
+            updateVoteUI(container, null, 'Vote removed');
+            container.dataset.voteId = '';
+            container.dataset.vote = '';
+        }
+    },method)
 }
 
 function updateVote(voteId, isUpvote, container) {
-    console.log(voteId, isUpvote)
-    fetch(`/vote/${voteId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-        },
-        body: JSON.stringify({
-            is_upvote: isUpvote,
-        }),
+    const url = `/vote/${voteId}`
+    const method = 'PUT'
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+    }
+    const body = JSON.stringify({
+        is_upvote: isUpvote,
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else if (response.status === 401) {
-                redirectToLogin();
-            }
-        })
-        .then(data => {
-            console.log(data)
-            if (data.message === 'Vote updated') {
-                container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-                container.dataset.voteId = data.vote_id;
-                updateVoteUI(container, isUpvote, 'Vote updated');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+    sendAjaxRequest(false,url,(data) => {
+        if (data.message === 'Vote updated') {
+            container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+            container.dataset.voteId = data.vote_id;
+            updateVoteUI(container, isUpvote, 'Vote updated');
+        }
+    },method,headers,body)
 }
 
 function updateVoteUI(container, isUpvote, message) {
     const postId = container.dataset.id;
     const type = container.dataset.type;
-    const upvoteOutline = container.querySelector(`#${type}-upvote-outline-${postId}`);
-    const upvoteFill = container.querySelector(`#${type}-upvote-fill-${postId}`);
-    const downvoteOutline = container.querySelector(`#${type}-downvote-outline-${postId}`);
-    const downvoteFill = container.querySelector(`#${type}-downvote-fill-${postId}`);
+
+    const upvoteOutline = document.getElementById(`${type}-upvote-outline-${postId}`);
+    const upvoteFill = document.getElementById(`${type}-upvote-fill-${postId}`);
+    const downvoteOutline = document.getElementById(`${type}-downvote-outline-${postId}`);
+    const downvoteFill = document.getElementById(`${type}-downvote-fill-${postId}`);
     const voteCountElement = container.querySelector('.vote-count');
     let currentCount = parseInt(voteCountElement.textContent);
 
     // Reset icons
-    upvoteOutline.classList.remove('hidden');
-    upvoteFill.classList.add('hidden');
-    downvoteOutline.classList.remove('hidden');
-    downvoteFill.classList.add('hidden');
+    upvoteOutline.style.display = "block";
+    upvoteFill.style.display = "none";
+    downvoteOutline.style.display = "block";
+    downvoteFill.style.display = "none";
 
     if (message === 'Saved') {
         if (isUpvote) {
-            upvoteOutline.classList.add('hidden');
-            upvoteFill.classList.remove('hidden');
+            upvoteOutline.style.display = "none";
+            upvoteFill.style.display = "block";
             voteCountElement.textContent = currentCount + 1;
         } else {
-            downvoteOutline.classList.add('hidden');
-            downvoteFill.classList.remove('hidden');
+            downvoteOutline.style.display = "none";
+            downvoteFill.style.display = "block";
             voteCountElement.textContent = currentCount - 1;
         }
     } else if (message === 'Vote updated') {
         if (isUpvote) {
-            upvoteOutline.classList.add('hidden');
-            upvoteFill.classList.remove('hidden');
+            upvoteOutline.style.display = "none";
+            upvoteFill.style.display = "block";
             voteCountElement.textContent = currentCount + 2;
         } else {
-            downvoteOutline.classList.add('hidden');
-            downvoteFill.classList.remove('hidden');
+            downvoteOutline.style.display = "none";
+            downvoteFill.style.display = "block";
             voteCountElement.textContent = currentCount - 2;
         }
     } else if (message === 'Vote removed') {
