@@ -24,13 +24,11 @@ class FileController extends Controller
         $file = $request->file('image');
         $extension = $file->getClientOriginalExtension();
 
-        // Hashing
         $fileName = $file->hashName();
-        // Save in correct folder and disk
-        $file = $file->storeAs($type, $fileName, self::$diskName);
+        $filePath = $file->storeAs($type, $fileName, self::$diskName);
 
         Image::create([
-            'path' => $file,
+            'path' => $filePath,
             'image_type' => $imageType,
             $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
         ]);

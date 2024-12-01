@@ -11,14 +11,14 @@ class SearchController extends Controller
 {
     use PaginationTrait;
 
-    public function get_posts($search_query)
+    public function getPosts($search_query)
     {
         return NewsPost::join('user', 'user.id', '=', "news_post.id")
             ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\',?) OR title=?)', [$search_query, $search_query])
             ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC', [$search_query]);
     }
 
-    public function get_posts_by_tag(Tag $tag)
+    public function getPostsByTag(Tag $tag)
     {
         return NewsPost::join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
@@ -27,7 +27,7 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $search_query = $request->search;
-        $news_posts = $this->get_posts($search_query)->take(3)->get();
+        $news_posts = $this->getPosts($search_query)->take(3)->get();
 
         $query = $search_query == '' ? '' : "%{$search_query}%";
 
@@ -44,33 +44,32 @@ class SearchController extends Controller
         ], 200);
     }
 
-    public function search_post(Request $request)
+    public function searchPost(Request $request)
     {
         $search_query = $request->search;
-        $news_posts = SearchController::get_posts($search_query);
+        $news_posts = SearchController::getPosts($search_query);
         $title = "Related Posts";
         $baseUrl = "/search/posts/{$search_query}";
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl);
     }
 
-    public function search_tag(Request $request)
+    public function searchTag(Request $request)
     {
         $tag_query = $request->search;
         $tag = Tag::where('name', $tag_query)->first();
-        $news_posts = $this->get_posts_by_tag($tag);
+        $news_posts = $this->getPostsByTag($tag);
         $title = "{$tag_query} Posts";
         $baseUrl = "/search/tags/{$tag_query}";
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl);
     }
-    
-    public function search_user(Request $request)
+
+    public function searchUser(Request $request)
     {
-        $search_query = "%".strtolower($request->search)."%";
+        $search_query = "%" . strtolower($request->search) . "%";
 
-        $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query,$search_query]);
-        return $this->paginate_users($users,$request);
+        $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query, $search_query]);
+        return $this->paginate_users($users, $request);
     }
-
 }

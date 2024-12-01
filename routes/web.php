@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 // Redirect root to /home
 Route::redirect('/', '/home');
+Route::redirect('/home', '/news/recent-feed');
 
 // Login
 Route::controller(LoginController::class)->group(function () {
@@ -39,10 +40,9 @@ Route::controller(RegisterController::class)->group(function () {
 
 // News
 Route::controller(NewsController::class)->group(function () {
-    Route::get('/home', 'recent_feed')->name('home');
-    Route::get('/news/my-feed', 'my_feed')->middleware('auth');
-    Route::get('/news/top-feed', 'top_feed');
-    Route::get('/news/recent-feed', 'recent_feed');
+    Route::get('/news/my-feed', 'myFeed')->middleware('auth')->name('news.my');
+    Route::get('/news/top-feed', 'topFeed')->name('news.top');
+    Route::get('/news/recent-feed', 'recentFeed')->name('news.recent');
 
     Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
     Route::get('/news/{news_post}', 'show')->name('news.show');
@@ -87,11 +87,11 @@ Route::controller(UserController::class)->group(function () {
 
 // Search
 Route::controller(SearchController::class)->group(function () {
-    Route::get('/search/tags/{search}', 'search_tag');
-    Route::get('/search/posts/{search}', 'search_post');
+    Route::get('/search/tags/{search}', 'searchTag');
+    Route::get('/search/posts/{search}', 'searchPost');
 
-    Route::get('api/search/users', 'search_user')->middleware('admin');
-    Route::get('api/search/users/{search}', 'search_user')->middleware('admin');
+    Route::get('api/search/users', 'searchUser')->middleware('admin');
+    Route::get('api/search/users/{search}', 'searchUser')->middleware('admin');
 
     Route::get('api/search/{search}', 'search');
 });
