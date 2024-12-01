@@ -26,7 +26,7 @@
                 @endif
             @endif
 
-            <img src="{{ $post->title_image_path }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
+            <img src="{{ $post->titleImage->url }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
 
             <div class="mt-10">
                 {{ $post->content }}
@@ -47,7 +47,7 @@
                     <button class="rounded flex justify-center m-5" id="personalizedFileInput"
                         title="Click to upload new Image">
                         <img class="rounded-full w-48 h-48 object-cover border-2 border-white"
-                            src="{{$post->title_image_path}}" alt="Current Title Image">
+                            src="{{$post->titleImage->url}}" alt="Current Title Image">
                     </button>
                     <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
                         title="Click to upload new Image">
@@ -209,7 +209,7 @@
         @if (Auth::check())
             <p class="mt-4 font-bold">Post's Author</p>
             <div class="flex items-center border border-gray-700 rounded-xl px-5 py-4 mt-4">
-                <img src="{{ $post->author->profile_image_path }}" alt="Profile Picture"
+                <img src="{{ $post->author->profileImage->url }}" alt="Profile Picture"
                     class="w-12 h-12 rounded-full object-cover">
 
                 <a href="{{route('user.posts', ['user' => $post->author->id])}}">

@@ -42,7 +42,7 @@
             </a>
             <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
                 href="{{ url('/users/' . Auth::id()) . '/posts' }}">
-                <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profile_image_path}}" alt="">
+                <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profileImage->url}}" alt="">
             </a>
 
         @else

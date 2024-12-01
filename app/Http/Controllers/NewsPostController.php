@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
-class NewsController extends Controller
+class NewsPostController extends Controller
 {
     use PaginationTrait;
 
@@ -122,7 +122,6 @@ class NewsController extends Controller
             'content' => 'required|string',
             'for_followers' => 'nullable|string',
             'tags' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
             'remove_image' => 'required|string',
         ]);
 
@@ -133,10 +132,7 @@ class NewsController extends Controller
         ]);
 
         if ($request->hasFile('image') || $validated['remove_image'] == "true") {
-            Image::query()
-                ->where('news_post_id', '=', $newsPost->id)
-                ->where('image_type', '=', Image::TYPE_POST_TITLE)
-                ->delete();
+            FileController::delete($newsPost, Image::TYPE_POST_TITLE);
         }
         if ($request->hasFile('image')) {
             FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);

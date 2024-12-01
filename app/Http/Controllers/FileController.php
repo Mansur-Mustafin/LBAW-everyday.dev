@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\NewsPost;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -14,16 +15,18 @@ class FileController extends Controller
 
     static $systemTypes = [
         'profile' => ['png', 'jpg', 'jpeg', 'gif'],
-        'post' => ['mp3', 'mp4', 'gif', 'png', 'jpg', 'jpeg'],
+        'post' => ['png', 'jpg', 'jpeg', 'gif'],
     ];
 
     public static function upload(Request $request, User|NewsPost $model, string $imageType)
     {
-        // Parameters
         $type = $model instanceof User ? 'profile' : 'post';
-        $file = $request->file('image');
-        $extension = $file->getClientOriginalExtension();
 
+        $request->validate([
+            'image' => 'image|max:2048|mimes:' . implode(',', self::$systemTypes[$type]),
+        ]);
+
+        $file = $request->file('image');
         $fileName = $file->hashName();
         $filePath = $file->storeAs($type, $fileName, self::$diskName);
 
@@ -34,5 +37,30 @@ class FileController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public static function delete(User|NewsPost $model, string $imageType)
+    {
+        $image = null;
+        switch ($imageType) {
+            case Image::TYPE_PROFILE:
+                $image = $model->profileImage;
+                break;
+
+            case Image::TYPE_POST_TITLE:
+                $image = $model->titleImage;
+                break;
+
+            case Image::TYPE_POST_CONTENT:
+                // TODO
+                break;
+        }
+
+        if ($image->path) {
+            if (Storage::disk('public_uploads')->exists($image->path)) {
+                Storage::disk('public_uploads')->delete($image->path);
+            }
+            $image->delete();
+        }
     }
 }
