@@ -1,9 +1,9 @@
-const toggleTwoDiv = document.getElementsByClassName('toggleTwo')[0]
-const hiddenToggle = document.getElementById('hiddenToggle')
+const toggleTwoDiv = document.getElementsByClassName('toggleTwo')[0];
+const hiddenToggle = document.getElementById('hiddenToggle');
 
-if(toggleTwoDiv) {
-  const name = toggleTwoDiv.dataset.name ?? ''
-  const initialValue = toggleTwoDiv.dataset.initialvalue == 'true'
+if (toggleTwoDiv) {
+  const name = toggleTwoDiv.dataset.name ?? '';
+  const initialValue = toggleTwoDiv.dataset.initialvalue == 'true';
   const html = `
   <label for="toggleTwo"
       class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm">
@@ -16,13 +16,13 @@ if(toggleTwoDiv) {
       </div>
       ${name}
   </label>
-  `
-  toggleTwoDiv.innerHTML += html
-  const toggleTwo = document.getElementById('toggleTwo')
+  `;
+  toggleTwoDiv.innerHTML += html;
+  const toggleTwo = document.getElementById('toggleTwo');
 
-  toggleTwo.checked = initialValue
+  toggleTwo.checked = initialValue;
 
   toggleTwo.addEventListener('change', (_event) => {
-    hiddenToggle.value = toggleTwo.checked ? 'true' : 'false'
-  })
+    hiddenToggle.value = toggleTwo.checked ? 'true' : 'false';
+  });
 }

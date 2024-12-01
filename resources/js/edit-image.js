@@ -1,9 +1,15 @@
-const editImage = document.getElementById("edit-image")
+const editImage = document.getElementById('edit-image');
 
-function changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage) {
+function changeImage(
+  fileInput,
+  thumbnailButton,
+  deleteThumbnailButton,
+  buttonAddImage,
+  removeImage
+) {
   const file = fileInput.files[0];
   if (file) {
-    const imgTag = thumbnailButton.querySelector("img");
+    const imgTag = thumbnailButton.querySelector('img');
     imgTag.src = URL.createObjectURL(file);
     deleteThumbnailButton.classList.remove('hidden');
     imgTag.classList.remove('hidden');
@@ -12,8 +18,8 @@ function changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddIm
   }
 }
 
-function deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage) {
-  const imgTag = thumbnailButton.querySelector("img");
+function deleteImage(thumbnailButton, deleteThumbnailButton, buttonAddImage, removeImage) {
+  const imgTag = thumbnailButton.querySelector('img');
   imgTag.src = '';
   imgTag.classList.add('hidden');
   buttonAddImage.classList.remove('hidden');
@@ -22,29 +28,29 @@ function deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,remove
 }
 
 if (editImage) {
-  const thumbnailButton = document.getElementById("personalizedFileInput");
-  const buttonAddImage = document.getElementById("buttonAddImage");
+  const thumbnailButton = document.getElementById('personalizedFileInput');
+  const buttonAddImage = document.getElementById('buttonAddImage');
 
-  const fileInput = document.getElementById("realFileInput");
-  const deleteThumbnailButton = document.getElementById("deleteThumbnail");
-  const removeImage =  document.getElementById("fileRemoved");
+  const fileInput = document.getElementById('realFileInput');
+  const deleteThumbnailButton = document.getElementById('deleteThumbnail');
+  const removeImage = document.getElementById('fileRemoved');
 
-  thumbnailButton.addEventListener("click", function (evt) {
+  thumbnailButton.addEventListener('click', function (evt) {
     evt.preventDefault();
-    fileInput.click()
+    fileInput.click();
   });
-  buttonAddImage.addEventListener("click", function (evt) {
+  buttonAddImage.addEventListener('click', function (evt) {
     evt.preventDefault();
-    fileInput.click()
-  });
-
-  fileInput.addEventListener("change", function (evt) {
-    thumbnailButton.classList.remove('hidden')
-    changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
+    fileInput.click();
   });
 
-  deleteThumbnailButton.addEventListener("click", function (evt) {
+  fileInput.addEventListener('change', function (evt) {
+    thumbnailButton.classList.remove('hidden');
+    changeImage(fileInput, thumbnailButton, deleteThumbnailButton, buttonAddImage, removeImage);
+  });
+
+  deleteThumbnailButton.addEventListener('click', function (evt) {
     evt.preventDefault();
-    deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,removeImage)
+    deleteImage(thumbnailButton, deleteThumbnailButton, buttonAddImage, removeImage);
   });
 }
