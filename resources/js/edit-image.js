@@ -5,7 +5,7 @@ function changeImage(fileInput,thumbnailButton,deleteThumbnailButton,buttonAddIm
   if (file) {
     const imgTag = thumbnailButton.querySelector("img");
     imgTag.src = URL.createObjectURL(file);
-    deleteThumbnailButton.style.display = "block";
+    deleteThumbnailButton.classList.remove('hidden');
     imgTag.classList.remove('hidden');
     buttonAddImage.classList.add('hidden');
     removeImage.value = 'false';
@@ -18,7 +18,7 @@ function deleteImage(thumbnailButton,deleteThumbnailButton,buttonAddImage,remove
   imgTag.classList.add('hidden');
   buttonAddImage.classList.remove('hidden');
   removeImage.value = 'true';
-  deleteThumbnailButton.style.display = "none";
+  deleteThumbnailButton.classList.add('hidden');
 }
 
 if (editImage) {

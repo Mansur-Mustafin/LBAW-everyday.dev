@@ -66,7 +66,7 @@ if (postContainer) {
                 }
                 if (page > lastPage) {
                     if (loadingIcon) loadingIcon.classList.add('hidden');
-                    if (footer) footer.style.display = 'block'
+                    if (footer) footer.classList.remove('hidden');
                 }
         }
     })
@@ -149,7 +149,7 @@ if (resultsDivAdmin) {
                 loadMoreData(page);
             }
             if (page > lastPage) {
-                if (loadingIcon) loadingIcon.style.display = 'none';
+                if (loadingIcon) loadingIcon.classList.add('hidden');
             }            
         }
     })
@@ -213,7 +213,7 @@ if(resultsDivFollow) {
                 loadMoreData(page);
             }
             if (page > lastPage) {
-                if (loadingIcon) loadingIcon.style.display = 'none';
+                if (loadingIcon) loadingIcon.classList.add('hidden');
             }            
         }
     })

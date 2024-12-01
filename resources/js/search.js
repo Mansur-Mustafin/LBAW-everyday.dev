@@ -15,7 +15,7 @@ resultsDiv.addEventListener('mousedown', () => {
 searchBarDiv.addEventListener('blur', () => {
     setTimeout(() => {
         if (!clickedInsideResults) {
-            resultsDiv.style.display = 'none';
+            resultsDiv.classList.add('hidden');
             searchContainer.classList.remove('rounded-t-2xl');
             searchContainer.classList.add('rounded-2xl');
         }
@@ -26,7 +26,7 @@ searchBarDiv.addEventListener('blur', () => {
 
 searchBarDiv.addEventListener('focus', () => {
         if (searchBarDiv.dataset.auth) {
-            resultsDiv.style.display = 'block';
+            resultsDiv.classList.remove('hidden');
             searchContainer.classList.add('rounded-t-2xl');
             searchContainer.classList.remove('rounded-2xl');
         }
@@ -34,7 +34,7 @@ searchBarDiv.addEventListener('focus', () => {
 );
 
 searchBarDiv.onkeyup = async () => {
-    resultsDiv.style.display = 'block';
+    resultsDiv.classList.remove('hidden');
     if (searchBarDiv.value === '') {
         searchContainer.classList.remove('rounded-t-2xl');
         searchContainer.classList.add('rounded-2xl');
