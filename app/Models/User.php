@@ -25,20 +25,29 @@ class User extends Authenticatable
     protected $with = ['profileImage'];
 
     protected $fillable = [
-        'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
+        'username',
+        'public_name',
+        'password',
+        'email',
+        'rank',
+        'status',
+        'reputation',
+        'is_admin'
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $appends = ['profile_image_path'];
 
-    public function getProfileImagePathAttribute() {
+    public function getProfileImagePathAttribute()
+    {
         return $this->profileImage ? $this->profileImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_PROFILE]);
     }
 
-    public function profileImage() {
+    public function profileImage()
+    {
         return $this->hasOne(Image::class, 'user_id')
-                    ->where('image_type', Image::TYPE_PROFILE);
+            ->where('image_type', Image::TYPE_PROFILE);
     }
 
     public function comments()
@@ -66,7 +75,7 @@ class User extends Authenticatable
         return $this->tags()->pluck('name')->toArray();
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return $this->is_admin == true;
     }
