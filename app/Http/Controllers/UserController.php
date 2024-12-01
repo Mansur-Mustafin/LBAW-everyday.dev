@@ -45,8 +45,7 @@ class UserController extends Controller
 
     public function showAdmin(Request $request)
     {
-        $users = User::take(10)->get(); // TODO: para o que isso?
-        return view('pages.admin.admin', ['users' => $users]);
+        return view('pages.admin.admin');
     }
 
     public function showEditForm(User $user, Request $request)
