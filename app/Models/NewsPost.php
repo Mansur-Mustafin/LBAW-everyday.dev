@@ -40,7 +40,7 @@ class NewsPost extends Model
     ];
     protected $casts = [
         'created_at' => 'datetime',
-        'changed_at' => 'datetime', 
+        'changed_at' => 'datetime',
     ];
 
     public function author()
@@ -66,18 +66,12 @@ class NewsPost extends Model
     public function titleImage()
     {
         return $this->hasOne(Image::class, 'news_post_id')
-                    ->where('image_type', Image::TYPE_POST_TITLE);
+            ->where('image_type', Image::TYPE_POST_TITLE);
     }
 
     public function getTitleImagePathAttribute()
     {
         return $this->titleImage ? $this->titleImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_POST_TITLE]);
-    }
-
-    // time_ago shows time in readable format
-    public function getTimeAgoAttribute()
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
     }
 
     public function comments()

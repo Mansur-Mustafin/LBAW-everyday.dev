@@ -53,7 +53,7 @@
         </div>
 
         <p class="text-gray-400">By {{$news->author->public_name}}</p>
-        <p class="text-sm text-gray-500">Posted {{ $news->time_ago }}</p>
+        <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
     </div>
 
 </div>
