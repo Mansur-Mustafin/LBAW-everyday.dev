@@ -45,28 +45,4 @@ class RegisterController extends Controller
         return redirect()->route('home')
             ->withSuccess('You have successfully registered & logged in!');
     }
-
-    public function registerByAdmin(Request $request)
-    {
-        $credentials = $request->validate([
-            'public_name' => 'required|string|max:250',
-            'username' => 'required|string|max:40',
-            'email' => 'required|email|max:250|unique:user',
-            'password' => 'required|min:4',
-            'reputation' => 'required|integer',
-            'is_admin'=>'required|string',
-        ]);
-
-        User::create([
-            'username' => $credentials['username'],
-            'public_name' => $credentials['public_name'],
-            'email' => $credentials['email'],
-            'password' => Hash::make($credentials['password']),
-            'reputation' => $credentials['reputation'],
-            'is_admin' => $credentials['is_admin']
-        ]);
-
-        return redirect()->route('admin')
-            ->withSuccess('You have successfully created an account!');
-    }
 }

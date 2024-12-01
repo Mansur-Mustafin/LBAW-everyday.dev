@@ -190,9 +190,10 @@ if (usersList) {
     let lastPage = 0
 
     const buildUser = (user) => {
+        console.log(user)
         let html = `
             <div class="flex items-center border border-gray-700 rounded-xl px-5 py-4 mt-4">
-                <img src="${user.profile_image_path}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
+                <img src="${user.image.url}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
                 
                 <a href="/users/${user.id}/posts" class="w-40">
                     <div class="ml-4">
@@ -238,7 +239,7 @@ if (usersList) {
             }
         })
         .then(data => {
-            // console.log(data.users.data)
+            console.log(data)
             lastPage = data.last_page
             data.users.data.forEach(user => {
                 usersList.innerHTML += buildUser(user)

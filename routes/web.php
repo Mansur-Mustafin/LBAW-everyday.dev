@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentsController;
-use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
@@ -35,11 +36,10 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
-    Route::post('/admin/register', 'registerByAdmin')->middleware('admin');
 });
 
 // News
-Route::controller(NewsController::class)->group(function () {
+Route::controller(NewsPostController::class)->group(function () {
     Route::get('/news/my-feed', 'myFeed')->middleware('auth')->name('news.my');
     Route::get('/news/top-feed', 'topFeed')->name('news.top');
     Route::get('/news/recent-feed', 'recentFeed')->name('news.recent');
@@ -53,17 +53,17 @@ Route::controller(NewsController::class)->group(function () {
 });
 
 // Comments
-Route::controller(CommentsController::class)->group(function () {
-    Route::post('/comments', 'store')->middleware('auth');
-    Route::put('/comments/{comment}', 'update')->middleware('auth');
-    Route::delete('/comments/{comment}', 'destroy')->middleware('auth');
+Route::prefix('comments')->middleware('auth')->controller(CommentsController::class)->group(function () {
+    Route::post('/', 'store');
+    Route::put('/{comment}', 'update');
+    Route::delete('/{comment}', 'destroy');
 });
 
 // Votes
-Route::controller(VoteController::class)->group(function () {
-    Route::post('/vote', 'store')->middleware('auth')->name('vote.store');
-    Route::put('/vote/{vote}', 'update')->middleware('auth')->name('vote.update');
-    Route::delete('/vote/{vote}', 'destroy')->middleware('auth')->name('vote.destroy');
+Route::prefix('vote')->middleware('auth')->controller(VoteController::class)->group(function () {
+    Route::post('/', 'store')->name('vote.store');
+    Route::put('/{vote}', 'update')->name('vote.update');
+    Route::delete('/{vote}', 'destroy')->name('vote.destroy');
 });
 
 // User
@@ -72,9 +72,6 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->middleware('auth')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
     Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
-    Route::get('/admin', 'showAdmin')->middleware('admin')->name('admin');
-    Route::get('/admin/users/{user}/edit', 'showEditFormAdmin')->middleware('admin');
-    Route::get('/admin/users/create', 'showCreateFormAdmin')->middleware('admin');
 
     // Follow
     Route::post('/users/{user}/follow', 'follow')->middleware('auth')->name('users.follow');
@@ -83,6 +80,14 @@ Route::controller(UserController::class)->group(function () {
     Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
     Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
     Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
+});
+
+// Admin
+Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
+    Route::get('/', 'showAdmin')->name('admin');
+    Route::get('/users/{user}/edit', 'showEditFormAdmin');
+    Route::get('/users/create', 'showCreateFormAdmin');
+    Route::post('/register', 'registerByAdmin');
 });
 
 // Search

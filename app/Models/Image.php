@@ -29,7 +29,11 @@ class Image extends Model
         self::TYPE_POST_CONTENT => 'post/default-post-content-image.jpg',
     ];
 
+    protected $hidden = ['user_id', 'news_post_id', 'path'];
+
     protected $table = 'image';
+
+    protected $appends = ['url'];
 
     protected $fillable = [
         'path',
@@ -38,12 +42,22 @@ class Image extends Model
         'user_id',
     ];
 
-    public function getPath()
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function newsPost()
+    {
+        return $this->belongsTo(NewsPost::class, 'news_post_id');
+    }
+
+    public function getUrlAttribute()
     {
         if ($this->path && Storage::disk('public_uploads')->exists($this->path)) {
             return asset($this->path);
-        } else {
-            return asset(self::DEFAULT_IMAGES[$this->image_type]);
-        }
+        } 
+        
+        return asset(self::DEFAULT_IMAGES[$this->image_type]);
     }
 }

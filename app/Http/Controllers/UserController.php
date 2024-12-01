@@ -43,26 +43,11 @@ class UserController extends Controller
         return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
     }
 
-    public function showAdmin(Request $request)
-    {
-        return view('pages.admin.admin');
-    }
-
     public function showEditForm(User $user, Request $request)
     {
         $this->authorize('update', $user);
 
         return view('pages.edit-user', ['user' => $user]);
-    }
-
-    public function showEditFormAdmin(User $user, Request $request)
-    {
-        return view('pages.admin.edit-user', ['user' => $user]);
-    }
-
-    public function showCreateFormAdmin(Request $request)
-    {
-        return view('pages.admin.create-user');
     }
 
     public function update(User $user, Request $request)
@@ -87,7 +72,6 @@ class UserController extends Controller
             ],
             'reputation' => 'nullable',
             'is_admin' => 'nullable',
-            'image' => 'nullable|image|max:2048',
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
             'remove_image' => 'required|string',
@@ -105,10 +89,7 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('image') || $validated['remove_image'] == "true") {
-            Image::query()
-                ->where('user_id', '=', $user->id)
-                ->where('image_type', '=', Image::TYPE_PROFILE)
-                ->delete();
+            FileController::delete($user, Image::TYPE_PROFILE);
         }
         if ($request->hasFile('image')) {
             FileController::upload($request, $user, Image::TYPE_PROFILE);

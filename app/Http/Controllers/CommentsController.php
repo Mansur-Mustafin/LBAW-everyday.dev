@@ -24,7 +24,7 @@ class CommentsController extends Controller
     {
         $thread_parent = $this->findMostParentComment($comment->id);
 
-        NewsController::processComments([$thread_parent], Auth::user());
+        NewsPostController::processComments([$thread_parent], Auth::user());
 
         return response()->json([
             'thread' => view('partials.comment', [
