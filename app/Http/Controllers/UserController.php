@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
+use App\Models\NewsPost;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\NewsPost;
-use Illuminate\Http\Request;
-use App\Http\Controllers\PaginationTrait;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Image;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {

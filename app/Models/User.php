@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
