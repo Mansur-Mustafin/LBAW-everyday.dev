@@ -106,22 +106,7 @@
                 </div>
 
                 {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
-                <div class="hidden mt-4">
-                    <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
-                    <label for="toggleTwo" title="Make post vidible only for followers."
-                        class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm">
-                        <div class="relative">
-                            <input type="checkbox" id="toggleTwo" class="peer sr-only
-                                {{$post->for_followers ? 'checked' : ''}}" />
-                            <div class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"></div>
-                            <div
-                                class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900">
-                            </div>
-                        </div>
-                        Followers only
-                    </label>
-                </div>
-                {{-- <p>{{dd($post->for_followers);}}</p> --}}
+                <div class="toggleTwo" data-name="Followers only" data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}"></div>
                 <input class="hidden" name="tags" id="tagsInput">
                 <input class="hidden" type="text" id="hiddenToggle" name="for_followers"
                     value='{{$post->for_followers ? 'true' : 'false'}}'>
