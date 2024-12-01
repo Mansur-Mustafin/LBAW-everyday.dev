@@ -10,7 +10,7 @@
         let successPopup = document.getElementById('success-popup');
         if (successPopup) {
           setTimeout(function () {
-            successPopup.style.display = 'none';
+            successPopup.classList.add('hidden');
           }, 4000);
         }
       });
