@@ -66,7 +66,7 @@ function submitVote(type, id, isUpvote, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Saved') {
                 container.dataset.voteId = data.vote_id;
                 container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
@@ -94,7 +94,7 @@ function removeVote(voteId, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Vote removed') {
                 updateVoteUI(container, null, 'Vote removed');
                 container.dataset.voteId = '';
@@ -126,7 +126,7 @@ function updateVote(voteId, isUpvote, container) {
             }
         })
         .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.message === 'Vote updated') {
                 container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
                 container.dataset.voteId = data.vote_id;
