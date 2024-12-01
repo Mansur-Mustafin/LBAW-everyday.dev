@@ -44,7 +44,7 @@ Route::controller(NewsController::class)->group(function () {
     Route::get('/news/top-feed', 'topFeed')->name('news.top');
     Route::get('/news/recent-feed', 'recentFeed')->name('news.recent');
 
-    Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('create');
+    Route::get('/news/create-post', 'showCreationForm')->middleware('auth')->name('news.create');
     Route::get('/news/{news_post}', 'show')->name('news.show');
     Route::get('/news/{news_post}/comment/{comment}', 'showSingleThread');
     Route::post('/news', 'store')->middleware('auth')->name('news');
