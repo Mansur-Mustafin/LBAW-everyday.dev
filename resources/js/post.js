@@ -9,10 +9,10 @@ const hiddenToggle = document.getElementById('hiddenToggle')
 
 // Create Post
 if (createForm) {
-  followersToggle.addEventListener('change', function (evt) {
+/*   followersToggle.addEventListener('change', function (evt) {
     hiddenToggle.value = this.checked ? 'true' : 'false'
   })
-
+ */
   title.addEventListener('change', function (evt) {
     title.style.borderWidth = '0px'
   })
@@ -82,10 +82,6 @@ const editForm = document.getElementById('editForm');
 
 // Edit Post
 if (editForm) {
-  // TODO: make as a class
-  followersToggle.addEventListener('change', function (evt) {
-      hiddenToggle.value = this.checked ? 'true' : 'false'
-  })
 
   window.toggleEdit = function() {
       const editButton = document.getElementById('edit-button');

@@ -84,19 +84,7 @@
         </div>
         <div>
             <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
-            <label for="toggleTwoAdmin"
-                class="flex items-center cursor-pointer select-none text-dark dark:text-white gap-2 text-sm">
-                <div class="relative">
-                    <input type="checkbox" id="toggleTwoAdmin" class="peer sr-only" />
-                    <div class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"></div>
-                    <div
-                        class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900">
-                    </div>
-                </div>
-                <span class="font-bold text-sm">
-                    Admin
-                </span>
-            </label>
+            <div class="toggleTwo" data-name="Admin"></div>
         </div>
         <input class="hidden" type="text" id="hiddenToggle" name="is_admin" value='false'>
         <div class="flex gap-2 self-end">
