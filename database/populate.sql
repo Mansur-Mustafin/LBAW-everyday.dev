@@ -293,25 +293,25 @@ TRUE, 400, 6, 8);
 
 INSERT INTO image (path, image_type, news_post_id, user_id)
 VALUES
-('post/2.jpg', 'PostTitle', 1, NULL),
-('post/3.jpg', 'PostContent', 1, NULL),
-('post/4.png', 'PostTitle', 2, NULL),
-('post/5.jpg', 'PostTitle', 3, NULL),
-('post/6.png', 'PostTitle', 4, NULL),
-('post/7.png', 'PostTitle', 5, NULL),
-('post/8.jpg', 'PostTitle', 6, NULL),
-('post/9.jpg', 'PostTitle', 7, NULL),
-('post/10.jpg', 'PostTitle', 8, NULL),
-('post/11.jpg', 'PostTitle', 9, NULL),
-('post/12.jpg', 'PostTitle', 10, NULL),
-('post/1.jpg', 'PostTitle', 11, NULL),
-('post/13.jpg', 'PostTitle', 12, NULL),
-('post/14.jpg', 'PostTitle', 13, NULL),
-('post/15.jpg', 'PostTitle', 14, NULL),
-('post/16.jpg', 'PostTitle', 15, NULL),
-('post/17.jpg', 'PostTitle', 16, NULL),
-('post/18.jpg', 'PostTitle', 17, NULL),
-('post/19.jpg', 'PostTitle', 18, NULL);
+('post/64ONZCusT3DBrS4TO1XrYZJKrMhdgCDy8ZjUhsqf.webp', 'PostTitle', 1, NULL),
+('post/8Q9jRGDijSFzBmWs1kUKcO6SlFOMYgoPaD1CViTk.webp', 'PostContent', 1, NULL),
+('post/fuuPsO4T4j9FwSnUFWtjK0Kua31wvo0Znf06H3UM.png', 'PostTitle', 2, NULL),
+('post/jK2u2SHbW21055A80YJ3fxKYjfTt5UjHULfpMdA6.jpg', 'PostTitle', 3, NULL),
+('post/ijntS0epmuvFR4YIsWtqMJOFEFSiynIJ1LSCOkok.webp', 'PostTitle', 4, NULL),
+('post/N1JduCRiLze3lpLBwZ6gCK9qsJk2CCDMw0lm6Rmw.webp', 'PostTitle', 5, NULL),
+('post/hBy7Ku4HBH9r1xzS296Fveda6d9vi29JpgepMoGG.jpg', 'PostTitle', 6, NULL),
+('post/PWicNYjT3yJRkLVuKFxlbmR9rgV53doXCBzxkSck.jpg', 'PostTitle', 7, NULL),
+('post/q6PnXK1mOhk3at2NmgrFA4VAdlxprbXwKyLfcG36.jpg', 'PostTitle', 8, NULL),
+('post/PhauknJxL7vlCGZfWjvbwDPH7XFOf5EmB00e2iqN.webp', 'PostTitle', 9, NULL),
+('post/sw5LaQ9adf8VDOWxnSsQgMUksUpm0kxlCxI76tG8.jpg', 'PostTitle', 10, NULL),
+('post/53c4LGgwBjudrzAffAmDdpUucY5BRcKux4xpYHoM.jpg', 'PostTitle', 11, NULL),
+('post/0WqScYm28tmiWJxkRLjkPMNNItKZEnQHbczWW0z5.jpg', 'PostTitle', 12, NULL),
+('post/7fGFCpLTszqDKqcwpMyKdgwSvJVSwdQlAQUdItfh.jpg', 'PostTitle', 13, NULL),
+('post/TVSzhrjA4nU3L3EYdjMzCWr80h27phdU4zU48JEP.jpg', 'PostTitle', 14, NULL),
+('post/tNHwX1K2O9nAX7gsX437sDreGVJZKHJzcK35UoZk.jpg', 'PostTitle', 15, NULL),
+('post/91t6hUBk7Viw9cJNHGhwKIJn2h6pIi4fHim7oV7H.jpg', 'PostTitle', 16, NULL),
+('post/CXfnXjKtjI9WtDa01XhcF1Yp86As3JuwB8zAogap.jpg', 'PostTitle', 17, NULL),
+('post/qZsEnWGYlGFc4G8TofPZiH7oSkzCHbbVHZkzc5A4.jpg', 'PostTitle', 18, NULL);
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
