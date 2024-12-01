@@ -1,16 +1,13 @@
 <?php
 
-use App\Http\Controllers\CommentsController;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\SearchController;
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\NewsController;
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

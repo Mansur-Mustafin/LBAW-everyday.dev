@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\User;
-use App\Http\Controllers\PaginationTrait;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
