@@ -20,7 +20,7 @@ function addCommentHandler(data) {
 
    const noComments = document.getElementById('no-comments')
 
-   if (noComments) noComments.style.display = 'none'
+   if (noComments) noComments.classList.add('hidden')
 
    if (threadDiv) {
       threadDiv.outerHTML = threadHTML;
@@ -44,13 +44,13 @@ function editCommentHandler(data) {
    const abortButton = document.getElementById("abort_button-" + comment_id)
 
 
-   editForm.style.display = 'none'
-   saveButton.style.display = 'none'
-   abortButton.style.display = 'none'
+   editForm.classList.add('hidden')
+   saveButton.classList.add('hidden')
+   abortButton.classList.add('hidden')
 
-   editButton.style.display = 'block'
+   editButton.classList.remove('hidden')
    commentContent.innerHTML = data.comment.content
-   commentContent.style.display = 'block'
+   commentContent.classList.remove('hidden')
 
 }
 
@@ -119,7 +119,7 @@ function addButtonsBehaviour() {
 
          const form = document.getElementById(`subCommentForm-${commentSection.id.split('-')[1]}`)
 
-         form.style.display = "flex"
+         form.classList.add("flex")
 
          commentSection.children[0].style.borderBottom = 0
          commentSection.children[0].style.borderRadius = 0
@@ -156,20 +156,20 @@ function addButtonsBehaviour() {
 
          const abortButton = document.getElementById("abort_button-" + comment_id)
 
-         abortButton.style.display = 'block'
-         editForm.style.display = 'block'
-         saveButton.style.display = 'block'
+         abortButton.classList.remove('hidden')
+         editForm.classList.remove('hidden')
+         saveButton.classList.remove('hidden')
 
-         commentContent.style.display = 'none'
-         editButton.style.display = 'none'
+         commentContent.classList.add('hidden')
+         editButton.classList.add('hidden')
 
          abortButton.addEventListener('click', function () {
-            editForm.style.display = 'none'
-            abortButton.style.display = 'none'
-            saveButton.style.display = 'none'
+            editForm.classList.add('hidden')
+            abortButton.classList.add('hidden')
+            saveButton.classList.add('hidden')
 
-            editButton.style.display = 'block'
-            commentContent.style.display = 'block'
+            editButton.classList.remove('hidden')
+            commentContent.classList.remove('hidden')
          })
 
          saveButton.addEventListener('click', function () {

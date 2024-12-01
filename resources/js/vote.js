@@ -114,29 +114,29 @@ function updateVoteUI(container, isUpvote, message) {
     let currentCount = parseInt(voteCountElement.textContent);
 
     // Reset icons
-    upvoteOutline.style.display = "block";
-    upvoteFill.style.display = "none";
-    downvoteOutline.style.display = "block";
-    downvoteFill.style.display = "none";
+    upvoteOutline.classList.remove('hidden');
+    upvoteFill.classList.add('hidden');
+    downvoteOutline.classList.remove('hidden');
+    downvoteFill.classList.add('hidden');
 
     if (message === 'Saved') {
         if (isUpvote) {
-            upvoteOutline.style.display = "none";
-            upvoteFill.style.display = "block";
+            upvoteOutline.classList.add('hidden');
+            upvoteFill.classList.remove('hidden');
             voteCountElement.textContent = currentCount + 1;
         } else {
-            downvoteOutline.style.display = "none";
-            downvoteFill.style.display = "block";
+            downvoteOutline.classList.add('hidden');
+            downvoteFill.classList.remove('hidden');
             voteCountElement.textContent = currentCount - 1;
         }
     } else if (message === 'Vote updated') {
         if (isUpvote) {
-            upvoteOutline.style.display = "none";
-            upvoteFill.style.display = "block";
+            upvoteOutline.classList.add('hidden');
+            upvoteFill.classList.remove('hidden');
             voteCountElement.textContent = currentCount + 2;
         } else {
-            downvoteOutline.style.display = "none";
-            downvoteFill.style.display = "block";
+            downvoteOutline.classList.add('hidden');
+            downvoteFill.classList.remove('hidden');
             voteCountElement.textContent = currentCount - 2;
         }
     } else if (message === 'Vote removed') {
