@@ -167,7 +167,6 @@ if (resultsDivFollow) {
   const apiUrl = '/api' + urlObj.pathname;
 
   const buildUserFollowCard = (user) => {
-    console.log(user);
     let html = `
             <div class="flex items-center border border-gray-700 rounded-xl px-5 py-4 mt-4">
                 <img src="${user.profile_image.url}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
