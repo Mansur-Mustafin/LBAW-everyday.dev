@@ -75,11 +75,24 @@ class UserController extends Controller
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
             'remove_image' => 'required|string',
+            'adm_password' => 'nullable|string'
         ]);
 
-        if ($isAdminEdit) {
+        $demoteAdmin = $validated['is_admin'] == 'false' && $user->is_admin;
+
+        if ($isAdminEdit && !$demoteAdmin) {
             $user->reputation = $validated['reputation'] ?? $user->reputation;
             $user->is_admin = $validated['is_admin'] ?? $user->is_admin;
+        }
+
+        if ($isAdminEdit && $demoteAdmin) {
+            $adminPassword = env('ADMIN_SECRET_PASSWORD');
+
+            if (!Hash::check($validated['adm_password'], $adminPassword)) {
+                return redirect()->back()->withErrors(['adm_password' => 'The administrative password is incorrect.']);
+            } 
+
+            $user->is_admin = $validated['is_admin'];
         }
 
         $user->update([
