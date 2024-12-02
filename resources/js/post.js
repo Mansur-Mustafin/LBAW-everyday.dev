@@ -4,15 +4,8 @@ const selectedTags = document.getElementById('selectedTags');
 const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
 
-const followersToggle = document.getElementById('toggleTwo');
-const hiddenToggle = document.getElementById('hiddenToggle');
-
 // Create Post
 if (createForm) {
-  /*   followersToggle.addEventListener('change', function (evt) {
-    hiddenToggle.value = this.checked ? 'true' : 'false'
-  })
- */
   title.addEventListener('change', function (evt) {
     title.style.borderWidth = '0px';
   });
