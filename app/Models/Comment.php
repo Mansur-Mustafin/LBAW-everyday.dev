@@ -13,6 +13,8 @@ class Comment extends Model
 
     public const UPDATED_AT = null;
 
+    protected $with = ['author'];
+
     protected $fillable = [
         'content',
         'is_omitted',
@@ -28,7 +30,7 @@ class Comment extends Model
         return $this->belongsTo(NewsPost::class, 'news_post_id');
     }
 
-    public function user()
+    public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
     }

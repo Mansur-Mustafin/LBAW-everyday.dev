@@ -504,7 +504,7 @@ FOR EACH ROW
 EXECUTE FUNCTION notify_on_vote();
 
 
--- Trigger 12
+-- Trigger 12 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_reputation_on_post_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -512,22 +512,21 @@ DECLARE
     reputation_change INTEGER;
 BEGIN
     IF TG_OP = 'INSERT' AND NEW.vote_type = 'PostVote' THEN
-        IF NEW.is_upvote THEN
-            reputation_change := 10;
-        ELSE
-            reputation_change := -10;
-        END IF;
+        reputation_change := CASE WHEN NEW.is_upvote THEN 10 ELSE -10 END;
         SELECT author_id INTO post_author_id FROM news_post WHERE id = NEW.news_post_id;
         UPDATE "user" SET reputation = reputation + reputation_change WHERE id = post_author_id;
 
     ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'PostVote' THEN
-        IF OLD.is_upvote THEN
-            reputation_change := -10;
-        ELSE
-            reputation_change := 10;
-        END IF;
+        reputation_change := CASE WHEN OLD.is_upvote THEN -10 ELSE 10 END;
         SELECT author_id INTO post_author_id FROM news_post WHERE id = OLD.news_post_id;
         UPDATE "user" SET reputation = reputation + reputation_change WHERE id = post_author_id;
+
+    ELSIF TG_OP = 'UPDATE' AND NEW.vote_type = 'PostVote' THEN
+        IF OLD.news_post_id = NEW.news_post_id AND OLD.is_upvote <> NEW.is_upvote THEN
+            reputation_change := CASE WHEN NEW.is_upvote THEN 20 ELSE -20 END;
+            SELECT author_id INTO post_author_id FROM news_post WHERE id = OLD.news_post_id;
+            UPDATE "user" SET reputation = reputation + reputation_change WHERE id = post_author_id;
+        END IF;
     END IF;
 
     RETURN NULL;
@@ -535,12 +534,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_adjust_reputation_on_post_vote
-AFTER INSERT OR DELETE ON vote
+AFTER INSERT OR DELETE OR UPDATE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_reputation_on_post_vote();
 
 
--- Trigger 13
+-- Trigger 13 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_reputation_on_comment_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -548,22 +547,21 @@ DECLARE
     reputation_change INTEGER;
 BEGIN
     IF TG_OP = 'INSERT' AND NEW.vote_type = 'CommentVote' THEN
-        IF NEW.is_upvote THEN
-            reputation_change := 50;
-        ELSE
-            reputation_change := -50;
-        END IF;
+        reputation_change := CASE WHEN NEW.is_upvote THEN 50 ELSE -50 END;
         SELECT author_id INTO comment_author_id FROM comment WHERE id = NEW.comment_id;
         UPDATE "user" SET reputation = reputation + reputation_change WHERE id = comment_author_id;
 
     ELSIF TG_OP = 'DELETE' AND OLD.vote_type = 'CommentVote' THEN
-        IF OLD.is_upvote THEN
-            reputation_change := -50;
-        ELSE
-            reputation_change := 50;
-        END IF;
+        reputation_change := CASE WHEN OLD.is_upvote THEN -50 ELSE 50 END;
         SELECT author_id INTO comment_author_id FROM comment WHERE id = OLD.comment_id;
         UPDATE "user" SET reputation = reputation + reputation_change WHERE id = comment_author_id;
+
+    ELSIF TG_OP = 'UPDATE' AND NEW.vote_type = 'CommentVote' THEN
+        IF OLD.comment_id = NEW.comment_id AND OLD.is_upvote <> NEW.is_upvote THEN
+            reputation_change := CASE WHEN NEW.is_upvote THEN 100 ELSE -100 END;
+            SELECT author_id INTO comment_author_id FROM comment WHERE id = NEW.comment_id;
+            UPDATE "user" SET reputation = reputation + reputation_change WHERE id = comment_author_id;
+        END IF;
     END IF;
 
     RETURN NULL;
@@ -571,7 +569,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_adjust_reputation_on_comment_vote
-AFTER INSERT OR DELETE ON vote
+AFTER INSERT OR DELETE OR UPDATE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_reputation_on_comment_vote();
 
@@ -620,7 +618,7 @@ WHEN (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE)
 EXECUTE FUNCTION adjust_reputation_on_successful_report();
 
 
--- Trigger 16
+-- Trigger 16 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_post_votes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -637,6 +635,15 @@ BEGIN
         ELSE
             UPDATE news_post SET downvotes = downvotes - 1 WHERE id = OLD.news_post_id;
         END IF;
+
+    ELSIF TG_OP = 'UPDATE' AND NEW.vote_type = 'PostVote' THEN
+        IF OLD.news_post_id = NEW.news_post_id AND OLD.is_upvote <> NEW.is_upvote THEN
+            IF NEW.is_upvote THEN
+                UPDATE news_post SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = NEW.news_post_id;
+            ELSE
+                UPDATE news_post SET upvotes = upvotes - 1, downvotes = downvotes + 1 WHERE id = NEW.news_post_id;
+            END IF;
+        END IF;
     END IF;
 
     RETURN NULL;
@@ -644,12 +651,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_adjust_post_votes
-AFTER INSERT OR DELETE ON vote
+AFTER INSERT OR DELETE OR UPDATE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_post_votes();
 
 
--- Trigger 17
+-- Trigger 17 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_comment_votes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -666,6 +673,15 @@ BEGIN
         ELSE
             UPDATE comment SET downvotes = downvotes - 1 WHERE id = OLD.comment_id;
         END IF;
+
+    ELSIF TG_OP = 'UPDATE' AND NEW.vote_type = 'CommentVote' THEN
+        IF OLD.comment_id = NEW.comment_id AND OLD.is_upvote <> NEW.is_upvote THEN
+            IF NEW.is_upvote THEN
+                UPDATE comment SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = NEW.comment_id;
+            ELSE
+                UPDATE comment SET upvotes = upvotes - 1, downvotes = downvotes + 1 WHERE id = NEW.comment_id;
+            END IF;
+        END IF;
     END IF;
 
     RETURN NULL;
@@ -673,6 +689,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_adjust_comment_votes
-AFTER INSERT OR DELETE ON vote
+AFTER INSERT OR DELETE OR UPDATE ON vote
 FOR EACH ROW
 EXECUTE FUNCTION adjust_comment_votes();

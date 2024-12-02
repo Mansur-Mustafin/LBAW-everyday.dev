@@ -28,11 +28,11 @@
                 </a>
             @endif
             <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
-                href="{{ url('/news/create-post') }}">
+                href="{{ route('news.create') }}">
                 New post
             </a>
             <a type="button" class="bg-white text-black rounded-xl p-2 laptop:hidden "
-                href="{{ url('/news/create-post') }}">
+                href="{{ route('news.create') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-plus">
@@ -42,7 +42,7 @@
             </a>
             <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
                 href="{{ url('/users/' . Auth::id()) . '/posts' }}">
-                <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profile_image_path}}" alt="">
+                <img class="w-6 h-6 rounded-md" src="{{Auth::user()->profileImage->url}}" alt="">
             </a>
 
         @else

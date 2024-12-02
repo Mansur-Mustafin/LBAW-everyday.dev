@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 /**
  * App\Models\NewsPost
@@ -28,7 +27,9 @@ class NewsPost extends Model
     protected $table = 'news_post';
 
     public const UPDATED_AT = null;
-    protected $with = ['author', 'tags'];
+
+    protected $with = ['author', 'tags', 'titleImage'];
+
     protected $fillable = [
         'title',
         'content',
@@ -38,9 +39,10 @@ class NewsPost extends Model
         'downvotes',
         'is_omitted'
     ];
+
     protected $casts = [
         'created_at' => 'datetime',
-        'changed_at' => 'datetime', 
+        'changed_at' => 'datetime',
     ];
 
     public function author()
@@ -66,18 +68,12 @@ class NewsPost extends Model
     public function titleImage()
     {
         return $this->hasOne(Image::class, 'news_post_id')
-                    ->where('image_type', Image::TYPE_POST_TITLE);
-    }
-
-    public function getTitleImagePathAttribute()
-    {
-        return $this->titleImage ? $this->titleImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_POST_TITLE]);
-    }
-
-    // time_ago shows time in readable format
-    public function getTimeAgoAttribute()
-    {
-        return Carbon::parse($this->created_at)->diffForHumans();
+            ->where('image_type', Image::TYPE_POST_TITLE)
+            ->withDefault(function ($image, $newsPost) {
+                $image->image_type = Image::TYPE_POST_TITLE;
+                $image->path = null;
+                $image->news_post_id = $newsPost->id;
+            });
     }
 
     public function comments()

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CommentsController extends Controller
 {
 
-    function findMostParentComment($comment_id)
+    public function findMostParentComment($comment_id)
     {
         $comment = Comment::find($comment_id);
 
@@ -20,25 +20,39 @@ class CommentsController extends Controller
         return $comment;
     }
 
-    function buildNestedComment($comment, $thread)
+    public function buildNestedComment($comment, $thread)
     {
         $thread_parent = $this->findMostParentComment($comment->id);
 
-        NewsController::processComments([$thread_parent], Auth::user());
+        NewsPostController::processComments([$thread_parent], Auth::user());
 
-        return response()->json(['thread' => view('partials.comment', ['comment' => $thread_parent, 'level' => 0, 'post' => NewsPost::find($thread_parent->news_post_id), 'thread' => $thread])->render(), "thread_id" => $thread_parent->id]);
+        return response()->json([
+            'thread' => view('partials.comment', [
+                'comment' => $thread_parent, 
+                'level' => 0, 
+                'post' => NewsPost::find($thread_parent->news_post_id), 
+                'thread' => $thread
+            ])->render(),
+            "thread_id" => $thread_parent->id
+        ]);
     }
 
-    function buildComment($comment, $thread)
+    public function buildComment($comment, $thread)
     {
-        return response()->json(['thread' => view('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => NewsPost::find($comment->news_post_id), 'thread' => $thread])->render(), "thread_id" => $comment->id]);
+        return response()->json([
+            'thread' => view('partials.comment', [
+                'comment' => $comment, 
+                'level' => 0, 
+                'post' => NewsPost::find($comment->news_post_id), 
+                'thread' => $thread
+            ])->render(), 
+            "thread_id" => $comment->id
+        ]);
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
-
-        $request->validate([
+        $validated = $request->validate([
             'content' => 'required|string|max:40',
             'news_post_id' => 'nullable|string',
             'parent_comment_id' => 'nullable|string',
@@ -46,16 +60,16 @@ class CommentsController extends Controller
         ]);
 
         $comment = Comment::create([
-            'content' => $request->content,
-            'news_post_id' => $request->news_post_id ? (int) $request->news_post_id : null,
-            'parent_comment_id' => $request->parent_comment_id ? (int) $request->parent_comment_id : null,
-            'author_id' => $user->id
+            'content' => $validated['content'],
+            'news_post_id' => $validated['news_post_id'] ?? null,
+            'parent_comment_id' => $validated['parent_comment_id'] ?? null,
+            'author_id' => Auth::id()
         ]);
 
-        if ($request->news_post_id) {
-            return $this->buildComment($comment, $request->thread);
+        if ($validated['news_post_id']) {
+            return $this->buildComment($comment, $validated['thread']);
         } else {
-            return $this->buildNestedComment($comment, $request->thread);
+            return $this->buildNestedComment($comment, $validated['thread']);
         }
     }
 
@@ -63,12 +77,12 @@ class CommentsController extends Controller
     {
         $this->authorize('update', $comment);
 
-        $request->validate([
+        $validated = $request->validate([
             'content' => 'nullable|string|max:250'
         ]);
 
         $comment->update([
-            'content' => $request->content,
+            'content' => $validated['content'],
         ]);
 
         return response()->json(['comment' => $comment]);
@@ -81,7 +95,7 @@ class CommentsController extends Controller
             $comment->delete();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false]);  // TODO: return 500?
         }
     }
 }

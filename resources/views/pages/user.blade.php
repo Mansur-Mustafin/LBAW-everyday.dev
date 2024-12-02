@@ -70,7 +70,7 @@
             @endcan
         </header>
         <div class="rounded flex justify-center m-5">
-            <img src="{{ $user->profile_image_path }}" alt="Your profile image"
+            <img src="{{ $user->profileImage->url }}" alt="Your profile image"
                 class="rounded-full w-48 h-48 object-cover border-2 border-white">
         </div>
         <div class="p-4">

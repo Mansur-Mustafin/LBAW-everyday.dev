@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\FileController;
+use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\View\View;
-
-use App\Models\User;
 
 class RegisterController extends Controller
 {
@@ -28,7 +24,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => 'required|string|max:40',
             'email' => 'required|email|max:250|unique:user',
@@ -36,10 +32,10 @@ class RegisterController extends Controller
         ]);
 
         User::create([
-            'username' => $request->username,
-            'public_name' => $request->public_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'username' => $credentials['username'],
+            'public_name' => $credentials['public_name'],
+            'email' => $credentials['email'],
+            'password' => Hash::make($credentials['password']),
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -48,29 +44,5 @@ class RegisterController extends Controller
 
         return redirect()->route('home')
             ->withSuccess('You have successfully registered & logged in!');
-    }
-
-    public function registerByAdmin(Request $request)
-    {
-        $request->validate([
-            'public_name' => 'required|string|max:250',
-            'username' => 'required|string|max:40',
-            'email' => 'required|email|max:250|unique:user',
-            'password' => 'required|min:4',
-            'reputation' => 'required|integer',
-            'is_admin'=>'required|string',
-        ]);
-
-        User::create([
-            'username' => $request->username,
-            'public_name' => $request->public_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'reputation' => $request->reputation,
-            'is_admin' => $request->is_admin
-        ]);
-
-        return redirect()->route('admin')
-            ->withSuccess('You have successfully created an account!');
     }
 }

@@ -17,7 +17,7 @@
             <button type="button" class="rounded flex justify-center m-5" id="personalizedFileInput"
                 title="Click to upload Image">
                 <img class="rounded-full w-48 h-48 object-cover border-2 border-white"
-                    src="{{$user->profile_image_path}}" alt="Current Profile Image">
+                    src="{{$user->profileImage->url}}" alt="Current Profile Image">
             </button>
             <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
                 title="Click to upload new Image">

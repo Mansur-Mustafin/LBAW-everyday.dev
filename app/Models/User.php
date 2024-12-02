@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -24,23 +22,30 @@ class User extends Authenticatable
 
     public const UPDATED_AT = null;
 
-    protected $with = ['profileImage'];
-
     protected $fillable = [
-        'username', 'public_name', 'password', 'email', 'rank', 'status', 'reputation', 'is_admin'
+        'username',
+        'public_name',
+        'password',
+        'email',
+        'rank',
+        'status',
+        'reputation',
+        'is_admin'
     ];
+
+    protected $with = ['profileImage'];
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $appends = ['profile_image_path'];
-
-    public function getProfileImagePathAttribute() {
-        return $this->profileImage ? $this->profileImage->getPath() : asset(Image::DEFAULT_IMAGES[Image::TYPE_PROFILE]);
-    }
-
-    public function profileImage() {
+    public function profileImage()
+    {
         return $this->hasOne(Image::class, 'user_id')
-                    ->where('image_type', Image::TYPE_PROFILE);
+            ->where('image_type', Image::TYPE_PROFILE)
+            ->withDefault(function ($image, $user) {
+                $image->image_type = Image::TYPE_PROFILE;
+                $image->path = null;
+                $image->user_id = $user->id;
+            });
     }
 
     public function comments()
@@ -68,7 +73,7 @@ class User extends Authenticatable
         return $this->tags()->pluck('name')->toArray();
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return $this->is_admin == true;
     }
