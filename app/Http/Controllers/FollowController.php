@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Enums\ImageTypeEnum;
-use App\Models\NewsPost;
 use App\Models\User;
-use App\Models\Vote;
-use App\Services\FileService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class FollowController extends Controller
 {
