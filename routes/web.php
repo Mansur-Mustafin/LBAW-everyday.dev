@@ -4,12 +4,13 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\FollowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,12 +39,13 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::prefix('news')->controller(NewsPostController::class)->group(function () {
+Route::prefix('news')->controller(FeedController::class)->group(function ()  {
     Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
     Route::get('/top-feed', 'topFeed')->name('news.top');
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
+});
 
-
+Route::prefix('news')->controller(NewsPostController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/create-post', 'showCreationForm')->name('news.create');
         Route::post('/', 'store')->name('news');

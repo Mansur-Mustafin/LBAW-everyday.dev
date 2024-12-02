@@ -127,8 +127,6 @@ function addButtonsBehaviour() {
 
         const isAuth = commentSection.dataset.auth;
 
-        console.log(isAuth);
-
         if (!isAuth) redirectToLogin();
 
         addNestedComment(commentSection.id.split('-')[1]);
