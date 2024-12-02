@@ -100,3 +100,9 @@ Route::controller(SearchController::class)->group(function () {
 
     Route::get('api/search/{search}', 'search');
 });
+
+// File
+Route::prefix('file')->middleware('auth')->controller(AdminController::class)->group(function () {
+    Route::post('/upload', 'uploadAjax');
+    Route::post('/delete', 'deleteAjax');
+});

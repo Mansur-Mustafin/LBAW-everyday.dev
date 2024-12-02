@@ -76,6 +76,12 @@ class NewsPost extends Model
             });
     }
 
+    public function contentImages()
+    {
+        return $this->hasMany(Image::class, 'news_post_id')
+            ->where('image_type', Image::TYPE_POST_CONTENT);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
