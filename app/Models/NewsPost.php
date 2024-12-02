@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ImageTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -68,9 +69,9 @@ class NewsPost extends Model
     public function titleImage()
     {
         return $this->hasOne(Image::class, 'news_post_id')
-            ->where('image_type', Image::TYPE_POST_TITLE)
+            ->where('image_type', ImageTypeEnum::POST_TITLE->value)
             ->withDefault(function ($image, $newsPost) {
-                $image->image_type = Image::TYPE_POST_TITLE;
+                $image->image_type = ImageTypeEnum::POST_TITLE->value;
                 $image->path = null;
                 $image->news_post_id = $newsPost->id;
             });
@@ -79,7 +80,7 @@ class NewsPost extends Model
     public function contentImages()
     {
         return $this->hasMany(Image::class, 'news_post_id')
-            ->where('image_type', Image::TYPE_POST_CONTENT);
+            ->where('image_type', ImageTypeEnum::POST_CONTENT->value);
     }
 
     public function comments()

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\Image;
 use App\Models\NewsPost;
 use App\Models\Tag;
+use App\Enums\ImageTypeEnum;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -104,7 +105,7 @@ class NewsPostController extends Controller
         ]);
 
         if ($request->has('image')) {
-            FileController::upload($request, $post, Image::TYPE_POST_TITLE);
+            FileService::upload($request, $post, ImageTypeEnum::POST_TITLE->value);
         }
         
         $this->syncTags($post, $validated['tags'] ?? '');
@@ -132,10 +133,10 @@ class NewsPostController extends Controller
         ]);
 
         if ($request->hasFile('image') || $validated['remove_image'] == "true") {
-            FileController::delete($newsPost, Image::TYPE_POST_TITLE);
+            FileService::delete($newsPost, ImageTypeEnum::POST_TITLE->value);
         }
         if ($request->hasFile('image')) {
-            FileController::upload($request, $newsPost, Image::TYPE_POST_TITLE);
+            FileService::upload($request, $newsPost, ImageTypeEnum::POST_TITLE->value);
         }
 
         $this->syncTags($newsPost, $validated['tags'] ?? '');
