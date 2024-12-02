@@ -7,7 +7,7 @@
 
     <h2 class="text-2xl font-semibold my-4 mx-4">Edit Profile</h2>
 
-    <form method="POST" action="{{ url('users/' . $user->id) }}" enctype="multipart/form-data"
+    <form method="POST" action="{{ route('user.update', $user->id) }}" enctype="multipart/form-data"
         class="px-3 flex flex-col gap-4 mt-4">
         @csrf
         @method('PUT')

@@ -7,7 +7,7 @@
 <section
     class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
 
-    <form method="POST" action="{{ route('user.update', $user->id) }}" enctype="multipart/form-data"
+    <form method="POST" action="{{ route('admin.update', $user->id) }}" enctype="multipart/form-data"
         class="px-3 flex flex-col gap-4 mt-4" id="admin-edit-profile">
         @csrf
         @method('PUT')

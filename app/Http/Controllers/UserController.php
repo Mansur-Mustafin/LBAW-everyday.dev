@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
 use App\Models\NewsPost;
 use App\Models\User;
 use App\Models\Vote;
+use App\Enums\ImageTypeEnum;
+use App\Services\FileService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +55,6 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $isAdminEdit = $request->user()->isAdmin() && $request->user()->id != $user->id;
-
         $validated = $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => [
@@ -71,29 +70,10 @@ class UserController extends Controller
                 Rule::unique('user')->ignore($user->id),
             ],
             'reputation' => 'nullable',
-            'is_admin' => 'nullable',
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
             'remove_image' => 'required|string',
-            'adm_password' => 'nullable|string'
         ]);
-
-        $demoteAdmin = $validated['is_admin'] == 'false' && $user->is_admin;
-
-        if ($isAdminEdit && !$demoteAdmin) {
-            $user->reputation = $validated['reputation'] ?? $user->reputation;
-            $user->is_admin = $validated['is_admin'] ?? $user->is_admin;
-        }
-
-        if ($isAdminEdit && $demoteAdmin) {
-            $adminPassword = env('ADMIN_SECRET_PASSWORD');
-
-            if (!Hash::check($validated['adm_password'], $adminPassword)) {
-                return redirect()->back()->withErrors(['adm_password' => 'The administrative password is incorrect.']);
-            } 
-
-            $user->is_admin = $validated['is_admin'];
-        }
 
         $user->update([
             'public_name' => $validated['public_name'],
@@ -102,14 +82,14 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('image') || $validated['remove_image'] == "true") {
-            FileController::delete($user, Image::TYPE_PROFILE);
+            FileService::delete($user, ImageTypeEnum::PROFILE->value);
         }
         if ($request->hasFile('image')) {
-            FileController::upload($request, $user, Image::TYPE_PROFILE);
+            FileService::upload($request, $user, ImageTypeEnum::PROFILE->value);
         }
 
-        if ($request->filled('new_password') && ($request->filled('old_password') || $isAdminEdit)) {
-            if (!Hash::check($request->input('old_password'), $user->password) && !$isAdminEdit) {
+        if ($request->filled('new_password') && $request->filled('old_password')) {
+            if (!Hash::check($request->input('old_password'), $user->password)) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
 
