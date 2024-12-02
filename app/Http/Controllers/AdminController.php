@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ImageTypeEnum;
 use App\Models\User;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\NewsPost;
-use App\Models\Vote;
-use App\Enums\ImageTypeEnum;
-use App\Services\FileService;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
