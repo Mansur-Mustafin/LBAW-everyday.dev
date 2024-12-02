@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ImageTypeEnum;
 use App\Models\Comment;
 use App\Models\NewsPost;
 use App\Models\Tag;
-use App\Enums\ImageTypeEnum;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;

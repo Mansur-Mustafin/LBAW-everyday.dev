@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\FileService;
 use App\Models\NewsPost;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 
 class FileController extends Controller

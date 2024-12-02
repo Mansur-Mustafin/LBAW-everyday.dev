@@ -9,6 +9,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,10 +72,11 @@ Route::middleware('auth')->controller(UserController::class)->group(function () 
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
+});
 
-    // Follow
-    Route::post('/users/{user}/follow', 'follow')->name('users.follow');
-    Route::delete('/users/{user}/unfollow', 'unfollow')->name('users.unfollow');
+Route::middleware('auth')->controller(FollowController::class)->group(function () {
+    Route::post('/users/{user}/follow', 'followUser')->name('users.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('users.unfollow');
     Route::get('users/{user}/followers', 'showFollowers')->name('users.followers');
     Route::get('users/{user}/following', 'showFollowing')->name('users.following');
     Route::get('api/users/{user}/followers', 'getFollowers');
