@@ -1,3 +1,5 @@
+-- TODO: deletar Trigger 8, 9, 10, 11;
+
 --
 -- Drop old schema
 --
@@ -408,100 +410,99 @@ BEFORE DELETE ON comment
 FOR EACH ROW
 EXECUTE FUNCTION prevent_comment_deletion_with_references();
 
+-- -- Trigger 8
+-- CREATE OR REPLACE FUNCTION notify_on_comment() RETURNS TRIGGER AS $$
+-- DECLARE authorid INTEGER;
+-- BEGIN
 
--- Trigger 8
-CREATE OR REPLACE FUNCTION notify_on_comment() RETURNS TRIGGER AS $$
-DECLARE authorid INTEGER;
-BEGIN
-
-    IF NEW.news_post_id IS NOT NULL THEN 
-        SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
-        IF authorid <> NEW.author_id THEN
-            INSERT INTO notification (notification_type, user_id, comment_id) 
-            VALUES ('CommentNotification', authorid, NEW.id);
-        END IF;
+--     IF NEW.news_post_id IS NOT NULL THEN 
+--         SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
+--         IF authorid <> NEW.author_id THEN
+--             INSERT INTO notification (notification_type, user_id, comment_id) 
+--             VALUES ('CommentNotification', authorid, NEW.id);
+--         END IF;
     
-    ELSIF NEW.parent_comment_id IS NOT NULL THEN
-        SELECT author_id INTO authorid FROM comment WHERE id = NEW.parent_comment_id;
-        IF authorid <> NEW.author_id THEN
-            INSERT INTO notification (notification_type, user_id, comment_id) 
-            VALUES ('CommentNotification', authorid, NEW.id);
-        END IF;
-    END IF;
+--     ELSIF NEW.parent_comment_id IS NOT NULL THEN
+--         SELECT author_id INTO authorid FROM comment WHERE id = NEW.parent_comment_id;
+--         IF authorid <> NEW.author_id THEN
+--             INSERT INTO notification (notification_type, user_id, comment_id) 
+--             VALUES ('CommentNotification', authorid, NEW.id);
+--         END IF;
+--     END IF;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_notify_on_comment
-AFTER INSERT ON comment
-FOR EACH ROW
-EXECUTE FUNCTION notify_on_comment();
-
-
--- Trigger 9
-CREATE OR REPLACE FUNCTION notify_on_new_post()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Insert a notification for each follower of the post author
-    INSERT INTO notification (notification_type, user_id, news_post_id)
-    SELECT 'PostNotification', follower_id, NEW.id
-    FROM follows
-    WHERE followed_id = NEW.author_id;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_notify_on_new_post
-AFTER INSERT ON news_post
-FOR EACH ROW
-EXECUTE FUNCTION notify_on_new_post();
+-- CREATE TRIGGER trigger_notify_on_comment
+-- AFTER INSERT ON comment
+-- FOR EACH ROW
+-- EXECUTE FUNCTION notify_on_comment();
 
 
--- Trigger 10
-CREATE OR REPLACE FUNCTION notify_on_follow() RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO notification ( notification_type, user_id, follower_id) 
-    VALUES ('FollowNotification', NEW.followed_id, NEW.follower_id);
+-- -- Trigger 9
+-- CREATE OR REPLACE FUNCTION notify_on_new_post()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--     -- Insert a notification for each follower of the post author
+--     INSERT INTO notification (notification_type, user_id, news_post_id)
+--     SELECT 'PostNotification', follower_id, NEW.id
+--     FROM follows
+--     WHERE followed_id = NEW.author_id;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_notify_on_follow
-AFTER INSERT ON follows
-FOR EACH ROW
-EXECUTE FUNCTION notify_on_follow();
+-- CREATE TRIGGER trigger_notify_on_new_post
+-- AFTER INSERT ON news_post
+-- FOR EACH ROW
+-- EXECUTE FUNCTION notify_on_new_post();
 
 
--- Trigger 11
-CREATE OR REPLACE FUNCTION notify_on_vote() RETURNS TRIGGER AS $$
-DECLARE
-    authorid INTEGER;
-BEGIN
+-- -- Trigger 10
+-- CREATE OR REPLACE FUNCTION notify_on_follow() RETURNS TRIGGER AS $$
+-- BEGIN
+--     INSERT INTO notification ( notification_type, user_id, follower_id) 
+--     VALUES ('FollowNotification', NEW.followed_id, NEW.follower_id);
 
-    IF NEW.vote_type = 'PostVote' THEN
-        SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER trigger_notify_on_follow
+-- AFTER INSERT ON follows
+-- FOR EACH ROW
+-- EXECUTE FUNCTION notify_on_follow();
+
+
+-- -- Trigger 11
+-- CREATE OR REPLACE FUNCTION notify_on_vote() RETURNS TRIGGER AS $$
+-- DECLARE
+--     authorid INTEGER;
+-- BEGIN
+
+--     IF NEW.vote_type = 'PostVote' THEN
+--         SELECT author_id INTO authorid FROM news_post WHERE id = NEW.news_post_id;
         
-        INSERT INTO notification (notification_type, user_id, vote_id) 
-        VALUES ('VoteNotification', authorid, NEW.id);
+--         INSERT INTO notification (notification_type, user_id, vote_id) 
+--         VALUES ('VoteNotification', authorid, NEW.id);
 
-    ELSIF NEW.vote_type = 'CommentVote' THEN
-        SELECT author_id INTO authorid FROM comment WHERE id = NEW.comment_id;
+--     ELSIF NEW.vote_type = 'CommentVote' THEN
+--         SELECT author_id INTO authorid FROM comment WHERE id = NEW.comment_id;
         
-        INSERT INTO notification (notification_type, user_id, vote_id) 
-        VALUES ('VoteNotification', authorid, NEW.id);
-    END IF;
+--         INSERT INTO notification (notification_type, user_id, vote_id) 
+--         VALUES ('VoteNotification', authorid, NEW.id);
+--     END IF;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_notify_on_vote
-AFTER INSERT ON vote
-FOR EACH ROW
-EXECUTE FUNCTION notify_on_vote();
+-- CREATE TRIGGER trigger_notify_on_vote
+-- AFTER INSERT ON vote
+-- FOR EACH ROW
+-- EXECUTE FUNCTION notify_on_vote();
 
 
 -- Trigger 12 TODO: change in WIKI

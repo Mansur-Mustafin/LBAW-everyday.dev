@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\NotificationTypeEnum;
 use App\Enums\ImageTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +46,21 @@ class NewsPost extends Model
         'created_at' => 'datetime',
         'changed_at' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($newsPost) {
+            $followers = $newsPost->author->followers()->pluck('id');
+    
+            foreach ($followers as $followerId) {
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::POST,
+                    'user_id' => $followerId,
+                    'news_post_id' => $newsPost->id,
+                ]);
+            }
+        });
+    }
 
     public function author()
     {
