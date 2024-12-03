@@ -62,6 +62,24 @@ VALUES
 ('isabellawood', 'Isabella Wood', 'isabellapass', 'isabellawood@example.com', 'noobie', 'pending', 10, FALSE);
 
 
+INSERT INTO follows (follower_id, followed_id)
+VALUES
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 6),
+(6, 7),
+(7, 8),
+(8, 9),
+(9, 10),
+(10, 1),
+(1, 3),
+(2, 4),
+(3, 5),
+(4, 6),
+(5, 7);
+
 
 INSERT INTO tag (name)
 VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
@@ -315,8 +333,8 @@ VALUES
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
-(NOW() - INTERVAL '5 days', 'This is great news!', 2, 1, NULL),
-(NOW() - INTERVAL '4 days', 'Can''t wait to try the new gadget.', 3, 2, NULL),
+(NOW() - INTERVAL '5 days', 'This is great news!', 1, 1, NULL),
+(NOW() - INTERVAL '4 days', 'Can''t wait to try the new gadget.', 3, NULL, 1),
 (NOW() - INTERVAL '3 days', 'Very helpful tips, thank you.', 4, 3, NULL),
 (NOW() - INTERVAL '2 days', 'Congratulations to the team!', 5, 4, NULL),
 (NOW() - INTERVAL '1 days', 'Fascinating interview.', 6, 5, NULL),
@@ -339,7 +357,7 @@ VALUES
 
 INSERT INTO vote (created_at, vote_type, is_upvote, user_id, news_post_id, comment_id)
 VALUES
-(NOW() - INTERVAL '2 days', 'PostVote', TRUE,  3, 1, NULL),
+(NOW() - INTERVAL '2 days', 'CommentVote', TRUE,  3, NULL, 10),
 (NOW() - INTERVAL '1 days', 'PostVote', TRUE, 4, 2, NULL),
 (NOW() - INTERVAL '12 hours', 'PostVote', TRUE, 5, 3, NULL),
 (NOW() - INTERVAL '6 hours', 'PostVote', TRUE, 6, 4, NULL),
@@ -430,25 +448,6 @@ VALUES
 ('I have read the guidelines, request to unblock.', FALSE, 10),
 ('Account blocked due to misunderstanding.', FALSE, 7),
 ('Promise to adhere to rules, please unblock.', FALSE, 9);
-
-
-INSERT INTO follows (follower_id, followed_id)
-VALUES
-(1, 2),
-(2, 3),
-(3, 4),
-(4, 5),
-(5, 6),
-(6, 7),
-(7, 8),
-(8, 9),
-(9, 10),
-(10, 1),
-(1, 3),
-(2, 4),
-(3, 5),
-(4, 6),
-(5, 7);
 
 
 INSERT INTO user_tag_subscribes (user_id, tag_id)
