@@ -49,4 +49,9 @@ class Comment extends Model
     {
         return $this->hasMany(Vote::class, 'comment_id');
     }
+
+    // public function notification()
+    // {
+    //     return $this->hasOne(Notification::class, 'comment_id');
+    // }
 }

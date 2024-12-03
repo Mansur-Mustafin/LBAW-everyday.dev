@@ -64,7 +64,7 @@ class FollowController extends Controller
         });
 
         return response()->json([
-            'users' => $followers,
+            'data' => $followers->items(),
             'next_page' => $followers->currentPage() + 1,
             'last_page' => $followers->lastPage(),
         ]);
