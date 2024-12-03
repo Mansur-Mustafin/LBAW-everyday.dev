@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ImageTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -40,9 +41,9 @@ class User extends Authenticatable
     public function profileImage()
     {
         return $this->hasOne(Image::class, 'user_id')
-            ->where('image_type', Image::TYPE_PROFILE)
+            ->where('image_type', ImageTypeEnum::PROFILE->value)
             ->withDefault(function ($image, $user) {
-                $image->image_type = Image::TYPE_PROFILE;
+                $image->image_type = ImageTypeEnum::PROFILE->value;
                 $image->path = null;
                 $image->user_id = $user->id;
             });

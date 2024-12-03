@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
+use App\Enums\ImageTypeEnum;
 use App\Models\NewsPost;
 use App\Models\User;
 use App\Models\Vote;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Services\FileService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -54,8 +53,6 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $isAdminEdit = $request->user()->isAdmin() && $request->user()->id != $user->id;
-
         $validated = $request->validate([
             'public_name' => 'required|string|max:250',
             'username' => [
@@ -71,16 +68,10 @@ class UserController extends Controller
                 Rule::unique('user')->ignore($user->id),
             ],
             'reputation' => 'nullable',
-            'is_admin' => 'nullable',
             'old_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:4|confirmed',
             'remove_image' => 'required|string',
         ]);
-
-        if ($isAdminEdit) {
-            $user->reputation = $validated['reputation'] ?? $user->reputation;
-            $user->is_admin = $validated['is_admin'] ?? $user->is_admin;
-        }
 
         $user->update([
             'public_name' => $validated['public_name'],
@@ -89,14 +80,14 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('image') || $validated['remove_image'] == "true") {
-            FileController::delete($user, Image::TYPE_PROFILE);
+            FileService::delete($user, ImageTypeEnum::PROFILE->value);
         }
         if ($request->hasFile('image')) {
-            FileController::upload($request, $user, Image::TYPE_PROFILE);
+            FileService::upload($request, $user, ImageTypeEnum::PROFILE->value);
         }
 
-        if ($request->filled('new_password') && ($request->filled('old_password') || $isAdminEdit)) {
-            if (!Hash::check($request->input('old_password'), $user->password) && !$isAdminEdit) {
+        if ($request->filled('new_password') && $request->filled('old_password')) {
+            if (!Hash::check($request->input('old_password'), $user->password)) {
                 return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
             }
 
@@ -106,66 +97,5 @@ class UserController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
-    }
-
-    public function follow(User $user)
-    {
-        try {
-            $this->authorize('follow', $user);
-            Auth::user()->following()->attach($user->id);
-
-            return response()->json(['message' => 'Successfully followed user']);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => 'Cannot follow this user'], 403);
-        }
-    }
-
-    public function unfollow(User $user)
-    {
-        try {
-            $this->authorize('unfollow', $user);
-            Auth::user()->following()->detach($user->id);
-
-            return response()->json(['message' => 'Successfully unfollowed user']);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => 'Cannot follow this user'], 403);
-        }
-    }
-
-    public function showFollowers(User $user)
-    {
-        return view('pages.users', ['title' => "Followers", 'user' => $user]);
-    }
-
-    public function showFollowing(User $user)
-    {
-        return view('pages.users', ['title' => "Following", 'user' => $user]);
-    }
-
-    public function getFollowers(User $user, Request $request)
-    {
-        return $this->getFollowData($user->followers(), $request);
-    }
-
-    public function getFollowing(User $user, Request $request)
-    {
-        return $this->getFollowData($user->following(), $request);
-    }
-
-    private function getFollowData($query, Request $request)
-    {
-        $followers = $query->paginate(10);
-
-        $followers->getCollection()->transform(function ($follower) {
-            $follower->can_follow = auth()->user()->can('follow', $follower);
-            $follower->can_unfollow = auth()->user()->can('unfollow', $follower);
-            return $follower;
-        });
-
-        return response()->json([
-            'users' => $followers,
-            'next_page' => $followers->currentPage() + 1,
-            'last_page' => $followers->lastPage(),
-        ]);
     }
 }

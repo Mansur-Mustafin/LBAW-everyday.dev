@@ -2,65 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
 use App\Models\NewsPost;
-use App\Models\User;
+use App\Services\FileService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    static $default = 'default.jpg';
-    static $diskName = 'public_uploads';
-
-    static $systemTypes = [
-        'profile' => ['png', 'jpg', 'jpeg', 'gif'],
-        'post' => ['png', 'jpg', 'jpeg', 'gif'],
-    ];
-
-    public static function upload(Request $request, User|NewsPost $model, string $imageType)
+    public function ajaxUpload(Request $request)
     {
-        $type = $model instanceof User ? 'profile' : 'post';
-
-        $request->validate([
-            'image' => 'image|max:2048|mimes:' . implode(',', self::$systemTypes[$type]),
+        $validated = $request->validate([
+            'image' => 'required|image|max:2048|mimes:' . implode(',', FileService::$systemTypes['post']),
+            'model_id' => 'required|integer',
+            'image_type' => 'required|string',
         ]);
 
-        $file = $request->file('image');
-        $fileName = $file->hashName();
-        $filePath = $file->storeAs($type, $fileName, self::$diskName);
+        $model = NewsPost::find($validated['model_id']);
 
-        Image::create([
-            'path' => $filePath,
-            'image_type' => $imageType,
-            $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
-        ]);
+        if (!$model) {
+            return response()->json(['success' => false, 'message' => 'Model not found'], 404);
+        }
 
-        return redirect()->back();
+        return FileService::upload($request, $model, $validated['image_type']);
     }
 
-    public static function delete(User|NewsPost $model, string $imageType)
+    public function ajaxDelete(Request $request)
     {
-        $image = null;
-        switch ($imageType) {
-            case Image::TYPE_PROFILE:
-                $image = $model->profileImage;
-                break;
+        $validated = $request->validate([
+            'model_id' => 'required|integer',
+            'image_type' => 'required|string',
+            'path' => 'required|string' //TODO: passa aqui o path de imagem que temos que deletar.
+        ]);
 
-            case Image::TYPE_POST_TITLE:
-                $image = $model->titleImage;
-                break;
+        $model = NewsPost::find($validated['model_id']);
 
-            case Image::TYPE_POST_CONTENT:
-                // TODO
-                break;
+        if (!$model) {
+            return response()->json(['success' => false, 'message' => 'Model not found'], 404);
         }
 
-        if ($image->path) {
-            if (Storage::disk('public_uploads')->exists($image->path)) {
-                Storage::disk('public_uploads')->delete($image->path);
-            }
-            $image->delete();
-        }
+        return FileService::delete($model, $validated['image_type'], $validated['path']);
     }
 }
