@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\NotificationTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Vote extends Model
 {
@@ -21,6 +23,25 @@ class Vote extends Model
         'created_at',
         'vote_type',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($vote) {
+            if ($vote->news_post_id){
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::VOTE,
+                    'user_id' => optional($vote->newsPost)->author_id,
+                    'vote_id' => $vote->id,
+                ]);
+            } else {
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::VOTE,
+                    'user_id' => optional($vote->comment)->author_id,
+                    'vote_id' => $vote->id,
+                ]);
+            }
+        });
+    }
 
     public function user()
     {

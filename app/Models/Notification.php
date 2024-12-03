@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\PostVote;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,13 @@ class Notification extends Model
     ];
 
     protected $with = ['newsPost', 'vote', 'follower', 'comment'];
+    
+    protected static function booted()
+    {
+        static::created(function (self $notification) {
+            event(new PostVote($notification));
+        });   
+    }
 
     public function user()
     {

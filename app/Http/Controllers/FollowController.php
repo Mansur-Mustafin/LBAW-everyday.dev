@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NotificationTypeEnum;
 use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,12 @@ class FollowController extends Controller
         try {
             $this->authorize('follow', $user);
             Auth::user()->following()->attach($user->id);
+
+            Notification::create([
+                'notification_type' => NotificationTypeEnum::FOLLOW,
+                'user_id' => $user->id,
+                'follower_id' => Auth::id(),
+            ]);
 
             return response()->json(['message' => 'Successfully followed user']);
         } catch (AuthorizationException $e) {

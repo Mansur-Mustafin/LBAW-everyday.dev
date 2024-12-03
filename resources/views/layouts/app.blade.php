@@ -11,6 +11,12 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <script>
+        const pusherAppKey = "{{ env('PUSHER_APP_KEY') }}";
+        const pusherCluster = "{{ env('PUSHER_APP_CLUSTER') }}";
+    </script>
+
+    <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
