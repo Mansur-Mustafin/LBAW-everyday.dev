@@ -11,6 +11,7 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,6 +70,7 @@ Route::prefix('vote')->middleware('auth')->controller(VoteController::class)->gr
     Route::delete('/{vote}', 'destroy')->name('vote.destroy');
 });
 
+<<<<<<< HEAD
 Route::middleware('auth')->controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
@@ -83,6 +85,33 @@ Route::middleware('auth')->controller(FollowController::class)->group(function (
     Route::get('users/{user}/following', 'showFollowing')->name('users.following');
     Route::get('api/users/{user}/followers', 'getFollowers');
     Route::get('api/users/{user}/following', 'getFollowing');
+=======
+// User
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users/{user}/posts', 'showUserPosts')->middleware('auth')->name('user.posts');
+    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->middleware('auth')->name('user.upvotes');
+    Route::get('/users/{user}/edit', 'showEditForm')->middleware('auth')->name('user.edit');
+    Route::put('/users/{user}', 'update')->middleware('auth')->name('user.update');
+
+    // Follow
+    Route::post('/users/{user}/follow', 'follow')->middleware('auth')->name('users.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollow')->middleware('auth')->name('users.unfollow');
+    Route::get('users/{user}/followers', 'showFollowers')->middleware('auth')->name('users.followers');
+    Route::get('users/{user}/following', 'showFollowing')->middleware('auth')->name('users.following');
+    Route::get('api/users/{user}/followers', 'getFollowers')->middleware('auth');
+    Route::get('api/users/{user}/following', 'getFollowing')->middleware('auth');
+
+    // Follow Tag
+    Route::post('/users/{user}/follow/tag/{tag}','followTag')->middleware('auth')->name('user.follow_tag');
+    Route::delete('/users/{user}/unfollow/tag/{tag}','unfollowTag')->middleware('auth')->name('user.unfollow_tag');
+    // Route::get('users/{user}/following/tags', 'showTags')->middleware('auth')->name('users.following');
+    Route::get('api/users/{user}/following/tags', 'getFollowingTags')->middleware('auth');
+});
+
+// Tags
+Route::controller(TagController::class)->group(function () {
+    Route::get('/api/tags','getTags')->middleware('auth');
+>>>>>>> 5bb5029 (feat:tags backend)
 });
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
