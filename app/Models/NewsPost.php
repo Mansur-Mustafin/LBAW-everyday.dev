@@ -61,10 +61,10 @@ class NewsPost extends Model
         return $this->hasMany(Vote::class, 'news_post_id');
     }
 
-    public function getTagNamesAttribute()
-    {
-        return $this->tags()->pluck('name')->toArray();
-    }
+    // public function notifications()
+    // {
+    //     return $this->hasMany(Notification::class, 'news_post_id');
+    // }
 
     public function titleImage()
     {
@@ -86,5 +86,10 @@ class NewsPost extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function getTagNamesAttribute()
+    {
+        return $this->tags()->pluck('name')->toArray();
     }
 }

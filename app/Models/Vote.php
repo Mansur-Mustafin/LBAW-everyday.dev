@@ -36,4 +36,9 @@ class Vote extends Model
     {
         return $this->belongsTo(Comment::class, 'comment_id');
     }
+
+    // public function notification()
+    // {
+    //     return $this->hasOne(Notification::class, 'vote_id');
+    // }
 }

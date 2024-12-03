@@ -18,7 +18,7 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
-      data.users.data.forEach((user) => {
+      data.data.forEach((user) => {
         resultsDiv.innerHTML += buildUser(user);
       });
     },
@@ -204,6 +204,57 @@ if (resultsDivFollow) {
   const loadMoreData = async (page) => {
     const url = apiUrl + `?page=${page}`;
     buildByRequest(url, buildUserFollowCard, resultsDivFollow);
+  };
+
+  document.addEventListener('scroll', function () {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let windowHeight = window.innerHeight;
+    let documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollTop + windowHeight >= documentHeight - 100) {
+      if (page <= lastPage && loading == false) {
+        page++;
+        loadMoreData(page);
+      }
+      if (page > lastPage) {
+        if (loadingIcon) loadingIcon.classList.add('hidden');
+      }
+    }
+  });
+}
+
+// Notifications
+const resultsDivNotification = document.getElementById('notifications-list');
+if (resultsDivNotification) {
+  const urlObj = new URL(resultsDivNotification.dataset.url);
+  const apiUrl = urlObj.pathname;
+
+  const buildNotification = (notification) => {
+    console.log(notification);
+    let html = '';
+
+    switch (notification.notification_type) {
+      case 'FollowNotification':
+        html = `<div>Yo brother, o @${notification.follower.username} aka ${notification.follower.public_name} deu follow.</div>`;
+        break;
+        
+      default:
+        html = `<div>${notification.notification_type}</div>`;
+        break;
+    }
+
+    return html;
+  };
+
+  window.onload = async () => {
+    resultsDivNotification.innerHTML = '';
+    page = 1;
+    buildByRequest(apiUrl, buildNotification, resultsDivNotification);
+  };
+
+  const loadMoreData = async (page) => {
+    const url = apiUrl + `?page=${page}`;
+    buildByRequest(url, buildNotification, resultsDivNotification);
   };
 
   document.addEventListener('scroll', function () {
