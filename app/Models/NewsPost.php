@@ -51,7 +51,8 @@ class NewsPost extends Model
     {
         static::created(function ($newsPost) {
             $followers = $newsPost->author->followers()->pluck('id');
-    
+
+            // TODO: use Notification::insert or make as a job.
             foreach ($followers as $followerId) {
                 Notification::create([
                     'notification_type' => NotificationTypeEnum::POST,

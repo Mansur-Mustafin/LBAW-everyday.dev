@@ -14,6 +14,7 @@
     <script>
         const pusherAppKey = "{{ env('PUSHER_APP_KEY') }}";
         const pusherCluster = "{{ env('PUSHER_APP_CLUSTER') }}";
+        const userId = "{{ Auth::id() }}"
     </script>
 
     <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
