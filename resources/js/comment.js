@@ -4,6 +4,7 @@ import { addVoteButtonBehaviour } from './vote.js';
 // Adds Vote Behaviour to Comments
 document.addEventListener('DOMContentLoaded', function () {
   addButtonsBehaviour();
+  markdownSupport();
 });
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -199,4 +200,34 @@ function addButtonsBehaviour() {
       );
     });
   });
+}
+
+function markdownSupport() {
+  document.querySelectorAll('.write-comment').forEach((element) => {
+    element.addEventListener('click', () => toggleWritePreview(element.dataset.post, element))
+  })
+
+  document.querySelectorAll('.preview-comment').forEach((element) => {
+    element.addEventListener('click', () => toggleWritePreview(element.dataset.post, element))
+  })
+}
+
+function toggleWritePreview(id, elem) {
+
+  const writeButton = document.getElementById("write-comment-post-" + id)
+  const previewButton = document.getElementById("preview-comment-post-" + id)
+
+  if (writeButton.dataset.active == 'true' && previewButton == elem) {
+    writeButton.dataset.active = 'false'
+    writeButton.classList.remove('bg-input')
+
+    previewButton.dataset.active = 'true'
+    previewButton.classList.add('bg-input')
+  } else if (previewButton.dataset.active == 'true' && writeButton == elem) {
+    previewButton.dataset.active = 'false'
+    previewButton.classList.remove('bg-input')
+
+    writeButton.dataset.active = 'true'
+    writeButton.classList.add('bg-input')
+  }
 }
