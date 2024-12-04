@@ -111,6 +111,6 @@ Route::prefix('file')->middleware('auth')->controller(FileController::class)->gr
 });
 
 Route::middleware('auth')->controller(NotificationController::class)->group(function () {
-    Route::get('/notifications', 'index');
+    Route::get('/notifications', 'index')->name('notifications.index');
     Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
 });

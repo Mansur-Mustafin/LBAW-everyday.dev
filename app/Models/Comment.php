@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\NotificationTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Comment extends Model
 {
@@ -29,16 +30,14 @@ class Comment extends Model
     protected static function booted()
     {
         static::created(function ($comment) {
-            if ($comment->news_post_id) {
+            $user_id = $comment->news_post_id ?
+                optional($comment->post)->author_id :
+                optional($comment->parent)->author_id;
+
+            if ($user_id != Auth::id()){
                 Notification::create([
                     'notification_type' => NotificationTypeEnum::COMMENT,
-                    'user_id' => optional($comment->post)->author_id,
-                    'comment_id' => $comment->id,
-                ]);
-            } else {
-                Notification::create([
-                    'notification_type' => NotificationTypeEnum::COMMENT,
-                    'user_id' => optional($comment->parent)->author_id,
+                    'user_id' => $user_id,
                     'comment_id' => $comment->id,
                 ]);
             }
