@@ -29,11 +29,19 @@ class Comment extends Model
     protected static function booted()
     {
         static::created(function ($comment) {
-            Notification::create([
-                'notification_type' => NotificationTypeEnum::COMMENT,
-                'user_id' => $comment->author_id,
-                'comment_id' => $comment->id,
-            ]);
+            if ($comment->news_post_id) {
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::COMMENT,
+                    'user_id' => optional($comment->post)->author_id,
+                    'comment_id' => $comment->id,
+                ]);
+            } else {
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::COMMENT,
+                    'user_id' => optional($comment->parent)->author_id,
+                    'comment_id' => $comment->id,
+                ]);
+            }
         });
     }
 

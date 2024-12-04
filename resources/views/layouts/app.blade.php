@@ -53,6 +53,7 @@
             </section>
         @else
             @include('layouts.header')
+            @include('partials.notification-container')
 
             <div class="flex flex-grow">
 

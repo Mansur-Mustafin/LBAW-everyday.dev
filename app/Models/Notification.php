@@ -66,7 +66,7 @@ class Notification extends Model
     public function comment()
     {
         return $this->belongsTo(Comment::class, 'comment_id')
-            ->select('id', 'content', 'author_id')
+            ->select('id', 'content', 'author_id', 'news_post_id')
             ->with('author');
     }
 }
