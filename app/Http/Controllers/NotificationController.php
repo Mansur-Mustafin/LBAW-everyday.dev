@@ -17,7 +17,7 @@ class NotificationController extends Controller
     {
         $notifications = Auth::user()->notifications()
             ->orderBy('created_at', 'desc')
-            ->paginate(1);
+            ->paginate(10);
 
         $unreadNotificationIds = $notifications->where('is_viewed', false)->pluck('id');
         if ($unreadNotificationIds->isNotEmpty()) {
