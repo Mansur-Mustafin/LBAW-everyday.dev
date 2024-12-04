@@ -229,15 +229,28 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
+  
   const buildNotification = (notification) => {
     console.log(notification);
     let html = '';
 
     switch (notification.notification_type) {
       case 'FollowNotification':
-        html = `<div>Yo brother, o @${notification.follower.username} aka ${notification.follower.public_name} deu follow.</div>`;
+        html = `<div class='p-10 border-white border-2'>Yo brother, o @${notification.follower.username} aka ${notification.follower.public_name} deu follow.</div>`;
         break;
-        
+
+      case 'VoteNotification':
+        html = `<div class='p-10 border-white border-2'>Yo brother, o @${notification.vote.user.username} aka ${notification.vote.user.public_name} deu vote.</div>`;
+        break;
+
+      case 'CommentNotification':
+        html = `<div class='p-10 border-white border-2'>Yo brother, o @${notification.comment.author.username} aka ${notification.comment.author.public_name} escreveu comment.</div>`;
+        break;
+
+      case 'PostNotification':
+        html = `<div class='p-10 border-white border-2'>Yo brother, o @${notification.news_post.author.username} aka ${notification.news_post.author.public_name} publicou o <span class="font-semibold">${notification.news_post.title}.<span></div>`;
+        break;
+
       default:
         html = `<div>${notification.notification_type}</div>`;
         break;

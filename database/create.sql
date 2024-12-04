@@ -38,6 +38,13 @@ CREATE TABLE "user" (
     remember_token VARCHAR
 );
 
+CREATE TABLE follows (
+    follower_id INTEGER NOT NULL REFERENCES "user"(id),     -- who follows
+    followed_id INTEGER NOT NULL REFERENCES "user"(id),     -- who is followed
+    PRIMARY KEY (follower_id, followed_id),
+    CHECK (follower_id <> followed_id)
+);
+
 CREATE TABLE news_post (
     id SERIAL PRIMARY KEY,
     title VARCHAR NOT NULL,
@@ -110,7 +117,11 @@ CREATE TABLE notification (
         (notification_type = 'VoteNotification' AND vote_id IS NOT NULL) OR
         (notification_type = 'FollowNotification' AND follower_id IS NOT NULL) OR
         (notification_type = 'CommentNotification' AND comment_id IS NOT NULL)
-    )
+    ),
+    CONSTRAINT fk_notification_follows  -- When user unfollow, need to delete that notification.
+        FOREIGN KEY (follower_id, user_id)
+        REFERENCES follows(follower_id, followed_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE report (
@@ -155,13 +166,6 @@ CREATE TABLE unblock_appeal (
     description TEXT NOT NULL,
     is_resolved BOOLEAN NOT NULL DEFAULT FALSE,
     user_id INTEGER NOT NULL REFERENCES "user"(id)
-);
-
-CREATE TABLE follows (
-    follower_id INTEGER NOT NULL REFERENCES "user"(id),     -- who follows
-    followed_id INTEGER NOT NULL REFERENCES "user"(id),     -- who is followed
-    PRIMARY KEY (follower_id, followed_id),
-    CHECK (follower_id <> followed_id)
 );
 
 CREATE TABLE user_tag_subscribes (

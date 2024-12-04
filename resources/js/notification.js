@@ -9,7 +9,6 @@ if (userId) {
   const channel = pusher.subscribe(`user.${userId}`);
 
   channel.bind('notification-personal', function (data) {
-    console.log(`${Object.entries(data.notification)}`);
     displayNotification(data.notification);
   });
 
