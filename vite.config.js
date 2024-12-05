@@ -18,7 +18,7 @@ export default defineConfig({
                 'resources/js/toggle-two.js',
                 'resources/js/feed.js',
                 'resources/js/notification.js',
-
+                'resources/js/bookmark.js',
             ],
             refresh: true,
         }),
