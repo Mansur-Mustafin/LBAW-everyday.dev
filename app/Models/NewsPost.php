@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ImageTypeEnum;
+use App\Enums\NotificationTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,6 +47,22 @@ class NewsPost extends Model
         'changed_at' => 'datetime',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($newsPost) {
+            $followers = $newsPost->author->followers()->pluck('id');
+
+            // TODO: use Notification::insert or make as a job.
+            foreach ($followers as $followerId) {
+                Notification::create([
+                    'notification_type' => NotificationTypeEnum::POST,
+                    'user_id' => $followerId,
+                    'news_post_id' => $newsPost->id,
+                ]);
+            }
+        });
+    }
+
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
@@ -61,10 +78,10 @@ class NewsPost extends Model
         return $this->hasMany(Vote::class, 'news_post_id');
     }
 
-    public function getTagNamesAttribute()
-    {
-        return $this->tags()->pluck('name')->toArray();
-    }
+    // public function notifications()
+    // {
+    //     return $this->hasMany(Notification::class, 'news_post_id');
+    // }
 
     public function titleImage()
     {
@@ -86,5 +103,10 @@ class NewsPost extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function getTagNamesAttribute()
+    {
+        return $this->tags()->pluck('name')->toArray();
     }
 }

@@ -91,7 +91,7 @@ class NewsPostController extends Controller
 
         $this->syncTags($post, $validated['tags'] ?? '');
 
-        return redirect()->route('home')
+        return redirect()->route('news.show', $post->id) 
             ->withSuccess('You have successfully created post!');
     }
 
@@ -131,7 +131,7 @@ class NewsPostController extends Controller
         $this->authorize('delete', $newsPost);
         $newsPost->delete();
 
-        return redirect()->route('home')
+        return redirect()->route('news.recent')
             ->withSuccess('Post deleted successfully!');
     }
 

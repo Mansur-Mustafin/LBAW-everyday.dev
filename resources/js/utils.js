@@ -30,3 +30,27 @@ export function redirectToLogin() {
 
   window.location.href = loginUrl;
 }
+
+export function truncateWords(str, maxWords = 10) {
+  if (!str) return '';
+  
+  const words = str.split(/\s+/); // Split by any whitespace character
+  if (words.length > maxWords) {
+      return words.slice(0, maxWords).join(' ') + '...';
+  }
+  return str;
+}
+
+export function showSuccessMessage(message) {
+  const popup = document.createElement('div');
+  popup.id = 'success-popup';
+  popup.className = 'fixed bottom-4 right-4 bg-green-900 text-white p-4 rounded-xl shadow-lg';
+  popup.innerText = message;
+
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.classList.add('hidden');
+    setTimeout(() => popup.remove(), 1000);
+  }, 4000);
+}
