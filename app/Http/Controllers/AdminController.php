@@ -106,4 +106,22 @@ class AdminController extends Controller
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
     }
+
+    public function createTag(Request $request) 
+    {
+        $tag = $request->tag();
+        Tag::create([
+            'name'=>$tag
+        ]);
+
+        return redirect()->route('admin')
+            ->withSuccess('You have sucessfully created a tag!');
+    }
+
+    public function deleteTag(Tag $tag)
+    {
+        $tag->delete();
+        return redirect->route('admin')
+            ->withSuccess('You have sucessfully deleted a tag!');
+    }
 }

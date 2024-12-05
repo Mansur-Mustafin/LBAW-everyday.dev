@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/js/post.js',
                 'resources/js/comment.js',
                 'resources/js/toggle-two.js',
+                'resources/js/admin.js',
             ],
             refresh: true,
         }),
