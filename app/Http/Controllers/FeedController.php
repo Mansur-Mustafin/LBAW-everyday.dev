@@ -28,8 +28,17 @@ class FeedController extends Controller
     {
         $user = Auth::user();
         $following = $user->following()->pluck('id');
-        $news_posts = NewsPost::whereIn('author_id', $following)
-            ->orderBy('created_at', 'desc');
+        $news_posts_by_follow = NewsPost::whereIn('author_id', $following)
+            ->orderBy('created_at', 'desc')->get();
+        $news_posts_by_tag =  $user->tags()->get()->map(function ($tag,$key) {
+            return $tag->newsPosts()->get();
+        })->flatten();
+
+        $news_posts = $news_posts_by_follow->merge($news_posts_by_tag);
+
+
+        dd(gettype($news_posts));
+
         return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
     }
 }

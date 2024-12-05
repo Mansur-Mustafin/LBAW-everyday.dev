@@ -111,7 +111,7 @@ const buildPost = (post) => {
 };
 
 const buildTag = (tag) => {
-  const url = `${baseUrl}/search/tags/${tag.name}`;
+  const url = `${baseUrl}/search/posts/tags/${tag.name}`;
   return `
         <div class="p-2 hover:bg-gray-700">
             <a href="${url}" class="flex items-center">

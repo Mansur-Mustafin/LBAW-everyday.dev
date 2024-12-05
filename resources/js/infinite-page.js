@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   addVoteButtonBehaviour();
 });
 
-const buildByRequest = async (url, buildUser, resultsDiv) => {
+const buildByRequest = async (url, buildUser, resultsDiv,type = "user") => {
   if (loading) return;
   loading = true;
   if (loadingIcon) loadingIcon.classList.remove('hidden');
@@ -18,9 +18,15 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
-      data.users.data.forEach((user) => {
-        resultsDiv.innerHTML += buildUser(user);
-      });
+      if(type == "user") {
+        data.users.data.forEach((user) => {
+          resultsDiv.innerHTML += buildUser(user);
+        });
+      } else {
+        data.tags.data.forEach((tag) => {
+          resultsDiv.innerHTML += buildUser(tag)
+        })
+      }
     },
     method
   );
@@ -79,9 +85,64 @@ if (postContainer) {
   });
 }
 
+const adminPageType = document.getElementById('admin-page-type');
+
+// Tags on Admin Page
+const resultsDivAdminTag = document.getElementById('admin-search-tags-results');
+if (resultsDivAdminTag && adminPageType.value == 'tag') {
+  const searchBar = document.getElementById('admin-search-bar');
+  const baseUrl = searchBar.dataset.url;
+
+  const buildUserAdminCard = (tag) => {
+    return `
+        <div class="flex flex-col border border-gray-700 rounded">
+            <div class="flex justify-between p-2">
+              <p class="p-5">${tag.name}</p>
+            </div>
+        </div>
+        `;
+  };
+
+  window.onload = async () => {
+    const searchQuery = `${baseUrl}/api/search/tags/`;
+    resultsDivAdminTag.innerHTML = '';
+    page = 1;
+    buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdminTag,"tag");
+  };
+
+  const loadMoreData = async (page) => {
+    const searchQuery = `${baseUrl}/api/search/tags/${searchBar.value}?page=${page}`;
+    buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdminTag,"tag");
+  };
+
+  if (searchBar) {
+    searchBar.onkeyup = async () => {
+      const searchQuery = `${baseUrl}/api/search/tags/${searchBar.value}`;
+      resultsDivAdminTag.innerHTML = '';
+      page = 1;
+      buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdminTag,"tag");
+    };
+  }
+
+  document.addEventListener('scroll', function () {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    let windowHeight = window.innerHeight;
+    let documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollTop + windowHeight >= documentHeight - 100) {
+      if (page <= lastPage && loading == false) {
+        page++;
+        loadMoreData(page);
+      }
+      if (page > lastPage) {
+        if (loadingIcon) loadingIcon.classList.add('hidden');
+      }
+    }
+  });
+}
 // Users on Admin Dashboard
 const resultsDivAdmin = document.getElementById('admin-search-users-results');
-if (resultsDivAdmin) {
+if (resultsDivAdmin && adminPageType.value == 'user') {
   const searchBar = document.getElementById('admin-search-bar');
   const baseUrl = searchBar.dataset.url;
 

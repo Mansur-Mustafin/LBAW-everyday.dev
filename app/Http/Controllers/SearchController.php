@@ -54,7 +54,7 @@ class SearchController extends Controller
         return $this->news_post_page($news_posts, $title, $request, $baseUrl);
     }
 
-    public function searchTag(Request $request)
+    public function searchTagPosts(Request $request)
     {
         $tag_query = $request->search;
         $tag = Tag::where('name', $tag_query)->first();
@@ -63,6 +63,13 @@ class SearchController extends Controller
         $baseUrl = "/search/tags/{$tag_query}";
 
         return $this->news_post_page($news_posts, $title, $request, $baseUrl);
+    }
+
+    public function searchTags(Request $request)
+    {
+        $tag_query = "%" . strtolower($request->search) . "%";
+        $tags = Tag::whereRaw("LOWER(name) like ?",$tag_query);
+        return $this->paginate_tags($tags,$request);
     }
 
     public function searchUser(Request $request)

@@ -51,4 +51,16 @@ trait PaginationTrait
             'last_page' => $users->lastPage()
         ]);
     }
+
+    public function paginate_tags($tags, Request $request)
+    {
+        $tags = $tags->paginate(10);
+
+
+        return response()->json([
+            'tags'      => $tags,
+            'next-page' => $tags->currentPage() + 1,
+            'last_page' => $tags->lastPage()
+        ]);
+    }
 }

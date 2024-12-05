@@ -5,9 +5,16 @@
 
 <div class="container mx-auto flex flex-col gap-2 mt-4 laptop:m-auto laptop:max-w-[42.5rem]">
 
-  <h1 class="text-7xl border-b border-gray-700">
-    Users
-  </h1>
+  <input type="text" class="hidden" id="admin-page-type" value="tag">
+
+  <div class="text-7xl border-b border-gray-700">
+    <a href="#" class="" id="user-title">
+      Users
+    </a>
+    <a href ="#" id="tag-title">
+      Tags
+    </a>
+  </div>
 
   <div class="flex text-black bg-white rounded p-2 tablet:mx-0 mx-2 mt-4">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" viewBox="0 0 30 30">
@@ -19,16 +26,28 @@
       class="laptop:h-full laptop:p-2 outline-none rounded-t laptop:w-full text-lg laptop:text-xl">
   </div>
 
-  <a href="{{url('admin/users/create')}}"
+  <a href="{{url('admin/users/create')}}" id="create-user"
     class="flex flex-col border text-white bg-black border-gray-700 rounded text-2xl items-center justify-center p-2 mx-2 tablet:mx-0">
     <p class="w-fit">
       Create new user
     </p>
   </a>
+  
+  <a href="{{url('admin/users/create')}}" id="create-tag"
+    class="flex flex-col border text-white bg-black border-gray-700 rounded text-2xl items-center justify-center p-2 mx-2 tablet:mx-0">
+    <p class="w-fit">
+     Create new Tag 
+    </p>
+  </a>
+
   <div id="admin-search-users-results" class="laptop:flex laptop:flex-col laptop:gap-2">
   </div>
+  <div id="admin-search-tags-results" class="laptop:flex laptop:flex-col laptop:gap-2">
   <div id="loading-icon" class="my-6">
     <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
   </div>
+
 </div>
+
+
 @endsection
