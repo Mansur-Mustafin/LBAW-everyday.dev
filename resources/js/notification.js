@@ -27,15 +27,15 @@ if (userId) {
       imageSrc: vote.user.profile_image.url,
       triggeredBy: vote.user.public_name,
       text: vote.is_upvote
-        ? `Upvoted your ${vote.news_post_id ? 'post.' : 'comment.'}.`
-        : `Downvoted your ${vote.news_post_id ? 'post.' : 'comment.'}.`,
-      hrefOpen: vote.news_post_id ? `${vote.news_post_id}` : `#`,
+        ? `Upvoted your ${vote.news_post_id ? 'post' : 'comment'}.`
+        : `Downvoted your ${vote.news_post_id ? 'post' : 'comment'}.`,
+      hrefOpen: vote.news_post_id ? `news/${vote.news_post_id}` : `#`,
     }),
     CommentNotification: ({ comment }) => ({
       imageSrc: comment.author.profile_image.url,
       triggeredBy: comment.author.public_name,
       text: comment.news_post_id ? 'Leaved a comment on your post.' : 'Replied to your comment.',
-      hrefOpen: comment.news_post_id ? `${comment.news_post_id}` : `#`,
+      hrefOpen: comment.news_post_id ? `news/${comment.news_post_id}` : `#`,
     }),
     FollowNotification: ({ follower }) => ({
       imageSrc: follower.profile_image.url,
@@ -47,7 +47,7 @@ if (userId) {
       imageSrc: news_post.author.profile_image.url,
       triggeredBy: news_post.author.public_name,
       text: `Posted: ${truncateWords(news_post.title, 15)}`,
-      hrefOpen: `${news_post.id}`,
+      hrefOpen: `news/${news_post.id}`,
     }),
   };
 

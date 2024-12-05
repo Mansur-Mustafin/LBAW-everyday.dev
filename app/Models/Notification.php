@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\NotificationTypeEnum;
 use App\Events\SendNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\NotificationTypeEnum;
 use Illuminate\Support\Facades\Auth;
 
 class Notification extends Model
