@@ -8,10 +8,14 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
+
+// use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,4 +110,13 @@ Route::controller(SearchController::class)->group(function () {
 Route::prefix('file')->middleware('auth')->controller(FileController::class)->group(function () {
     Route::post('/upload', 'uploadAjax');
     Route::post('/delete', 'deleteAjax');
+});
+
+Route::middleware('auth')->controller(NotificationController::class)->group(function () {
+    Route::get('/notifications', 'index')->name('notifications.index');
+    Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
+});
+
+Route::middleware('auth')->controller(NotificationSettingController::class)->group(function () {
+    Route::put('/notification-settings', 'update');
 });

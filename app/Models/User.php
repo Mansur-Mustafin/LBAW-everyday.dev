@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class, 'author_id');
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
     public function followers()
     {
         return $this->belongsToMany(self::class, 'follows', 'followed_id', 'follower_id');
@@ -69,11 +74,17 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
     }
 
+    public function notificationSetting()
+    {
+        return $this->hasOne(NotificationSetting::class, 'user_id', 'id');
+    }
+
     public function getTagNamesAttribute()
     {
         return $this->tags()->pluck('name')->toArray();
     }
 
+    // TODO: para o que isso serve?
     public function isAdmin(): bool
     {
         return $this->is_admin == true;
