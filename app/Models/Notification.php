@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Events\SendNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\NotificationTypeEnum;
+use Illuminate\Support\Facades\Auth;
 
 class Notification extends Model
 {
@@ -31,6 +33,32 @@ class Notification extends Model
     ];
 
     protected $with = ['newsPost', 'vote', 'follower', 'comment'];
+
+    public static function create(array $attributes = [])
+    {
+        $userId = $attributes['user_id'] ?? null;
+
+        if ($userId == Auth::id()) {
+            return null;
+        }
+
+        $notificationSetting = NotificationSetting::where('user_id', $userId)->first();
+
+        $type = $attributes['notification_type'] ?? null;
+        $canNotify = match ($type) {
+            NotificationTypeEnum::VOTE => $notificationSetting->vote_notifications,
+            NotificationTypeEnum::COMMENT => $notificationSetting->comment_notifications,
+            NotificationTypeEnum::FOLLOW => $notificationSetting->follow_notifications,
+            NotificationTypeEnum::POST => $notificationSetting->post_notifications,
+            default => false,
+        };
+
+        if (!$canNotify) {
+            return null;
+        }
+
+        return static::query()->create($attributes);
+    }
 
     protected static function booted()
     {

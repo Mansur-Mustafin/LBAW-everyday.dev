@@ -231,7 +231,7 @@ if (resultsDivNotification) {
 
   
   const buildNotification = (notification) => {
-    console.log(notification);
+    // console.log(notification);
     let html = '';
 
     switch (notification.notification_type) {

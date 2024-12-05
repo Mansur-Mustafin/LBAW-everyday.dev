@@ -180,6 +180,17 @@ CREATE TABLE bookmarks (
     PRIMARY KEY (user_id, news_post_id)
 );
 
+-- TODO: add in UML, delete table when delete user.
+CREATE TABLE notification_settings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
+    follow_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    vote_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    post_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    comment_notifications BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
 --
 -- Unique Indexes
 --
@@ -280,6 +291,21 @@ CREATE INDEX idx_news_comment_search ON comment USING GIN (tsvectors);
 --
 -- Triggers
 --
+
+-- Trigger 0 TODO: add no Wiki (vai criar um notification setting para cada usuario que foi criado)
+CREATE OR REPLACE FUNCTION create_default_notification_settings()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification_settings (user_id)
+    VALUES (NEW.id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_user_insert
+AFTER INSERT ON "user"
+FOR EACH ROW
+EXECUTE FUNCTION create_default_notification_settings();
 
 -- Trigger 1
 CREATE OR REPLACE FUNCTION update_changed_at()

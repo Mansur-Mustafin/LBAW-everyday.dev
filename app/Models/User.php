@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
     }
 
+    public function notificationSetting()
+    {
+        return $this->hasOne(NotificationSetting::class, 'user_id', 'id');
+    }
+
     public function getTagNamesAttribute()
     {
         return $this->tags()->pluck('name')->toArray();

@@ -1,5 +1,6 @@
-import { truncateWords } from './utils.js';
+import { truncateWords, showSuccessMessage, sendAjaxRequest } from './utils.js';
 
+// Receive Notification in Real-time
 if (userId) {
   const pusher = new Pusher(pusherAppKey, {
     cluster: pusherCluster,
@@ -90,4 +91,61 @@ if (userId) {
 
     setTimeout(() => dismissNotification(notificationElement), 5000);
   }
+}
+
+// Notification Settings
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+const notificationSettings = document.getElementById('notification-settings');
+if (notificationSettings) {
+  const notificationSettingsButtons = notificationSettings.querySelector(
+    '#notification-settings-buttons'
+  );
+  const saveButton = notificationSettingsButtons.querySelector('#save-notification-button');
+  const cancelButton = notificationSettingsButtons.querySelector('#cancel-notification-button');
+  const toggleTwoDivs = document.querySelectorAll('.toggleTwo');
+
+  saveButton.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const settings = {};
+    toggleTwoDivs.forEach((div) => {
+      const hiddenToggle = div.querySelector('.hiddenToggle');
+      const name = hiddenToggle.name;
+      const value = hiddenToggle.value === 'true';
+      settings[name] = value;
+    });
+
+    sendAjaxRequest(
+      '/notification-settings',
+      (data) => {
+        if (data.success) {
+          notificationSettingsButtons.classList.add('hidden');
+          showSuccessMessage(data.message);
+          toggleTwoDivs.forEach((div) => {
+            div.dataset.initialvalue =
+              div.querySelector('.hiddenToggle').value === 'true' ? 'true' : 'false';
+          });
+        }
+      },
+      'PUT',
+      { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+      JSON.stringify(settings)
+    );
+  });
+
+  cancelButton.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    toggleTwoDivs.forEach((div) => {
+      const toggleTwo = div.querySelector('.toggleTwoInput');
+      const hiddenToggle = div.querySelector('.hiddenToggle');
+      const initialValue = div.dataset.initialvalue === 'true';
+
+      toggleTwo.checked = initialValue;
+      hiddenToggle.value = initialValue ? 'true' : 'false';
+    });
+
+    notificationSettingsButtons.classList.add('hidden');
+  });
 }
