@@ -36,4 +36,6 @@
     </section>
 </section>
 
+@include('layouts.footer')
+
 @endsection
