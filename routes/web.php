@@ -11,7 +11,8 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\VoteController;
+use App\Http\Controllers\VoteController;    
+use App\Http\Controllers\NotificationSettingController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Broadcast;
 
@@ -113,4 +114,8 @@ Route::prefix('file')->middleware('auth')->controller(FileController::class)->gr
 Route::middleware('auth')->controller(NotificationController::class)->group(function () {
     Route::get('/notifications', 'index')->name('notifications.index');
     Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
+});
+
+Route::middleware('auth')->controller(NotificationSettingController::class)->group(function () {
+    Route::put('/notification-settings', 'update');
 });

@@ -10,7 +10,7 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        return view('pages.notifications');
+        return view('pages.notifications', ['settings' => Auth::user()->notificationSetting]);
     }
 
     public function getNotifications(Request $request)

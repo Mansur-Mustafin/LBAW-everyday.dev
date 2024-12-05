@@ -31,13 +31,11 @@ class Vote extends Model
                 optional($vote->newsPost)->author_id :
                 optional($vote->comment)->author_id;
 
-            if ($user_id != Auth::id()) {
-                Notification::create([
-                    'notification_type' => NotificationTypeEnum::VOTE,
-                    'user_id' => $user_id,
-                    'vote_id' => $vote->id,
-                ]);
-            }
+            Notification::create([
+                'notification_type' => NotificationTypeEnum::VOTE,
+                'user_id' => $user_id,
+                'vote_id' => $vote->id,
+            ]);            
         });
     }
 

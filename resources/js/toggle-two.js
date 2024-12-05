@@ -1,5 +1,6 @@
 const toggleTwoDivs = document.querySelectorAll('.toggleTwo');
-const admPassword = document.getElementById('admPassword');
+const admPassword = document.getElementById('admPassword'); // case of demote admin
+const notificationSettingsButtons = document.getElementById('notification-settings-buttons');
 
 toggleTwoDivs.forEach((div, index) => {
   const name = div.dataset.name ?? '';
@@ -29,11 +30,12 @@ toggleTwoDivs.forEach((div, index) => {
 
   hiddenToggle.value = initialValue ? 'true' : 'false';
 
-  const controlsAdmPassword = name === 'Follow Notification';
-
   toggleTwo.addEventListener('change', () => {
     hiddenToggle.value = toggleTwo.checked ? 'true' : 'false';
 
+    if (notificationSettingsButtons) {
+      notificationSettingsButtons.classList.remove('hidden');
+    }
     if (admPassword && initialValue) {
       admPassword.classList.toggle('hidden');
     }

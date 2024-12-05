@@ -34,13 +34,11 @@ class Comment extends Model
                 optional($comment->post)->author_id :
                 optional($comment->parent)->author_id;
 
-            if ($user_id != Auth::id()){
-                Notification::create([
-                    'notification_type' => NotificationTypeEnum::COMMENT,
-                    'user_id' => $user_id,
-                    'comment_id' => $comment->id,
-                ]);
-            }
+            Notification::create([
+                'notification_type' => NotificationTypeEnum::COMMENT,
+                'user_id' => $user_id,
+                'comment_id' => $comment->id,
+            ]);            
         });
     }
 
