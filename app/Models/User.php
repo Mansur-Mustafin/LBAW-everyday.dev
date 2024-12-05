@@ -80,6 +80,11 @@ class User extends Authenticatable
         return $this->hasOne(NotificationSetting::class, 'user_id', 'id');
     }
 
+    public function bookmarkedPosts()
+    {
+        return $this->belongsToMany(NewsPost::class, 'bookmarks', 'user_id', 'news_post_id');
+    }
+
     public function getTagNamesAttribute()
     {
         return $this->tags()->pluck('name')->toArray();

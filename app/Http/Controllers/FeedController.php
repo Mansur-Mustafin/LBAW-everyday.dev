@@ -37,4 +37,11 @@ class FeedController extends Controller
 
         return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
     }
+
+    public function bookmarksFeed(Request $request)
+    {
+        $user = Auth::user();
+        $news_posts = $user->bookmarkedPosts();
+        return $this->news_post_page($news_posts, "Your Bookmarks", $request, route('news.bookmarks'));
+    }
 }

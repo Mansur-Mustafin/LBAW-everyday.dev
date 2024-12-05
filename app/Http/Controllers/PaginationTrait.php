@@ -11,8 +11,12 @@ trait PaginationTrait
     {
         $news_posts = $news_posts->paginate(12);
         $user = Auth::user();
+
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+
         foreach ($news_posts as $news) {
             $news->user_vote = null;
+            $news->is_bookmarked = false;
 
             if ($user) {
                 $vote = $news->votes()->where('user_id', $user->id)->first();
@@ -21,6 +25,8 @@ trait PaginationTrait
                     $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
                     $news->user_vote_id = $vote->id;
                 }
+
+                $news->is_bookmarked = in_array($news->id, $userBookmarks);
             }
         }
 
