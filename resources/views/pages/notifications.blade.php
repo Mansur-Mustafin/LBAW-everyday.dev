@@ -6,12 +6,13 @@
     <section
         class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
 
-        <main class="order-2 tablet:order-none flex-1 px-4">
-            <h2 class="text-2xl font-semibold my-4">Notifications</h2>
-            <div data-url="{{ route('notifications.get') }}" id="notifications-list"
-                class="laptop:flex laptop:flex-col laptop:gap-2">
-            </div>
+        <main class="order-2 tablet:order-none flex-1">
+            <h2 class="text-2xl font-semibold my-4 px-4">Notifications</h2>
+            <div data-url="{{ route('notifications.get') }}" id="notifications-list" class="flex flex-col">
 
+                
+
+            </div>
             <div id="loading-icon" class="hidden my-6">
                 <img class="w-12 h-12 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
             </div>
