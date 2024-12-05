@@ -107,3 +107,15 @@ Route::prefix('file')->middleware('auth')->controller(FileController::class)->gr
     Route::post('/upload', 'uploadAjax');
     Route::post('/delete', 'deleteAjax');
 });
+
+Route::get('/contacts', function () {
+    return view('pages.contacts'); // Garante que há uma view chamada "contacts.blade.php"
+})->name('contacts');
+
+Route::get('/about-us', function () {
+    return view('pages.about'); // Garante que há uma view chamada "about.blade.php"
+})->name('about');
+
+Route::get('/main-features', function () {
+    return view('pages.features'); // Garante que há uma view chamada "features.blade.php"
+})->name('features');
