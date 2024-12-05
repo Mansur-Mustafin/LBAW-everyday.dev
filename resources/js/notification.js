@@ -10,7 +10,7 @@ if (userId) {
   const channel = pusher.subscribe(`user.${userId}`);
 
   channel.bind('notification-personal', function (data) {
-    displayNotification(data.notification);
+    displayNotification(data);
   });
 
   const dismissNotification = (notificationElement) => {
@@ -24,7 +24,7 @@ if (userId) {
 
   const notificationHandlers = {
     VoteNotification: ({ vote }) => ({
-      imageSrc: vote.user.profile_image.url,
+      imageSrc: vote.user.profile_image,
       triggeredBy: vote.user.public_name,
       text: vote.is_upvote
         ? `Upvoted your ${vote.news_post_id ? 'post' : 'comment'}.`
@@ -32,19 +32,19 @@ if (userId) {
       hrefOpen: vote.news_post_id ? `news/${vote.news_post_id}` : `#`,
     }),
     CommentNotification: ({ comment }) => ({
-      imageSrc: comment.author.profile_image.url,
+      imageSrc: comment.author.profile_image,
       triggeredBy: comment.author.public_name,
       text: comment.news_post_id ? 'Leaved a comment on your post.' : 'Replied to your comment.',
       hrefOpen: comment.news_post_id ? `news/${comment.news_post_id}` : `#`,
     }),
     FollowNotification: ({ follower }) => ({
-      imageSrc: follower.profile_image.url,
+      imageSrc: follower.profile_image,
       triggeredBy: follower.public_name,
       text: 'Followed you.',
       hrefOpen: `/users/${follower.id}/posts`,
     }),
     PostNotification: ({ news_post }) => ({
-      imageSrc: news_post.author.profile_image.url,
+      imageSrc: news_post.author.profile_image,
       triggeredBy: news_post.author.public_name,
       text: `Posted: ${truncateWords(news_post.title, 15)}`,
       hrefOpen: `news/${news_post.id}`,

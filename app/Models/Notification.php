@@ -34,6 +34,8 @@ class Notification extends Model
 
     protected $with = ['newsPost', 'vote', 'follower', 'comment'];
 
+    protected $appends = ['time_ago'];
+
     public static function create(array $attributes = [])
     {
         $userId = $attributes['user_id'] ?? null;
@@ -96,5 +98,10 @@ class Notification extends Model
         return $this->belongsTo(Comment::class, 'comment_id')
             ->select('id', 'content', 'author_id', 'news_post_id')
             ->with('author');
+    }
+
+    public function getTimeAgoAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }

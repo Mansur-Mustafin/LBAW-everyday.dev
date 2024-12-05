@@ -229,7 +229,7 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
-  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username }) => `
+  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago }) => `
     <div class="hover:bg-gray-900 p-4 flex">
         <div class="w-8 h-8 mr-4">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -246,7 +246,7 @@ if (resultsDivNotification) {
             </svg>
         </div>
 
-        <div>
+        <div class=" grow">
             <div class="flex gap-2 items-center">
                 <img src="${imageSrc}"
                     alt="Profile Image" class="w-10 h-10 rounded-xl">
@@ -257,6 +257,7 @@ if (resultsDivNotification) {
             </div>
             <p class="mt-4">${text}</p>
         </div>
+        <p class="text-gray-500 self-end">${time_ago}</p>
     </div>
   `;
 
@@ -294,9 +295,9 @@ if (resultsDivNotification) {
   };
 
   const buildNotification = (notification) => {
-    // console.log(notification);
     const handler = notificationHandlers[notification.notification_type];
     const details = handler(notification);
+    details.time_ago = notification.time_ago
     const html = notificationBoxHTML(details);
     return html;
   };
