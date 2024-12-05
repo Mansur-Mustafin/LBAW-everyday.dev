@@ -43,6 +43,9 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+        $newsPost->is_bookmarked = false;
+
         if ($user) {
             $vote = $newsPost->votes()->where('user_id', $user->id)->first();
 
@@ -50,6 +53,8 @@ class NewsPostController extends Controller
                 $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
                 $newsPost->user_vote_id = $vote->id;
             }
+
+            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
         }
 
         $this->processComments($newsPost->comments, $user);
