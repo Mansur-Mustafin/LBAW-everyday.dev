@@ -84,9 +84,11 @@
         </div>
         <div>
             <!-- -- code copied from https://tailgrids.com/components/toggle-switch -->
-            <div class="toggleTwo" data-name="Admin"></div>
+            <div class="toggleTwo" data-name="Admin">
+                <input class="hidden hiddenToggle" type="text" name="is_admin" value='false'>
+            </div>
         </div>
-        <input class="hidden" type="text" id="hiddenToggle" name="is_admin" value='false'>
+        
         <div class="flex gap-2 self-end">
             <a href="{{ url('/admin') }}" class="text-input bg-white font-bold rounded-xl px-6 py-2">Cancel</a>
             <button class="text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Create Account</button>

@@ -62,6 +62,24 @@ VALUES
 ('isabellawood', 'Isabella Wood', 'isabellapass', 'isabellawood@example.com', 'noobie', 'pending', 10, FALSE);
 
 
+INSERT INTO follows (follower_id, followed_id)
+VALUES
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(5, 6),
+(6, 7),
+(7, 8),
+(8, 9),
+(9, 10),
+(10, 1),
+(1, 3),
+(2, 4),
+(3, 5),
+(4, 6),
+(5, 7);
+
 
 INSERT INTO tag (name)
 VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
@@ -315,8 +333,8 @@ VALUES
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
-(NOW() - INTERVAL '5 days', 'This is great news!', 2, 1, NULL),
-(NOW() - INTERVAL '4 days', 'Can''t wait to try the new gadget.', 3, 2, NULL),
+(NOW() - INTERVAL '5 days', 'This is great news!', 1, 1, NULL),
+(NOW() - INTERVAL '4 days', 'Can''t wait to try the new gadget.', 3, NULL, 1),
 (NOW() - INTERVAL '3 days', 'Very helpful tips, thank you.', 4, 3, NULL),
 (NOW() - INTERVAL '2 days', 'Congratulations to the team!', 5, 4, NULL),
 (NOW() - INTERVAL '1 days', 'Fascinating interview.', 6, 5, NULL),
@@ -339,7 +357,7 @@ VALUES
 
 INSERT INTO vote (created_at, vote_type, is_upvote, user_id, news_post_id, comment_id)
 VALUES
-(NOW() - INTERVAL '2 days', 'PostVote', TRUE,  3, 1, NULL),
+(NOW() - INTERVAL '2 days', 'CommentVote', TRUE,  3, NULL, 10),
 (NOW() - INTERVAL '1 days', 'PostVote', TRUE, 4, 2, NULL),
 (NOW() - INTERVAL '12 hours', 'PostVote', TRUE, 5, 3, NULL),
 (NOW() - INTERVAL '6 hours', 'PostVote', TRUE, 6, 4, NULL),
@@ -432,25 +450,6 @@ VALUES
 ('Promise to adhere to rules, please unblock.', FALSE, 9);
 
 
-INSERT INTO follows (follower_id, followed_id)
-VALUES
-(1, 2),
-(2, 3),
-(3, 4),
-(4, 5),
-(5, 6),
-(6, 7),
-(7, 8),
-(8, 9),
-(9, 10),
-(10, 1),
-(1, 3),
-(2, 4),
-(3, 5),
-(4, 6),
-(5, 7);
-
-
 INSERT INTO user_tag_subscribes (user_id, tag_id)
 VALUES
 (1, 1),
@@ -487,3 +486,74 @@ VALUES
 (3, 7),
 (4, 8),
 (5, 3);
+
+INSERT INTO notification (is_viewed, notification_type, user_id, news_post_id, vote_id, follower_id, comment_id)
+VALUES
+('False','FollowNotification','2', NULL, NULL,'1', NULL),
+('False','FollowNotification','3', NULL, NULL,'2', NULL),
+('False','FollowNotification','4', NULL, NULL,'3', NULL),
+('False','FollowNotification','5', NULL, NULL,'4', NULL),
+('False','FollowNotification','6', NULL, NULL,'5', NULL),
+('False','FollowNotification','7', NULL, NULL,'6', NULL),
+('False','FollowNotification','8', NULL, NULL,'7', NULL),
+('False','FollowNotification','9', NULL, NULL,'8', NULL),
+('False','FollowNotification','10', NULL, NULL,'9', NULL),
+('False','FollowNotification','1', NULL, NULL,'10', NULL),
+('False','FollowNotification','3', NULL, NULL,'1', NULL),
+('False','FollowNotification','4', NULL, NULL,'2', NULL),
+('False','FollowNotification','5', NULL, NULL,'3', NULL),
+('False','FollowNotification','6', NULL, NULL,'4', NULL),
+('False','FollowNotification','7', NULL, NULL,'5', NULL),
+('False','PostNotification','10','1', NULL, NULL, NULL),
+('False','PostNotification','10','2', NULL, NULL, NULL),
+('False','PostNotification','10','3', NULL, NULL, NULL),
+('False','PostNotification','10','4', NULL, NULL, NULL),
+('False','PostNotification','10','5', NULL, NULL, NULL),
+('False','PostNotification','10','6', NULL, NULL, NULL),
+('False','PostNotification','10','7', NULL, NULL, NULL),
+('False','PostNotification','10','8', NULL, NULL, NULL),
+('False','PostNotification','10','9', NULL, NULL, NULL),
+('False','PostNotification','10','10', NULL, NULL, NULL),
+('False','PostNotification','10','11', NULL, NULL, NULL),
+('False','PostNotification','1','12', NULL, NULL, NULL),
+('False','PostNotification','2','13', NULL, NULL, NULL),
+('False','PostNotification','1','13', NULL, NULL, NULL),
+('False','PostNotification','3','14', NULL, NULL, NULL),
+('False','PostNotification','2','14', NULL, NULL, NULL),
+('False','PostNotification','4','15', NULL, NULL, NULL),
+('False','PostNotification','3','15', NULL, NULL, NULL),
+('False','PostNotification','5','16', NULL, NULL, NULL),
+('False','PostNotification','4','16', NULL, NULL, NULL),
+('False','PostNotification','6','17', NULL, NULL, NULL),
+('False','PostNotification','5','17', NULL, NULL, NULL),
+('False','PostNotification','7','18', NULL, NULL, NULL),
+('False','CommentNotification','1', NULL, NULL, NULL,'2'),
+('False','CommentNotification','1', NULL, NULL, NULL,'3'),
+('False','CommentNotification','1', NULL, NULL, NULL,'4'),
+('False','CommentNotification','1', NULL, NULL, NULL,'5'),
+('False','CommentNotification','1', NULL, NULL, NULL,'6'),
+('False','CommentNotification','1', NULL, NULL, NULL,'7'),
+('False','CommentNotification','1', NULL, NULL, NULL,'8'),
+('False','CommentNotification','1', NULL, NULL, NULL,'9'),
+('False','CommentNotification','1', NULL, NULL, NULL,'11'),
+('False','CommentNotification','7', NULL, NULL, NULL,'12'),
+('False','CommentNotification','8', NULL, NULL, NULL,'13'),
+('False','CommentNotification','8', NULL, NULL, NULL,'16'),
+('False','CommentNotification','8', NULL, NULL, NULL,'17'),
+('False','CommentNotification','3', NULL, NULL, NULL,'19'),
+('False','CommentNotification','4', NULL, NULL, NULL,'20'),
+('False','VoteNotification','1', NULL,'1', NULL, NULL),
+('False','VoteNotification','1', NULL,'2', NULL, NULL),
+('False','VoteNotification','1', NULL,'3', NULL, NULL),
+('False','VoteNotification','1', NULL,'4', NULL, NULL),
+('False','VoteNotification','1', NULL,'5', NULL, NULL),
+('False','VoteNotification','1', NULL,'6', NULL, NULL),
+('False','VoteNotification','1', NULL,'7', NULL, NULL),
+('False','VoteNotification','1', NULL,'8', NULL, NULL),
+('False','VoteNotification','3', NULL,'9', NULL, NULL),
+('False','VoteNotification','4', NULL,'10', NULL, NULL),
+('False','VoteNotification','5', NULL,'11', NULL, NULL),
+('False','VoteNotification','6', NULL,'12', NULL, NULL),
+('False','VoteNotification','7', NULL,'13', NULL, NULL),
+('False','VoteNotification','8', NULL,'14', NULL, NULL),
+('False','VoteNotification','9', NULL,'15', NULL, NULL);

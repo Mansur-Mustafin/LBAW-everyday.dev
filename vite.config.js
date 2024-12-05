@@ -17,6 +17,7 @@ export default defineConfig({
                 'resources/js/comment.js',
                 'resources/js/toggle-two.js',
                 'resources/js/bookmark.js',
+                'resources/js/notification.js',
             ],
             refresh: true,
         }),
