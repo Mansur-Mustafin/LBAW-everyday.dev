@@ -21,6 +21,8 @@ class Tag extends Model
 
     protected $table = 'tag';
 
+    public const UPDATED_AT = null;
+
     protected $fillable = [
         'name',
     ];

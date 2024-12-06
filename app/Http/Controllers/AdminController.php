@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
 use App\Models\User;
+use App\Models\Tag;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,9 +12,14 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
-    public function show(Request $request)
+    public function showUsers(Request $request)
     {
-        return view('pages.admin.admin');
+        return view('pages.admin.admin',['type'=> 'users']);
+    }
+
+    public function showTags(Request $request)
+    {
+        return view('pages.admin.admin',['type'=> 'tags']);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -24,6 +30,11 @@ class AdminController extends Controller
     public function showCreateForm(Request $request)
     {
         return view('pages.admin.create-user');
+    }
+
+    public function showCreateTagForm(Request $request)
+    {
+        return view('pages.admin.create-tag');
     }
 
     public function register(Request $request)
@@ -109,19 +120,23 @@ class AdminController extends Controller
 
     public function createTag(Request $request) 
     {
-        $tag = $request->tag();
-        Tag::create([
-            'name'=>$tag
+        $credentials = $request->validate([
+            'name'=> 'required|string|max:250'
         ]);
 
-        return redirect()->route('admin')
+        Tag::create([
+            'name'=> $credentials['name']
+        ]);
+
+        return redirect()->route('admin.tags')
             ->withSuccess('You have sucessfully created a tag!');
-    }
+ }
 
     public function deleteTag(Tag $tag)
     {
         $tag->delete();
-        return redirect->route('admin')
-            ->withSuccess('You have sucessfully deleted a tag!');
+        return response()->json([
+            "You have successfully delete $tag->name"
+        ]);
     }
 }

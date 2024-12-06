@@ -21,7 +21,6 @@
     @vite('resources/js/edit-image.js')
     @vite('resources/js/follow.js')
     @vite('resources/js/toggle-two.js')
-    @vite('resources/js/admin.js')
 
 
     <script type="text/javascript">
