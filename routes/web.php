@@ -95,13 +95,21 @@ Route::middleware('auth')->controller(TagController::class)->group(function () {
 });
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
-    Route::get('/', 'show')->name('admin');
+    // Users
+    Route::get('/', 'showUsers')->name('admin');
+    Route::get('/users','showUsers');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
     Route::post('/register', 'register');
     Route::put('/{user}', 'update')->name('admin.update');
-    Route::post('/tag/create','createTag');
-    Route::delete('/tag/delete/{tag}','deleteTag');
+
+    // Tags
+    Route::post('/tags/create','createTag');
+    Route::delete('/tags/delete/{tag}','deleteTag');
+    Route::get('/tags','showTags')->name('admin.tags');
+    //  I don't know why, but the redirect from tags/delete/{tag} calls /tags with DELETE
+    Route::get('/tags','showTags')->name('admin.tags');
+    Route::get('/tags/create','showCreateTagForm');
 });
 
 Route::controller(SearchController::class)->group(function () {
