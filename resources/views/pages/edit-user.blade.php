@@ -58,10 +58,10 @@
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
-
+        
         <div class="flex flex-col">
             <label class="font-bold text-sm mb-2">Email</label>
-            <input name="email" class="rounded-2xl bg-input outline-none p-3" placeholder="Email*"
+            <input name="email" class="disabled rounded-2xl bg-input outline-none p-3" placeholder="Email*"
                 value="{{ old('email', $user->email) }}">
             @error('email')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
@@ -70,19 +70,23 @@
 
         <h3 class="font-bold text-lg flex-1">Reset Password</h3>
 
+        
+            
         <p class="text-sm text-gray-500">Leave the password fields empty if you do not wish to reset your password.</p>
 
-        <div class="flex flex-col relative w-full">
-            <label class="font-bold text-sm mb-2">Old Password</label>
-            <input name="old_password" type="password" class="rounded-2xl bg-input outline-none p-3"
-                placeholder="Old Password*">
-            <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
-                visibility_off
-            </span>
-            @error('old_password')
-                <span class="text-red-400 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
+        @if (!is_null($user->password))
+            <div class="flex flex-col relative w-full">
+                <label class="font-bold text-sm mb-2">Old Password</label>
+                <input name="old_password" type="password" class="rounded-2xl bg-input outline-none p-3"
+                    placeholder="Old Password*">
+                <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
+                    visibility_off
+                </span>
+                @error('old_password')
+                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+        @endif
 
         <div class="flex flex-col relative w-full">
             <label class="font-bold text-sm mb-2">New Password</label>
@@ -106,7 +110,7 @@
             @error('new_password_confirmation')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
-        </div>
+        </div>            
 
         <div class="flex gap-2 self-end mb-4">
             <a href="{{ url('/users/' . $user->id . '/posts') }}"
