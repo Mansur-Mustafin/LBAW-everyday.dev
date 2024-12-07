@@ -5,8 +5,10 @@
 
 @if ($type == 'users')
   @include('pages.admin.users')
-@else
+@elseif ($type == 'tags')
   @include('pages.admin.tags')
+@else
+  @include('pages.admin.tag-proposals')
 @endif
 
 

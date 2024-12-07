@@ -7,6 +7,9 @@
     <a class="px-2" id="tags-title">
       Tags
     </a>
+    <a href="{{url('/admin/tag_proposals')}}" class="px-2 text-gray-600" id="tags-title">
+      Tag Proposals
+    </a>
   </div>
   <div class="flex text-black bg-white rounded p-2 tablet:mx-0 mx-2 mt-4">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" viewBox="0 0 30 30">

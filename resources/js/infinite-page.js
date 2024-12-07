@@ -17,6 +17,29 @@ const deleteTag = async (tagId,baseUrl) => {
   )
 }
 
+
+const deleteTagProposal = async (tagProposalId,baseUrl) => {
+  sendAjaxRequest(
+    `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
+    (data) => {
+      console.log(data)
+      window.location = `${baseUrl}/admin/tag_proposals`
+    },
+    'DELETE'
+  )
+}
+
+const acceptTagProposal = async (tagProposalId,baseUrl) => {
+  sendAjaxRequest(
+    `${baseUrl}/admin/tag_proposals/update/${tagProposalId}`,
+    (data) => {
+      console.log(data)
+      window.location = `${baseUrl}/admin/tag_proposals`
+    },
+    'PUT'
+  )
+}
+
 const buildByRequest = async (url, buildUser, resultsDiv) => {
   if (loading) return;
   loading = true;
@@ -33,7 +56,7 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
         data.users.data.forEach((user) => {
           resultsDiv.innerHTML += buildUser(user);
         });
-      } else {
+      } else if (data.tags) {
         data.tags.data.forEach((tag) => {
           resultsDiv.innerHTML += buildUser(tag)
         })
@@ -45,6 +68,27 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
             const baseUrl = target.dataset.baseurl
             console.log(tagId,baseUrl)
             await deleteTag(tagId,baseUrl)
+          }
+        })
+      } else {
+        console.log(data)
+        data.tag_proposals.data.forEach((tagProposal) => {
+          resultsDiv.innerHTML += buildUser(tagProposal)
+        })
+        resultsDiv.addEventListener('click',async (e) => {
+          e.preventDefault();
+          const target = e.target
+          if (target.id && target.id.endsWith('-delete-button')) {
+            const tagProposalId = target.id.split('-delete-button')[0]
+            const baseUrl = target.dataset.baseurl
+            console.log(tagProposalId,baseUrl)
+            await deleteTagProposal(tagProposalId,baseUrl)
+          }
+          if (target.id && target.id.endsWith('-accept-button')) {
+            const tagProposalId = target.id.split('-accept-button')[0]
+            const baseUrl = target.dataset.baseurl
+            console.log(tagProposalId,baseUrl)
+            await acceptTagProposal(tagProposalId,baseUrl)
           }
         })
       }
@@ -109,8 +153,10 @@ if (postContainer) {
 
 // Users on Admin Dashboard
 const resultsDivAdmin = document.getElementById('admin-search-users-results');
-const resultsDivAdminTag = document.getElementById('admin-search-tags-results')
-if (resultsDivAdmin || resultsDivAdminTag) {
+const resultsDivAdminTag = document.getElementById('admin-search-tags-results');
+const resultsDivAdminTagProposals = document.getElementById('admin-search-tag-proposals-results');
+
+if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
   const searchBar = document.getElementById('admin-search-bar');
   const baseUrl = searchBar.dataset.url;
   let buildFunction;
@@ -174,6 +220,39 @@ if (resultsDivAdmin || resultsDivAdminTag) {
     buildFunction = buildUserAdminCardUser
     baseQuery = `${baseUrl}/api/search/users/`;
     resultsDiv = resultsDivAdmin
+  } else if (resultsDivAdminTagProposals) {
+    const buildUserAdminCardTagProposal = (tagProposal) => {
+      return `
+          <div id="${tagProposal.id}-card" class="flex border border-gray-700 rounded p-2">
+            <div class="flex-grow">
+              <p class="text-xl">${tagProposal.name}</p>
+              <p class="">${tagProposal.description}</p>
+              <p class="text-gray-600">from ${tagProposal.proposer.public_name}
+              <span class="">@${tagProposal.proposer.username}</span>
+              </p>
+            </div>
+            ${
+              !tagProposal.is_resolved 
+              ? `
+                <a href="" id="${tagProposal.id}-accept-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
+                  A
+                </a>  
+                <a href="" id="${tagProposal.id}-delete-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
+                  X
+                </a>  
+              `
+              : `
+                <p class="place-content-center m-3">
+                Accepted
+                </p>
+              `
+            }
+          </div>
+          `;
+    };
+    buildFunction = buildUserAdminCardTagProposal
+    baseQuery = `${baseUrl}/api/search/tag_proposals/`;
+    resultsDiv = resultsDivAdminTagProposals
   }
 
 
