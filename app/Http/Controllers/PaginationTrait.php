@@ -9,18 +9,34 @@ trait PaginationTrait
 {
     public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
     {
-        $news_posts = $news_posts->paginate(12);
         $user = Auth::user();
+
+        if($user) {
+            $news_posts = $news_posts->with([
+                'votes' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }
+            ])->paginate(12);
+        } else {
+            $news_posts = $news_posts->paginate(12);
+        }
+
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+
+        // TODO: solucao melhor?
         foreach ($news_posts as $news) {
             $news->user_vote = null;
+            $news->is_bookmarked = false;
 
             if ($user) {
-                $vote = $news->votes()->where('user_id', $user->id)->first();
+                $vote = $news->votes->first();
 
                 if ($vote) {
                     $news->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
                     $news->user_vote_id = $vote->id;
                 }
+
+                $news->is_bookmarked = in_array($news->id, $userBookmarks);
             }
         }
 

@@ -1,9 +1,11 @@
 import { sendAjaxRequest, truncateWords } from './utils';
 import { addVoteButtonBehaviour } from './vote';
+import { addBookmarkButtonBehaviour } from './bookmark';
 
 // Adds Vote Behaviour to Post pages
 document.addEventListener('DOMContentLoaded', function () {
   addVoteButtonBehaviour();
+  addBookmarkButtonBehaviour();
 });
 
 const buildByRequest = async (url, buildUser, resultsDiv) => {
@@ -56,6 +58,7 @@ if (postContainer) {
         }
         postContainer.innerHTML += data.news_posts;
         addVoteButtonBehaviour();
+        addBookmarkButtonBehaviour();
       },
       method
     );
