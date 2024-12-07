@@ -11,7 +11,6 @@ const deleteTag = async (tagId,baseUrl) => {
     `${baseUrl}/admin/tags/delete/${tagId}`,
     (data) => {
       console.log(data)
-
       window.location = `${baseUrl}/admin/tags`
     },
     'DELETE'
@@ -39,6 +38,7 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
           resultsDiv.innerHTML += buildUser(tag)
         })
         resultsDiv.addEventListener('click',async (e) => {
+          e.preventDefault();
           const target = e.target
           if (target.id && target.id.endsWith('-delete-button')) {
             const tagId = target.id.split('-delete-button')[0]
@@ -124,7 +124,7 @@ if (resultsDivAdmin || resultsDivAdminTag) {
           <div id="${tag.id}-card" class="flex flex-col border border-gray-700 rounded">
               <div class="flex justify-between p-2">
                 <p class="p-5">${tag.name}</p>
-              <a id="${tag.id}-delete-button" data-baseurl="${baseUrl}">  
+              <a href="" id="${tag.id}-delete-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
                 X
               </a>  
           </div>

@@ -34,10 +34,7 @@ class FeedController extends Controller
             return $tag->newsPosts()->get();
         })->flatten();
 
-        $news_posts = $news_posts_by_follow->merge($news_posts_by_tag);
-
-
-        dd(gettype($news_posts));
+        $news_posts = $news_posts_by_follow->merge($news_posts_by_tag)->toQuery();
 
         return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
     }
