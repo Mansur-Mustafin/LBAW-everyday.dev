@@ -88,8 +88,8 @@ Route::middleware('auth')->controller(FollowController::class)->group(function (
 });
 
 Route::middleware('auth')->controller(TagController::class)->group(function () {
-    Route::post('tag/follow/{tag}','followTag')->middleware('auth')->name('user.follow_tag');
-    Route::delete('tag/unfollow/{tag}','unfollowTag')->middleware('auth')->name('user.unfollow_tag');
+    Route::post('tag/store/{tag}','store')->middleware('auth')->name('user.follow_tag');
+    Route::delete('tag/delete/{tag}','delete')->middleware('auth')->name('user.unfollow_tag');
     Route::get('api/tags', 'getFollowingTags')->middleware('auth');
     Route::get('api/tags/all','getTags');
 });

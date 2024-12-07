@@ -20,7 +20,7 @@ if(followTagSection && followButton && unFollowButton) {
 
   followButton.addEventListener('click', (event) => {
     event.preventDefault()
-    const url = `${baseUrl}/tag/follow/${tagId}`
+    const url = `${baseUrl}/tag/store/${tagId}`
     sendAjaxRequest(url,(data)=>{},'POST')
     followButton.classList.add('hidden')
     unFollowButton.classList.remove('hidden')
@@ -28,7 +28,7 @@ if(followTagSection && followButton && unFollowButton) {
 
   unFollowButton.addEventListener('click', (event) => {
     event.preventDefault()
-    const url = `${baseUrl}/tag/unfollow/${tagId}`
+    const url = `${baseUrl}/tag/delete/${tagId}`
     sendAjaxRequest(url,(data)=>{},'DELETE')
     followButton.classList.remove('hidden')
     unFollowButton.classList.add('hidden')

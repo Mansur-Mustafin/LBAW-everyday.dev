@@ -16,11 +16,10 @@ class TagController extends Controller
     return Tag::all();
    } 
 
-   public function followTag(Request $request) 
+   public function store(Request $request, Tag $tag) 
    {
+      $this->authorize('store', $tag); 
       try {
-         // TODO: Tag Policy
-         // $this->authorize('follow_tag', $user); 
          Auth::user()->tags()->attach($request->tag);
 
          return response()->json(['message' => "Successfully followed {$request->tag}"]);
@@ -29,11 +28,10 @@ class TagController extends Controller
       }
    }
 
-   public function unfollowTag(Request $request) 
+   public function delete(Request $request,Tag $tag) 
    {
+      $this->authorize('delete', $tag); 
       try {
-         // TODO: Tag Policy
-         // $this->authorize('follow_tag', $user);
          Auth::user()->tags()->detach($request->tag);
 
          return response()->json(['message' => "Successfully unfollowed {$request->tag}"]);
@@ -43,8 +41,6 @@ class TagController extends Controller
    }
 
    public function getFollowingTags() {
-      // TODO: Tag Policy
-      // $this->authorize('follow_tag', $user);
       $user = Auth::user();
       $tags = $user->tags()->paginate(10);
 
