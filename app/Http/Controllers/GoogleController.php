@@ -19,8 +19,21 @@ class GoogleController extends Controller
         
         if (!$user) {
 
+            if (User::where('email', $google_user->getEmail())->exists()) {
+                return redirect()->route('login')->withErrors(['google-email' => 'This email is already registered.']);
+            }
+
+            $base_username = explode('@', $google_user->getEmail())[0];
+            $username = $base_username;
+            $counter = 1;
+
+            while (User::where('username', $username)->exists()) {
+                $username = $base_username . $counter;
+                $counter++;
+            }
+
             $new_user = User::create([
-                'username' => $google_user->getName(),
+                'username' => $username,
                 'email' => $google_user->getEmail(),
                 'google_id' => $google_user->getId(),
                 'public_name' => $google_user->getName(),
