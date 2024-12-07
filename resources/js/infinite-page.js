@@ -78,6 +78,7 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
         resultsDiv.addEventListener('click',async (e) => {
           e.preventDefault();
           const target = e.target
+          console.log(target)
           if (target.id && target.id.endsWith('-delete-button')) {
             const tagProposalId = target.id.split('-delete-button')[0]
             const baseUrl = target.dataset.baseurl
@@ -171,7 +172,7 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
               <div class="flex justify-between p-2">
                 <p class="p-5">${tag.name}</p>
               <a href="" id="${tag.id}-delete-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
-                X
+                &#10060;
               </a>  
           </div>
           `;
@@ -234,11 +235,11 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
             ${
               !tagProposal.is_resolved 
               ? `
-                <a href="" id="${tagProposal.id}-accept-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
-                  A
+                <a href="" id="${tagProposal.id}-accept-button" class="text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+                  &#x2705;
                 </a>  
                 <a href="" id="${tagProposal.id}-delete-button" class="place-content-center m-3" data-baseurl="${baseUrl}">  
-                  X
+                  &#10060;
                 </a>  
               `
               : `
