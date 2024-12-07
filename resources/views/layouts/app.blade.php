@@ -28,6 +28,7 @@
     @vite('resources/js/edit-image.js')
     @vite('resources/js/follow.js')
     @vite('resources/js/toggle-two.js')
+    @vite('resources/js/bookmark.js')
     @vite('resources/js/notification.js')
 
 
