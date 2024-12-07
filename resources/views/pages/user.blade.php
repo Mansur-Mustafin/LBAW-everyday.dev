@@ -108,17 +108,21 @@
             @include('partials.tags', ['tags' => $user->tag_names])
         </div>
 
-        <div class="p-4 flex items-center gap-2 justify-center">
+        <div class="p-4 flex flex-col gap-2 justify-center">
+            @if (Auth::check() and (Auth::id() == $user->id))
+                <a href="{{ url('/tag_proposal/create') }}"
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Create tag Proposal</a>
+            @endif
             @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @endif
             @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/logout') }}"
-                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1 self-end">Logout</a>
+                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1">Logout</a>
             @endif
         </div>
 

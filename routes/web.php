@@ -12,6 +12,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TagProposalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -107,14 +108,21 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::post('/tags/create','createTag');
     Route::delete('/tags/delete/{tag}','deleteTag');
     Route::get('/tags','showTags')->name('admin.tags');
-    //  I don't know why, but the redirect from tags/delete/{tag} calls /tags with DELETE
     Route::get('/tags','showTags')->name('admin.tags');
     Route::get('/tags/create','showCreateTagForm');
+
+    // Tag Proposals
+    Route::get('/tag_proposals','showTagProposals');
+    Route::put('/tag_proposals/update/{tag_proposal}','updateTagProposal');
+    Route::delete('/tag_proposals/delete/{tag_proposal}','deleteTagProposal');
 });
 
 Route::controller(SearchController::class)->group(function () {
     Route::get('api/search/tags','searchTags');
     Route::get('api/search/tags/{search}','searchTags');
+
+    Route::get('api/search/tag_proposals','searchTagProposals');
+    Route::get('api/search/tag_proposals/{search}','searchTagProposals');
 
     Route::get('/search/posts/tags/','searchTagPosts');
     Route::get('/search/posts/tags/{search}', 'searchTagPosts');
@@ -123,10 +131,18 @@ Route::controller(SearchController::class)->group(function () {
     Route::get('api/search/users', 'searchUser')->middleware('admin');
     Route::get('api/search/users/{search}', 'searchUser')->middleware('admin');
 
+
     Route::get('api/search/{search}', 'search');
 });
 
 Route::prefix('file')->middleware('auth')->controller(FileController::class)->group(function () {
     Route::post('/upload', 'uploadAjax');
     Route::post('/delete', 'deleteAjax');
+});
+
+Route::middleware('auth')->controller(TagProposalController::class)->group(function () {
+    Route::get('tag_proposal/create','showCreationForm');
+    Route::post('tag_proposals/create','store');
+    Route::get('/api/tag_proposals','show');
+    Route::get('/api/tag_proposals/all','showAll');
 });

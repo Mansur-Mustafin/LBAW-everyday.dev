@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\NewsPost;
 use App\Models\Tag;
+use App\Models\TagProposal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -78,5 +79,14 @@ class SearchController extends Controller
 
         $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query, $search_query]);
         return $this->paginate_users($users, $request);
+    }
+
+
+    public function searchTagProposals(Request $request)
+    {
+        $search_query = "%" . strtolower($request->search) . "%";
+
+        $tag_proposals = TagProposal::whereRaw("LOWER(name) like ?", [$search_query]);
+        return $this->paginate_tag_proposals($tag_proposals, $request);
     }
 }

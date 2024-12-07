@@ -63,4 +63,15 @@ trait PaginationTrait
             'last_page' => $tags->lastPage()
         ]);
     }
+
+    public function paginate_tag_proposals($tag_proposals,Request $request)
+    {
+        $tag_proposals = $tag_proposals->with('proposer')->paginate(10);
+
+        return response()->json([
+            'tag_proposals' => $tag_proposals,
+            'next-page' => $tag_proposals->currentPage() + 1,
+            'last_page' => $tag_proposals->lastPage()
+        ]);
+    }
 }

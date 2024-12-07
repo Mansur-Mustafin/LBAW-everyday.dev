@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ImageTypeEnum;
 use App\Models\User;
 use App\Models\Tag;
+use App\Models\TagProposal;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,6 +21,11 @@ class AdminController extends Controller
     public function showTags(Request $request)
     {
         return view('pages.admin.admin',['type'=> 'tags']);
+    }
+
+    public function showTagProposals(Request $request)
+    {
+        return view('pages.admin.admin',['type'=>'tagProposals']);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -130,7 +136,7 @@ class AdminController extends Controller
 
         return redirect()->route('admin.tags')
             ->withSuccess('You have sucessfully created a tag!');
- }
+    }
 
     public function deleteTag(Tag $tag)
     {
@@ -139,4 +145,34 @@ class AdminController extends Controller
             "You have successfully delete $tag->name"
         ]);
     }
+
+    public function updateTagProposal(Request $request,TagProposal $tag_proposal)
+    {
+        try {
+            $tag_proposal->update([
+                'is_resolved'=> true,
+            ]);
+
+            Tag::create([
+                'name'=>$tag_proposal->name
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function deleteTagProposal(Request $request,TagProposal $tag_proposal)
+    {
+        try {
+            // TODO: Create Policy
+            // $this->authorize('delete',$tag_proposal');
+            $tag_proposal->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
 }
