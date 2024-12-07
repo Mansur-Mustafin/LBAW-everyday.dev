@@ -26,6 +26,9 @@
                         <p class="font-semibold text-black">Google</p>
                     </a>
                 </div>
+                @error('google-email')
+                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                @enderror
 
                 <div class="flex flex-col mb-2">
                     <label class="font-bold text-sm mb-2">Username</label>
