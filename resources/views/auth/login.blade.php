@@ -25,6 +25,9 @@
                         <p class="font-semibold text-black">Google</p>
                     </a>
                 </div>
+                @error('google-email')
+                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                @enderror
 
                 <div class="mb-2 flex justify-center text-sm">
                     <p>or</p>
