@@ -14,8 +14,8 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm">Tag</label>
-            <input name="name" class="rounded-2xl bg-input outline-none p-3" placeholder="Public Name*" value="">
-            @error('public_name')
+            <input name="name" class="rounded-2xl bg-input outline-none p-3" placeholder="Name*" value="">
+            @error('name')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>

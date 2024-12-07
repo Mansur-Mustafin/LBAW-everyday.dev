@@ -15,14 +15,14 @@ if(tagsSection) {
 
     if(e.target.id.endsWith('-follow')) {
       const tagId = e.target.id.split('-follow')[0]
-      const url = `${baseUrl}/tag/follow/${tagId}`
+      const url = `${baseUrl}/tag/store/${tagId}`
       sendAjaxRequest(url, (data) => {},'POST')
       document.getElementById(`${tagId}-follow`).classList.add('hidden')
       document.getElementById(`${tagId}-unfollow`).classList.remove('hidden')
     }
     if(e.target.id.endsWith('-unfollow')) {
       const tagId = e.target.id.split('-unfollow')[0]
-      const url = `${baseUrl}/tag/unfollow/${tagId}`
+      const url = `${baseUrl}/tag/delete/${tagId}`
       sendAjaxRequest(url, (data) => {},'DELETE')
       document.getElementById(`${tagId}-follow`).classList.remove('hidden')
       document.getElementById(`${tagId}-unfollow`).classList.add('hidden')
