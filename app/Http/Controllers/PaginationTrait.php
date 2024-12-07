@@ -46,7 +46,7 @@ trait PaginationTrait
         $users = $users->paginate(10);
 
         return response()->json([
-            'users'     => $users,
+            'data'     => $users->items(),
             'next-page' => $users->currentPage() + 1,
             'last_page' => $users->lastPage()
         ]);

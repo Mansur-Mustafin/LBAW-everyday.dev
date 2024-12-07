@@ -7,13 +7,18 @@ use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use Illuminate\Support\Facades\Route;
+
+// use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,4 +150,18 @@ Route::middleware('auth')->controller(TagProposalController::class)->group(funct
     Route::post('tag_proposals/create','store');
     Route::get('/api/tag_proposals','show');
     Route::get('/api/tag_proposals/all','showAll');
+});
+
+Route::middleware('auth')->controller(NotificationController::class)->group(function () {
+    Route::get('/notifications', 'index')->name('notifications.index');
+    Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
+});
+
+Route::middleware('auth')->controller(NotificationSettingController::class)->group(function () {
+    Route::put('/notification-settings', 'update');
+});
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirect')->name('google-auth');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });

@@ -1,4 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.body.default')
+
 @section('content')
 
 @include('partials.success-popup')
