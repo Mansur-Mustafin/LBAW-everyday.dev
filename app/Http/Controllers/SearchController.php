@@ -62,7 +62,7 @@ class SearchController extends Controller
         $title = "{$tag_query} Posts";
         $baseUrl = "/search/tags/{$tag_query}";
 
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl);
+        return $this->news_post_page($news_posts, $title, $request, $baseUrl,['tag'=>$tag]);
     }
 
     public function searchTags(Request $request)
