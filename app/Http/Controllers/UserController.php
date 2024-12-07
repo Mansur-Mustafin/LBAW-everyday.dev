@@ -86,11 +86,13 @@ class UserController extends Controller
             FileService::upload($request, $user, ImageTypeEnum::PROFILE->value);
         }
 
-        if ($request->filled('new_password') && $request->filled('old_password')) {
-            if (!Hash::check($request->input('old_password'), $user->password)) {
-                return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+        if ($request->filled('new_password')) {
+            if (!is_null($user->password)) { // created account via OAuth
+                if (!Hash::check($validated['old_password'], $user->password)) {
+                    return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
+                }
             }
-
+    
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
         }
