@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Mail;
-use Illuminate\Http\Request;
 use App\Mail\MailModel;
 use App\Models\User;
-use TransportException;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use Mail;
 
 class MailController extends Controller
 {
