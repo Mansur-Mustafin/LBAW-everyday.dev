@@ -8,6 +8,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
@@ -37,6 +38,14 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->middleware('auth')->name('logout');
+
+    Route::get('/recover/form', 'showRecoverForm')->name('recover.form');
+    Route::post('/recover', 'recover')->name('recover.update');
+    Route::get('/recover', 'showResetPasswordForm')->name('recover.reset');
+});
+
+Route::controller(MailController::class)->group(function(){
+    Route::post('/emailrecover', 'send')->name('email.recover');
 });
 
 Route::controller(RegisterController::class)->group(function () {

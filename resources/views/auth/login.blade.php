@@ -1,5 +1,7 @@
 @extends('layouts.body.single-form')
 
+@include('partials.success-popup')
+
 @section('content')
 <div class="flex items-center justify-center">
     <div class="flex items-center justify-center md:flex-row rounded-2xl shadow-2xl shadow-gray-900 max-w-4xl w-full overflow-hidden">
@@ -66,7 +68,7 @@
                 <div class="text-center mt-4">
                     <span class="text-gray-400">Don't have an account?</span>
                     <a href="{{ route('register') }}" class="text-white underline">Register</a>
-                    <p><a href="" class="text-white underline">Forgot Password?</a></p>
+                    <p><a href="{{ route('recover.form') }}" class="text-white underline">Forgot Password?</a></p>
                 </div>
             </form>
         </div>
