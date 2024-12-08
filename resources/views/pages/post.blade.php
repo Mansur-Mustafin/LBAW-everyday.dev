@@ -10,8 +10,7 @@
             <h1 class="text-3xl font-bold">{{ $post->title }}</h1>
             <div class="flex flex-wrap mt-5 gap-2">
                 @foreach ($post->tags as $tag)
-                    <span
-                        class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ $tag->name }}</span>
+                    <span class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ $tag->name }}</span>
                 @endforeach
             </div>
             @if (Auth::check())
@@ -27,10 +26,12 @@
             @endif
 
             <img src="{{ $post->titleImage->url }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
-
-            <div class="mt-10">
-                {{ $post->content }}
-            </div>
+            @can('view', $post)
+                <div class="mt-10">
+                    {{ $post->content }}
+                </div>
+            @endcan
+            
 
             @if (Auth::check())
                 @include('partials.bar-post', ['post' => $post])
@@ -123,38 +124,46 @@
                 <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
             </div> --}}
         </div>
-        <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
-            <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-                class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-                placeholder="Share your thoughts" id="commentInput" />
-            <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
-        </form>
+        @can('view', $post)
+            <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
+                <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
+                    class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                    placeholder="Share your thoughts" id="commentInput" />
+                <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+            </form>
 
-        <section class="mt-10">
+            <section class="mt-10">
 
-            @if ($thread == 'single')
-                <div class="flex justify-between mb-5 items-center">
-                    <h1 class="pl-1 pr-3 text-sm">Single thread discussion
-                    </h1>
-                    <hr class="flex-grow opacity-20 text-gray-700">
-                    </hr>
-                    <a href="{{ url('news/' . $post->id) }}" class="pr-1 pl-3 text-sm hover:underline">See full
-                        discussion</a>
-                </div>
-
-            @endif
-
-            <div class="flex flex-col gap-3" id="comment-section">
-
-                @forelse ($comments->where('parent_comment_id', null) as $comment)
-                    @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
-                @empty
-                    <div class="text-gray-400" id="no-comments">
-                        No comments yet. Be the first to comment!
+                @if ($thread == 'single')
+                    <div class="flex justify-between mb-5 items-center">
+                        <h1 class="pl-1 pr-3 text-sm">Single thread discussion
+                        </h1>
+                        <hr class="flex-grow opacity-20 text-gray-700">
+                        </hr>
+                        <a href="{{ url('news/' . $post->id) }}" class="pr-1 pl-3 text-sm hover:underline">See full
+                            discussion</a>
                     </div>
-                @endforelse
+                @endif
+    
+                <div class="flex flex-col gap-3" id="comment-section">
+    
+                    @forelse ($comments->where('parent_comment_id', null) as $comment)
+                        @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
+                    @empty
+                        <div class="text-gray-400" id="no-comments">
+                            No comments yet. Be the first to comment!
+                        </div>
+                    @endforelse
+                </div>
+            </section>
+        @endcan
+        @cannot('view', $post)
+            <div class="self-center mt-3">
+                <p class="text-gray-400 text-lg">Follow the author to see post content.</p>
             </div>
-        </section>
+        @endcannot
+
+        
     </section>
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
@@ -207,12 +216,12 @@
                 </a>
                 @can('follow', $post->author)
                     <button
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        id="follow-button-refresh" class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="follow">Follow</button>
                 @endcan
                 @can('unfollow', $post->author)
                     <button
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        id="unfollow-button-refresh" class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>
