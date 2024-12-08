@@ -110,6 +110,8 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::get('/users/create', 'showCreateForm');
     Route::post('/register', 'register');
     Route::put('/{user}', 'update')->name('admin.update');
+    Route::put('/users/{user}/block','blockUser');
+    Route::put('/users/{user}/unblock','unblockUser');
 
     // Tags
     Route::post('/tags/create','createTag');
@@ -122,6 +124,7 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::get('/tag_proposals','showTagProposals');
     Route::put('/tag_proposals/update/{tag_proposal}','updateTagProposal');
     Route::delete('/tag_proposals/delete/{tag_proposal}','deleteTagProposal');
+    
 });
 
 Route::controller(SearchController::class)->group(function () {

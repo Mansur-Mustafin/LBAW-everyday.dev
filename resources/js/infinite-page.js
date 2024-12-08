@@ -42,6 +42,13 @@ const acceptTagProposal = async (tagProposalId,baseUrl) => {
   )
 }
 
+const loadingIcon = document.getElementById('loading-icon');
+let lastPage = 0;
+let loading = false;
+let page = 1;
+const alreadyBlockButton = []
+const alreadyUnblockButton = []
+
 const buildByRequest = async (url, buildUser, resultsDiv) => {
   if (loading) return;
   loading = true;
@@ -55,9 +62,54 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
       if(data.users) {
-        data.users.data.forEach((user) => {
+        data.data.forEach((user) => {
           resultsDiv.innerHTML += buildUser(user);
         });
+        resultsDiv.addEventListener('click',(event) => {
+          if(loading) return
+          const target = event.target.closest(`.block-button`)
+          if(target) {
+            event.preventDefault();
+            const baseUrl = target.dataset.url
+            const id = target.id.split('-block-button')[0]
+            if(alreadyBlockButton.includes(id)) return
+            alreadyBlockButton.push(id)
+            const url = `${baseUrl}/admin/users/${id}/block`
+            loading = true
+            sendAjaxRequest(
+              url,
+              (data) => {
+                console.log(data)
+                window.location =`${baseUrl}/admin` 
+              },
+              'PUT'
+            )
+            loading = false
+          }
+        })
+        resultsDiv.addEventListener('click',(event) => {
+          if(loading) return
+          const target = event.target.closest(`.unblock-button`)
+          if(target) {
+            event.preventDefault();
+            const baseUrl = target.dataset.url
+            const id = target.id.split('-unblock-button')[0]
+            console.log('b')
+            if(alreadyUnblockButton.includes(id)) return
+            alreadyUnblockButton.push(id)
+            const url = `${baseUrl}/admin/users/${id}/unblock`
+            loading = true
+            sendAjaxRequest(
+              url,
+              (data) => {
+                console.log(data)
+                window.location =`${baseUrl}/admin` 
+              },
+              'PUT'
+            )
+            loading = false
+          }
+        })
       } else if (data.tags) {
         data.tags.data.forEach((tag) => {
           resultsDiv.innerHTML += buildUser(tag)
@@ -100,11 +152,6 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
   );
 };
 
-
-const loadingIcon = document.getElementById('loading-icon');
-let lastPage = 0;
-let loading = false;
-let page = 1;
 
 // Posts
 const postContainer = document.getElementById('news-posts-container');
@@ -167,7 +214,6 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
   let baseQuery;
   let resultsDiv;
 
-
   if (resultsDivAdminTag) {
     const buildUserAdminCardTag = (tag) => {
       return `
@@ -191,6 +237,16 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
                   </span>
           `;
+      const blockedBadge = `
+        <span class="">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+        </span>
+      `
+      const pendingBadge = `
+        <span class="">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
+        </span>
+      `
       const pageUrl = `${baseUrl}/users/${user.id}/posts`;
       const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
       return `
@@ -200,13 +256,8 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
                   <h2 class="text-2xl flex gap-1">
                       <a href="${pageUrl}">
                       ${user.public_name}
-                      </a>
-                      <span class="hidden">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
-                      </span>
-                      <span class="hidden">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
-                      </span>
+                      ${user.status == 'blocked' ? blockedBadge : ''}    
+                      ${user.status == 'pending' ? pendingBadge : ''}    
                       ${user.is_admin == true ? adminBadge : ''}
                   </h1>
                   <h3 class="text-gray-400 hidden">${user.rank}</h3>
@@ -214,8 +265,23 @@ if (resultsDivAdmin || resultsDivAdminTag || resultsDivAdminTagProposals) {
                   <h3 class="text-gray-400">${user.username}</h3>
                   <h3 class="text-gray-400">${user.email}</h3>
                   </div>
+                  ${
+                    !user.is_admin 
+                    ? user.status != 'blocked'
+                      ? `
+                        <a id="${user.id}-block-button" data-url="${baseUrl}"  class="block-button flex flex-col p-2 justify-center" href="">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+                        </a>
+                      `
+                      : `
+                        <a id="${user.id}-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center" href="">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
+                        </a >
+                      `
+                    : ''
+                  }
                   <a class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
                   </a>
               </div>
           </div>

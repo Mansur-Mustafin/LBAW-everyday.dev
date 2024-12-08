@@ -175,4 +175,25 @@ class AdminController extends Controller
         }
     }
 
+    public function blockUser(User $user,Request $request)
+    {
+        $user->update([
+            'status'=>'blocked'
+        ]);
+
+        return response()->json([
+            'sucess'=>'You have successfully banned a user'
+        ]);
+    }
+
+    public function unblockUser(User $user,Request $request)
+    {
+        $user->update([
+            'status'=>'active'
+        ]);
+
+        return response()->json([
+            'sucess'=>'You have successfully unbanned a user'
+        ]);
+    }
 }
