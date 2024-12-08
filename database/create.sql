@@ -191,6 +191,12 @@ CREATE TABLE notification_settings (
     comment_notifications BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+-- to create a unique link.
+CREATE TABLE password_resets (
+    email VARCHAR(256) NOT NULL UNIQUE,
+    token VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 --
 -- Unique Indexes
