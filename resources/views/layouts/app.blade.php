@@ -11,6 +11,13 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <script>
+        const pusherAppKey = "{{ env('PUSHER_APP_KEY') }}";
+        const pusherCluster = "{{ env('PUSHER_APP_CLUSTER') }}";
+        const userId = "{{ Auth::id() }}"
+    </script>
+
+    <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
@@ -21,6 +28,8 @@
     @vite('resources/js/edit-image.js')
     @vite('resources/js/follow.js')
     @vite('resources/js/toggle-two.js')
+    @vite('resources/js/bookmark.js')
+    @vite('resources/js/notification.js')
 
 
     <script type="text/javascript">
@@ -31,31 +40,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="@yield('body-class', 'bg-background text-white')">
-    <main class="flex flex-col h-screen">
-
-        @if (in_array(Route::currentRouteName(), ['login', 'register']))
-            <div class="py-3 px-5">
-                <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
-                <a class="button" href="{{ route('login') }}">Login</a>
-                <a class="button" href="{{ route('register') }}">Register</a>
-            </div>
-            <section id="content" class="flex items-center justify-center w-full h-full">
-                @yield('content')
-            </section>
-        @else
-            @include('layouts.header')
-
-            <div class="flex flex-grow">
-
-                @include('layouts.aside')
-
-                <section id="content" class="w-full h-full">
-                    @yield('content')
-                </section>
-            </div>
-        @endif
-    </main>
-</body>
+@yield('body')
 
 </html>
