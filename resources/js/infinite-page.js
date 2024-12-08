@@ -232,9 +232,9 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
-  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago }) => `
+  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago, is_viewed }) => `
     <div class="hover:bg-gray-900 p-4 flex">
-        <div class="w-8 h-8 mr-4">
+        <div class="w-8 h-8 mr-4 relative">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -247,8 +247,8 @@ if (resultsDivNotification) {
                         fill=${color}></path>
                 </g>
             </svg>
+            ${is_viewed ? '' : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'}
         </div>
-
         <div class=" grow">
             <div class="flex gap-2 items-center">
                 <img src="${imageSrc}"
@@ -300,7 +300,8 @@ if (resultsDivNotification) {
   const buildNotification = (notification) => {
     const handler = notificationHandlers[notification.notification_type];
     const details = handler(notification);
-    details.time_ago = notification.time_ago
+    details.time_ago = notification.time_ago;
+    details.is_viewed = notification.is_viewed;
     const html = notificationBoxHTML(details);
     return html;
   };
