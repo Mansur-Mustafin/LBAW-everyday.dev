@@ -1,3 +1,5 @@
+import { toMarkdown } from "./markdown";
+
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
 
@@ -65,6 +67,42 @@ if (createForm) {
 
     createForm.submit();
   });
+
+
+  const writeButton = document.getElementById('write-button')
+  const previewButton = document.getElementById('preview-button')
+
+  const previewArea = document.getElementById('preview-area')
+  const writeArea = document.getElementById('write-area')
+
+  writeButton.addEventListener('click', (e) => {
+    writeButton.classList.add('bg-input')
+    previewButton.classList.remove('bg-input')
+
+    writeArea.classList.add('flex')
+    writeArea.classList.remove('hidden')
+
+    previewArea.classList.remove('block')
+    previewArea.classList.add('hidden')
+  })
+
+  previewButton.addEventListener('click', (e) => {
+
+    const content = writeArea.value
+
+    previewButton.classList.add('bg-input')
+    writeButton.classList.remove('bg-input')
+
+    previewArea.classList.remove('hidden')
+
+    previewArea.innerHTML = toMarkdown(content)
+
+    console.log(previewArea.innerHTML)
+
+    writeArea.classList.remove('flex')
+    writeArea.classList.add('hidden')
+  })
+
 }
 
 const toggleButton = document.getElementById('toggleTagSelector');
