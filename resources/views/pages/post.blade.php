@@ -105,7 +105,7 @@
                     </select>
                 </div>
 
-                {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
+                <p class="block text-sm font-medium text-gray-300 mt-5 mb-3">Post's visibility</p>
                 <div class="toggleTwo" data-name="Followers only" data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
                     <input class="hidden hiddenToggle" type="text" name="for_followers"
                         value='{{$post->for_followers ? 'true' : 'false'}}'>
@@ -216,11 +216,11 @@
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>
-            {{-- @if ($post->for_followers)
+            @if ($post->for_followers)
             <div class="flex mt-4">
-                <p class="bg-red-400 text-gray-800 px-3 py-1 ml-2 rounded-full text-sm ">Followers only</p>
+                <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
             </div>
-            @endif --}}
+            @endif
         @endif
     </section>
 </section>
