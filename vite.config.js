@@ -16,12 +16,9 @@ export default defineConfig({
                 'resources/js/post.js',
                 'resources/js/comment.js',
                 'resources/js/toggle-two.js',
-<<<<<<< HEAD
-                'resources/js/markdown.js'
-=======
+                'resources/js/markdown.js',
                 'resources/js/bookmark.js',
                 'resources/js/notification.js',
->>>>>>> main
             ],
             refresh: true,
         }),
