@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.body.default')
 
 @section('content')
 
@@ -111,8 +111,9 @@
 
         <div class="flex flex-col">
             <label class="font-bold text-sm mb-1">Admin Privilegies</label>
-            <div class="toggleTwo mb-4" data-name="Admin" data-initialvalue="{{ $user->is_admin ? 'true' : 'false'}}"></div>
-            <input class="hidden" type="text" id="hiddenToggle" name="is_admin" value='{{$user->is_admin ? 'true' : 'false'}}'>
+            <div class="toggleTwo mb-4" data-name="Admin" data-initialvalue="{{ $user->is_admin ? 'true' : 'false'}}">
+                <input class="hidden hiddenToggle" type="text" name="is_admin" value='{{$user->is_admin ? 'true' : 'false'}}'>
+            </div>
             @if ($user->is_admin)
                 <div id="admPassword" class="hidden flex flex-col relative w-full">
                     <label class="font-bold text-sm">Administrative Password</label>
