@@ -149,7 +149,7 @@ class NewsPostController extends Controller
 
         $tagNames = explode(',', $tags);
         $tagIds = Tag::whereIn('name', $tagNames)->pluck('id')->toArray();
-        $post->tags()->attach($tagIds);
+        $post->tags()->sync($tagIds);
     }
 
     static function processComments($comments, $user)
