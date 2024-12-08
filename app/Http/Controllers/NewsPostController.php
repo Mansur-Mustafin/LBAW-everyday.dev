@@ -43,6 +43,9 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+        $newsPost->is_bookmarked = false;
+
         if ($user) {
             $vote = $newsPost->votes()->where('user_id', $user->id)->first();
 
@@ -50,6 +53,8 @@ class NewsPostController extends Controller
                 $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
                 $newsPost->user_vote_id = $vote->id;
             }
+
+            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
         }
 
         $this->processComments($newsPost->comments, $user);
@@ -86,7 +91,7 @@ class NewsPostController extends Controller
 
         $this->syncTags($post, $validated['tags'] ?? '');
 
-        return redirect()->route('home')
+        return redirect()->route('news.show', $post->id) 
             ->withSuccess('You have successfully created post!');
     }
 
@@ -126,7 +131,7 @@ class NewsPostController extends Controller
         $this->authorize('delete', $newsPost);
         $newsPost->delete();
 
-        return redirect()->route('home')
+        return redirect()->route('news.recent')
             ->withSuccess('Post deleted successfully!');
     }
 
@@ -144,7 +149,7 @@ class NewsPostController extends Controller
 
         $tagNames = explode(',', $tags);
         $tagIds = Tag::whereIn('name', $tagNames)->pluck('id')->toArray();
-        $post->tags()->attach($tagIds);
+        $post->tags()->sync($tagIds);
     }
 
     static function processComments($comments, $user)

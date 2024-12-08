@@ -2,16 +2,24 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordRecoverController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
+
+// use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +42,16 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/logout', 'logout')->middleware('auth')->name('logout');
 });
 
+Route::controller(PasswordRecoverController::class)->group(function () {
+    Route::get('/recover/form', 'showRecoverForm')->name('recover.form');
+    Route::post('/recover', 'recover')->name('recover.update');
+    Route::get('/recover', 'showResetPasswordForm')->name('recover.reset');
+});
+
+Route::controller(MailController::class)->group(function(){
+    Route::post('/emailrecover', 'send')->name('email.recover');
+});
+
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
@@ -43,6 +61,7 @@ Route::prefix('news')->controller(FeedController::class)->group(function ()  {
     Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
     Route::get('/top-feed', 'topFeed')->name('news.top');
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
+    Route::get('/bookmarks', 'bookmarksFeed')->middleware('auth')->name('news.bookmarks');
 });
 
 Route::prefix('news')->controller(NewsPostController::class)->group(function () {
@@ -105,5 +124,24 @@ Route::controller(SearchController::class)->group(function () {
 
 Route::prefix('file')->middleware('auth')->controller(FileController::class)->group(function () {
     Route::post('/upload', 'uploadAjax');
-    Route::post('/delete', 'deleteAjax');
+    Route::delete('/delete', 'deleteAjax');
+});
+
+Route::prefix('bookmark')->middleware('auth')->controller(BookmarkController::class)->group(function () {
+    Route::post('/', 'store')->name('bookmark.store');
+    Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
+});
+
+Route::middleware('auth')->controller(NotificationController::class)->group(function () {
+    Route::get('/notifications', 'index')->name('notifications.index');
+    Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
+});
+
+Route::middleware('auth')->controller(NotificationSettingController::class)->group(function () {
+    Route::put('/notification-settings', 'update');
+});
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirect')->name('google-auth');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.body.default')
 
 @section('content')
 
@@ -54,13 +54,16 @@
                     </select>
                     <label class='hidden laptop:text-sm tablet:block'>Add tags to your post</label>
                 </div>
-                <div class="toggleTwo" data-name="Followers only"></div>
             </div>
-            <div id="selectedTags" class="flex gap-1 flex-wrap"></div>
 
-            <input class="hidden" name="tags" id="tagsInput">
-            <input class="hidden" type="text" id="hiddenToggle" name="for_followers" value='false'>
-            <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Post</button>
+            <div class="toggleTwo" data-name="Followers only" data-initialvalue="false">
+                <input class="hidden hiddenToggle" type="text" name="for_followers" value='false'>
+            </div>
+        </div>
+        <div id="selectedTags" class="flex gap-1 flex-wrap"></div>
+
+        <input class="hidden" name="tags" id="tagsInput">
+        <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Post</button>
     </form>
 </section>
 @endsection
