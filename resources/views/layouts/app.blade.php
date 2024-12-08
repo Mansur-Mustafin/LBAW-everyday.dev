@@ -21,7 +21,7 @@
     @vite('resources/js/edit-image.js')
     @vite('resources/js/follow.js')
     @vite('resources/js/toggle-two.js')
-
+    @vite('resources/js/markdown.js')
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug

@@ -122,31 +122,12 @@
                 <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
             </div> --}}
         </div>
-        <!-- <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
+        <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
             <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                 class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                 placeholder="Share your thoughts" id="commentInput" />
             <button class="-ml-20 px-5 py-2  rounded-xl bg-purple-900" type="submit">Post</button>
-        </form> -->
-
-        <div class="flex flex-col mt-10">
-            <div class="flex gap-2 mb-2">
-                <button class="py-1 write-comment px-4 bg-input rounded-xl" data-active="true"
-                    data-post="{{ $post->id }}" id="write-comment-post-{{$post->id}}">Write</button>
-                <button class="p-1 px-4 rounded-xl preview-comment" id="preview-comment-post-{{$post->id}}"
-                    data-post="{{ $post->id }}" data-active="false">Preview</button>
-            </div>
-            <textarea type=" text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-                class="outline-none p-4 w-full h-48 border border-solid border-gray-700 resize-none bg-input rounded-xl hover:border-white hover:border-opacity-70"
-                placeholder="Share your thoughts" id="commentInput"></textarea>
-
-            <div class="hidden">
-                teste
-            </div>
-
-
-            <button class="px-5 py-2 rounded-xl bg-purple-900 self-end mt-2" type="submit">Post</button>
-        </div>
+        </form>
 
 
         <section class="mt-10">
