@@ -1,82 +1,102 @@
-@extends('layouts.app')
-
-@section('body-class', "bg-[url('/public/assets/backg.svg')] bg-cover text-white")
+@extends('layouts.body.single-form')
 
 @section('content')
 <div class="flex items-center justify-center">
-    <div class="flex items-center justify-center md:flex-row rounded-lg shadow-2xl max-w-4xl w-full overflow-hidden">
-        
+    <div
+        class="flex items-center justify-center md:flex-row rounded-2xl shadow-2xl shadow-gray-900 max-w-4xl w-full overflow-hidden">
+
         <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center text-white">
             <h2 class="text-3xl font-bold mb-4">Where developers suffer together</h2>
             <p class="mb-6">
-                We know how hard it is to be a developer. It doesn't have to be. Personalized news feed, dev community, and search, much better than what's out there. Maybe ;)
+                We know how hard it is to be a developer. It doesn't have to be. Personalized news feed, dev community,
+                and search, much better than what's out there. Maybe ;)
             </p>
         </div>
 
         <div class="md:w-1/2 p-8 w-full">
-          <form method="POST" action="{{ route('register') }}" id="registerForm" class="flex flex-col items-center mx-auto my-auto max-w-md p-6 rounded">
-            {{ csrf_field() }}
+            <form method="POST" action="{{ route('register') }}" id="registerForm">
+                {{ csrf_field() }}
+                
+                <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
 
-            <label for="username" class="block font-semibold mb-2">Username</label>
-            <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-            @if ($errors->has('username'))
-                <span class="text-red-400 text-sm">
-                  {{ $errors->first('username') }}
-              </span>
-            @endif
+                <div class="flex flex-col mb-2">
+                    <a href="{{ route('google-auth') }}"
+                        class="rounded-2xl bg-white hover:bg-gray-300 outline-none p-3 cursor-pointer flex flex-row justify-center gap-2 transition duration-200">
+                        <svg width="24px" height="24px" viewBox="-0.5 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Google-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-401.000000, -860.000000)"> <g id="Google" transform="translate(401.000000, 860.000000)"> <path d="M9.82727273,24 C9.82727273,22.4757333 10.0804318,21.0144 10.5322727,19.6437333 L2.62345455,13.6042667 C1.08206818,16.7338667 0.213636364,20.2602667 0.213636364,24 C0.213636364,27.7365333 1.081,31.2608 2.62025,34.3882667 L10.5247955,28.3370667 C10.0772273,26.9728 9.82727273,25.5168 9.82727273,24" id="Fill-1" fill="#FBBC05"> </path> <path d="M23.7136364,10.1333333 C27.025,10.1333333 30.0159091,11.3066667 32.3659091,13.2266667 L39.2022727,6.4 C35.0363636,2.77333333 29.6954545,0.533333333 23.7136364,0.533333333 C14.4268636,0.533333333 6.44540909,5.84426667 2.62345455,13.6042667 L10.5322727,19.6437333 C12.3545909,14.112 17.5491591,10.1333333 23.7136364,10.1333333" id="Fill-2" fill="#EB4335"> </path> <path d="M23.7136364,37.8666667 C17.5491591,37.8666667 12.3545909,33.888 10.5322727,28.3562667 L2.62345455,34.3946667 C6.44540909,42.1557333 14.4268636,47.4666667 23.7136364,47.4666667 C29.4455,47.4666667 34.9177955,45.4314667 39.0249545,41.6181333 L31.5177727,35.8144 C29.3995682,37.1488 26.7323182,37.8666667 23.7136364,37.8666667" id="Fill-3" fill="#34A853"> </path> <path d="M46.1454545,24 C46.1454545,22.6133333 45.9318182,21.12 45.6113636,19.7333333 L23.7136364,19.7333333 L23.7136364,28.8 L36.3181818,28.8 C35.6879545,31.8912 33.9724545,34.2677333 31.5177727,35.8144 L39.0249545,41.6181333 C43.3393409,37.6138667 46.1454545,31.6490667 46.1454545,24" id="Fill-4" fill="#4285F4"> </path> </g> </g> </g> </g></svg>
+                        <p class="font-semibold text-black">Google</p>
+                    </a>
+                </div>
+                @error('google-email')
+                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                @enderror
 
-            <label for="public_name" class="block font-semibold mb-2">Public name</label>
-            <input id="public_name" type="text" name="public_name" value="{{ old('public_name') }}" required autofocus class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-            @if ($errors->has('public_name'))
-                <span class="text-red-400 text-sm">
-                  {{ $errors->first('public_name') }}
-              </span>
-            @endif
+                <div class="flex flex-col mb-2">
+                    <label class="font-bold text-sm mb-2">Username</label>
+                    <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus
+                        placeholder="Username*" class="rounded-2xl bg-input outline-none p-3">
+                    @error('username')
+                        <span class="text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <label for="email" class="block font-semibold mb-2">E-Mail</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-            @if ($errors->has('email'))
-              <span class="text-red-400 text-sm">
-                  {{ $errors->first('email') }}
-              </span>
-            @endif
+                <div class="flex flex-col mb-2">
+                    <label class="font-bold text-sm mb-2">Public name</label>
+                    <input id="public_name" type="text" name="public_name" value="{{ old('public_name') }}" required
+                        placeholder="Public name*" class="rounded-2xl bg-input outline-none p-3">
+                    @error('public_name')
+                        <span class="text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+                
+                <div class="flex flex-col mb-2">
+                    <label class="font-bold text-sm mb-2">E-Mail</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                        placeholder="Public name*" class="rounded-2xl bg-input outline-none p-3">
+                    @error('email')
+                        <span class="text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <label for="password" class="block font-semibold mb-2">Password</label>
-            <div class="relative w-full">
-              <input id="password" type="password" name="password" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-              <span class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
-                visibility_off
-              </span>
-            </div>
-            @if ($errors->has('password'))
-              <span class="text-red-400 text-sm">
-                  {{ $errors->first('password') }}
-              </span>
-            @endif
 
-            <label for="password-confirm" class="block font-semibold mb-2">Confirm Password</label>
-            <div class="relative w-full">
-              <input id="password-confirm" type="password" name="password_confirmation" required class="w-full p-3 bg-white text-black border-[#5a7d99] rounded mb-4 focus:outline-none focus:ring-2 focus:ring-[#5a7d99]">
-              <span class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-0.5 text-gray-500">
-                visibility_off
-              </span>
-            </div>
+                <div class="flex flex-col relative w-full mb-2">
+                    <label class="font-bold text-sm mb-2">Password</label>
+                    <input id="password" type="password" name="password" required 
+                        class="rounded-2xl bg-input outline-none p-3" placeholder="Password*">
+                    <span class="toggle-password material-icons cursor-pointer absolute inset-y-10 right-3 text-gray-500">
+                        visibility_off
+                    </span>
+                    @error('password')
+                        <span class="text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+        
+                <div class="flex flex-col relative w-full mb-5">
+                    <label class="font-bold text-sm mb-2">Confirm Password</label>
+                    <input id="password-confirm" type="password" name="password_confirmation" required
+                        class="rounded-2xl bg-input outline-none p-3" placeholder="Confirm Password*">
+                    <span class="toggle-password material-icons cursor-pointer absolute inset-y-10 right-3 text-gray-500">
+                        visibility_off
+                    </span>
+                    @error('new_password_confirmation')
+                        <span class="text-red-400 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <label class="inline-flex items-center text-sm mb-4">
-              <input type="checkbox" name="age" id="ageCheckbox" class="bg-gray-600 rounded accent-[#5a7d99]">
-              <span class="ml-2">I confirm that I am over 13 years old</span>
-            </label>
-            <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>
+                <label class="inline-flex items-center text-sm mb-4">
+                    <input type="checkbox" name="age" id="ageCheckbox" class="bg-gray-600 rounded accent-[#5a7d99]">
+                    <span class="ml-2">I confirm that I am over 13 years old</span>
+                </label>
+                <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <a href="{{ route('login') }}" class="text-gray-300 hover:text-white hover:underline transition duration-200">Back to Login</a>
+                    <button type="submit" id="submitButton"
+                        class="w-1/2 bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
+                        Register
+                    </button>
+                </div>
 
-            <button type="submit" id="submitButton" class="mt-4 w-full bg-[#5a7d99] hover:bg-[#34547c] text-white font-extrabold py-2 rounded transition duration-200">
-              Register
-            </button>
-
-            <div class="text-center mt-4">
-              <span class="text-gray-400">Back to</span>
-              <a href="{{ route('login') }}" class="text-[#5a7d99] hover:text-[#34547c] font-semibold">Login</a>
-            </div>
-          </form>
+            </form>
         </div>
     </div>
 </div>

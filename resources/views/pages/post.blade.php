@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.body.default')
 
 @section('content')
 
@@ -106,10 +106,12 @@
                 </div>
 
                 {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
-                <div class="toggleTwo" data-name="Followers only" data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}"></div>
+                <div class="toggleTwo" data-name="Followers only" data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
+                    <input class="hidden hiddenToggle" type="text" name="for_followers"
+                        value='{{$post->for_followers ? 'true' : 'false'}}'>
+                </div>
                 <input class="hidden" name="tags" id="tagsInput">
-                <input class="hidden" type="text" id="hiddenToggle" name="for_followers"
-                    value='{{$post->for_followers ? 'true' : 'false'}}'>
+                
             </form>
 
             {{-- @include('partials.bar-post', ['post' => $post])

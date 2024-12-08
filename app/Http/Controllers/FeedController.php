@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsPost;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,5 +30,12 @@ class FeedController extends Controller
         $news_posts = NewsPost::whereIn('author_id', $following)
             ->orderBy('created_at', 'desc');
         return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
+    }
+
+    public function bookmarksFeed(Request $request)
+    {
+        $user = Auth::user();
+        $news_posts = $user->bookmarkedPosts();
+        return $this->news_post_page($news_posts, "Your Bookmarks", $request, route('news.bookmarks'));
     }
 }

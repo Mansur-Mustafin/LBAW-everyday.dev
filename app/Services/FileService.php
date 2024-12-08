@@ -47,15 +47,15 @@ class FileService
         $image = null;
 
         switch ($imageType) {
-            case ImageTypeEnum::PROFILE:
+            case ImageTypeEnum::PROFILE->value:
                 $image = $model->profileImage;
                 break;
 
-            case ImageTypeEnum::POST_TITLE:
+            case ImageTypeEnum::POST_TITLE->value:
                 $image = $model->titleImage;
                 break;
 
-            case ImageTypeEnum::POST_CONTENT:
+            case ImageTypeEnum::POST_CONTENT->value:
                 if ($path) {
                     $image = $model->contentImages()->where('path', $path)->first();
                 }
