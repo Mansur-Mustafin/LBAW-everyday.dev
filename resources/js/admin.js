@@ -43,10 +43,10 @@ const acceptUnblockAppeal = async (unblockAppealId,baseUrl) => {
 }
 const deleteUnblockAppeal = async (unblockAppealId,baseUrl) => {
   sendAjaxRequest(
-    `${baseUrl}/admin/tag_proposals/delete/${unblockAppealId}`,
+    `${baseUrl}/admin/unblock_appeals/delete/${unblockAppealId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/tag_proposals`
+      window.location = `${baseUrl}/admin/unblock_appeals`
     },
     'DELETE'
   )
@@ -94,7 +94,7 @@ const buildUserCard = (user) => {
   const pageUrl = `${baseUrl}/users/${user.id}/posts`;
   const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
   return `
-      <div class="flex flex-col p-2">
+      <div class="flex flex-col p-2 border rounded border-gray-700 bg-input">
           <div class="flex justify-between">
               <div class="flex-grow">
                 <a href="${pageUrl}" class="text-2xl flex place items-center gap-1">
@@ -132,11 +132,12 @@ const buildUserCard = (user) => {
 }
 const buildTagCard = (tag) => {
   return `
-      <div id="${tag.id}-card" class="flex flex-col">
-          <div class="flex justify-between items-center p-2">
+      <div id="${tag.id}-card" class="flex flex-col p-2 border rounded border-gray-700 bg-input">
+          <div class="flex justify-between items-center">
             <p class="text-2xl">${tag.name}</p>
             <a href="" id="${tag.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+                <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
             </a>  
@@ -146,7 +147,7 @@ const buildTagCard = (tag) => {
 }
 const buildTagProposalCard = (tagProposal) => {
   return `
-      <div id="${tagProposal.id}-card" class="flex p-2">
+      <div id="${tagProposal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
         <div class="flex-grow">
           <p class="text-2xl">${tagProposal.name}</p>
           <p class="">${tagProposal.description}</p>
@@ -158,12 +159,13 @@ const buildTagProposalCard = (tagProposal) => {
           !tagProposal.is_resolved 
           ? `
             <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </a>  
             <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+              <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
             </a>  
@@ -180,7 +182,7 @@ const buildTagProposalCard = (tagProposal) => {
 const buildUnblockAppealCard = (unblockAppeal) => {
   const pageUrl = `${baseUrl}/users/${unblockAppeal.user_id}/posts`;
   return `
-      <div id="${unblockAppeal.id}-card" class="flex p-2">
+      <div id="${unblockAppeal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
         <div class="flex flex-col flex-grow ">
           <a href="${pageUrl}" class="text-2xl">
             ${unblockAppeal.public_name}
@@ -194,12 +196,13 @@ const buildUnblockAppealCard = (unblockAppeal) => {
           !unblockAppeal.is_resolved 
           ? `
             <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </a>  
             <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+                <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
             </a>  

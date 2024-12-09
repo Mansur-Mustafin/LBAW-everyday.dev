@@ -18,11 +18,11 @@ class UnblockAppeal extends Model
         'name',
         'description',
         'is_resolved',
-        'proposer_id'
+        'user_id'
     ];
 
     public function proposer()
     {
-        return $this->belongsTo(User::class,'proposer_id');
+        return $this->belongsTo(User::class,'user_id');
     }
 }

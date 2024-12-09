@@ -3,31 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\UnblockAppeal;
+use Illuminate\Support\Facades\Auth;
 
 class UnblockAppealController extends Controller
 {
-    //
-    public function showCreationForm(Request $request)
-    {
-        return view('pages.create-unblock-appeal');
-    }
-
     public function store(Request $request)
     {
         $credentials = $request->validate([
-            'name'=>'required|string|max:250',
-            'description'=>'required|string|max:1000',
+            'description'=>'required|string|max:2000',
         ]);
+
+        $unblock_appeal = UnblockAppeal::where('user_id',Auth::id())->where('is_resolved',false)->get();
+        $user = Auth::user();
+
+        if(!$unblock_appeal->isEmpty()) {
+            return redirect()->route('blocked')
+                ->withError('There is already a request');
+        }
 
         UnblockAppeal::create([
-            'name'       => $credentials['name'],
             'description'=> $credentials['description'],
             'is_resolved'=> false,
-            'proposer_id'=> Auth::id()
+            'user_id'=> Auth::id()
         ]);
 
-        $user = Auth::user();
-        return redirect()->route('user.posts',['user'=>$user])
-            ->withSuccess('You have successfully created Tag Proposal!');
+
+        $user->update([
+            'status'=>'pending'
+        ]);
+
+        return redirect()->route('blocked')
+            ->withSuccess('You have successfully created an Unblock Appeal!');
     }
 }
