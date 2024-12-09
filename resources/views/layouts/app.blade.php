@@ -31,6 +31,7 @@
     @vite('resources/js/feed.js')
     @vite('resources/js/notification.js')
     @vite('resources/js/bookmark.js')
+    @vite('resources/js/admin.js')
 
 
     <script type="text/javascript">

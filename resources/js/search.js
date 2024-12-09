@@ -3,8 +3,8 @@ import { sendAjaxRequest } from './utils';
 const searchBarDiv = document.getElementById('search-bar');
 const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results');
-const baseUrl = searchBarDiv.dataset.url;
-const isAuth = searchBarDiv.dataset.auth;
+const baseUrl = searchBarDiv ? searchBarDiv.dataset.url : '';
+const isAuth = searchBarDiv ? searchBarDiv.dataset.auth : '';
 let loading = false;
 
 let clickedInsideResults = false;

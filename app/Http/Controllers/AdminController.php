@@ -6,6 +6,7 @@ use App\Enums\ImageTypeEnum;
 use App\Models\User;
 use App\Models\Tag;
 use App\Models\TagProposal;
+use App\Models\UnblockAppeal;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,17 +16,22 @@ class AdminController extends Controller
 {
     public function showUsers(Request $request)
     {
-        return view('pages.admin.admin',['type'=> 'users']);
+        return view('pages.admin.admin',['show'=> 'users']);
     }
 
     public function showTags(Request $request)
     {
-        return view('pages.admin.admin',['type'=> 'tags']);
+        return view('pages.admin.admin',['show'=> 'tags']);
     }
 
     public function showTagProposals(Request $request)
     {
-        return view('pages.admin.admin',['type'=>'tagProposals']);
+        return view('pages.admin.admin',['show'=>'tag_proposals']);
+    }
+
+    public function showUnblockAppeals(Request $request)
+    {
+        return view('pages.admin.admin',['show'=>'unblock_appeals']);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -146,7 +152,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function updateTagProposal(Request $request,TagProposal $tag_proposal)
+    public function acceptTagProposal(Request $request,TagProposal $tag_proposal)
     {
         try {
             $tag_proposal->update([
@@ -166,9 +172,39 @@ class AdminController extends Controller
     public function deleteTagProposal(Request $request,TagProposal $tag_proposal)
     {
         try {
-            // TODO: Create Policy
-            // $this->authorize('delete',$tag_proposal');
             $tag_proposal->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function acceptUnblockAppeal(Request $request,UnblockAppeal $unblock_appeal)
+    {
+        try {
+            $unblock_appeal->update([
+                'is_resolved'=> true,
+            ]);
+
+            $unblock_appeal->proposer()->update([
+                'status'=>'active'
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function deleteUnblockAppeal(Request $request,UnblockAppeal $unblock_appeal)
+    {
+        try {
+        
+            $unblock_appeal->proposer()->update([
+                'status'=>'blocked'
+            ]);
+
+            $unblock_appeal->delete();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false]);

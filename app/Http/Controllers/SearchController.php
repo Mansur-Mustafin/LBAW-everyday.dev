@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\TagProposal;
+use App\Models\UnblockAppeal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -86,7 +87,18 @@ class SearchController extends Controller
     {
         $search_query = "%" . strtolower($request->search) . "%";
 
-        $tag_proposals = TagProposal::whereRaw("LOWER(name) like ?", [$search_query]);
+        $tag_proposals = TagProposal::with('proposer')->whereRaw("LOWER(name) like ?", [$search_query]);
         return $this->paginate_tag_proposals($tag_proposals, $request);
+    }
+
+    public function searchUnblockAppeals(Request $request)
+    {
+        $search_query = "%" . strtolower($request->search) . "%";
+
+        $unblock_appeals = UnblockAppeal::select('user.*','unblock_appeal.*')
+            ->leftJoin('user','user.id','=','unblock_appeal.user_id')
+            ->where('status',"blocked")
+            ->whereRaw("LOWER(username) like ?",[$search_query]);
+        return $this->paginate_unblock_appeals($unblock_appeals,$request);
     }
 }
