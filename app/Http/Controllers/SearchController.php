@@ -97,7 +97,8 @@ class SearchController extends Controller
 
         $unblock_appeals = UnblockAppeal::select('user.*','unblock_appeal.*')
             ->leftJoin('user','user.id','=','unblock_appeal.user_id')
-            ->where('status',"blocked")
+            ->where('status','pending')
+            ->where('is_resolved','false')
             ->whereRaw("LOWER(username) like ?",[$search_query]);
         return $this->paginate_unblock_appeals($unblock_appeals,$request);
     }

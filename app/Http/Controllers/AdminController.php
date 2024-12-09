@@ -186,7 +186,7 @@ class AdminController extends Controller
                 'is_resolved'=> true,
             ]);
 
-            $unblock_appeal->proposer()->update([
+            $unblock_appeal->proposer()->get()->first()->update([
                 'status'=>'active'
             ]);
 
@@ -199,8 +199,7 @@ class AdminController extends Controller
     public function deleteUnblockAppeal(Request $request,UnblockAppeal $unblock_appeal)
     {
         try {
-        
-            $unblock_appeal->proposer()->update([
+            $unblock_appeal->proposer()->get()->first()->update([
                 'status'=>'blocked'
             ]);
 

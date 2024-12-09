@@ -32,8 +32,12 @@ class FeedController extends Controller
         $news_posts_by_tag =  $user->tags()->get()->map(function ($tag,$key) {
             return $tag->newsPosts()->get();
         })->flatten();
-
-        $news_posts = $news_posts_by_follow->merge($news_posts_by_tag)->toQuery();
+        
+        if(!$news_posts_by_follow->merge($news_posts_by_tag)->isEmpty()) {
+            $news_posts = $news_posts_by_follow->merge($news_posts_by_tag)->toQuery();
+        } else {
+            $news_posts = NewsPost::query()->whereNull('id');
+        }
 
         return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
     }
