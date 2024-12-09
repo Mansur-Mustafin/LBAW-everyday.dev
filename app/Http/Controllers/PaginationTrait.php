@@ -70,11 +70,10 @@ trait PaginationTrait
 
     public function paginate_tags($tags, Request $request)
     {
-        $tags = $tags->paginate(10);
-
+        $tags = $tags->paginate(12);
 
         return response()->json([
-            'tags'      => $tags,
+            'data'      => $tags->items(),
             'next-page' => $tags->currentPage() + 1,
             'last_page' => $tags->lastPage()
         ]);
@@ -82,12 +81,23 @@ trait PaginationTrait
 
     public function paginate_tag_proposals($tag_proposals,Request $request)
     {
-        $tag_proposals = $tag_proposals->with('proposer')->paginate(10);
+        $tag_proposals = $tag_proposals->paginate(10);
 
         return response()->json([
-            'tag_proposals' => $tag_proposals,
+            'data' => $tag_proposals->items(),
             'next-page' => $tag_proposals->currentPage() + 1,
             'last_page' => $tag_proposals->lastPage()
+        ]);
+    }
+
+    public function paginate_unblock_appeals($unblock_appeals,Request $request)
+    {
+        $unblock_appeals = $unblock_appeals->paginate(10);
+
+        return response()->json([
+            'data' => $unblock_appeals->items(),
+            'next-page' => $unblock_appeals->currentPage() + 1,
+            'last_page' => $unblock_appeals->lastPage()
         ]);
     }
 }

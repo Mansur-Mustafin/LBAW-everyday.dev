@@ -17,6 +17,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
+use App\Http\Controllers\UnblockAppealController;
+
 use Illuminate\Support\Facades\Route;
 
 // use Illuminate\Support\Facades\Broadcast;
@@ -105,7 +107,7 @@ Route::middleware('auth')->controller(TagController::class)->group(function () {
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
     Route::get('/', 'showUsers')->name('admin');
-    Route::get('/users','showUsers');
+    Route::get('/users','showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
     Route::post('/register', 'register');
@@ -117,14 +119,17 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::post('/tags/create','createTag');
     Route::delete('/tags/delete/{tag}','deleteTag');
     Route::get('/tags','showTags')->name('admin.tags');
-    Route::get('/tags','showTags')->name('admin.tags');
     Route::get('/tags/create','showCreateTagForm');
 
     // Tag Proposals
-    Route::get('/tag_proposals','showTagProposals');
-    Route::put('/tag_proposals/update/{tag_proposal}','updateTagProposal');
+    Route::get('/tag_proposals','showTagProposals')->name('admin.tag_proposals');
+    Route::put('/tag_proposals/accept/{tag_proposal}','acceptTagProposal');
     Route::delete('/tag_proposals/delete/{tag_proposal}','deleteTagProposal');
     
+    // Unblock Appeals
+    Route::get('/unblock_appeals','showUnblockAppeals')->name('admin.unblock_appeals');
+    Route::put('/unblock_appeals/accept/{unblock_appeal}','acceptUnblockAppeal');
+    Route::delete('/unblock_appeals/delete/{unblock_appeal}','deleteUnblockAppeal');
 });
 
 Route::controller(SearchController::class)->group(function () {
@@ -133,6 +138,9 @@ Route::controller(SearchController::class)->group(function () {
 
     Route::get('api/search/tag_proposals','searchTagProposals');
     Route::get('api/search/tag_proposals/{search}','searchTagProposals');
+
+    Route::get('api/search/unblock_appeals','searchUnblockAppeals');
+    Route::get('api/search/unblock_appeals/{search}','searchUnblockAppeals');
 
     Route::get('/search/posts/tags/','searchTagPosts');
     Route::get('/search/posts/tags/{search}', 'searchTagPosts');

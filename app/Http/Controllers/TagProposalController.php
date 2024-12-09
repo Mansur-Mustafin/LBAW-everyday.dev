@@ -10,8 +10,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 class TagProposalController extends Controller
 {
-    use PaginationTrait;
-
     public function showCreationForm(Request $request)
     {
         return view('pages.create-tag-proposal');
@@ -50,24 +48,5 @@ class TagProposalController extends Controller
         $user = Auth::user();
         return redirect()->route('user.posts',['user'=>$user])
             ->withSuccess('You have successfully created Tag Proposal!');
-    }
-
-    public function show(Request $request)
-    {
-        $user_id = Auth::id();
-        $tag_proposals = TagProposal::where('proposer_id',$user_id)->get();
-        return response()->json([
-            'tag_proposals'=> $tag_proposals
-        ]);
-        // return paginate_tag_proposals($tag_proposals,$request);
-    }
-
-    public function showAll(Request $request,User $user)
-    {
-        $tag_proposals = TagProposal::all();
-        return response()->json([
-            'tag_proposals'=> $tag_proposals
-        ]);
-        // return paginate_tag_proposals($tag_proposals,$request);
     }
 }

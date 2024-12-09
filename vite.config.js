@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/js/feed.js',
                 'resources/js/notification.js',
                 'resources/js/bookmark.js',
+                'resources/js/admin.js',
             ],
             refresh: true,
         }),
