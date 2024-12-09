@@ -4,8 +4,11 @@ const selectedTags = document.getElementById('selectedTags');
 const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
 
-const editor = document.getElementById('editor-container');
-const content = document.getElementById('content-input');
+const editor_create = document.getElementById('editor-create-container');
+const content_create = document.getElementById('content-input');
+
+const editor_edit = document.getElementById('editor-edit-container');
+const content_edit = document.getElementById('content-input');
 
 // Create Post
 if (createForm) {
@@ -66,48 +69,10 @@ if (createForm) {
       return;
     }
 
-    console.log(editor.innerHTML)
-
-    content.value = editor.children[0].innerHTML
+    content_create.value = editor_create.children[0].innerHTML;
 
     createForm.submit();
   });
-
-
-  const writeButton = document.getElementById('write-button')
-  const previewButton = document.getElementById('preview-button')
-
-  const previewArea = document.getElementById('preview-area')
-  const writeArea = document.getElementById('write-area')
-
-  writeButton.addEventListener('click', (e) => {
-    writeButton.classList.add('bg-input')
-    previewButton.classList.remove('bg-input')
-
-    writeArea.classList.add('flex')
-    writeArea.classList.remove('hidden')
-
-    previewArea.classList.remove('block')
-    previewArea.classList.add('hidden')
-  })
-
-  previewButton.addEventListener('click', (e) => {
-
-    const content = writeArea.value
-
-    previewButton.classList.add('bg-input')
-    writeButton.classList.remove('bg-input')
-
-    previewArea.classList.remove('hidden')
-
-    previewArea.innerHTML = toMarkdown(content)
-
-    console.log(previewArea.innerHTML)
-
-    writeArea.classList.remove('flex')
-    writeArea.classList.add('hidden')
-  })
-
 }
 
 const toggleButton = document.getElementById('toggleTagSelector');
@@ -206,6 +171,8 @@ if (editForm) {
       if (post_tags.length > 0) {
         document.getElementById('tagsInput').value = post_tags.join(',');
       }
+
+      content_edit.value = editor_edit.children[0].innerHTML;
 
       editForm.submit();
     });

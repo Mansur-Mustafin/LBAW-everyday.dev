@@ -76,8 +76,11 @@
 
                 <div class="mb-5">
                     <label for="content" class="block text-sm font-medium text-gray-300">Content</label>
-                    <textarea name="content" id="content" rows="5"
-                        class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">{{ $post->content }}</textarea>
+
+                    <div id="editor-edit-container" class="text-white rounded-xl bg-input !border-none">
+                        {!! $post->content !!}
+                    </div>
+                    <input class="hidden" id="content-input" name="content">
                 </div>
 
                 <p class="block text-sm font-medium text-gray-300">Posts' Tag</p>
@@ -114,17 +117,10 @@
                         value='{{$post->for_followers ? 'true' : 'false'}}'>
                 </div>
                 <input class="hidden" name="tags" id="tagsInput">
-
+            </form>
         </div>
-        </form>
 
-        {{-- @include('partials.bar-post', ['post' => $post])
 
-        <div class="mt-10 flex items-center">
-            <input type="text" class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl"
-                placeholder="Share your thoughts">
-            <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
-        </div> --}}
         @can('view', $post)
             <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
                 <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
