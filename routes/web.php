@@ -15,6 +15,7 @@ use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 // use Illuminate\Support\Facades\Broadcast;
@@ -134,14 +135,9 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-Route::get('/contacts', function () {
-    return view('pages.contacts'); 
-})->name('contacts');
+Route::controller(PageController::class)->group(function(){
+    Route::get('/contacts', 'contacts')->name('contacts');
+    Route::get('/about-us', 'about')->name('about');
+    Route::get('/main-features', 'features')->name('features');
+});
 
-Route::get('/about-us', function () {
-    return view('pages.about'); 
-})->name('about');
-
-Route::get('/main-features', function () {
-    return view('pages.features'); 
-})->name('features');
