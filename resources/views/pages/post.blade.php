@@ -107,25 +107,24 @@
                     </select>
                 </div>
 
-                {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
+                <p class="block text-sm font-medium text-gray-300 mt-5 mb-3">Post's visibility</p>
                 <div class="toggleTwo" data-name="Followers only"
                     data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
-                    <p class="block text-sm font-medium text-gray-300 mt-5 mb-3">Post's visibility</p>
-                    <div class="toggleTwo" data-name="Followers only"
-                        data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
-                    </div>
-                    <input class="hidden" name="tags" id="tagsInput">
-            </form>
+                    <input class="hidden hiddenToggle" type="text" name="for_followers"
+                        value='{{$post->for_followers ? 'true' : 'false'}}'>
+                </div>
+                <input class="hidden" name="tags" id="tagsInput">
 
-            {{-- @include('partials.bar-post', ['post' => $post])
-
-            <div class="mt-10 flex items-center">
-                <input type="text"
-                    class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl"
-                    placeholder="Share your thoughts">
-                <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
-            </div> --}}
         </div>
+        </form>
+
+        {{-- @include('partials.bar-post', ['post' => $post])
+
+        <div class="mt-10 flex items-center">
+            <input type="text" class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl"
+                placeholder="Share your thoughts">
+            <button class="-ml-20 border border-solid border-gray-700 px-5 py-2 rounded-xl ">Post</button>
+        </div> --}}
         @can('view', $post)
             <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
                 <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
