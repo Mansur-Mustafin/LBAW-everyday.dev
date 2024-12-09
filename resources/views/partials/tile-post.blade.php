@@ -68,11 +68,18 @@
                     <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
                 </svg>
             </button>
-
         </div>
 
-        <p class="text-gray-400">By {{ $news->author->public_name }}</p>
-        <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
+        <div class="flex items-center">
+            <div class="grow">
+                <p class="text-gray-400">By {{ $news->author->public_name }}</p>
+                <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
+            </div>
+            @if ($news->for_followers)
+                <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
+            @endif
+        </div>
+        
     </div>
 
 </div>

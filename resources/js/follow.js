@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
         url,
         (data) => {
           console.log(data);
+          if (target.id === 'follow-button-refresh' || target.id === 'unfollow-button-refresh') {
+            location.reload();
+          }
           if (action === 'follow') {
             target.textContent = 'Unfollow';
             target.dataset.action = 'unfollow';
