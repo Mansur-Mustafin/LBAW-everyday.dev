@@ -4,8 +4,16 @@
     @include('partials.success-popup')
 
     <div class="container tablet:mx-auto w-full">
-        <h1 class="text-2xl font-semibold my-4 ml-4">{{ $title }}</h1>
-
+        <div class="flex flex-row items-center px-5 pt-5">
+            <h1 class="text-2xl font-semibold grow">{{ $title }}</h1>
+            <div class="relative">
+                <button id="toggle-filter-button" class="mr-5 bg-input rounded-md py-1 px-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+                @include('partials.filter')
+            </div>
+        </div>
+        
         <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container"
             class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4">
             @foreach ($news_posts as $news)
