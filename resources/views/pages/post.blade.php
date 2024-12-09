@@ -28,8 +28,8 @@
 
             <img src="{{ $post->titleImage->url }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
             @can('view', $post)
-                <div class="mt-10">
-                    {{ $post->content }}
+                <div class="mt-10 prose">
+                    {!! $post->content !!}
                 </div>
             @endcan
 
@@ -107,19 +107,14 @@
                     </select>
                 </div>
 
-                <<<<<<< HEAD {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
+                {{-- <p class="block text-sm font-medium text-gray-300 mt-5">Post's visibility</p> --}}
+                <div class="toggleTwo" data-name="Followers only"
+                    data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
+                    <p class="block text-sm font-medium text-gray-300 mt-5 mb-3">Post's visibility</p>
                     <div class="toggleTwo" data-name="Followers only"
                         data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
-                        =======
-                        <p class="block text-sm font-medium text-gray-300 mt-5 mb-3">Post's visibility</p>
-                        <div class="toggleTwo" data-name="Followers only"
-                            data-initialvalue="{{ $post->for_followers ? 'true' : 'false'}}">
-                            >>>>>>> main
-                            <input class="hidden hiddenToggle" type="text" name="for_followers"
-                                value='{{$post->for_followers ? 'true' : 'false'}}'>
-                        </div>
-                        <input class="hidden" name="tags" id="tagsInput">
-
+                    </div>
+                    <input class="hidden" name="tags" id="tagsInput">
             </form>
 
             {{-- @include('partials.bar-post', ['post' => $post])

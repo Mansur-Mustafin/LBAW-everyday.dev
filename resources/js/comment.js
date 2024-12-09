@@ -4,7 +4,6 @@ import { addVoteButtonBehaviour } from './vote.js';
 // Adds Vote Behaviour to Comments
 document.addEventListener('DOMContentLoaded', function () {
   addButtonsBehaviour();
-  markdownSupport();
 });
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
