@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
-    static $default = 'default.jpg';
     static $diskName = 'public_uploads';
 
     static array $systemTypes = [
