@@ -29,11 +29,16 @@ const toolbarOptions = [
    [{ align: [] }],
 ];
 
-const quill = new Quill('#editor-container', {
-   modules: {
-      toolbar: toolbarOptions,
-   },
-   theme: 'snow'
-});
+const container = document.querySelector('#editor-container');
+if (container) {
+   const quill = new Quill(container, {
+      modules: {
+         toolbar: toolbarOptions,
+      },
+      theme: 'snow'
+   });
 
-document.querySelector('.ql-toolbar').classList.add('rounded-xl', 'text-red-900', '!p-4', 'my-4', '!border-1', '!border-gray-700');
+   document.querySelector('.ql-toolbar').classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700');
+}
+
+

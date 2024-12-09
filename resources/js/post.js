@@ -1,10 +1,11 @@
-import { toMarkdown } from "./markdown";
-
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
 
 const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
+
+const editor = document.getElementById('editor-container');
+const content = document.getElementById('content-input');
 
 // Create Post
 if (createForm) {
@@ -64,6 +65,10 @@ if (createForm) {
       title.style.borderColor = 'red';
       return;
     }
+
+    console.log(editor.innerHTML)
+
+    content.value = editor.children[0].innerHTML
 
     createForm.submit();
   });

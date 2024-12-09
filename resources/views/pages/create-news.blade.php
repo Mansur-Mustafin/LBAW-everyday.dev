@@ -43,6 +43,7 @@
 
 
             <div id="editor-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
+            <input class="hidden" id="content-input" name="content">
 
             <div class="flex items-center justify-between mt-5">
                 <div class='flex items-center gap-2'>
@@ -54,11 +55,12 @@
                     </select>
                     <label class='hidden laptop:text-sm tablet:block'>Add tags to your post</label>
                 </div>
+                <div class="toggleTwo" data-name="Followers only" data-initialvalue="false">
+                    <input class="hidden hiddenToggle" type="text" name="for_followers" value='false'>
+                </div>
             </div>
 
-            <div class="toggleTwo" data-name="Followers only" data-initialvalue="false">
-                <input class="hidden hiddenToggle" type="text" name="for_followers" value='false'>
-            </div>
+
         </div>
         <div id="selectedTags" class="flex gap-1 flex-wrap"></div>
 
