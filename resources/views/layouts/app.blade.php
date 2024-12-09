@@ -30,6 +30,7 @@
     @vite('resources/js/toggle-two.js')
     @vite('resources/js/bookmark.js')
     @vite('resources/js/notification.js')
+    @vite('resources/js/filter.js')
 
 
     <script type="text/javascript">
