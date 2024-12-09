@@ -95,4 +95,9 @@ class User extends Authenticatable
     {
         return $this->is_admin == true;
     }
+
+    public function hasUnseenNotifications(): bool
+    {
+        return $this->notifications()->where('is_viewed', false)->exists();
+    }
 }
