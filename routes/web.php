@@ -2,14 +2,19 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordRecoverController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookmarkController;
+<<<<<<< HEAD
 use App\Http\Controllers\BlockedController;
+=======
+>>>>>>> main
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
@@ -47,6 +52,16 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->middleware('auth')->name('logout');
+});
+
+Route::controller(PasswordRecoverController::class)->group(function () {
+    Route::get('/recover/form', 'showRecoverForm')->name('recover.form');
+    Route::post('/recover', 'recover')->name('recover.update');
+    Route::get('/recover', 'showResetPasswordForm')->name('recover.reset');
+});
+
+Route::controller(MailController::class)->group(function(){
+    Route::post('/emailrecover', 'send')->name('email.recover');
 });
 
 Route::controller(RegisterController::class)->group(function () {
@@ -161,6 +176,11 @@ Route::middleware('blocked')->controller(SearchController::class)->group(functio
 Route::prefix('file')->middleware('auth')->middleware('blocked')->controller(FileController::class)->group(function () {
     Route::post('/upload', 'uploadAjax');
     Route::delete('/delete', 'deleteAjax');
+});
+
+Route::prefix('bookmark')->middleware('auth')->controller(BookmarkController::class)->group(function () {
+    Route::post('/', 'store')->name('bookmark.store');
+    Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
 });
 
 Route::prefix('bookmark')->middleware('auth')->middleware('blocked')->controller(BookmarkController::class)->group(function () {

@@ -9,6 +9,8 @@ export function addBookmarkButtonBehaviour() {
     const authenticated = container.dataset.authenticated === 'true';
     const bookmarkButton = container.querySelector('.bookmark-button');
 
+    if (!bookmarkButton) return;
+
     if (!authenticated) {
       bookmarkButton.addEventListener('click', redirectToLogin);
     } else {

@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
     }
 
+    public function bookmarkedPosts()
+    {
+        return $this->belongsToMany(NewsPost::class, 'bookmarks', 'user_id', 'news_post_id');
+    }
+
     public function notificationSetting()
     {
         return $this->hasOne(NotificationSetting::class, 'user_id', 'id');
@@ -94,5 +99,10 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->is_admin == true;
+    }
+
+    public function hasUnseenNotifications(): bool
+    {
+        return $this->notifications()->where('is_viewed', false)->exists();
     }
 }
