@@ -11,7 +11,7 @@ enum ImageTypeEnum: string
     public function label(): string
     {
         return match ($this) {
-            self::PROFILE => 'profile/default-profile-image.jpg',
+            self::PROFILE => 'profile/default.svg',
             self::POST_TITLE => 'post/default-post-title-image.jpg',
             self::POST_CONTENT => 'post/default-post-content-image.jpg',
         };

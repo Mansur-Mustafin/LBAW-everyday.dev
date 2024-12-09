@@ -22,9 +22,10 @@
 
     <div class="flex gap-2">
         @if (Auth::check())
+            {{-- Notifications --}}
             <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
                 href="{{ route('notifications.index') }}">
-                <div class="w-6 h-6 rounded-md">
+                <div class="w-6 h-6 rounded-md relative">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -37,6 +38,9 @@
                                 fill="#292D32"></path>
                         </g>
                     </svg>
+                    @if (Auth::user()->hasUnseenNotifications())
+                        <div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-4 left-4"></div>
+                    @endif
                 </div>
             </a>
             @if (Auth::user()->isAdmin())
