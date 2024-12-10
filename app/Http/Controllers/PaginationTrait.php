@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait PaginationTrait
 {
-    public function news_post_page($news_posts, string $title, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
+    public function news_post_page($news_posts, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
     {
         $user = Auth::user();
 
@@ -40,21 +40,14 @@ trait PaginationTrait
             }
         }
 
-        if ($request->ajax()) {
-            return response()->json([
-                'news_posts' => view('partials.posts', compact('news_posts'))->render(),
-                'next_page'  => $news_posts->currentPage() + 1,
-                'last_page'  => $news_posts->lastPage()
-            ]);
-        }
+        sleep(1);
 
-        if (is_null($baseUrl)) {
-            $baseUrl = $request->url();
-        }
-
-        $data = array_merge(compact('news_posts', 'title', 'baseUrl'), $additionalData);
-
-        return view($view, $data);
+        return response()->json([
+            'news_posts' => view('partials.posts', compact('news_posts'))->render(),
+            'next_page'  => $news_posts->currentPage() + 1,
+            'last_page'  => $news_posts->lastPage()
+        ]);
+        
     }
 
     public function paginate_users($users, Request $request)

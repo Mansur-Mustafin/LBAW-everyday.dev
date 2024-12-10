@@ -59,7 +59,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::prefix('news')->controller(FeedController::class)->group(function ()  {
     Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
-    Route::get('/top-feed', 'topFeed')->name('news.top');
+    Route::get('/api/recent-feed', 'getRecentFeed')->name('api.news.recent');
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
     Route::get('/bookmarks', 'bookmarksFeed')->middleware('auth')->name('news.bookmarks');
 });
