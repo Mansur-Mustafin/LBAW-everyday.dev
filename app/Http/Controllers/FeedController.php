@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Enums\UserStatusEnum;
+use Illuminate\Support\Facades\Log;
 
 class FeedController extends Controller
 {
@@ -21,7 +22,7 @@ class FeedController extends Controller
 
     public function getRecentFeed(Request $request)
     {
-        $news_posts = NewsPost::orderBy('created_at', 'desc');
+        $news_posts = NewsPost::query()->orderBy('created_at', 'desc');
         return $this->news_post_page($news_posts, $request, route('news.recent'));
     }
 

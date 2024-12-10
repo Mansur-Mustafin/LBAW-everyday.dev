@@ -11,12 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  document.getElementById('clear-all-button').addEventListener('click', () => {
-    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-  });
-
   document.querySelectorAll('.filter-section').forEach((section) => {
     const header = section.querySelector('.filter-header');
     const list = section.querySelector('.filter-list');
