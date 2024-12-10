@@ -82,8 +82,27 @@ VALUES
 
 
 INSERT INTO tag (name)
-VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
-
+VALUES 
+('AI'), 
+('Machine Learning'), 
+('Security'), 
+('Cloud'), 
+('Python'),
+('Technology'),
+('Health'),
+('Sports'),
+('Entertainment'),
+('Travel'),
+('Politics'),
+('Science'),
+('Education'),
+('Business'),
+('Lifestyle'),
+('Environment'),
+('Culture'),
+('Art'),
+('Economy'),
+('History');
 
 INSERT INTO news_post (title, created_at, changed_at, content, for_followers, upvotes, downvotes, author_id)
 VALUES
@@ -387,25 +406,6 @@ VALUES
 (NOW(), 'Comment contains hate speech.', 'CommentReport', 9, NULL, 3, NULL),
 (NOW(), 'User is violating community guidelines.', 'UserReport', 10, NULL, NULL, 1),
 (NOW(), 'Post contains unauthorized content.', 'PostReport', 1, 4, NULL, NULL);
-
-
-INSERT INTO tag (name)
-VALUES
-('Technology'),
-('Health'),
-('Sports'),
-('Entertainment'),
-('Travel'),
-('Politics'),
-('Science'),
-('Education'),
-('Business'),
-('Lifestyle'),
-('Environment'),
-('Culture'),
-('Art'),
-('Economy'),
-('History');
 
 
 INSERT INTO news_post_tag (news_post_id, tag_id)
