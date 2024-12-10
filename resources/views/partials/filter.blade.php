@@ -9,12 +9,12 @@
     @include('partials.filter-checkbox-section', [
         'title' => 'Tags',
         'items' => $tags,
-        'name' => 'tag',
+        'name' => 'tags',
     ])
     @include('partials.filter-checkbox-section', [
         'title' => 'Author Rank',
         'items' => $rankings,
-        'name' => 'rank',
+        'name' => 'ranks',
     ])
     @include('partials.filter-radio-section', [
         'title' => 'Date Range',

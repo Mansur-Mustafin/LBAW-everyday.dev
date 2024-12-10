@@ -1,4 +1,4 @@
-import { sendAjaxRequest, truncateWords } from './utils';
+import { sendAjaxRequest, encodeForAjax, truncateWords } from './utils';
 import { addVoteButtonBehaviour } from './vote';
 import { addBookmarkButtonBehaviour } from './bookmark';
 
@@ -37,6 +37,36 @@ let page = 1;
 const postContainer = document.getElementById('news-posts-container');
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
+
+  const filter = document.getElementById('filter');
+  const checkboxes = filter.querySelectorAll('input[type=checkbox]');
+  const radio = filter.querySelectorAll('input[type=radio]');
+
+  radio.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      postContainer.innerHTML = '';
+      page = 1;
+      loadMoreData(page);
+    });
+  });
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      postContainer.innerHTML = '';
+      page = 1;
+      loadMoreData(page);
+    });
+  });
+  filter.querySelector('#clear-all-button').addEventListener('click', () => {
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
+    radios[0].checked = true;
+    postContainer.innerHTML = '';
+    page = 1;
+    loadMoreData(page);
+  });
+
   let newsPageURL = postContainer.dataset.url;
 
   window.onload = async () => {
@@ -46,14 +76,37 @@ if (postContainer) {
   };
 
   const loadMoreData = (page) => {
-    console.log('Hello');
     if (loading) return;
     loading = true;
 
     if (loadingIcon) loadingIcon.classList.remove('hidden');
 
-    const url = newsPageURL + `?page=${page}`;
-    const method = 'GET';
+    let url = newsPageURL + `?page=${page}`;
+
+    const filterData = {};
+
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        if (!filterData[checkbox.name]) {
+          filterData[checkbox.name] = [];
+        }
+        filterData[checkbox.name].push(checkbox.value);
+      }
+    });
+
+    filter.querySelectorAll('input[type=radio]').forEach((radioButton) => {
+      if (radioButton.checked) {
+        filterData[radioButton.name] = radioButton.value;
+      }
+    });
+
+    const filterParams = encodeForAjax(filterData);
+    if (filterParams) {
+      url += '&' + filterParams;
+    }
+
+    console.log(url);
+
     sendAjaxRequest(
       url,
       (data) => {
@@ -67,7 +120,7 @@ if (postContainer) {
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
       },
-      method
+      'GET'
     );
   };
 
