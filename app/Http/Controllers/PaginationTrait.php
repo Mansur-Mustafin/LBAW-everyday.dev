@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\NewsPostFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -10,37 +11,10 @@ trait PaginationTrait
 {
     public function news_post_page($news_posts, Request $request, $additionalData = [], $view = 'pages.news')
     {
-        $tags = $request->input('tags', []);
-        $authorRank = $request->input('ranks', []);
-        $dateTime = $request->input('date_range', null);
-        $user = Auth::user();
+        $filter = new NewsPostFilter($request);
 
-        if (!empty($tags)) {
-            $news_posts = $news_posts->whereHas('tags', function ($query) use ($tags) {
-                $query->whereIn('name', $tags);
-            });
-        }
-        if (!empty($authorRank)) {
-            $news_posts = $news_posts->whereHas('author', function($query) use ($authorRank) {
-                $query->whereIn('rank', $authorRank);
-            });
-        }
-        if (!empty($dateTime) && $dateTime !== 'All Time') {
-            switch ($dateTime) {
-                case 'Last Day':
-                    $news_posts = $news_posts->where('created_at', '>=', now()->subDay());
-                    break;
-                case 'Last Week':
-                    $news_posts = $news_posts->where('created_at', '>=', now()->subWeek());
-                    break;
-                case 'Last Month':
-                    $news_posts = $news_posts->where('created_at', '>=', now()->subMonth());
-                    break;
-                case 'Last Year':
-                    $news_posts = $news_posts->where('created_at', '>=', now()->subYear());
-                    break;
-            }
-        }
+        $news_posts = $filter->apply($news_posts);
+        $user = Auth::user();
         
         if ($user) {
             $news_posts->with([

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum UserStatusEnum: string
+enum UserRankEnum: string
 {
     case NOOBIE = 'noobie';
     case CODE_MONKEY = 'code monkey';
