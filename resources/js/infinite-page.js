@@ -39,33 +39,37 @@ if (postContainer) {
   const footer = document.getElementById('profile-footer');
 
   const filter = document.getElementById('filter');
-  const checkboxes = filter.querySelectorAll('input[type=checkbox]');
-  const radio = filter.querySelectorAll('input[type=radio]');
+  let checkboxes = null;
+  let radio = null;
+  if (filter) {
+    checkboxes = filter.querySelectorAll('input[type=checkbox]');
+    radio = filter.querySelectorAll('input[type=radio]');
 
-  radio.forEach((checkbox) => {
-    checkbox.addEventListener('change', () => {
-      postContainer.innerHTML = '';
-      page = 1;
-      loadMoreData(page);
+    radio.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        postContainer.innerHTML = '';
+        page = 1;
+        loadMoreData(page);
+      });
     });
-  });
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener('change', () => {
-      postContainer.innerHTML = '';
-      page = 1;
-      loadMoreData(page);
-    });
-  });
-  filter.querySelector('#clear-all-button').addEventListener('click', () => {
     checkboxes.forEach((checkbox) => {
-      checkbox.checked = false;
+      checkbox.addEventListener('change', () => {
+        postContainer.innerHTML = '';
+        page = 1;
+        loadMoreData(page);
+      });
     });
-    const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
-    radios[0].checked = true;
-    postContainer.innerHTML = '';
-    page = 1;
-    loadMoreData(page);
-  });
+    filter.querySelector('#clear-all-button').addEventListener('click', () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
+      radios[0].checked = true;
+      postContainer.innerHTML = '';
+      page = 1;
+      loadMoreData(page);
+    });
+  }
 
   let newsPageURL = postContainer.dataset.url;
 
@@ -83,29 +87,31 @@ if (postContainer) {
 
     let url = newsPageURL + `?page=${page}`;
 
-    const filterData = {};
+    if (filter) {
+      const filterData = {};
 
-    checkboxes.forEach((checkbox) => {
-      if (checkbox.checked) {
-        if (!filterData[checkbox.name]) {
-          filterData[checkbox.name] = [];
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          if (!filterData[checkbox.name]) {
+            filterData[checkbox.name] = [];
+          }
+          filterData[checkbox.name].push(checkbox.value);
         }
-        filterData[checkbox.name].push(checkbox.value);
-      }
-    });
+      });
 
-    filter.querySelectorAll('input[type=radio]').forEach((radioButton) => {
-      if (radioButton.checked) {
-        filterData[radioButton.name] = radioButton.value;
-      }
-    });
+      filter.querySelectorAll('input[type=radio]').forEach((radioButton) => {
+        if (radioButton.checked) {
+          filterData[radioButton.name] = radioButton.value;
+        }
+      });
 
-    const filterParams = encodeForAjax(filterData);
-    if (filterParams) {
-      url += '&' + filterParams;
+      const filterParams = encodeForAjax(filterData);
+      if (filterParams) {
+        url += '&' + filterParams;
+      }
+
+      console.log(url);
     }
-
-    console.log(url);
 
     sendAjaxRequest(
       url,

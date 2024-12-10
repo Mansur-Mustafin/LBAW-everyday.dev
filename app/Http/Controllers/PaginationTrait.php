@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 trait PaginationTrait
 {
-    public function news_post_page($news_posts, Request $request, $baseUrl = null, $additionalData = [], $view = 'pages.news')
+    public function news_post_page($news_posts, Request $request, $additionalData = [], $view = 'pages.news')
     {
         $tags = $request->input('tags', []);
         $authorRank = $request->input('ranks', []);
@@ -42,7 +42,6 @@ trait PaginationTrait
             }
         }
         
-
         if ($user) {
             $news_posts->with([
                 'votes' => function ($query) use ($user) {
@@ -50,8 +49,6 @@ trait PaginationTrait
                 }
             ]);
         }
-
-
 
         $news_posts = $news_posts->paginate(12);
         $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
