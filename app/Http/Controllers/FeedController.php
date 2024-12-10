@@ -6,7 +6,7 @@ use App\Models\NewsPost;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Enums\UserStatusEnum;
+use App\Enums\UserRankEnum;
 
 class FeedController extends Controller
 {
@@ -15,7 +15,7 @@ class FeedController extends Controller
     public function recentFeed(Request $request)
     {
         $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserStatusEnum::values(), 'title' => 'Recent News', 'baseUrl' => route('api.news.recent')]);
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Recent News', 'baseUrl' => route('api.news.recent')]);
     }
 
     public function getRecentFeed(Request $request)
@@ -27,7 +27,7 @@ class FeedController extends Controller
     public function myFeed(Request $request)
     {
         $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserStatusEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
     }
 
     public function getMyFeed(Request $request)
@@ -41,7 +41,7 @@ class FeedController extends Controller
     public function bookmarkFeed(Request $request)
     {
         $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserStatusEnum::values(), 'title' => 'Your Bookmarks', 'baseUrl' => route('api.news.bookmark')]);
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your Bookmarks', 'baseUrl' => route('api.news.bookmark')]);
     }
 
     public function getBookmarkFeed(Request $request)
