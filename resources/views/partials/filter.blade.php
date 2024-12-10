@@ -1,5 +1,5 @@
 <div id="filter"
-    class="w-64 pointer-events-none flex flex-col gap-3 absolute z-50 right-4 top-10 bg-input p-4 rounded-lg opacity-0 transition ease-out">
+    class="w-64 pointer-events-none flex flex-col gap-3 absolute z-30 right-4 top-10 bg-input p-4 rounded-lg opacity-0 transition ease-out">
 
     <div class="flex flex-row mb-3">
         <h3 class="font-semibold text-md grow">Filter</h3>
