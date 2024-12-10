@@ -24,17 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortContainer.querySelectorAll('li').forEach((li) => {
       li.addEventListener('click', () => {
-        if (event.currentTarget.innerHTML == 'None') {
-          chosenSort.innerHTML = 'Sort by';
-        } else {
-          chosenSort.innerHTML = event.currentTarget.innerHTML;
-        }
-
-        hiddenSelectedSort.value = chosenSort.innerHTML;
+        chosenSort.innerHTML = event.currentTarget.innerHTML; 
 
         sortPopup.classList.remove('opacity-100');
         sortPopup.classList.add('opacity-0', 'pointer-events-none');
         chevronIcon.classList.add('rotate-180');
+
+        // Change the title on page.
+
       });
     });
   }

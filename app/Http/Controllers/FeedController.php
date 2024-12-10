@@ -20,7 +20,7 @@ class FeedController extends Controller
 
     public function getRecentFeed(Request $request)
     {
-        $news_posts = NewsPost::query()->orderBy('created_at', 'desc');
+        $news_posts = NewsPost::query();
         return $this->news_post_page($news_posts, $request);
     }
 
@@ -34,7 +34,7 @@ class FeedController extends Controller
     {
         $user = Auth::user();
         $following = $user->following()->pluck('id');
-        $news_posts = NewsPost::query()->whereIn('author_id', $following)->orderBy('created_at', 'desc');
+        $news_posts = NewsPost::query()->whereIn('author_id', $following);
         return $this->news_post_page($news_posts, $request);
     }
 

@@ -37,26 +37,42 @@ let page = 1;
 const postContainer = document.getElementById('news-posts-container');
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
-
   const filter = document.getElementById('filter');
+  const sortByPopup = document.getElementById('sort-popup');
+
   let checkboxes = null;
   let radio = null;
+  let hiddenSelectedSort = null;
+
+  function refreshPage() {
+    postContainer.innerHTML = '';
+    page = 1;
+    loadMoreData(page);
+  }
+
+  if (sortByPopup) {
+    hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
+
+    sortByPopup.querySelectorAll('ul li').forEach((option) => {
+      option.addEventListener('click', () => {
+        hiddenSelectedSort.value = event.target.innerHTML;
+        refreshPage()
+      });
+    });
+  }
+
   if (filter) {
     checkboxes = filter.querySelectorAll('input[type=checkbox]');
     radio = filter.querySelectorAll('input[type=radio]');
 
     radio.forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
-        postContainer.innerHTML = '';
-        page = 1;
-        loadMoreData(page);
+        refreshPage()
       });
     });
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
-        postContainer.innerHTML = '';
-        page = 1;
-        loadMoreData(page);
+        refreshPage()
       });
     });
     filter.querySelector('#clear-all-button').addEventListener('click', () => {
@@ -65,18 +81,14 @@ if (postContainer) {
       });
       const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
       radios[0].checked = true;
-      postContainer.innerHTML = '';
-      page = 1;
-      loadMoreData(page);
+      refreshPage()
     });
   }
 
   let newsPageURL = postContainer.dataset.url;
 
   window.onload = async () => {
-    postContainer.innerHTML = '';
-    page = 1;
-    loadMoreData(page);
+    refreshPage()
   };
 
   const loadMoreData = (page) => {
@@ -88,24 +100,26 @@ if (postContainer) {
     let url = newsPageURL + `?page=${page}`;
 
     if (filter) {
-      const filterData = {};
+      const data = {};
 
       checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
-          if (!filterData[checkbox.name]) {
-            filterData[checkbox.name] = [];
+          if (!data[checkbox.name]) {
+            data[checkbox.name] = [];
           }
-          filterData[checkbox.name].push(checkbox.value);
+          data[checkbox.name].push(checkbox.value);
         }
       });
 
       filter.querySelectorAll('input[type=radio]').forEach((radioButton) => {
         if (radioButton.checked) {
-          filterData[radioButton.name] = radioButton.value;
+          data[radioButton.name] = radioButton.value;
         }
       });
 
-      const filterParams = encodeForAjax(filterData);
+      data[hiddenSelectedSort.name] = hiddenSelectedSort.value;
+
+      const filterParams = encodeForAjax(data);
       if (filterParams) {
         url += '&' + filterParams;
       }
