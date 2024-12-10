@@ -23,11 +23,11 @@
             </div>
         </div>
         
-        <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container"
+        <div data-url="{{ $baseUrl }}" id="news-posts-container"
             class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4">
-            @foreach ($news_posts as $news)
+            {{-- @foreach ($news_posts as $news)
                 @include('partials.tile-post', ['news' => $news])
-            @endforeach
+            @endforeach --}}
         </div>
 
         <div id="loading-icon" class="hidden">

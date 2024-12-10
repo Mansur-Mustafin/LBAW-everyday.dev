@@ -38,9 +38,15 @@ const postContainer = document.getElementById('news-posts-container');
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
   let newsPageURL = postContainer.dataset.url;
-  let lastPage = postContainer.dataset.last_page;
+
+  window.onload = async () => {
+    postContainer.innerHTML = '';
+    page = 1;
+    loadMoreData(page);
+  };
 
   const loadMoreData = (page) => {
+    console.log('Hello');
     if (loading) return;
     loading = true;
 
@@ -57,6 +63,7 @@ if (postContainer) {
           return;
         }
         postContainer.innerHTML += data.news_posts;
+        lastPage = data.last_page;
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
       },
@@ -232,7 +239,15 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
-  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago, is_viewed }) => `
+  const notificationBoxHTML = ({
+    imageSrc,
+    triggeredBy,
+    text,
+    color,
+    username,
+    time_ago,
+    is_viewed,
+  }) => `
     <div class="hover:bg-gray-900 p-4 flex">
         <div class="w-8 h-8 mr-4 relative">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -247,7 +262,11 @@ if (resultsDivNotification) {
                         fill=${color}></path>
                 </g>
             </svg>
-            ${is_viewed ? '' : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'}
+            ${
+              is_viewed
+                ? ''
+                : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'
+            }
         </div>
         <div class=" grow">
             <div class="flex gap-2 items-center">
@@ -269,31 +288,44 @@ if (resultsDivNotification) {
       imageSrc: vote.user.profile_image.url,
       triggeredBy: vote.user.public_name,
       text: vote.is_upvote
-        ? `Upvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`
-        : `Downvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`,
+        ? `Upvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`
+        : `Downvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`,
       color: '#D264B6',
-      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`
+      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`,
     }),
     CommentNotification: ({ comment }) => ({
       imageSrc: comment.author.profile_image.url,
       triggeredBy: comment.author.public_name,
-      text: comment.news_post_id ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.` : 'Replied to your comment.',
+      text: comment.news_post_id
+        ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.`
+        : 'Replied to your comment.',
       color: '#A480CF',
-      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`
+      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`,
     }),
     FollowNotification: ({ follower }) => ({
       imageSrc: follower.profile_image.url,
-      triggeredBy: `${follower.public_name}` ,
+      triggeredBy: `${follower.public_name}`,
       text: 'Followed you.',
       color: '#779BE7',
-      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`
+      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`,
     }),
     PostNotification: ({ news_post }) => ({
       imageSrc: news_post.author.profile_image.url,
       triggeredBy: news_post.author.public_name,
-      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(news_post.title, 15)}</a>`,
+      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(
+        news_post.title,
+        15
+      )}</a>`,
       color: '#49B6FF',
-      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`
+      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`,
     }),
   };
 
