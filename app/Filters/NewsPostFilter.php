@@ -35,4 +35,21 @@ class NewsPostFilter extends QueryFilter
                 break;
         }
     }
+
+    public function order_by(string $sort): void
+    {
+        switch ($sort) {
+            case 'Most recent':
+                $this->builder->orderBy('created_at', 'desc');
+                break;
+
+            case 'Most upvoted':
+                $this->builder->orderBy('created_at', 'desc');
+                break;
+
+            case 'Sort by':
+                $this->builder->orderBy('created_at', 'desc');
+                break;
+        }
+    }
 }
