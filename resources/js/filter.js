@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const filter = document.getElementById('filter');
 
     if (filter.classList.contains('opacity-0')) {
-      filter.classList.remove('opacity-0');
+      filter.classList.remove('opacity-0', 'pointer-events-none');
       filter.classList.add('opacity-100');
     } else {
       filter.classList.remove('opacity-100');
-      filter.classList.add('opacity-0');
+      filter.classList.add('opacity-0', 'pointer-events-none');
     }
   });
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       header.addEventListener('click', () => {
         if (list.style.maxHeight) {
           list.style.maxHeight = null;
-          chevronIcon.classList.remove('rotate-180');
+          chevronIcon.classList.add('rotate-180');
         } else {
           if (showAllButton && showAllButton.dataset.value === 'show-less') {
             list.style.maxHeight = list.scrollHeight + listMore.scrollHeight + 'px';
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             list.style.maxHeight = list.scrollHeight + 'px';
           }
 
-          chevronIcon.classList.add('rotate-180');
+          chevronIcon.classList.remove('rotate-180');
         }
       });
     }
