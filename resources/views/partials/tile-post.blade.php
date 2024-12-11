@@ -72,7 +72,7 @@
 
         <div class="flex items-center">
             <div class="grow">
-                <p class="text-gray-400">By {{ $news->author->public_name }}({{  }})</p>
+                <p class="text-gray-400">By {{ $news->author->public_name }}</p>
                 <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
             </div>
             @if ($news->for_followers)
