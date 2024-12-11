@@ -48,7 +48,7 @@ Route::controller(BlockedController::class)->group(function () {
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->middleware('auth')->name('logout');
+    Route::get('/logout', 'logout')->middleware(['auth'])->name('logout');
 });
 
 Route::controller(PasswordRecoverController::class)->group(function () {
@@ -66,15 +66,15 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::middleware('blocked')->prefix('news')->controller(FeedController::class)->group(function ()  {
-    Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
+Route::prefix('news')->middleware('blocked')->controller(FeedController::class)->group(function ()  {
+    Route::get('/my-feed', 'myFeed')->middleware(['auth','blocked'])->name('news.my');
     Route::get('/top-feed', 'topFeed')->name('news.top');
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
-    Route::get('/bookmarks', 'bookmarksFeed')->middleware('auth')->name('news.bookmarks');
+    Route::get('/bookmarks', 'bookmarksFeed')->middleware(['auth','blocked'])->name('news.bookmarks');
 });
 
-Route::middleware('blocked')->prefix('news')->controller(NewsPostController::class)->group(function () {
-    Route::middleware('auth')->group(function () {
+Route::prefix('news')->controller(NewsPostController::class)->group(function () {
+    Route::middleware(['auth','blocked'])->group(function () {
         Route::get('/create-post', 'showCreationForm')->name('news.create');
         Route::post('/', 'store')->name('news');
         Route::put('/{news_post}', 'update')->name('news.update');
@@ -84,27 +84,26 @@ Route::middleware('blocked')->prefix('news')->controller(NewsPostController::cla
     Route::get('/{news_post}/comment/{comment}', 'showSingleThread');
 });
 
-Route::middleware('blocked')->prefix('comments')->middleware('auth')->controller(CommentsController::class)->group(function () {
-    //TODO: Route::resource('/', CommentsController::class)->only('store', 'update', 'destroy'); 
+Route::prefix('comments')->middleware(['auth','blocked'])->controller(CommentsController::class)->group(function () {
     Route::post('/', 'store');
     Route::put('/{comment}', 'update');
     Route::delete('/{comment}', 'destroy');
 });
 
-Route::middleware('blocked')->prefix('vote')->middleware('auth')->controller(VoteController::class)->group(function () {
+Route::prefix('vote')->middleware(['auth','blocked'])->controller(VoteController::class)->group(function () {
     Route::post('/', 'store')->name('vote.store');
     Route::put('/{vote}', 'update')->name('vote.update');
     Route::delete('/{vote}', 'destroy')->name('vote.destroy');
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(UserController::class)->group(function () {
+Route::middleware(['auth','blocked'])->controller(UserController::class)->group(function () {
     Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(FollowController::class)->group(function () {
+Route::middleware(['auth','blocked'])->controller(FollowController::class)->group(function () {
     Route::post('/users/{user}/follow', 'followUser')->name('users.follow');
     Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('users.unfollow');
     Route::get('users/{user}/followers', 'showFollowers')->name('users.followers');
@@ -114,10 +113,10 @@ Route::middleware('auth')->middleware('blocked')->controller(FollowController::c
 
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(TagController::class)->group(function () {
-    Route::post('tag/store/{tag}','store')->middleware('auth')->name('user.follow_tag');
-    Route::delete('tag/delete/{tag}','delete')->middleware('auth')->name('user.unfollow_tag');
-    Route::get('api/tags', 'getFollowingTags')->middleware('auth');
+Route::middleware(['auth','blocked'])->controller(TagController::class)->group(function () {
+    Route::post('tag/store/{tag}','store')->name('user.follow_tag');
+    Route::delete('tag/delete/{tag}','delete')->name('user.unfollow_tag');
+    Route::get('api/tags', 'getFollowingTags');
     Route::get('api/tags/all','getTags');
 
     Route::post('admin/tags/create','store')->middleware('admin');
@@ -126,7 +125,7 @@ Route::middleware('auth')->middleware('blocked')->controller(TagController::clas
     Route::get('admin/tags/create','showCreationForm')->middleware('admin');
 });
 
-Route::prefix('admin')->middleware('blocked')->middleware('admin')->controller(AdminController::class)->group(function () {
+Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
     Route::get('/', 'showUsers')->name('admin');
     Route::get('/users','showUsers')->name('admin.users');
@@ -138,7 +137,7 @@ Route::prefix('admin')->middleware('blocked')->middleware('admin')->controller(A
     Route::put('/users/{user}/unblock','unblockUser');
 });
 
-Route::middleware('blocked')->controller(SearchController::class)->group(function () {
+Route::controller(SearchController::class)->group(function () {
     Route::get('api/search/tags','searchTags');
     Route::get('api/search/tags/{search}','searchTags');
 
@@ -159,22 +158,22 @@ Route::middleware('blocked')->controller(SearchController::class)->group(functio
     Route::get('api/search/{search}', 'search');
 });
 
-Route::prefix('file')->middleware('auth')->middleware('blocked')->controller(FileController::class)->group(function () {
+Route::prefix('file')->middleware(['auth','blocked'])->controller(FileController::class)->group(function () {
     Route::post('/upload', 'uploadAjax');
     Route::delete('/delete', 'deleteAjax');
 });
 
-Route::prefix('bookmark')->middleware('auth')->controller(BookmarkController::class)->group(function () {
+Route::prefix('bookmark')->middleware(['auth','blocked'])->controller(BookmarkController::class)->group(function () {
     Route::post('/', 'store')->name('bookmark.store');
     Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
 });
 
-Route::prefix('bookmark')->middleware('auth')->middleware('blocked')->controller(BookmarkController::class)->group(function () {
+Route::prefix('bookmark')->middleware(['auth','blocked'])->controller(BookmarkController::class)->group(function () {
     Route::post('/', 'store')->name('bookmark.store');
     Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(TagProposalController::class)->group(function () {
+Route::middleware(['auth','blocked'])->controller(TagProposalController::class)->group(function () {
     Route::get('tag_proposal/create','showCreationForm');
     Route::post('tag_proposals/create','store');
     Route::get('/api/tag_proposals/all','showAll');
@@ -192,16 +191,16 @@ Route::controller(UnblockAppealController::class)->group(function () {
     Route::delete('admin/unblock_appeals/delete/{unblock_appeal}','destroy')->middleware('admin');
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(NotificationController::class)->group(function () {
+Route::middleware(['auth','blocked'])->controller(NotificationController::class)->group(function () {
     Route::get('/notifications', 'index')->name('notifications.index');
     Route::get('/api/notifications', 'getNotifications')->name('notifications.get');
 });
 
-Route::middleware('auth')->middleware('blocked')->controller(NotificationSettingController::class)->group(function () {
+Route::middleware(['auth','blocked'])->controller(NotificationSettingController::class)->group(function () {
     Route::put('/notification-settings', 'update');
 });
 
-Route::middleware('blocked')->controller(GoogleController::class)->group(function () {
+Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google-auth');
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });

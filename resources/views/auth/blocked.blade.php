@@ -23,7 +23,11 @@
                             <span class="text-red-400 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="flex items-center justify-end mb-4">
+                    <div class="flex items-center justify-end mb-4 gap-2">
+                        <a href="{{ url('logout') }}"
+                            class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
+                            Logout
+                        </a>
                         <button type="submit"
                             class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
                             Submit
@@ -45,6 +49,10 @@
                 <p class="flex flex-col mb-2 text-center">
                     Your request is know being analyzed by our administrators.
                 </p>
+                <a href="{{ url('logout') }}"
+                    class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200 flex flex-col items-center">
+                    Logout
+                </a>
             </div>
         @else
             <script>window.location = "{{route('home')}}"</script>
