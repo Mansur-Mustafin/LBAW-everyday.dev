@@ -10,7 +10,7 @@
 
             @include('layouts.aside')
 
-            <section id="content" class="w-full h-full">
+            <section id="content" class="mt-20 w-full h-full">
                 @yield('content')
             </section>
         </div>
