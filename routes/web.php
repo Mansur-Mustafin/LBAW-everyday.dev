@@ -5,10 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordRecoverController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BookmarkController;
-<<<<<<< HEAD
 use App\Http\Controllers\BlockedController;
-=======
->>>>>>> main
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
@@ -122,6 +119,11 @@ Route::middleware('auth')->middleware('blocked')->controller(TagController::clas
     Route::delete('tag/delete/{tag}','delete')->middleware('auth')->name('user.unfollow_tag');
     Route::get('api/tags', 'getFollowingTags')->middleware('auth');
     Route::get('api/tags/all','getTags');
+
+    Route::post('admin/tags/create','store')->middleware('admin');
+    Route::delete('admin/tags/delete/{tag}','destroy')->middleware('admin');
+    Route::get('admin/tags','show')->name('admin.tags')->middleware('admin');
+    Route::get('admin/tags/create','showCreationForm')->middleware('admin');
 });
 
 Route::prefix('admin')->middleware('blocked')->middleware('admin')->controller(AdminController::class)->group(function () {
@@ -134,22 +136,6 @@ Route::prefix('admin')->middleware('blocked')->middleware('admin')->controller(A
     Route::put('/{user}', 'update')->name('admin.update');
     Route::put('/users/{user}/block','blockUser');
     Route::put('/users/{user}/unblock','unblockUser');
-
-    // Tags
-    Route::post('/tags/create','createTag');
-    Route::delete('/tags/delete/{tag}','deleteTag');
-    Route::get('/tags','showTags')->name('admin.tags');
-    Route::get('/tags/create','showCreateTagForm');
-
-    // Tag Proposals
-    Route::get('/tag_proposals','showTagProposals')->name('admin.tag_proposals');
-    Route::put('/tag_proposals/accept/{tag_proposal}','acceptTagProposal');
-    Route::delete('/tag_proposals/delete/{tag_proposal}','deleteTagProposal');
-    
-    // Unblock Appeals
-    Route::get('/unblock_appeals','showUnblockAppeals')->name('admin.unblock_appeals');
-    Route::put('/unblock_appeals/accept/{unblock_appeal}','acceptUnblockAppeal');
-    Route::delete('/unblock_appeals/delete/{unblock_appeal}','deleteUnblockAppeal');
 });
 
 Route::middleware('blocked')->controller(SearchController::class)->group(function () {
@@ -191,12 +177,19 @@ Route::prefix('bookmark')->middleware('auth')->middleware('blocked')->controller
 Route::middleware('auth')->middleware('blocked')->controller(TagProposalController::class)->group(function () {
     Route::get('tag_proposal/create','showCreationForm');
     Route::post('tag_proposals/create','store');
-    Route::get('/api/tag_proposals','show');
     Route::get('/api/tag_proposals/all','showAll');
+
+    Route::get('admin/tag_proposals','show')->middleware('admin')->name('admin.tag_proposals');
+    Route::put('admin/tag_proposals/accept/{tag_proposal}','accept')->middleware('admin');
+    Route::delete('admin/tag_proposals/delete/{tag_proposal}','destroy')->middleware('admin');
 });
 
 Route::controller(UnblockAppealController::class)->group(function () {
     Route::post('unblock_appeal/create','store')->name('unblock.create');
+
+    Route::get('admin/unblock_appeals','show')->middleware('admin')->name('admin.unblock_appeals');
+    Route::put('admin/unblock_appeals/accept/{unblock_appeal}','accept')->middleware('admin');
+    Route::delete('admin/unblock_appeals/delete/{unblock_appeal}','destroy')->middleware('admin');
 });
 
 Route::middleware('auth')->middleware('blocked')->controller(NotificationController::class)->group(function () {

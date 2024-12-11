@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UnblockAppealController extends Controller
 {
+    public function show(Request $request)
+    {
+        return view('pages.admin.admin',['show'=>'unblock_appeals']);
+    }
+
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -35,5 +40,36 @@ class UnblockAppealController extends Controller
 
         return redirect()->route('blocked')
             ->withSuccess('You have successfully created an Unblock Appeal!');
+    }
+
+    public function destroy(Request $request,UnblockAppeal $unblock_appeal)
+    {
+        try {
+            $unblock_appeal->proposer()->get()->first()->update([
+                'status'=>'blocked'
+            ]);
+
+            $unblock_appeal->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function accept(Request $request,UnblockAppeal $unblock_appeal)
+    {
+        try {
+            $unblock_appeal->update([
+                'is_resolved'=> true,
+            ]);
+
+            $unblock_appeal->proposer()->get()->first()->update([
+                'status'=>'active'
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
     }
 }

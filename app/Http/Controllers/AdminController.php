@@ -19,21 +19,6 @@ class AdminController extends Controller
         return view('pages.admin.admin',['show'=> 'users']);
     }
 
-    public function showTags(Request $request)
-    {
-        return view('pages.admin.admin',['show'=> 'tags']);
-    }
-
-    public function showTagProposals(Request $request)
-    {
-        return view('pages.admin.admin',['show'=>'tag_proposals']);
-    }
-
-    public function showUnblockAppeals(Request $request)
-    {
-        return view('pages.admin.admin',['show'=>'unblock_appeals']);
-    }
-
     public function showEditForm(User $user, Request $request)
     {
         return view('pages.admin.edit-user', ['user' => $user]);
@@ -42,11 +27,6 @@ class AdminController extends Controller
     public function showCreateForm(Request $request)
     {
         return view('pages.admin.create-user');
-    }
-
-    public function showCreateTagForm(Request $request)
-    {
-        return view('pages.admin.create-tag');
     }
 
     public function register(Request $request)
@@ -128,86 +108,6 @@ class AdminController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
-    }
-
-    public function createTag(Request $request) 
-    {
-        $credentials = $request->validate([
-            'name'=> 'required|string|max:250'
-        ]);
-
-        Tag::create([
-            'name'=> $credentials['name']
-        ]);
-
-        return redirect()->route('admin.tags')
-            ->withSuccess('You have sucessfully created a tag!');
-    }
-
-    public function deleteTag(Tag $tag)
-    {
-        $tag->delete();
-        return response()->json([
-            "You have successfully delete $tag->name"
-        ]);
-    }
-
-    public function acceptTagProposal(Request $request,TagProposal $tag_proposal)
-    {
-        try {
-            $tag_proposal->update([
-                'is_resolved'=> true,
-            ]);
-
-            Tag::create([
-                'name'=>$tag_proposal->name
-            ]);
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false]);
-        }
-    }
-
-    public function deleteTagProposal(Request $request,TagProposal $tag_proposal)
-    {
-        try {
-            $tag_proposal->delete();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false]);
-        }
-    }
-
-    public function acceptUnblockAppeal(Request $request,UnblockAppeal $unblock_appeal)
-    {
-        try {
-            $unblock_appeal->update([
-                'is_resolved'=> true,
-            ]);
-
-            $unblock_appeal->proposer()->get()->first()->update([
-                'status'=>'active'
-            ]);
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false]);
-        }
-    }
-
-    public function deleteUnblockAppeal(Request $request,UnblockAppeal $unblock_appeal)
-    {
-        try {
-            $unblock_appeal->proposer()->get()->first()->update([
-                'status'=>'blocked'
-            ]);
-
-            $unblock_appeal->delete();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false]);
-        }
     }
 
     public function blockUser(User $user,Request $request)
