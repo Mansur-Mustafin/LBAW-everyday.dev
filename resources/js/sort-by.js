@@ -24,14 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortContainer.querySelectorAll('li').forEach((li) => {
       li.addEventListener('click', () => {
-        chosenSort.innerHTML = event.currentTarget.innerHTML; 
+        chosenSort.innerHTML = event.currentTarget.innerHTML;
 
         sortPopup.classList.remove('opacity-100');
         sortPopup.classList.add('opacity-0', 'pointer-events-none');
         chevronIcon.classList.add('rotate-180');
-
-        // Change the title on page.
-
       });
     });
   }

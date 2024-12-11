@@ -2,6 +2,8 @@
 
 namespace App\Filters;
 
+use Illuminate\Support\Facades\DB;
+
 class NewsPostFilter extends QueryFilter
 {
     public function tags(array $tags): void
@@ -39,15 +41,13 @@ class NewsPostFilter extends QueryFilter
     public function order_by(string $sort): void
     {
         switch ($sort) {
-            case 'Most recent':
-                $this->builder->orderBy('created_at', 'desc');
-                break;
-
             case 'Most upvoted':
-                $this->builder->orderBy('created_at', 'desc');
+                $this->builder->orderBy(DB::raw('upvotes - downvotes'), 'desc');
                 break;
 
             case 'Sort by':
+            case 'Most recent':
+            default:
                 $this->builder->orderBy('created_at', 'desc');
                 break;
         }

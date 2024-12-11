@@ -39,6 +39,7 @@ if (postContainer) {
   const footer = document.getElementById('profile-footer');
   const filter = document.getElementById('filter');
   const sortByPopup = document.getElementById('sort-popup');
+  const newsTitle = document.getElementById('news-page-title');
 
   let checkboxes = null;
   let radio = null;
@@ -55,8 +56,9 @@ if (postContainer) {
 
     sortByPopup.querySelectorAll('ul li').forEach((option) => {
       option.addEventListener('click', () => {
+        newsTitle.innerHTML = event.target.dataset.header;
         hiddenSelectedSort.value = event.target.innerHTML;
-        refreshPage()
+        refreshPage();
       });
     });
   }
@@ -67,12 +69,12 @@ if (postContainer) {
 
     radio.forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
-        refreshPage()
+        refreshPage();
       });
     });
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener('change', () => {
-        refreshPage()
+        refreshPage();
       });
     });
     filter.querySelector('#clear-all-button').addEventListener('click', () => {
@@ -81,14 +83,14 @@ if (postContainer) {
       });
       const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
       radios[0].checked = true;
-      refreshPage()
+      refreshPage();
     });
   }
 
   let newsPageURL = postContainer.dataset.url;
 
   window.onload = async () => {
-    refreshPage()
+    refreshPage();
   };
 
   const loadMoreData = (page) => {
@@ -123,8 +125,6 @@ if (postContainer) {
       if (filterParams) {
         url += '&' + filterParams;
       }
-
-      console.log(url);
     }
 
     sendAjaxRequest(
