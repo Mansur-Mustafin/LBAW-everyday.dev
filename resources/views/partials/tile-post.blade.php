@@ -68,30 +68,11 @@
                     <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
                 </svg>
             </button>
-
-            <!-- Bookmark Button -->
-            <button type="submit" class="bookmark-button flex items-center justify-center ml-3">
-                <svg class="{{ $news->is_bookmarked ? 'hidden' : '' }}"
-                    id="post-bookmark-outline-{{ $news->id }}"
-                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-bookmark-plus">
-                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-                </svg>
-                <svg class="{{ $news->is_bookmarked ? '' : 'hidden' }}"
-                    id="post-bookmark-fill-{{ $news->id }}"
-                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-bookmark-plus">
-                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-                </svg>
-            </button>
-
         </div>
 
         <div class="flex items-center">
             <div class="grow">
-                <p class="text-gray-400">By {{ $news->author->public_name }}</p>
+                <p class="text-gray-400">By {{ $news->author->public_name }}({{  }})</p>
                 <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
             </div>
             @if ($news->for_followers)
