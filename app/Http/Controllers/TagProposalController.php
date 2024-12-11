@@ -15,6 +15,11 @@ class TagProposalController extends Controller
         return view('pages.create-tag-proposal');
     }
 
+    public function show(Request $request)
+    {
+        return view('pages.admin.admin',['show'=>'tag_proposals']);
+    }
+
     public function store(Request $request)
     {
         // TODO: Create Policy
@@ -48,5 +53,49 @@ class TagProposalController extends Controller
         $user = Auth::user();
         return redirect()->route('user.posts',['user'=>$user])
             ->withSuccess('You have successfully created Tag Proposal!');
+    }
+
+    public function destroy(Request $request,TagProposal $tag_proposal)
+    {
+        try {
+            $tag_proposal->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function acceptTagProposal(Request $request,TagProposal $tag_proposal)
+    {
+        try {
+            $tag_proposal->update([
+                'is_resolved'=> true,
+            ]);
+
+            Tag::create([
+                'name'=>$tag_proposal->name
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function accept(Request $request,TagProposal $tag_proposal)
+    {
+        try {
+            $tag_proposal->update([
+                'is_resolved'=> true,
+            ]);
+
+            Tag::create([
+                'name'=>$tag_proposal->name
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
     }
 }

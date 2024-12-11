@@ -16,28 +16,40 @@ class TagController extends Controller
     return Tag::all();
    } 
 
-   public function store(Request $request, Tag $tag) 
+   public function show(Request $request)
    {
-      $this->authorize('store', $tag); 
-      try {
-         Auth::user()->tags()->attach($request->tag);
-
-         return response()->json(['message' => "Successfully followed {$request->tag}"]);
-      } catch (AuthorizationException $e) {
-         return response()->json(['message' => "Cannot follow this {$request->tag}"], 403);
-      }
+      return view('pages.admin.admin',['show'=> 'tags']);
    }
 
-   public function delete(Request $request,Tag $tag) 
+   public function showCreationForm(Request $request)
    {
-      $this->authorize('delete', $tag); 
-      try {
-         Auth::user()->tags()->detach($request->tag);
+      return view('pages.admin.create-tag');
+   }
 
-         return response()->json(['message' => "Successfully unfollowed {$request->tag}"]);
-      } catch (AuthorizationException $e) {
-         return response()->json(['message' => "Cannot unfollow this {$request->tag}"], 403);
-      } 
+   public function store(Request $request) 
+   {
+      $credentials = $request->validate([
+         'name'=> 'required|string|max:250'
+      ]);
+
+      if(!Tag::where('name',$credentials['name'])->get()->isEmpty()) {
+         return redirect()->back()->withErrors('Tag already exists');
+      }
+
+      Tag::create([
+         'name'=> $credentials['name']
+      ]);
+
+      return redirect()->route('admin.tags')
+      ->withSuccess('You have sucessfully created a tag!');
+   }
+
+   public function destroy(Tag $tag)
+   {
+      $tag->delete();
+      return response()->json([
+         "You have successfully delete $tag->name"
+      ]);
    }
 
    public function getFollowingTags() {
