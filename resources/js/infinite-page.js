@@ -35,95 +35,70 @@ let page = 1;
 
 // Posts
 const postContainer = document.getElementById('news-posts-container');
+
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
   const filter = document.getElementById('filter');
   const sortByPopup = document.getElementById('sort-popup');
   const newsTitle = document.getElementById('news-page-title');
 
-  let checkboxes = null;
-  let radio = null;
-  let hiddenSelectedSort = null;
-
-  function refreshPage() {
+  const refreshPage = () => {
     postContainer.innerHTML = '';
     page = 1;
     loadMoreData(page);
-  }
+  };
 
-  if (sortByPopup) {
-    hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
+  const initializeSortByPopup = () => {
+    if (!sortByPopup) return;
+    const hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
 
     sortByPopup.querySelectorAll('ul li').forEach((option) => {
-      option.addEventListener('click', () => {
-        newsTitle.innerHTML = event.target.dataset.header;
-        hiddenSelectedSort.value = event.target.innerHTML;
+      option.addEventListener('click', (event) => {
+        const target = event.target;
+        newsTitle.innerHTML = target.dataset.header;
+        hiddenSelectedSort.value = target.innerHTML;
         refreshPage();
       });
     });
-  }
 
-  if (filter) {
-    checkboxes = filter.querySelectorAll('input[type=checkbox]');
-    radio = filter.querySelectorAll('input[type=radio]');
-
-    radio.forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        refreshPage();
-      });
-    });
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener('change', () => {
-        refreshPage();
-      });
-    });
-    filter.querySelector('#clear-all-button').addEventListener('click', () => {
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-      });
-      const radios = filter.querySelectorAll('input[type=radio][name="date_range"]');
-      radios[0].checked = true;
-      refreshPage();
-    });
-  }
-
-  let newsPageURL = postContainer.dataset.url;
-
-  window.onload = async () => {
-    refreshPage();
+    return hiddenSelectedSort;
   };
+
+  const initializeFilter = () => {
+    if (!filter) return;
+    const checkboxes = filter.querySelectorAll('input[type=checkbox]');
+    const radios = filter.querySelectorAll('input[type=radio]');
+    const clearButton = filter.querySelector('#clear-all-button');
+
+    const clearAllFilters = () => {
+      checkboxes.forEach((checkbox) => (checkbox.checked = false));
+      radios.forEach((radio) => radio.name === 'date_range' && (radio.checked = true));
+      refreshPage();
+    };
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', refreshPage));
+    radios.forEach((radio) => radio.addEventListener('change', refreshPage));
+    clearButton.addEventListener('click', clearAllFilters);
+
+    return { checkboxes, radios };
+  };
+
+  window.onload = refreshPage;
 
   const loadMoreData = (page) => {
     if (loading) return;
+
     loading = true;
+    loadingIcon?.classList.remove('hidden');
 
-    if (loadingIcon) loadingIcon.classList.remove('hidden');
-
-    let url = newsPageURL + `?page=${page}`;
+    let url = `${postContainer.dataset.url}?page=${page}`;
 
     if (filter) {
-      const data = {};
+      const filterData = gatherFilterData();
+      const filterParams = encodeForAjax(filterData);
 
-      checkboxes.forEach((checkbox) => {
-        if (checkbox.checked) {
-          if (!data[checkbox.name]) {
-            data[checkbox.name] = [];
-          }
-          data[checkbox.name].push(checkbox.value);
-        }
-      });
-
-      filter.querySelectorAll('input[type=radio]').forEach((radioButton) => {
-        if (radioButton.checked) {
-          data[radioButton.name] = radioButton.value;
-        }
-      });
-
-      data[hiddenSelectedSort.name] = hiddenSelectedSort.value;
-
-      const filterParams = encodeForAjax(data);
       if (filterParams) {
-        url += '&' + filterParams;
+        url += `&${filterParams}`;
       }
     }
 
@@ -131,17 +106,42 @@ if (postContainer) {
       url,
       (data) => {
         loading = false;
-        if (loadingIcon) loadingIcon.classList.add('hidden');
+        loadingIcon?.classList.add('hidden');
         if (data.news_posts == '') {
           return;
         }
         postContainer.innerHTML += data.news_posts;
         lastPage = data.last_page;
+
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
       },
       'GET'
     );
+  };
+
+  const gatherFilterData = () => {
+    const data = {};
+
+    const { checkboxes, radios } = initializeFilter();
+    const hiddenSelectedSort = initializeSortByPopup();
+
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        data[checkbox.name] = data[checkbox.name] || [];
+        data[checkbox.name].push(checkbox.value);
+      }
+    });
+
+    radios.forEach((radio) => {
+      if (radio.checked) {
+        data[radio.name] = radio.value;
+      }
+    });
+
+    data[hiddenSelectedSort.name] = hiddenSelectedSort.value;
+
+    return data;
   };
 
   document.addEventListener('scroll', function () {
@@ -155,8 +155,8 @@ if (postContainer) {
         loadMoreData(page);
       }
       if (page > lastPage) {
-        if (loadingIcon) loadingIcon.classList.add('hidden');
-        if (footer) footer.classList.remove('hidden');
+        loadingIcon?.classList.add('hidden');
+        footer?.classList.remove('hidden');
       }
     }
   });
