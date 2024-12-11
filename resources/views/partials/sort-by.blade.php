@@ -4,7 +4,7 @@
 
     <ul class="flex flex-col text-sm text-gray-200 gap-1">
         {{-- TODO: add one more color --}}
-        <li class="text-start w-full hover:bg-[#2A2B2E] px-3 py-1.5 rounded-md cursor-pointer">Most upvoted</li>
-        <li class="text-start w-full hover:bg-[#2A2B2E] px-3 py-1.5 rounded-md cursor-pointer">Most recent</li>
+        <li data-header = "Top News" class="text-start w-full hover:bg-[#2A2B2E] px-3 py-1.5 rounded-md cursor-pointer">Most upvoted</li>
+        <li data-header = "Recent News" class="text-start w-full hover:bg-[#2A2B2E] px-3 py-1.5 rounded-md cursor-pointer">Most recent</li>
     </ul>
 </div>
