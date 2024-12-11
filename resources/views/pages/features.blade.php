@@ -15,6 +15,7 @@
                 <p class="text-gray-400 mt-2">
                     everyday.dev provides a platform where developers can share, discuss, and curate industry news, enhanced with AI-driven personalization.
                 </p>
+                <img src="{{ asset('assets/community.jpg') }}" alt="Community-Driven News Feed" class="mt-4 rounded-md shadow-md">
             </div>
 
             <div>
@@ -36,6 +37,7 @@
                 <p class="text-gray-400 mt-2">
                     Use full-text and exact search to find relevant news, and filter results based on your interests for a tailored experience.
                 </p>
+                <img src="{{ asset('assets/search.jpg') }}" alt="Advanced Search and Filtering" class="mt-4 rounded-md shadow-md w-full">
             </div>
 
             <div>
@@ -43,6 +45,7 @@
                 <p class="text-gray-400 mt-2">
                     Enjoy seamless navigation and functionality across desktops, tablets, and smartphones with our responsive platform design.
                 </p>
+                <img src="{{ asset('assets/responsive.jpg') }}" alt="Responsive Designn" class="mt-4 rounded-md shadow-md">
             </div>
 
             <div>
@@ -50,6 +53,7 @@
                 <p class="text-gray-400 mt-2">
                     Authenticated users have profile pages to showcase their contributions and personalize their experience on the platform.
                 </p>
+                <img src="{{ asset('assets/profileImages.png') }}" alt="Profile and Personalization" class="mt-4 rounded-md shadow-md">
             </div>
 
             <div>
@@ -64,6 +68,7 @@
                 <p class="text-gray-400 mt-2">
                     Tags organize news items, with admins managing their creation and editing for optimal user experience.
                 </p>
+                <img src="{{ asset('assets/tag.jpg') }}" alt="Tag" class="mt-4 rounded-md shadow-md w-full">
             </div>
 
             <div>
@@ -78,6 +83,7 @@
                 <p class="text-gray-400 mt-2">
                     Seamlessly log in or register using OAuth for quick and secure access to the platform.
                 </p>
+                <img src="{{ asset('assets/Oauth.svg') }}" alt="Oauth" class="mt-4 rounded-md shadow-md w-2/3">
             </div>
 
             <div>
@@ -85,6 +91,7 @@
                 <p class="text-gray-400 mt-2">
                     Engage with the community by commenting on or voting for news items, fostering meaningful discussions.
                 </p>
+                <img src="{{ asset('assets/comment.jpg') }}" alt="Oauth" class="mt-4 rounded-md shadow-md">
             </div>
 
             <div>

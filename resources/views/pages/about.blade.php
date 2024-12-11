@@ -20,6 +20,15 @@
                 <img src="{{ asset('assets/aboutUsImage.jpg') }}" alt="Teamwork" class="rounded-md shadow-md">
             </div>
         </div>
+
+        <h2 class="mt-10 text-2xl font-bold text-purple-700">Team Members</h2>
+
+        <div class="flex gap-6 mt-10 ml-2">
+            <img src="{{ asset('assets/Afonso.jpg') }}" alt="Team Member 1" class="w-16 h-16 rounded-full shadow-md">
+            <img src="{{ asset('assets/Goiana.jpg') }}" alt="Team Member 2" class="w-16 h-16 rounded-full shadow-md">
+            <img src="{{ asset('assets/Mansur.jpg') }}" alt="Team Member 3" class="w-16 h-16 rounded-full shadow-md">
+            <img src="{{ asset('assets/Rubem.png') }}" alt="Team Member 4" class="w-16 h-16 rounded-full shadow-md">
+        </div>
     </section>
 </section>
 
