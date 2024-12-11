@@ -1,4 +1,4 @@
-<header class="sticky top-0 bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 ">
+<header class="fixed bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 w-full">
     <div>
         <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
     </div>
