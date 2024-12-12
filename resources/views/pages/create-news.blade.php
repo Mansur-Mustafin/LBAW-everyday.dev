@@ -32,16 +32,8 @@
         <input class="hidden" type="file" id="realFileInput" name="image">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
-        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3 mb-5" placeholder="Post title*">
+        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*">
         <div class="flex flex-col">
-            <div class="flex gap-1 mb-1">
-                <button class="px-3 py-1 hover:bg-input bg-input rounded-xl" id="write-button"
-                    data-active="true">Write</button>
-                <button class="px-3 py-1 hover:bg-input rounded-xl" id="preview-button"
-                    data-active="false">Preview</button>
-            </div>
-
-
             <div id="editor-create-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
             <input class="hidden" id="create-content-input" name="content">
 
