@@ -15,6 +15,9 @@ const content_edit = document.getElementById('edit-content-input');
 
 const saveButton = document.getElementById('saveButton');
 
+const content_images_create = document.getElementById('content-images-create');
+const content_images_edit = document.getElementById('content-images-edit');
+
 const toolbarOptions = [
   //   header options
   [{ header: [1, 2, 3] }],
@@ -32,7 +35,7 @@ const toolbarOptions = [
   ['blockquote', 'code-block'],
 
   // media
-  ['link', 'image', 'video'],
+  ['link', 'image'],
 
   // alignment
   [{ align: [] }],
@@ -58,7 +61,14 @@ if (createForm) {
 
     await Promise.all(getImagesPaths(imagesNotUploaded)); // had to do with a promise, otherwise the attribution below would be executed before all the images were uploaded.
 
+    content_images_create.value = imagesNotUploaded
+      .map((image) => 'post/' + image.src.split('post/')[1])
+      .join(',');
+
+    console.log(content_images_create.value);
+
     content_create.value = quill.root.innerHTML; // stores the html in a hidden input to send to laravel
+
     createForm.submit();
   });
 }
@@ -78,9 +88,16 @@ if (editForm) {
   if (saveButton) {
     saveButton.addEventListener('click', async (_) => {
       const imagesNotUploaded = Array.from(quill.root.querySelectorAll('img[src^="data:"]'));
+
       await Promise.all(getImagesPaths(imagesNotUploaded));
+
+      const images = quill.root.querySelectorAll('img');
+
+      content_images_edit.value = Array.from(images).map(
+        (img) => 'post/' + img.src.split('post/')[1]
+      );
+
       content_edit.value = quill.root.innerHTML;
-      console.log(content_edit.value);
       editForm.submit();
     });
   }
@@ -110,8 +127,6 @@ async function uploadImage(source) {
   // it is impossible to know what is the model_id here, once the post is not created yet. we need to figure out a way to handle this or keep this at 1 to all content photos
   // maybe one way to deal with it is simply not require model_id to be passed at all
   formData.append('image', blob, 'image.png');
-  formData.append('image_type', 'PostContent');
-  formData.append('model_id', 1);
 
   // i had to do my own fetch without sendAjaxRequest because i needed the response to be returned in this function and not in the handler
   try {
