@@ -33,6 +33,8 @@
     @vite('resources/js/notification.js')
     @vite('resources/js/bookmark.js')
     @vite('resources/js/admin.js')
+    @vite('resources/js/filter.js')
+    @vite('resources/js/sort-by.js')
 
 
     <script type="text/javascript">

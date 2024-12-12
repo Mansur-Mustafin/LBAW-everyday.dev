@@ -67,10 +67,14 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::prefix('news')->middleware('blocked')->controller(FeedController::class)->group(function ()  {
-    Route::get('/my-feed', 'myFeed')->middleware(['auth','blocked'])->name('news.my');
-    Route::get('/top-feed', 'topFeed')->name('news.top');
+    Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
+    Route::get('/api/my-feed', 'getMyFeed')->name('api.news.my');
+
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
-    Route::get('/bookmarks', 'bookmarksFeed')->middleware(['auth','blocked'])->name('news.bookmarks');
+    Route::get('/api/recent-feed', 'getRecentFeed')->name('api.news.recent');
+
+    Route::get('/bookmarks', 'bookmarkFeed')->middleware('auth')->name('news.bookmark');
+    Route::get('/api/bookmarks', 'getBookmarkFeed')->middleware('auth')->name('api.news.bookmark');
 });
 
 Route::prefix('news')->controller(NewsPostController::class)->group(function () {
@@ -97,8 +101,12 @@ Route::prefix('vote')->middleware(['auth','blocked'])->controller(VoteController
 });
 
 Route::middleware(['auth','blocked'])->controller(UserController::class)->group(function () {
-    Route::get('/users/{user}/posts', 'showUserPosts')->name('user.posts');
-    Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
+    Route::get('/users/{user}/posts', 'userPosts')->name('user.posts');
+    Route::get('/api/users/{user}/posts', 'getUserPosts')->name('api.user.posts');
+
+    Route::get('/users/{user}/upvotes', 'userUpvotes')->name('user.upvotes');
+    Route::get('/api/users/{user}/upvotes', 'getUserUpvotes')->name('api.user.upvotes');
+
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
 });

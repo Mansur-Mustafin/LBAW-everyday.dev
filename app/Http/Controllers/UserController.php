@@ -15,18 +15,30 @@ class UserController extends Controller
 {
     use PaginationTrait;
 
-    public function showUserPosts(User $user, Request $request)
+    public function userPosts(User $user, Request $request)
+    {
+        $title = "{$user->public_name}'s Posts";
+
+        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.posts', $user->id), 'user' => $user]);
+    }
+
+    public function getUserPosts(User $user, Request $request)
     {
         $news_posts = NewsPost::where('author_id', $user->id)
             ->orderBy('created_at', 'desc');
 
-        $title = "{$user->public_name}'s Posts";
-        $baseUrl = "/users/{$user->id}/posts";
 
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
+        return $this->news_post_page($news_posts, $request);
     }
 
-    public function showUserUpvotes(User $user, Request $request)
+    public function userUpvotes(User $user, Request $request)
+    {
+        $title = "{$user->public_name}'s Upvoted Posts";
+
+        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.upvotes', $user->id), 'user' => $user]);
+    }
+
+    public function getUserUpvotes(User $user, Request $request)
     {
         $upvotedPostIds = Vote::where('user_id', $user->id)
             ->where('is_upvote', true)
@@ -36,10 +48,7 @@ class UserController extends Controller
         $news_posts = NewsPost::whereIn('id', $upvotedPostIds)
             ->orderBy('created_at', 'desc');
 
-        $title = "{$user->public_name}'s Upvoted Posts";
-        $baseUrl = "/users/{$user->id}/upvotes";
-
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl, ['user' => $user], 'pages.user');
+        return $this->news_post_page($news_posts, $request);
     }
 
     public function showEditForm(User $user, Request $request)

@@ -21,6 +21,8 @@ export default defineConfig({
                 'resources/js/notification.js',
                 'resources/js/bookmark.js',
                 'resources/js/admin.js',
+                'resources/js/filter.js',
+                'resources/js/sort-by.js',
             ],
             refresh: true,
         }),
