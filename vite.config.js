@@ -18,6 +18,8 @@ export default defineConfig({
                 'resources/js/toggle-two.js',
                 'resources/js/bookmark.js',
                 'resources/js/notification.js',
+                'resources/js/filter.js',
+                'resources/js/sort-by.js',
             ],
             refresh: true,
         }),

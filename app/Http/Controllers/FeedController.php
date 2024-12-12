@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRankEnum;
 use App\Models\NewsPost;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
 {
@@ -13,29 +14,41 @@ class FeedController extends Controller
 
     public function recentFeed(Request $request)
     {
-        $news_posts = NewsPost::orderBy('created_at', 'desc');
-        return $this->news_post_page($news_posts, "Recent News", $request, route('news.recent'));
+        $tags = Tag::all()->pluck('name')->toArray();
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Recent News', 'baseUrl' => route('api.news.recent')]);
     }
 
-    public function topFeed(Request $request)
+    public function getRecentFeed(Request $request)
     {
-        $news_posts = NewsPost::orderBy(DB::raw('upvotes - downvotes'), 'desc');
-        return $this->news_post_page($news_posts, "Top News", $request, route('news.top'));
+        $news_posts = NewsPost::query();
+        return $this->news_post_page($news_posts, $request);
     }
 
     public function myFeed(Request $request)
     {
-        $user = Auth::user();
-        $following = $user->following()->pluck('id');
-        $news_posts = NewsPost::whereIn('author_id', $following)
-            ->orderBy('created_at', 'desc');
-        return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
+        $tags = Tag::all()->pluck('name')->toArray();
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
     }
 
-    public function bookmarksFeed(Request $request)
+    public function getMyFeed(Request $request)
+    {
+        $user = Auth::user();
+        $following = $user->following()->pluck('id');
+        $news_posts = NewsPost::query()->whereIn('author_id', $following);
+        return $this->news_post_page($news_posts, $request);
+    }
+
+    public function bookmarkFeed(Request $request)
+    {
+        $tags = Tag::all()->pluck('name')->toArray();
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your Bookmarks', 'baseUrl' => route('api.news.bookmark')]);
+    }
+
+    public function getBookmarkFeed(Request $request)
     {
         $user = Auth::user();
         $news_posts = $user->bookmarkedPosts();
-        return $this->news_post_page($news_posts, "Your Bookmarks", $request, route('news.bookmarks'));
+        $tags = Tag::all()->pluck('name')->toArray();
+        return $this->news_post_page($news_posts, $request);
     }
 }
