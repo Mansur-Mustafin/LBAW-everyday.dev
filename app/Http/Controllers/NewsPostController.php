@@ -143,7 +143,6 @@ class NewsPostController extends Controller
             $paths = explode(',', $validated['content_images']);
 
             // i bet there is a better way, without compromising so much performance
-            // $newsPost->contentImages()->whereNotIn('path', $paths)->delete();
             FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, $paths);
 
             foreach ($paths as $path) {
@@ -162,13 +161,12 @@ class NewsPostController extends Controller
             ->with('message', 'Post atualizado com sucesso!');
     }
 
-    public function destroy(newsPost $newsPost)
+    public function destroy(NewsPost $newsPost)
     {
         $this->authorize('delete', $newsPost);
 
-        // TOOD:
-        // FileService::delete($newsPost, ImageTypeEnum::POST_TITLE->value);
-        // FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value);
+        FileService::delete($newsPost, ImageTypeEnum::POST_TITLE->value);
+        FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, []);
 
         $newsPost->delete();
 
