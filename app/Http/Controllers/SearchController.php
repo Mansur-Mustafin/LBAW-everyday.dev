@@ -13,14 +13,14 @@ class SearchController extends Controller
 {
     use PaginationTrait;
 
-    public function getPosts($search_query)
+    public static function getPosts($search_query)
     {
         return NewsPost::join('user', 'user.id', '=', "news_post.id")
             ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\',?) OR title=?)', [$search_query, $search_query])
             ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC', [$search_query]);
     }
 
-    public function getPostsByTag(Tag $tag)
+    public static function getPostsByTag(Tag $tag)
     {
         return NewsPost::join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
@@ -44,27 +44,6 @@ class SearchController extends Controller
             "tags" => $tags,
             "users" => $users,
         ], 200);
-    }
-
-    public function searchPost(Request $request)
-    {
-        $search_query = $request->search;
-        $news_posts = SearchController::getPosts($search_query);
-        $title = "Related Posts";
-        $baseUrl = "/search/posts/{$search_query}";
-
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl);
-    }
-
-    public function searchTagPosts(Request $request)
-    {
-        $tag_query = $request->search;
-        $tag = Tag::where('name', $tag_query)->first();
-        $news_posts = $this->getPostsByTag($tag);
-        $title = "{$tag_query} Posts";
-        $baseUrl = "/search/tags/{$tag_query}";
-
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl,['tag'=>$tag]);
     }
 
     public function searchTags(Request $request)

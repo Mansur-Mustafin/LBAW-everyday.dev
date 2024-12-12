@@ -6,6 +6,7 @@
     <div class="container tablet:mx-auto w-full">
         <div class="flex flex-row items-center px-5 pt-5">
             <h1 id="news-page-title" class="text-2xl font-semibold grow">{{ $title }}</h1>
+            @isset($tags)
             <div class="relative" id="sort-by-container">
                 <button id="toggle-sort-button"
                     class="flex flex-row items-center mr-2 cursor-pointer hover:bg-input transition rounded-md px-2 py-1">
@@ -21,6 +22,7 @@
                 </button>
                 @include('partials.filter')
             </div>
+            @endisset
         </div>
         
         <div data-url="{{ $baseUrl }}" id="news-posts-container"

@@ -79,7 +79,7 @@ const showElements = (elements, buildFunction) => {
 
 const addMorePosts = (searchQuery) => {
   const morePostsDiv = document.createElement('div');
-  const url = `${baseUrl}/search/posts/${searchQuery}`;
+  const url = `${baseUrl}/news/posts/${searchQuery}`;
 
   morePostsDiv.innerHTML = `
         <div class="p-2 hover:bg-gray-700 hover:text-white">
@@ -111,7 +111,8 @@ const buildPost = (post) => {
 };
 
 const buildTag = (tag) => {
-  const url = `${baseUrl}/search/posts/tags/${tag.name}`;
+  const url = `${baseUrl}/news/tags/${tag.name}`;
+  console.log(tag.name)
   return `
         <div class="p-2 hover:bg-gray-700">
             <a href="${url}" class="flex items-center">
