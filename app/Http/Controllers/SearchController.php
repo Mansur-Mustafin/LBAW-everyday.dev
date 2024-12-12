@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\NewsPost;
 use App\Models\Tag;
+use App\Models\TagProposal;
+use App\Models\UnblockAppeal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,14 +13,14 @@ class SearchController extends Controller
 {
     use PaginationTrait;
 
-    public function getPosts($search_query)
+    public static function getPosts($search_query)
     {
         return NewsPost::join('user', 'user.id', '=', "news_post.id")
             ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\',?) OR title=?)', [$search_query, $search_query])
             ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC', [$search_query]);
     }
 
-    public function getPostsByTag(Tag $tag)
+    public static function getPostsByTag(Tag $tag)
     {
         return NewsPost::join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
@@ -44,25 +46,11 @@ class SearchController extends Controller
         ], 200);
     }
 
-    public function searchPost(Request $request)
+    public function searchTags(Request $request)
     {
-        $search_query = $request->search;
-        $news_posts = SearchController::getPosts($search_query);
-        $title = "Related Posts";
-        $baseUrl = "/search/posts/{$search_query}";
-
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl);
-    }
-
-    public function searchTag(Request $request)
-    {
-        $tag_query = $request->search;
-        $tag = Tag::where('name', $tag_query)->first();
-        $news_posts = $this->getPostsByTag($tag);
-        $title = "{$tag_query} Posts";
-        $baseUrl = "/search/tags/{$tag_query}";
-
-        return $this->news_post_page($news_posts, $title, $request, $baseUrl);
+        $tag_query = "%" . strtolower($request->search) . "%";
+        $tags = Tag::whereRaw("LOWER(name) like ?",$tag_query);
+        return $this->paginate_tags($tags,$request);
     }
 
     public function searchUser(Request $request)
@@ -71,5 +59,26 @@ class SearchController extends Controller
 
         $users = User::whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$search_query, $search_query]);
         return $this->paginate_users($users, $request);
+    }
+
+
+    public function searchTagProposals(Request $request)
+    {
+        $search_query = "%" . strtolower($request->search) . "%";
+
+        $tag_proposals = TagProposal::with('proposer')->whereRaw("LOWER(name) like ?", [$search_query]);
+        return $this->paginate_tag_proposals($tag_proposals, $request);
+    }
+
+    public function searchUnblockAppeals(Request $request)
+    {
+        $search_query = "%" . strtolower($request->search) . "%";
+
+        $unblock_appeals = UnblockAppeal::select('user.*','unblock_appeal.*')
+            ->leftJoin('user','user.id','=','unblock_appeal.user_id')
+            ->where('status','pending')
+            ->where('is_resolved','false')
+            ->whereRaw("LOWER(username) like ?",[$search_query]);
+        return $this->paginate_unblock_appeals($unblock_appeals,$request);
     }
 }

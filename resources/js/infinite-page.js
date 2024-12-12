@@ -1,4 +1,4 @@
-import { sendAjaxRequest, truncateWords } from './utils';
+import { sendAjaxRequest, encodeForAjax, truncateWords } from './utils';
 import { addVoteButtonBehaviour } from './vote';
 import { addBookmarkButtonBehaviour } from './bookmark';
 
@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
   addVoteButtonBehaviour();
   addBookmarkButtonBehaviour();
 });
+
+const loadingIcon = document.getElementById('loading-icon');
+let lastPage = 0;
+let loading = false;
+let page = 1;
+const alreadyBlockButton = []
+const alreadyUnblockButton = []
 
 const buildByRequest = async (url, buildUser, resultsDiv) => {
   if (loading) return;
@@ -20,131 +27,125 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
-      data.data.forEach((user) => {
-        resultsDiv.innerHTML += buildUser(user);
-      });
+      if(data.users) {
+        data.users.forEach((user) => {
+          resultsDiv.innerHTML += buildUser(user);
+        });
+      } 
     },
     method
   );
 };
 
-const loadingIcon = document.getElementById('loading-icon');
-let lastPage = 0;
-let loading = false;
-let page = 1;
 
 // Posts
 const postContainer = document.getElementById('news-posts-container');
+
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
-  let newsPageURL = postContainer.dataset.url;
-  let lastPage = postContainer.dataset.last_page;
+  const filter = document.getElementById('filter');
+  const sortByPopup = document.getElementById('sort-popup');
+  const newsTitle = document.getElementById('news-page-title');
+  const checkboxes = filter?.querySelectorAll('input[type=checkbox]');
+  const radios = filter?.querySelectorAll('input[type=radio]');
+  const hiddenSelectedSort = sortByPopup?.querySelector('input[type=hidden]');
+  let calledLoadMoreData = false;
+
+  const refreshPage = () => {
+    postContainer.innerHTML = '';
+    page = 1;
+    loadMoreData(page);
+  };
+
+  const initializeSortByPopup = () => {
+    if (!sortByPopup) return;
+
+    sortByPopup.querySelectorAll('ul li').forEach((option) => {
+      option.addEventListener('click', (event) => {
+        const target = event.target;
+        newsTitle.innerHTML = target.dataset.header;
+        hiddenSelectedSort.value = target.innerHTML;
+        refreshPage();
+      });
+    });
+  };
+
+  const initializeFilter = () => {
+    if (!filter) return;
+    const clearButton = filter.querySelector('#clear-all-button');
+
+    const clearAllFilters = () => {
+      checkboxes.forEach((checkbox) => (checkbox.checked = false));
+      radios.forEach((radio) => radio.name === 'date_range' && (radio.checked = true));
+      refreshPage();
+    };
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', refreshPage));
+    radios.forEach((radio) => radio.addEventListener('change', refreshPage));
+    clearButton.addEventListener('click', clearAllFilters);
+  };
+
+  window.onload = refreshPage;
+  if(filter) {
+    initializeFilter();
+    initializeSortByPopup();
+  }
 
   const loadMoreData = (page) => {
+    calledLoadMoreData = true;
+
     if (loading) return;
+
+    calledLoadMoreData = false;
     loading = true;
+    let url = `${postContainer.dataset.url}?page=${page}`;
 
-    if (loadingIcon) loadingIcon.classList.remove('hidden');
+    loadingIcon?.classList.remove('hidden');
 
-    const url = newsPageURL + `?page=${page}`;
-    const method = 'GET';
+    if (filter) {
+      const filterData = gatherFilterData();
+      url += `&${encodeForAjax(filterData)}`;
+    }
+
     sendAjaxRequest(
       url,
       (data) => {
         loading = false;
-        if (loadingIcon) loadingIcon.classList.add('hidden');
+        loadingIcon?.classList.add('hidden');
         if (data.news_posts == '') {
           return;
         }
         postContainer.innerHTML += data.news_posts;
+        lastPage = data.last_page;
+
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
+        if (calledLoadMoreData) refreshPage();
       },
-      method
+      'GET'
     );
   };
 
-  document.addEventListener('scroll', function () {
-    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    let windowHeight = window.innerHeight;
-    let documentHeight = document.documentElement.scrollHeight;
+  const gatherFilterData = () => {
+    const data = {};
 
-    if (scrollTop + windowHeight >= documentHeight - 100) {
-      if (page <= lastPage && loading == false) {
-        page++;
-        loadMoreData(page);
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        data[checkbox.name] = data[checkbox.name] || [];
+        data[checkbox.name].push(checkbox.value);
       }
-      if (page > lastPage) {
-        if (loadingIcon) loadingIcon.classList.add('hidden');
-        if (footer) footer.classList.remove('hidden');
+    });
+
+    radios.forEach((radio) => {
+      if (radio.checked) {
+        data[radio.name] = radio.value;
       }
-    }
-  });
-}
+    });
 
-// Users on Admin Dashboard
-const resultsDivAdmin = document.getElementById('admin-search-users-results');
-if (resultsDivAdmin) {
-  const searchBar = document.getElementById('admin-search-bar');
-  const baseUrl = searchBar.dataset.url;
+    data[hiddenSelectedSort.name] = hiddenSelectedSort.value;
 
-  const buildUserAdminCard = (user) => {
-    const adminBadge = `
-                <span class="">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
-                </span>
-        `;
-    const pageUrl = `${baseUrl}/users/${user.id}/posts`;
-    const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
-    return `
-        <div class="flex flex-col border border-gray-700 rounded">
-            <div class="flex justify-between p-2">
-                <div>
-                <h2 class="text-2xl flex gap-1">
-                    <a href="${pageUrl}">
-                    ${user.public_name}
-                    </a>
-                    <span class="hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
-                    </span>
-                    <span class="hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
-                    </span>
-                    ${user.is_admin == true ? adminBadge : ''}
-                </h1>
-                <h3 class="text-gray-400 hidden">${user.rank}</h3>
-                <h3 class="text-gray-400 hidden">${user.status}</h3>
-                <h3 class="text-gray-400">${user.username}</h3>
-                <h3 class="text-gray-400">${user.email}</h3>
-                </div>
-                <a class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
-                </a>
-            </div>
-        </div>
-        `;
+    return data;
   };
-
-  window.onload = async () => {
-    const searchQuery = `${baseUrl}/api/search/users/`;
-    resultsDivAdmin.innerHTML = '';
-    page = 1;
-    buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdmin);
-  };
-
-  const loadMoreData = async (page) => {
-    const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}?page=${page}`;
-    buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdmin);
-  };
-
-  if (searchBar) {
-    searchBar.onkeyup = async () => {
-      const searchQuery = `${baseUrl}/api/search/users/${searchBar.value}`;
-      resultsDivAdmin.innerHTML = '';
-      page = 1;
-      buildByRequest(searchQuery, buildUserAdminCard, resultsDivAdmin);
-    };
-  }
 
   document.addEventListener('scroll', function () {
     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -157,7 +158,8 @@ if (resultsDivAdmin) {
         loadMoreData(page);
       }
       if (page > lastPage) {
-        if (loadingIcon) loadingIcon.classList.add('hidden');
+        loadingIcon?.classList.add('hidden');
+        footer?.classList.remove('hidden');
       }
     }
   });
@@ -232,7 +234,15 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
-  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago, is_viewed }) => `
+  const notificationBoxHTML = ({
+    imageSrc,
+    triggeredBy,
+    text,
+    color,
+    username,
+    time_ago,
+    is_viewed,
+  }) => `
     <div class="hover:bg-gray-900 p-4 flex">
         <div class="w-8 h-8 mr-4 relative">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -247,7 +257,11 @@ if (resultsDivNotification) {
                         fill=${color}></path>
                 </g>
             </svg>
-            ${is_viewed ? '' : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'}
+            ${
+              is_viewed
+                ? ''
+                : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'
+            }
         </div>
         <div class=" grow">
             <div class="flex gap-2 items-center">
@@ -269,31 +283,44 @@ if (resultsDivNotification) {
       imageSrc: vote.user.profile_image.url,
       triggeredBy: vote.user.public_name,
       text: vote.is_upvote
-        ? `Upvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`
-        : `Downvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`,
+        ? `Upvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`
+        : `Downvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`,
       color: '#D264B6',
-      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`
+      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`,
     }),
     CommentNotification: ({ comment }) => ({
       imageSrc: comment.author.profile_image.url,
       triggeredBy: comment.author.public_name,
-      text: comment.news_post_id ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.` : 'Replied to your comment.',
+      text: comment.news_post_id
+        ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.`
+        : 'Replied to your comment.',
       color: '#A480CF',
-      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`
+      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`,
     }),
     FollowNotification: ({ follower }) => ({
       imageSrc: follower.profile_image.url,
-      triggeredBy: `${follower.public_name}` ,
+      triggeredBy: `${follower.public_name}`,
       text: 'Followed you.',
       color: '#779BE7',
-      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`
+      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`,
     }),
     PostNotification: ({ news_post }) => ({
       imageSrc: news_post.author.profile_image.url,
       triggeredBy: news_post.author.public_name,
-      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(news_post.title, 15)}</a>`,
+      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(
+        news_post.title,
+        15
+      )}</a>`,
       color: '#49B6FF',
-      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`
+      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`,
     }),
   };
 

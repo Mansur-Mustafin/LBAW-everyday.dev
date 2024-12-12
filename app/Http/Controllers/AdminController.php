@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
 use App\Models\User;
+use App\Models\Tag;
+use App\Models\TagProposal;
+use App\Models\UnblockAppeal;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,9 +14,9 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
-    public function show(Request $request)
+    public function showUsers(Request $request)
     {
-        return view('pages.admin.admin');
+        return view('pages.admin.admin',['show'=> 'users']);
     }
 
     public function showEditForm(User $user, Request $request)
@@ -105,5 +108,27 @@ class AdminController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
+    }
+
+    public function blockUser(User $user,Request $request)
+    {
+        $user->update([
+            'status'=>'blocked'
+        ]);
+
+        return response()->json([
+            'sucess'=>'You have successfully banned a user'
+        ]);
+    }
+
+    public function unblockUser(User $user,Request $request)
+    {
+        $user->update([
+            'status'=>'active'
+        ]);
+
+        return response()->json([
+            'sucess'=>'You have successfully unbanned a user'
+        ]);
     }
 }

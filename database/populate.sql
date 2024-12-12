@@ -13,11 +13,11 @@ VALUES
 ('mansur', 'Mansur Mustafin', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'mansur@example.com', 'noobie', 'active', 0, FALSE),
 ('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
 ('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
-('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'active', 20, FALSE),
-('lindajones', 'Linda Jones', 'lindapass', 'lindajones@example.com', 'noobie', 'active', 250, FALSE),
-('mikebrown', 'Mike Brown', 'mikepassword', 'mikebrown@example.com', '10x developer', 'active', 500, FALSE),
-('emilywhite', 'Emily White', 'emilypass', 'emilywhite@example.com', 'code monkey', 'blocked', -15, FALSE),
-('davidjohnson', 'David Johnson', 'davidpass', 'davidjohnson@example.com', 'noobie', 'active', 80, FALSE),
+('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'pending', 20, FALSE),
+('lindajones', 'Linda Jones', 'lindapass', 'lindajones@example.com', 'noobie', 'pending', 250, FALSE),
+('mikebrown', 'Mike Brown', 'mikepassword', 'mikebrown@example.com', '10x developer', 'pending', 500, FALSE),
+('emilywhite', 'Emily White', 'emilypass', 'emilywhite@example.com', 'code monkey', 'pending', -15, FALSE),
+('davidjohnson', 'David Johnson', 'davidpass', 'davidjohnson@example.com', 'noobie', 'pending', 80, FALSE),
 ('sarahlee', 'Sarah Lee', 'sarahpassword', 'sarahlee@example.com', 'noobie', 'active', 30, FALSE),
 ('alexmartin', 'Alex Martin', 'alexpass', 'alexmartin@example.com', 'noobie', 'pending', 200, FALSE),
 ('charlottejames', 'Charlotte James', 'charlottepassword', 'charlottejames@example.com', '10x developer', 'active', 600, FALSE),
@@ -82,8 +82,27 @@ VALUES
 
 
 INSERT INTO tag (name)
-VALUES ('AI'), ('Machine Learning'), ('Security'), ('Cloud'), ('Python');
-
+VALUES 
+('AI'), 
+('Machine Learning'), 
+('Security'), 
+('Cloud'), 
+('Python'),
+('Technology'),
+('Health'),
+('Sports'),
+('Entertainment'),
+('Travel'),
+('Politics'),
+('Science'),
+('Education'),
+('Business'),
+('Lifestyle'),
+('Environment'),
+('Culture'),
+('Art'),
+('Economy'),
+('History');
 
 INSERT INTO news_post (title, created_at, changed_at, content, for_followers, upvotes, downvotes, author_id)
 VALUES
@@ -389,25 +408,6 @@ VALUES
 (NOW(), 'Post contains unauthorized content.', 'PostReport', 1, 4, NULL, NULL);
 
 
-INSERT INTO tag (name)
-VALUES
-('Technology'),
-('Health'),
-('Sports'),
-('Entertainment'),
-('Travel'),
-('Politics'),
-('Science'),
-('Education'),
-('Business'),
-('Lifestyle'),
-('Environment'),
-('Culture'),
-('Art'),
-('Economy'),
-('History');
-
-
 INSERT INTO news_post_tag (news_post_id, tag_id)
 VALUES
 (1, 9),
@@ -427,18 +427,18 @@ VALUES
 (8, 15);
 
 
-INSERT INTO tag_proposal (description, is_resolved, proposer_id)
+INSERT INTO tag_proposal (name,description, is_resolved, proposer_id)
 VALUES
-('Suggesting a new tag: Innovation', FALSE, 2),
-('Proposing tag: Mental Health Awareness', FALSE, 3),
-('Request to add tag: Cryptocurrency', FALSE, 4),
-('Suggesting tag: Renewable Energy', FALSE, 5),
-('Proposal for new tag: Virtual Reality', FALSE, 6),
-('Adding tag: Remote Work', FALSE, 7),
-('Proposing tag: Social Media Trends', FALSE, 8),
-('Suggesting tag: Space Exploration', FALSE, 9),
-('Request to add tag: Climate Change', FALSE, 10),
-('Proposal for new tag: Culinary Arts', FALSE, 1);
+('Innovation','Suggesting a new tag: Innovation', FALSE, 2),
+('Mental Health Awareness','Proposing tag: Mental Health Awareness', FALSE, 3),
+('Crypto','Request to add tag: Cryptocurrency', FALSE, 4),
+('Renewable Energy','Suggesting tag: Renewable Energy', FALSE, 5),
+('Virtual Reality','Proposal for new tag: Virtual Reality', FALSE, 6),
+('Remote Work','Adding tag: Remote Work', FALSE, 7),
+('Social Media Trends','Proposing tag: Social Media Trends', FALSE, 8),
+('Space Exploration','Suggesting tag: Space Exploration', FALSE, 9),
+('Climate Change','Request to add tag: Climate Change', FALSE, 10),
+('Culinary Arts','Proposal for new tag: Culinary Arts', FALSE, 1);
 
 
 INSERT INTO unblock_appeal (description, is_resolved, user_id)

@@ -4,6 +4,24 @@ const defaultHeaders = {
   'X-Requested-With': 'XMLHttpRequest',
 };
 
+export function encodeForAjax(data) {
+  if (data == null) return null;
+  
+  const params = [];
+  for (const key in data) {
+    const value = data[key];
+    if (Array.isArray(value)) {
+      value.forEach(val => {
+        params.push(encodeURIComponent(key) + '[]=' + encodeURIComponent(val));
+      });
+    } else {
+      params.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+    }
+  }
+  return params.join('&');
+}
+
+
 export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined) {
   fetch(url, {
     method: method,
