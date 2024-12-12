@@ -83,7 +83,7 @@
                 </div>
 
                 <label class="inline-flex items-center text-sm mb-4">
-                    <input type="checkbox" name="age" id="ageCheckbox" class="bg-gray-600 rounded accent-[#5a7d99]">
+                    <input type="checkbox" name="age" id="ageCheckbox" class="form-checkbox bg-gray-600 rounded accent-[#5a7d99]">
                     <span class="ml-2">I confirm that I am over 13 years old</span>
                 </label>
                 <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>
