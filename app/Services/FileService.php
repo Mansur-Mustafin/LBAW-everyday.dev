@@ -9,7 +9,6 @@ use App\Enums\ImageTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
 class FileService
 {
     static $diskName = 'public_uploads';
@@ -19,54 +18,78 @@ class FileService
         'post' => ['png', 'jpg', 'jpeg', 'gif'],
     ];
 
-    public static function upload(Request $request, User|NewsPost $model, string $imageType)
+    public static function upload(Request $request, User|NewsPost|null $model, ?string $imageType)
     {
         $type = $model instanceof User ? 'profile' : 'post';
 
         $request->validate([
-            'image' => 'image|max:2048|mimes:' . implode(',', self::$systemTypes[$type]),
+            'image' => 'image|mimes:' . implode(',', self::$systemTypes[$type]),
         ]);
 
         $file = $request->file('image');
         $fileName = $file->hashName();
-        $filePath = $file->storeAs($type, $fileName, self::$diskName);
 
-        Image::create([
-            'path' => $filePath,
-            'image_type' => $imageType,
-            $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
-        ]);
+        if ($type === 'post') {
+            $subDir1 = substr($fileName, 0, 2);
+            $subDir2 = substr($fileName, 2, 2);
+            $directory = "$type/$subDir1/$subDir2";
+        } else {
+            $directory = $type;
+        }
 
+        $filePath = $file->storeAs($directory, $fileName, self::$diskName);
 
-        return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => $filePath]);
+        if ($model) {
+            Image::create([
+                'path' => $filePath,
+                'image_type' => $imageType,
+                $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => asset($filePath)]);
     }
 
-    public static function delete(User|NewsPost $model, string $imageType, string $path = null)
+    public static function delete(User|NewsPost $model, string $imageType, array $paths = null)
     {
-        $image = null;
-
         switch ($imageType) {
             case ImageTypeEnum::PROFILE->value:
                 $image = $model->profileImage;
+                if ($image->path) {
+                    if (Storage::disk('public_uploads')->exists($image->path)) {
+                        Storage::disk('public_uploads')->delete($image->path);
+                    }
+
+                    $image->delete();
+                }
                 break;
 
             case ImageTypeEnum::POST_TITLE->value:
                 $image = $model->titleImage;
+                if ($image->path) {
+                    if (Storage::disk('public_uploads')->exists($image->path)) {
+                        Storage::disk('public_uploads')->delete($image->path);
+                    }
+
+                    $image->delete();
+                }
                 break;
 
             case ImageTypeEnum::POST_CONTENT->value:
-                if ($path) {
-                    $image = $model->contentImages()->where('path', $path)->first();
+                $query = $model->contentImages();
+
+                if (!empty($paths)) {
+                    $query->whereNotIn('path', $paths);
+                }
+
+                $imagePaths = $query->pluck('path')->toArray();
+
+                if (!empty($imagePaths)) {
+                    Storage::disk('public_uploads')->delete($imagePaths);
+
+                    $query->delete();
                 }
                 break;
-        }
-
-        if ($image->path) {
-            if (Storage::disk('public_uploads')->exists($image->path)) {
-                Storage::disk('public_uploads')->delete($image->path);
-            }
-
-            $image->delete();
         }
 
         return response()->json(['success' => true, 'message' => 'Image deleted successfully']);

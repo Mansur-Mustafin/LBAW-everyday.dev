@@ -51,7 +51,7 @@
                 <div class="flex flex-col mb-2">
                     <label class="font-bold text-sm mb-2">E-Mail</label>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                        placeholder="Public name*" class="rounded-2xl bg-input outline-none p-3">
+                        placeholder="Email*" class="rounded-2xl bg-input outline-none p-3">
                     @error('email')
                         <span class="text-red-400 text-sm">{{ $message }}</span>
                     @enderror
