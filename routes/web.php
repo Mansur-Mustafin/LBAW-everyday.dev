@@ -48,7 +48,7 @@ Route::controller(PasswordRecoverController::class)->group(function () {
     Route::get('/recover', 'showResetPasswordForm')->name('recover.reset');
 });
 
-Route::controller(MailController::class)->group(function(){
+Route::controller(MailController::class)->group(function () {
     Route::post('/emailrecover', 'send')->name('email.recover');
 });
 
@@ -57,7 +57,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::prefix('news')->controller(FeedController::class)->group(function ()  {
+Route::prefix('news')->controller(FeedController::class)->group(function () {
     Route::get('/my-feed', 'myFeed')->middleware('auth')->name('news.my');
     Route::get('/top-feed', 'topFeed')->name('news.top');
     Route::get('/recent-feed', 'recentFeed')->name('news.recent');
@@ -123,8 +123,8 @@ Route::controller(SearchController::class)->group(function () {
 });
 
 Route::prefix('file')->middleware('auth')->controller(FileController::class)->group(function () {
-    Route::post('/upload', 'uploadAjax');
-    Route::delete('/delete', 'deleteAjax');
+    Route::post('/upload', 'ajaxUpload');
+    Route::delete('/delete', 'ajaxDelete');
 });
 
 Route::prefix('bookmark')->middleware('auth')->controller(BookmarkController::class)->group(function () {
