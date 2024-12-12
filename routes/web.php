@@ -23,7 +23,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
-// use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,20 +149,12 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
 });
 
 Route::controller(SearchController::class)->group(function () {
-    Route::get('api/search/tags', 'searchTags');
-    Route::get('api/search/tags/{search}', 'searchTags');
+    Route::get('api/search/tags/{search?}', 'searchTags');
+    Route::get('api/search/tag_proposals/{search?}', 'searchTagProposals');
+    Route::get('api/search/unblock_appeals/{search?}', 'searchUnblockAppeals');
+    Route::get('api/search/users/{search?}', 'searchUser')->middleware('admin');
 
-    Route::get('api/search/tag_proposals', 'searchTagProposals');
-    Route::get('api/search/tag_proposals/{search}', 'searchTagProposals');
-
-    Route::get('api/search/unblock_appeals', 'searchUnblockAppeals');
-    Route::get('api/search/unblock_appeals/{search}', 'searchUnblockAppeals');
-
-    Route::get('api/search/users', 'searchUser')->middleware('admin');
-    Route::get('api/search/users/{search}', 'searchUser')->middleware('admin');
-
-
-    Route::get('api/search/{search}', 'search');
+    Route::get('api/search', 'search');    // TODO: better pass api/search?query=<> or api/search/{search} ?
 });
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {
