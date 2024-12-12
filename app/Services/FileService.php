@@ -45,7 +45,8 @@ class FileService
 
     public static function delete(User|NewsPost $model, string $imageType, array $paths = null)
     {
-        $image = null;
+
+
 
         switch ($imageType) {
             case ImageTypeEnum::PROFILE->value:
@@ -71,19 +72,18 @@ class FileService
                 break;
 
             case ImageTypeEnum::POST_CONTENT->value:
-                if ($paths) {
-                    // TODO: nao deleta ultima imagem se apagar todos.
-                    $images = $model->contentImages()->whereNotIn('path', $paths)->get();
-                    
-                    foreach ($images as $image) {
-                        if ($image->path) {
-                            if (Storage::disk('public_uploads')->exists($image->path)) {
-                                Storage::disk('public_uploads')->delete($image->path);
-                            }
+                $query = $model->contentImages();
 
-                            $image->delete();
-                        }
-                    }
+                if (!empty($paths)) {
+                    $query->whereNotIn('path', $paths);
+                }
+
+                $imagePaths = $query->pluck('path')->toArray();
+
+                if (!empty($imagePaths)) {
+                    Storage::disk('public_uploads')->delete($imagePaths);
+
+                    $query->delete();
                 }
                 break;
         }
