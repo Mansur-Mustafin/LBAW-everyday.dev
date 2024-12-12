@@ -1,17 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./resources/**/*.blade.php",
-    "./resources/**/*.js",
-    "./resources/**/*.vue",
-  ],
+  content: ['./resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue'],
   theme: {
     screens: {
-      'tablet': '640px',
+      tablet: '640px',
 
-      'laptop': '1024px',
+      laptop: '1024px',
 
-      'desktop': '1280px',
+      desktop: '1280px',
     },
     extend: {
       colors: {
@@ -44,10 +40,13 @@ export default {
             span: {
               backgroundColor: 'transparent',
             },
+            img: {
+              margin: '0',
+            },
           },
         },
       }),
     },
   },
   plugins: [require('@tailwindcss/typography')],
-}
+};
