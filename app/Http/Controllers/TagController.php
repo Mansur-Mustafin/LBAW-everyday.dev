@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Tag;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 
 class TagController extends Controller
 {
    public function getTags()
    {
-    return Tag::all();
-   } 
+      return Tag::all();
+   }
 
    public function show(Request $request)
    {
-      return view('pages.admin.admin',['show'=> 'tags']);
+      return view('pages.admin.admin', ['show' => 'tags']);
    }
 
    public function showCreationForm(Request $request)
@@ -26,22 +24,22 @@ class TagController extends Controller
       return view('pages.admin.create-tag');
    }
 
-   public function store(Request $request) 
+   public function store(Request $request)
    {
       $credentials = $request->validate([
-         'name'=> 'required|string|max:250'
+         'name' => 'required|string|max:250'
       ]);
 
-      if(!Tag::where('name',$credentials['name'])->get()->isEmpty()) {
+      if (!Tag::where('name', $credentials['name'])->get()->isEmpty()) {
          return redirect()->back()->withErrors('Tag already exists');
       }
 
       Tag::create([
-         'name'=> $credentials['name']
+         'name' => $credentials['name']
       ]);
 
       return redirect()->route('admin.tags')
-      ->withSuccess('You have sucessfully created a tag!');
+         ->withSuccess('You have sucessfully created a tag!');
    }
 
    public function destroy(Tag $tag)
@@ -52,7 +50,8 @@ class TagController extends Controller
       ]);
    }
 
-   public function getFollowingTags() {
+   public function getFollowingTags()
+   {
       $user = Auth::user();
       $tags = $user->tags()->paginate(10);
 

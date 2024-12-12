@@ -34,7 +34,7 @@ class Vote extends Model
                 'notification_type' => NotificationTypeEnum::VOTE,
                 'user_id' => $user_id,
                 'vote_id' => $vote->id,
-            ]);            
+            ]);
         });
     }
 

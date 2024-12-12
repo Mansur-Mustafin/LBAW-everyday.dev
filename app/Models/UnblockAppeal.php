@@ -23,6 +23,6 @@ class UnblockAppeal extends Model
 
     public function proposer()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

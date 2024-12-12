@@ -37,7 +37,7 @@ class Comment extends Model
                 'notification_type' => NotificationTypeEnum::COMMENT,
                 'user_id' => $user_id,
                 'comment_id' => $comment->id,
-            ]);            
+            ]);
         });
     }
 

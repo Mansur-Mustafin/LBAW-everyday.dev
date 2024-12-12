@@ -8,15 +8,17 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
-    public function redirect() {
+    public function redirect()
+    {
         return Socialite::driver('google')->redirect();
     }
 
-    public function callbackGoogle() {
+    public function callbackGoogle()
+    {
 
         $google_user = Socialite::driver('google')->stateless()->user();
         $user = User::where('google_id', $google_user->getId())->first();
-        
+
         if (!$user) {
 
             if (User::where('email', $google_user->getEmail())->exists()) {
@@ -40,12 +42,10 @@ class GoogleController extends Controller
             ]);
 
             Auth::login($new_user);
-
         } else {
             Auth::login($user);
         }
 
         return redirect()->route('news.recent');
     }
-
 }

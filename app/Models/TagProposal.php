@@ -23,6 +23,6 @@ class TagProposal extends Model
 
     public function proposer()
     {
-        return $this->belongsTo(User::class,'proposer_id');
+        return $this->belongsTo(User::class, 'proposer_id');
     }
 }
