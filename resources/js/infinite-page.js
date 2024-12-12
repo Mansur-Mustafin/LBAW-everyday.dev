@@ -46,9 +46,9 @@ if (postContainer) {
   const filter = document.getElementById('filter');
   const sortByPopup = document.getElementById('sort-popup');
   const newsTitle = document.getElementById('news-page-title');
-  const checkboxes = filter.querySelectorAll('input[type=checkbox]');
-  const radios = filter.querySelectorAll('input[type=radio]');
-  const hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
+  const checkboxes = filter?.querySelectorAll('input[type=checkbox]');
+  const radios = filter?.querySelectorAll('input[type=radio]');
+  const hiddenSelectedSort = sortByPopup?.querySelector('input[type=hidden]');
   let calledLoadMoreData = false;
 
   const refreshPage = () => {
@@ -86,8 +86,10 @@ if (postContainer) {
   };
 
   window.onload = refreshPage;
-  initializeFilter();
-  initializeSortByPopup();
+  if(filter) {
+    initializeFilter();
+    initializeSortByPopup();
+  }
 
   const loadMoreData = (page) => {
     calledLoadMoreData = true;

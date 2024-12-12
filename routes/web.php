@@ -75,6 +75,12 @@ Route::prefix('news')->middleware('blocked')->controller(FeedController::class)-
 
     Route::get('/bookmarks', 'bookmarkFeed')->middleware('auth')->name('news.bookmark');
     Route::get('/api/bookmarks', 'getBookmarkFeed')->middleware('auth')->name('api.news.bookmark');
+
+    Route::get('/tags/{search}', 'tagFeed');
+    Route::get('api/tags/{search}', 'getTagFeed')->name('api.tags.search');
+
+    Route::get('/posts/{search}', 'postFeed');
+    Route::get('api/posts/{search}', 'getPostFeed')->name('api.posts.search');
 });
 
 Route::prefix('news')->controller(NewsPostController::class)->group(function () {
@@ -154,10 +160,6 @@ Route::controller(SearchController::class)->group(function () {
 
     Route::get('api/search/unblock_appeals','searchUnblockAppeals');
     Route::get('api/search/unblock_appeals/{search}','searchUnblockAppeals');
-
-    Route::get('/search/posts/tags/','searchTagPosts');
-    Route::get('/search/posts/tags/{search}', 'searchTagPosts');
-    Route::get('/search/posts/{search}', 'searchPost');
 
     Route::get('api/search/users', 'searchUser')->middleware('admin');
     Route::get('api/search/users/{search}', 'searchUser')->middleware('admin');
