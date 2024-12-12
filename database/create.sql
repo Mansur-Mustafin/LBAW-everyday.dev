@@ -157,6 +157,7 @@ CREATE TABLE news_post_tag (
 
 CREATE TABLE tag_proposal (
     id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
     description TEXT NOT NULL,
     is_resolved BOOLEAN NOT NULL DEFAULT FALSE,
     proposer_id INTEGER NOT NULL REFERENCES "user"(id)
