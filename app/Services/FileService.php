@@ -8,7 +8,7 @@ use App\Models\NewsPost;
 use App\Enums\ImageTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Log;
 
 class FileService
 {
@@ -43,32 +43,49 @@ class FileService
         return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => asset($filePath)]);
     }
 
-    public static function delete(User|NewsPost $model, string $imageType, string $path = null)
+    public static function delete(User|NewsPost $model, string $imageType, array $paths = null)
     {
         $image = null;
 
         switch ($imageType) {
             case ImageTypeEnum::PROFILE->value:
                 $image = $model->profileImage;
+                if ($image->path) {
+                    if (Storage::disk('public_uploads')->exists($image->path)) {
+                        Storage::disk('public_uploads')->delete($image->path);
+                    }
+
+                    $image->delete();
+                }
                 break;
 
             case ImageTypeEnum::POST_TITLE->value:
                 $image = $model->titleImage;
+                if ($image->path) {
+                    if (Storage::disk('public_uploads')->exists($image->path)) {
+                        Storage::disk('public_uploads')->delete($image->path);
+                    }
+
+                    $image->delete();
+                }
                 break;
 
             case ImageTypeEnum::POST_CONTENT->value:
-                if ($path) {
-                    $image = $model->contentImages()->where('path', $path)->first();
+                if ($paths) {
+                    // TODO: nao deleta ultima imagem se apagar todos.
+                    $images = $model->contentImages()->whereNotIn('path', $paths)->get();
+                    
+                    foreach ($images as $image) {
+                        if ($image->path) {
+                            if (Storage::disk('public_uploads')->exists($image->path)) {
+                                Storage::disk('public_uploads')->delete($image->path);
+                            }
+
+                            $image->delete();
+                        }
+                    }
                 }
                 break;
-        }
-
-        if ($image->path) {
-            if (Storage::disk('public_uploads')->exists($image->path)) {
-                Storage::disk('public_uploads')->delete($image->path);
-            }
-
-            $image->delete();
         }
 
         return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
