@@ -143,7 +143,8 @@ class NewsPostController extends Controller
             $paths = explode(',', $validated['content_images']);
 
             // i bet there is a better way, without compromising so much performance
-            $newsPost->contentImages()->whereNotIn('path', $paths)->delete();
+            // $newsPost->contentImages()->whereNotIn('path', $paths)->delete();
+            FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, $paths);
 
             foreach ($paths as $path) {
                 // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
@@ -162,6 +163,11 @@ class NewsPostController extends Controller
     public function destroy(newsPost $newsPost)
     {
         $this->authorize('delete', $newsPost);
+
+        // TOOD:
+        // FileService::delete($newsPost, ImageTypeEnum::POST_TITLE->value);
+        // FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value);
+
         $newsPost->delete();
 
         return redirect()->route('news.recent')
