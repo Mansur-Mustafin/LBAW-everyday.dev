@@ -81,6 +81,7 @@
                         {!! $post->content !!}
                     </div>
                     <input class="hidden" id="edit-content-input" name="content">
+                    <input class="hidden" id="content-images-edit" name="content_images">
                 </div>
 
                 <p class="block text-sm font-medium text-gray-300">Posts' Tag</p>

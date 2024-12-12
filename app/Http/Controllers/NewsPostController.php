@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ImageTypeEnum;
 use App\Models\Comment;
 use App\Models\NewsPost;
+use App\Models\Image;
 use App\Models\Tag;
 use App\Services\FileService;
 use Illuminate\Http\Request;
@@ -75,7 +76,8 @@ class NewsPostController extends Controller
             'content' => 'required|string',
             'for_followers' => 'required|string',
             'image' => 'nullable|image|max:2048',
-            'tags' => 'nullable|string'
+            'tags' => 'nullable|string',
+            'content_images' => 'nullable|string'
         ]);
 
         $post = NewsPost::create([
@@ -89,9 +91,20 @@ class NewsPostController extends Controller
             FileService::upload($request, $post, ImageTypeEnum::POST_TITLE->value);
         }
 
+        if ($request->has('content_images')) {
+            $paths = explode(',', $validated['content_images']);
+            foreach ($paths as $path) {
+                Image::create([
+                    'path' => $path,
+                    'image_type' => 'PostContent',
+                    'news_post_id' => $post->id,
+                ]);
+            }
+        }
+
         $this->syncTags($post, $validated['tags'] ?? '');
 
-        return redirect()->route('news.show', $post->id) 
+        return redirect()->route('news.show', $post->id)
             ->withSuccess('You have successfully created post!');
     }
 
@@ -99,13 +112,17 @@ class NewsPostController extends Controller
     {
         $this->authorize('update', $newsPost);
 
+
         $validated = $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string',
             'for_followers' => 'nullable|string',
             'tags' => 'nullable|string',
             'remove_image' => 'required|string',
+            'content_images' => 'nullable|string'
         ]);
+
+
 
         $newsPost->update([
             'title' => $validated['title'],
@@ -121,6 +138,21 @@ class NewsPostController extends Controller
         }
 
         $this->syncTags($newsPost, $validated['tags'] ?? '');
+
+        if ($request->has('content_images')) {
+            $paths = explode(',', $validated['content_images']);
+
+            // i bet there is a better way, without compromising so much efficiency
+            Image::where('news_post_id', $newsPost->id)->where('image_type', 'PostContent')->whereNotIn('path', $paths)->delete();
+
+            foreach ($paths as $path) {
+                Image::insertOrIgnore([
+                    'path' => $path,
+                    'image_type' => 'PostContent',
+                    'news_post_id' => $newsPost->id,
+                ]);
+            }
+        }
 
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
             ->with('message', 'Post atualizado com sucesso!');

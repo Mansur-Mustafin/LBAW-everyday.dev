@@ -19,7 +19,7 @@ class FileService
         'post' => ['png', 'jpg', 'jpeg', 'gif'],
     ];
 
-    public static function upload(Request $request, User|NewsPost $model, string $imageType)
+    public static function upload(Request $request, User|NewsPost|null $model, ?string $imageType)
     {
         $type = $model instanceof User ? 'profile' : 'post';
 
@@ -31,11 +31,14 @@ class FileService
         $fileName = $file->hashName();
         $filePath = $file->storeAs($type, $fileName, self::$diskName);
 
-        Image::create([
-            'path' => $filePath,
-            'image_type' => $imageType,
-            $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
-        ]);
+        if ($model) {
+            Image::create([
+                'path' => $filePath,
+                'image_type' => $imageType,
+                $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
+            ]);
+        }
+
 
         return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => asset($filePath)]);
     }
