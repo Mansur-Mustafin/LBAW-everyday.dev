@@ -27,34 +27,30 @@
             </li>
         </ul>
 
-        @if ($news_posts->isEmpty())
-            <p class="text-gray-500 text-center mt-10">
-                @if ($isPostsActive)
-                    {{ $user->public_name }} hasn't posted yet.
-                @elseif ($isUpvotesActive)
-                    {{ $user->public_name }} hasn't upvoted any posts yet.
-                @else
-                    No content available.
-                @endif
-            </p>
-        @else
-            <div class="container tablet:mx-auto w-full">
-                <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
-                <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container"
-                    class="grid grid-cols-1 gap-4">
-                    @foreach ($news_posts as $news)
-                        @include('partials.tile-post', ['news' => $news])
-                    @endforeach
-                </div>
-                <div id="loading-icon" class="hidden">
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>@include('partials.load-tile-post')</div>
-                        <div>@include('partials.load-tile-post')</div>
-                    </div>
-                    <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
-                </div>
+        {{-- <p class="text-gray-500 text-center mt-10">
+            @if ($isPostsActive)
+                {{ $user->public_name }} hasn't posted yet.
+            @elseif ($isUpvotesActive)
+                {{ $user->public_name }} hasn't upvoted any posts yet.
+            @else
+                No content available.
+            @endif
+        </p> --}}
+        
+        <div class="container tablet:mx-auto w-full">
+            <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
+            <div data-url="{{ $baseUrl }}" id="news-posts-container"
+                class="grid grid-cols-1 gap-4">
             </div>
-        @endif
+            <div id="loading-icon" class="hidden">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>@include('partials.load-tile-post')</div>
+                    <div>@include('partials.load-tile-post')</div>
+                </div>
+                <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
+            </div>
+        </div>
+        
     </main>
 
     <aside class="order-1 tablet:order-none border-l border-gray-700">

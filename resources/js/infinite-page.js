@@ -1,4 +1,4 @@
-import { sendAjaxRequest, truncateWords } from './utils';
+import { sendAjaxRequest, encodeForAjax, truncateWords } from './utils';
 import { addVoteButtonBehaviour } from './vote';
 import { addBookmarkButtonBehaviour } from './bookmark';
 
@@ -40,33 +40,109 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
 
 // Posts
 const postContainer = document.getElementById('news-posts-container');
+
 if (postContainer) {
   const footer = document.getElementById('profile-footer');
-  let newsPageURL = postContainer.dataset.url;
-  let lastPage = postContainer.dataset.last_page;
+  const filter = document.getElementById('filter');
+  const sortByPopup = document.getElementById('sort-popup');
+  const newsTitle = document.getElementById('news-page-title');
+  const checkboxes = filter.querySelectorAll('input[type=checkbox]');
+  const radios = filter.querySelectorAll('input[type=radio]');
+  const hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
+  let calledLoadMoreData = false;
+
+  const refreshPage = () => {
+    postContainer.innerHTML = '';
+    page = 1;
+    loadMoreData(page);
+  };
+
+  const initializeSortByPopup = () => {
+    if (!sortByPopup) return;
+
+    sortByPopup.querySelectorAll('ul li').forEach((option) => {
+      option.addEventListener('click', (event) => {
+        const target = event.target;
+        newsTitle.innerHTML = target.dataset.header;
+        hiddenSelectedSort.value = target.innerHTML;
+        refreshPage();
+      });
+    });
+  };
+
+  const initializeFilter = () => {
+    if (!filter) return;
+    const clearButton = filter.querySelector('#clear-all-button');
+
+    const clearAllFilters = () => {
+      checkboxes.forEach((checkbox) => (checkbox.checked = false));
+      radios.forEach((radio) => radio.name === 'date_range' && (radio.checked = true));
+      refreshPage();
+    };
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', refreshPage));
+    radios.forEach((radio) => radio.addEventListener('change', refreshPage));
+    clearButton.addEventListener('click', clearAllFilters);
+  };
+
+  window.onload = refreshPage;
+  initializeFilter();
+  initializeSortByPopup();
 
   const loadMoreData = (page) => {
+    calledLoadMoreData = true;
+
     if (loading) return;
+
+    calledLoadMoreData = false;
     loading = true;
+    let url = `${postContainer.dataset.url}?page=${page}`;
 
-    if (loadingIcon) loadingIcon.classList.remove('hidden');
+    loadingIcon?.classList.remove('hidden');
 
-    const url = newsPageURL + `?page=${page}`;
-    const method = 'GET';
+    if (filter) {
+      const filterData = gatherFilterData();
+      url += `&${encodeForAjax(filterData)}`;
+    }
+
     sendAjaxRequest(
       url,
       (data) => {
         loading = false;
-        if (loadingIcon) loadingIcon.classList.add('hidden');
+        loadingIcon?.classList.add('hidden');
         if (data.news_posts == '') {
           return;
         }
         postContainer.innerHTML += data.news_posts;
+        lastPage = data.last_page;
+
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
+        if (calledLoadMoreData) refreshPage();
       },
-      method
+      'GET'
     );
+  };
+
+  const gatherFilterData = () => {
+    const data = {};
+
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        data[checkbox.name] = data[checkbox.name] || [];
+        data[checkbox.name].push(checkbox.value);
+      }
+    });
+
+    radios.forEach((radio) => {
+      if (radio.checked) {
+        data[radio.name] = radio.value;
+      }
+    });
+
+    data[hiddenSelectedSort.name] = hiddenSelectedSort.value;
+
+    return data;
   };
 
   document.addEventListener('scroll', function () {
@@ -80,8 +156,8 @@ if (postContainer) {
         loadMoreData(page);
       }
       if (page > lastPage) {
-        if (loadingIcon) loadingIcon.classList.add('hidden');
-        if (footer) footer.classList.remove('hidden');
+        loadingIcon?.classList.add('hidden');
+        footer?.classList.remove('hidden');
       }
     }
   });
@@ -156,7 +232,15 @@ if (resultsDivNotification) {
   const urlObj = new URL(resultsDivNotification.dataset.url);
   const apiUrl = urlObj.pathname;
 
-  const notificationBoxHTML = ({ imageSrc, triggeredBy, text, color, username, time_ago, is_viewed }) => `
+  const notificationBoxHTML = ({
+    imageSrc,
+    triggeredBy,
+    text,
+    color,
+    username,
+    time_ago,
+    is_viewed,
+  }) => `
     <div class="hover:bg-gray-900 p-4 flex">
         <div class="w-8 h-8 mr-4 relative">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,7 +255,11 @@ if (resultsDivNotification) {
                         fill=${color}></path>
                 </g>
             </svg>
-            ${is_viewed ? '' : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'}
+            ${
+              is_viewed
+                ? ''
+                : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'
+            }
         </div>
         <div class=" grow">
             <div class="flex gap-2 items-center">
@@ -193,31 +281,44 @@ if (resultsDivNotification) {
       imageSrc: vote.user.profile_image.url,
       triggeredBy: vote.user.public_name,
       text: vote.is_upvote
-        ? `Upvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`
-        : `Downvoted your ${vote.news_post_id ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.` : 'comment.'}`,
+        ? `Upvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`
+        : `Downvoted your ${
+            vote.news_post_id
+              ? `<a class="underline" href="/news/${vote.news_post_id}">post</a>.`
+              : 'comment.'
+          }`,
       color: '#D264B6',
-      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`
+      username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`,
     }),
     CommentNotification: ({ comment }) => ({
       imageSrc: comment.author.profile_image.url,
       triggeredBy: comment.author.public_name,
-      text: comment.news_post_id ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.` : 'Replied to your comment.',
+      text: comment.news_post_id
+        ? `Leaved a comment on your <a class="underline" href="/news/${comment.news_post_id}">post</a>.`
+        : 'Replied to your comment.',
       color: '#A480CF',
-      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`
+      username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`,
     }),
     FollowNotification: ({ follower }) => ({
       imageSrc: follower.profile_image.url,
-      triggeredBy: `${follower.public_name}` ,
+      triggeredBy: `${follower.public_name}`,
       text: 'Followed you.',
       color: '#779BE7',
-      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`
+      username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`,
     }),
     PostNotification: ({ news_post }) => ({
       imageSrc: news_post.author.profile_image.url,
       triggeredBy: news_post.author.public_name,
-      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(news_post.title, 15)}</a>`,
+      text: `Posted: <a href="/news/${news_post.id}" class="underline">${truncateWords(
+        news_post.title,
+        15
+      )}</a>`,
       color: '#49B6FF',
-      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`
+      username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`,
     }),
   };
 
