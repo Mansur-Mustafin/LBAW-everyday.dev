@@ -60,4 +60,37 @@ trait PaginationTrait
             'last_page' => $users->lastPage()
         ]);
     }
+
+    public function paginate_tags($tags, Request $request)
+    {
+        $tags = $tags->paginate(12);
+
+        return response()->json([
+            'data'      => $tags->items(),
+            'next-page' => $tags->currentPage() + 1,
+            'last_page' => $tags->lastPage()
+        ]);
+    }
+
+    public function paginate_tag_proposals($tag_proposals,Request $request)
+    {
+        $tag_proposals = $tag_proposals->paginate(10);
+
+        return response()->json([
+            'data' => $tag_proposals->items(),
+            'next-page' => $tag_proposals->currentPage() + 1,
+            'last_page' => $tag_proposals->lastPage()
+        ]);
+    }
+
+    public function paginate_unblock_appeals($unblock_appeals,Request $request)
+    {
+        $unblock_appeals = $unblock_appeals->paginate(10);
+
+        return response()->json([
+            'data' => $unblock_appeals->items(),
+            'next-page' => $unblock_appeals->currentPage() + 1,
+            'last_page' => $unblock_appeals->lastPage()
+        ]);
+    }
 }
