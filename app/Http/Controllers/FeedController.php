@@ -26,7 +26,12 @@ class FeedController extends Controller
 
     public function myFeed(Request $request)
     {
-<<<<<<< HEAD
+        $tags = Tag::all()->pluck('name')->toArray();
+        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
+    }
+
+    public function getMyFeed(Request $request)
+    {
         $user = Auth::user();
         $following = $user->following()->pluck('id');
         $news_posts_by_follow = NewsPost::whereIn('author_id', $following)
@@ -40,19 +45,6 @@ class FeedController extends Controller
         } else {
             $news_posts = NewsPost::query()->whereNull('id');
         }
-
-        return $this->news_post_page($news_posts, "Your News", $request, route('news.my'));
-=======
-        $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
->>>>>>> main
-    }
-
-    public function getMyFeed(Request $request)
-    {
-        $user = Auth::user();
-        $following = $user->following()->pluck('id');
-        $news_posts = NewsPost::query()->whereIn('author_id', $following);
         return $this->news_post_page($news_posts, $request);
     }
 
