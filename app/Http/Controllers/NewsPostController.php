@@ -96,7 +96,7 @@ class NewsPostController extends Controller
             foreach ($paths as $path) {
                 Image::create([
                     'path' => $path,
-                    'image_type' => 'PostContent',
+                    'image_type' => ImageTypeEnum::POST_CONTENT,
                     'news_post_id' => $post->id,
                 ]);
             }
@@ -143,13 +143,13 @@ class NewsPostController extends Controller
             $paths = explode(',', $validated['content_images']);
 
             // i bet there is a better way, without compromising so much performance
-            Image::where('news_post_id', $newsPost->id)->where('image_type', 'PostContent')->whereNotIn('path', $paths)->delete();
+            $newsPost->contentImages()->whereNotIn('path', $paths)->delete();
 
             foreach ($paths as $path) {
                 // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
                 Image::insertOrIgnore([
                     'path' => $path,
-                    'image_type' => 'PostContent',
+                    'image_type' => ImageTypeEnum::POST_CONTENT,
                     'news_post_id' => $newsPost->id,
                 ]);
             }
