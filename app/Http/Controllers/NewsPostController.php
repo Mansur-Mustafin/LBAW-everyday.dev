@@ -142,10 +142,11 @@ class NewsPostController extends Controller
         if ($request->has('content_images')) {
             $paths = explode(',', $validated['content_images']);
 
-            // i bet there is a better way, without compromising so much efficiency
+            // i bet there is a better way, without compromising so much performance
             Image::where('news_post_id', $newsPost->id)->where('image_type', 'PostContent')->whereNotIn('path', $paths)->delete();
 
             foreach ($paths as $path) {
+                // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
                 Image::insertOrIgnore([
                     'path' => $path,
                     'image_type' => 'PostContent',
