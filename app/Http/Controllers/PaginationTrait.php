@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Filters\NewsPostFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 trait PaginationTrait
 {
@@ -15,7 +14,7 @@ trait PaginationTrait
 
         $news_posts = $filter->apply($news_posts);
         $user = Auth::user();
-        
+
         if ($user) {
             $news_posts->with([
                 'votes' => function ($query) use ($user) {
@@ -43,8 +42,6 @@ trait PaginationTrait
                 $news->is_bookmarked = in_array($news->id, $userBookmarks);
             }
         }
-
-        sleep(1);
 
         return response()->json([
             'news_posts' => view('partials.posts', compact('news_posts'))->render(),

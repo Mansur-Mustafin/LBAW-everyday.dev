@@ -41,6 +41,10 @@ if (postContainer) {
   const filter = document.getElementById('filter');
   const sortByPopup = document.getElementById('sort-popup');
   const newsTitle = document.getElementById('news-page-title');
+  const checkboxes = filter.querySelectorAll('input[type=checkbox]');
+  const radios = filter.querySelectorAll('input[type=radio]');
+  const hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
+  let calledLoadMoreData = false;
 
   const refreshPage = () => {
     postContainer.innerHTML = '';
@@ -50,7 +54,6 @@ if (postContainer) {
 
   const initializeSortByPopup = () => {
     if (!sortByPopup) return;
-    const hiddenSelectedSort = sortByPopup.querySelector('input[type=hidden]');
 
     sortByPopup.querySelectorAll('ul li').forEach((option) => {
       option.addEventListener('click', (event) => {
@@ -60,14 +63,10 @@ if (postContainer) {
         refreshPage();
       });
     });
-
-    return hiddenSelectedSort;
   };
 
   const initializeFilter = () => {
     if (!filter) return;
-    const checkboxes = filter.querySelectorAll('input[type=checkbox]');
-    const radios = filter.querySelectorAll('input[type=radio]');
     const clearButton = filter.querySelector('#clear-all-button');
 
     const clearAllFilters = () => {
@@ -79,27 +78,26 @@ if (postContainer) {
     checkboxes.forEach((checkbox) => checkbox.addEventListener('change', refreshPage));
     radios.forEach((radio) => radio.addEventListener('change', refreshPage));
     clearButton.addEventListener('click', clearAllFilters);
-
-    return { checkboxes, radios };
   };
 
   window.onload = refreshPage;
+  initializeFilter();
+  initializeSortByPopup();
 
   const loadMoreData = (page) => {
+    calledLoadMoreData = true;
+
     if (loading) return;
 
+    calledLoadMoreData = false;
     loading = true;
-    loadingIcon?.classList.remove('hidden');
-
     let url = `${postContainer.dataset.url}?page=${page}`;
+
+    loadingIcon?.classList.remove('hidden');
 
     if (filter) {
       const filterData = gatherFilterData();
-      const filterParams = encodeForAjax(filterData);
-
-      if (filterParams) {
-        url += `&${filterParams}`;
-      }
+      url += `&${encodeForAjax(filterData)}`;
     }
 
     sendAjaxRequest(
@@ -115,6 +113,7 @@ if (postContainer) {
 
         addVoteButtonBehaviour();
         addBookmarkButtonBehaviour();
+        if (calledLoadMoreData) refreshPage();
       },
       'GET'
     );
@@ -122,9 +121,6 @@ if (postContainer) {
 
   const gatherFilterData = () => {
     const data = {};
-
-    const { checkboxes, radios } = initializeFilter();
-    const hiddenSelectedSort = initializeSortByPopup();
 
     checkboxes.forEach((checkbox) => {
       if (checkbox.checked) {
