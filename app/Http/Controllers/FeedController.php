@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRankEnum;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Enums\UserRankEnum;
 
 class FeedController extends Controller
 {

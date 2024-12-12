@@ -36,9 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const filterSearch = (searchInput, tagItems, showAllButton) => {
     const query = searchInput.value.toLowerCase().trim();
 
-    // TODO: click on show all if it really start search
-    // TODO: if the field empty, click on show less
-
     if (query) {
       if (showAllButton.dataset.value === 'show-all') {
         showAllButton.click();
