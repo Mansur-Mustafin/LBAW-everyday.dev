@@ -11,7 +11,7 @@ class FileController extends Controller
     public function ajaxUpload(Request $request)
     {
         $validated = $request->validate([
-            'image' => 'required|image|max:2048|mimes:' . implode(',', FileService::$systemTypes['post']),
+            'image' => 'required|image|mimes:' . implode(',', FileService::$systemTypes['post']),
             'model_id' => 'required|integer',
             'image_type' => 'required|string',
         ]);
@@ -21,7 +21,6 @@ class FileController extends Controller
         if (!$model) {
             return response()->json(['success' => false, 'message' => 'Model not found'], 404);
         }
-
         return FileService::upload($request, $model, $validated['image_type']);
     }
 

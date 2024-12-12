@@ -33,10 +33,10 @@ export function redirectToLogin() {
 
 export function truncateWords(str, maxWords = 10) {
   if (!str) return '';
-  
+
   const words = str.split(/\s+/); // Split by any whitespace character
   if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(' ') + '...';
+    return words.slice(0, maxWords).join(' ') + '...';
   }
   return str;
 }
@@ -53,4 +53,22 @@ export function showSuccessMessage(message) {
     popup.classList.add('hidden');
     setTimeout(() => popup.remove(), 1000);
   }, 4000);
+}
+
+// not by me
+export function uploadBase64Image(dataUrl) {
+  const matches = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/);
+
+  const mimeType = matches[1];
+  const base64Data = matches[2];
+
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: mimeType });
+
+  return blob;
 }
