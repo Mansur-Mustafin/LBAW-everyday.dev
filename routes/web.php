@@ -170,7 +170,6 @@ Route::controller(SearchController::class)->group(function () {
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {
     Route::post('/upload', 'ajaxUpload');
-    Route::delete('/delete', 'ajaxDelete');
 });
 
 Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkController::class)->group(function () {

@@ -22,23 +22,6 @@ class FileController extends Controller
             $model = NewsPost::find($validated['model_id']);
         }
 
-        return FileService::upload($request, $model, $request->has('image_type') ?? $validated['image_type']);
-    }
-
-    public function ajaxDelete(Request $request)
-    {
-        $validated = $request->validate([
-            'model_id' => 'required|integer',
-            'image_type' => 'required|string',
-            'path' => 'required|string' //TODO: passa aqui o path de imagem que temos que deletar.
-        ]);
-
-        $model = NewsPost::find($validated['model_id']);
-
-        if (!$model) {
-            return response()->json(['success' => false, 'message' => 'Model not found'], 404);
-        }
-
-        return FileService::delete($model, $validated['image_type'], $validated['path']);
+        return FileService::upload($request, $model, $request->input('image_type'));
     }
 }
