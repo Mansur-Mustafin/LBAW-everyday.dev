@@ -80,7 +80,7 @@
                     <div id="editor-edit-container" class="text-white rounded-xl bg-input !border-none">
                         {!! $post->content !!}
                     </div>
-                    <input class="hidden" id="content-input" name="content">
+                    <input class="hidden" id="edit-content-input" name="content">
                 </div>
 
                 <p class="block text-sm font-medium text-gray-300">Posts' Tag</p>
