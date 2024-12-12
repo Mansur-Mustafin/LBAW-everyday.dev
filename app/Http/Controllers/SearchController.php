@@ -49,8 +49,8 @@ class SearchController extends Controller
     public function searchTags(Request $request)
     {
         $tag_query = "%" . strtolower($request->search) . "%";
-        $tags = Tag::whereRaw("LOWER(name) like ?",$tag_query);
-        return $this->paginate_tags($tags,$request);
+        $tags = Tag::whereRaw("LOWER(name) like ?", $tag_query);
+        return $this->paginate_tags($tags, $request);
     }
 
     public function searchUser(Request $request)
@@ -74,11 +74,11 @@ class SearchController extends Controller
     {
         $search_query = "%" . strtolower($request->search) . "%";
 
-        $unblock_appeals = UnblockAppeal::select('user.*','unblock_appeal.*')
-            ->leftJoin('user','user.id','=','unblock_appeal.user_id')
-            ->where('status','pending')
-            ->where('is_resolved','false')
-            ->whereRaw("LOWER(username) like ?",[$search_query]);
-        return $this->paginate_unblock_appeals($unblock_appeals,$request);
+        $unblock_appeals = UnblockAppeal::select('user.*', 'unblock_appeal.*')
+            ->leftJoin('user', 'user.id', '=', 'unblock_appeal.user_id')
+            ->where('status', 'pending')
+            ->where('is_resolved', 'false')
+            ->whereRaw("LOWER(username) like ?", [$search_query]);
+        return $this->paginate_unblock_appeals($unblock_appeals, $request);
     }
 }

@@ -101,7 +101,7 @@ class UserController extends Controller
                     return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
                 }
             }
-    
+
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
         }

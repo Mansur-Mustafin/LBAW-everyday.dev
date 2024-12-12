@@ -77,9 +77,9 @@ class FollowController extends Controller
             'last_page' => $followers->lastPage(),
         ]);
     }
-    public function followTag(Request $request, Tag $tag) 
+    public function followTag(Request $request, Tag $tag)
     {
-        $this->authorize('store', $tag); 
+        $this->authorize('store', $tag);
         try {
             Auth::user()->tags()->attach($request->tag);
 
@@ -89,15 +89,15 @@ class FollowController extends Controller
         }
     }
 
-    public function unfollowTag(Request $request,Tag $tag) 
+    public function unfollowTag(Request $request, Tag $tag)
     {
-        $this->authorize('delete', $tag); 
+        $this->authorize('delete', $tag);
         try {
             Auth::user()->tags()->detach($request->tag);
 
             return response()->json(['message' => "Successfully unfollowed {$request->tag}"]);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => "Cannot unfollow this {$request->tag}"], 403);
-        } 
+        }
     }
 }

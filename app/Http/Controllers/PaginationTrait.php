@@ -72,7 +72,7 @@ trait PaginationTrait
         ]);
     }
 
-    public function paginate_tag_proposals($tag_proposals,Request $request)
+    public function paginate_tag_proposals($tag_proposals, Request $request)
     {
         $tag_proposals = $tag_proposals->paginate(10);
 
@@ -83,7 +83,7 @@ trait PaginationTrait
         ]);
     }
 
-    public function paginate_unblock_appeals($unblock_appeals,Request $request)
+    public function paginate_unblock_appeals($unblock_appeals, Request $request)
     {
         $unblock_appeals = $unblock_appeals->paginate(10);
 

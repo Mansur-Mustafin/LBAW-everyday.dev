@@ -8,8 +8,6 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\SearchController;
-
 class FeedController extends Controller
 {
     use PaginationTrait;
@@ -38,11 +36,11 @@ class FeedController extends Controller
         $following = $user->following()->pluck('id');
         $news_posts_by_follow = NewsPost::whereIn('author_id', $following)
             ->orderBy('created_at', 'desc')->get();
-        $news_posts_by_tag =  $user->tags()->get()->map(function ($tag,$key) {
+        $news_posts_by_tag =  $user->tags()->get()->map(function ($tag, $key) {
             return $tag->newsPosts()->get();
         })->flatten();
-        
-        if(!$news_posts_by_follow->merge($news_posts_by_tag)->isEmpty()) {
+
+        if (!$news_posts_by_follow->merge($news_posts_by_tag)->isEmpty()) {
             $news_posts = $news_posts_by_follow->merge($news_posts_by_tag)->toQuery();
         } else {
             $news_posts = NewsPost::query()->whereNull('id');
@@ -69,7 +67,7 @@ class FeedController extends Controller
         $search_query = $request->search;
         // $baseUrl = "news/api/posts/{$search_query}";
         $baseUrl = route('api.posts.search', $search_query);
-        return view('pages.news',['title'=>'Related Posts','baseUrl'=>$baseUrl]);
+        return view('pages.news', ['title' => 'Related Posts', 'baseUrl' => $baseUrl]);
     }
 
     public function getPostFeed(Request $request)
@@ -86,7 +84,7 @@ class FeedController extends Controller
         // $baseUrl = "news/api/tags/{$tag_query}";
         // $baseUrl = "/news/api/recent-feed?page=1&tags[]=AI&date_range=All%20Time&order_by=Sort%20by"
         $baseUrl = route('api.tags.search', $tag_query);
-        return view('pages.news',['title'=>'Tag Related Posts','baseUrl'=>$baseUrl]);
+        return view('pages.news', ['title' => 'Tag Related Posts', 'baseUrl' => $baseUrl]);
     }
 
     public function getTagFeed(Request $request)
@@ -95,6 +93,6 @@ class FeedController extends Controller
         $tag = Tag::where('name', $tag_query)->first();
 
         $news_posts = SearchController::getPostsByTag($tag);
-        return $this->news_post_page($news_posts, $request,['tag'=>$tag]);
+        return $this->news_post_page($news_posts, $request, ['tag' => $tag]);
     }
 }

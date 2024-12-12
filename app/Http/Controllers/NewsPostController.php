@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
 use App\Models\Comment;
-use App\Models\NewsPost;
 use App\Models\Image;
+use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Services\FileService;
 use Illuminate\Http\Request;
