@@ -88,8 +88,6 @@ if (createForm) {
       title.style.borderColor = 'red';
       return;
     }
-
-    createForm.submit();
   });
 }
 
@@ -189,8 +187,6 @@ if (editForm) {
       if (post_tags.length > 0) {
         document.getElementById('tagsInput').value = post_tags.join(',');
       }
-
-      editForm.submit();
     });
   }
 }
