@@ -4,9 +4,6 @@ const selectedTags = document.getElementById('selectedTags');
 const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
 
-const editor_create = document.getElementById('editor-create-container');
-const content_create = document.getElementById('content-input');
-
 const editor_edit = document.getElementById('editor-edit-container');
 const content_edit = document.getElementById('content-input');
 
@@ -68,10 +65,6 @@ if (createForm) {
       title.style.borderColor = 'red';
       return;
     }
-
-    content_create.value = editor_create.children[0].innerHTML;
-
-    createForm.submit();
   });
 }
 

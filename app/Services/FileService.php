@@ -24,7 +24,7 @@ class FileService
         $type = $model instanceof User ? 'profile' : 'post';
 
         $request->validate([
-            'image' => 'image|max:2048|mimes:' . implode(',', self::$systemTypes[$type]),
+            'image' => 'image|mimes:' . implode(',', self::$systemTypes[$type]),
         ]);
 
         $file = $request->file('image');
@@ -37,8 +37,7 @@ class FileService
             $model instanceof User ? 'user_id' : 'news_post_id' => $model->id,
         ]);
 
-
-        return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => $filePath]);
+        return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => asset($filePath)]);
     }
 
     public static function delete(User|NewsPost $model, string $imageType, string $path = null)

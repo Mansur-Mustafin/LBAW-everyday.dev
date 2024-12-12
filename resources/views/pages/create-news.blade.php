@@ -42,7 +42,7 @@
             </div>
 
 
-            <div id="editor-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
+            <div id="editor-create-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
             <input class="hidden" id="content-input" name="content">
 
             <div class="flex items-center justify-between mt-5">
