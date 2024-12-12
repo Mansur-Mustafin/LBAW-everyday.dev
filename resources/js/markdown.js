@@ -72,11 +72,11 @@ if (createForm) {
     // json stringify does not work here because of the image
     const formData = new FormData();
 
-    // it is impossible to know what is the model_id here, once the post is not created yet. we need to figure out a way to handle this or keep this at 0 to all content photos
+    // it is impossible to know what is the model_id here, once the post is not created yet. we need to figure out a way to handle this or keep this at 1 to all content photos
     // maybe one way to deal with it is simply not require model_id to be passed at all
     formData.append('image', blob, 'image.png');
     formData.append('image_type', 'PostContent');
-    formData.append('model_id', 0);
+    formData.append('model_id', 1);
 
     // i had to do my own fetch without sendAjaxRequest because i needed the response to be returned in this function and not in the handler
     try {
