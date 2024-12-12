@@ -4,9 +4,6 @@ const selectedTags = document.getElementById('selectedTags');
 const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
 
-const editor_edit = document.getElementById('editor-edit-container');
-const content_edit = document.getElementById('content-input');
-
 // Create Post
 if (createForm) {
   title.addEventListener('change', function (evt) {
@@ -164,10 +161,6 @@ if (editForm) {
       if (post_tags.length > 0) {
         document.getElementById('tagsInput').value = post_tags.join(',');
       }
-
-      content_edit.value = editor_edit.children[0].innerHTML;
-
-      editForm.submit();
     });
   }
 }

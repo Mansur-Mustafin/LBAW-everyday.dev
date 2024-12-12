@@ -43,7 +43,7 @@
 
 
             <div id="editor-create-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
-            <input class="hidden" id="content-input" name="content">
+            <input class="hidden" id="create-content-input" name="content">
 
             <div class="flex items-center justify-between mt-5">
                 <div class='flex items-center gap-2'>
