@@ -148,11 +148,13 @@ class NewsPostController extends Controller
 
             foreach ($paths as $path) {
                 // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
-                Image::insertOrIgnore([
-                    'path' => $path,
-                    'image_type' => ImageTypeEnum::POST_CONTENT,
-                    'news_post_id' => $newsPost->id,
-                ]);
+                if (!empty($path)) {
+                    Image::insertOrIgnore([
+                        'path' => $path,
+                        'image_type' => ImageTypeEnum::POST_CONTENT,
+                        'news_post_id' => $newsPost->id,
+                    ]);
+                }
             }
         }
 
