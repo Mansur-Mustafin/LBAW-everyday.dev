@@ -8,7 +8,6 @@ use App\Models\NewsPost;
 use App\Enums\ImageTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class FileService
 {
@@ -29,7 +28,16 @@ class FileService
 
         $file = $request->file('image');
         $fileName = $file->hashName();
-        $filePath = $file->storeAs($type, $fileName, self::$diskName);
+
+        if ($type === 'post') {
+            $subDir1 = substr($fileName, 0, 2);
+            $subDir2 = substr($fileName, 2, 2);
+            $directory = "$type/$subDir1/$subDir2";
+        } else {
+            $directory = $type;
+        }
+
+        $filePath = $file->storeAs($directory, $fileName, self::$diskName);
 
         if ($model) {
             Image::create([
@@ -39,15 +47,11 @@ class FileService
             ]);
         }
 
-
         return response()->json(['success' => true, 'message' => 'Image uploaded successfully', 'path' => asset($filePath)]);
     }
 
     public static function delete(User|NewsPost $model, string $imageType, array $paths = null)
     {
-
-
-
         switch ($imageType) {
             case ImageTypeEnum::PROFILE->value:
                 $image = $model->profileImage;
