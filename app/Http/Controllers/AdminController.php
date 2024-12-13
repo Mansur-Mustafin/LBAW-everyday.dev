@@ -11,6 +11,7 @@ use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -129,6 +130,26 @@ class AdminController extends Controller
 
         return response()->json([
             'sucess'=>'You have successfully unbanned a user'
+        ]);
+    }
+
+    public function deleteUser(User $user, Request $request)
+    {   
+        $user->update([
+            'username' => 'deleted_user_' . $user->id,
+            'public_name' => 'Anonymous',
+            'email' => 'deleted_' . $user->id . '@example.com',
+            'password' => '', 
+            'status' => 'deleted',
+        ]);
+
+        DB::table('user_tag_subscribes')->where('user_id', $user->id)->delete();
+        DB::table('notification_settings')->where('user_id', $user->id)->delete();
+        DB::table('follows')->where('follower_id', $user->id)->orWhere('followed_id', $user->id)->delete();
+        DB::table('bookmarks')->where('user_id', $user->id)->delete();
+
+        return response()->json([
+            'sucess'=>'You have successfully deleted a user'
         ]);
     }
 }
