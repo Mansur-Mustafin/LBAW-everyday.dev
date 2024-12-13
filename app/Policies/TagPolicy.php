@@ -7,12 +7,12 @@ use App\Models\Tag;
 
 class TagPolicy
 {
-  public function store(User $user, Tag $tag): bool
+  public function follow(User $user, Tag $tag): bool
   {
     return !$user->tags->contains($tag);
   }
 
-  public function delete(User $user, Tag $tag): bool
+  public function unfollow(User $user, Tag $tag): bool
   {
     return $user->tags->contains($tag);
   }

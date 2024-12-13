@@ -62,7 +62,7 @@ class SearchController extends Controller
         $tags = Tag::query()
             ->whereRaw("LOWER(name) like ?", $tagQuery);
 
-        return $this->paginate_tags($tags, $request);
+        return $this->paginate($tags, $request, 12);
     }
 
     public function searchUser(Request $request)
@@ -72,7 +72,7 @@ class SearchController extends Controller
         $users = User::query()
             ->whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$searchQuery, $searchQuery]);
 
-        return $this->paginate_users($users, $request);
+        return $this->paginate($users, $request, 10);
     }
 
     public function searchTagProposals(Request $request)
@@ -83,7 +83,7 @@ class SearchController extends Controller
             ->with('proposer')
             ->whereRaw("LOWER(name) like ?", [$searchQuery]);
 
-        return $this->paginate_tag_proposals($tag_proposals, $request);
+        return $this->paginate($tag_proposals, $request, 10);
     }
 
     public function searchUnblockAppeals(Request $request)
@@ -95,6 +95,7 @@ class SearchController extends Controller
             ->where('status', 'pending')
             ->where('is_resolved', 'false')
             ->whereRaw("LOWER(username) like ?", [$searchQuery]);
-        return $this->paginate_unblock_appeals($unblock_appeals, $request);
+
+        return $this->paginate($unblock_appeals, $request, 10);
     }
 }
