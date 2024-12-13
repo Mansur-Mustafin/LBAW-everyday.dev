@@ -14,8 +14,12 @@ class FeedController extends Controller
 
     public function recentFeed(Request $request)
     {
-        $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Recent News', 'baseUrl' => route('api.news.recent')]);
+        return view('pages.news', [
+            'tags' => Tag::all()->pluck('name')->toArray(),
+            'rankings' => UserRankEnum::values(),
+            'title' => 'Recent News',
+            'baseUrl' => route('api.news.recent')
+        ]);
     }
 
     public function getRecentFeed(Request $request)
@@ -26,8 +30,12 @@ class FeedController extends Controller
 
     public function myFeed(Request $request)
     {
-        $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your News', 'baseUrl' => route('api.news.my')]);
+        return view('pages.news', [
+            'tags' => Tag::all()->pluck('name')->toArray(),
+            'rankings' => UserRankEnum::values(),
+            'title' => 'Your News',
+            'baseUrl' => route('api.news.my')
+        ]);
     }
 
     public function getMyFeed(Request $request)
@@ -45,8 +53,12 @@ class FeedController extends Controller
 
     public function bookmarkFeed(Request $request)
     {
-        $tags = Tag::all()->pluck('name')->toArray();
-        return view('pages.news', ['tags' => $tags, 'rankings' => UserRankEnum::values(), 'title' => 'Your Bookmarks', 'baseUrl' => route('api.news.bookmark')]);
+        return view('pages.news', [
+            'tags' => Tag::all()->pluck('name')->toArray(),
+            'rankings' => UserRankEnum::values(),
+            'title' => 'Your Bookmarks',
+            'baseUrl' => route('api.news.bookmark')
+        ]);
     }
 
     public function getBookmarkFeed(Request $request)
@@ -62,7 +74,10 @@ class FeedController extends Controller
         $search_query = $request->search;
         $baseUrl = route('api.posts.search', $search_query);
 
-        return view('pages.news', ['title' => 'Related Posts', 'baseUrl' => $baseUrl]);
+        return view('pages.news', [
+            'title' => 'Related Posts',
+            'baseUrl' => $baseUrl
+        ]);
     }
 
     public function getPostFeed(Request $request)
@@ -78,7 +93,10 @@ class FeedController extends Controller
         $tag_query = $request->search;
         $baseUrl = route('api.tags.search', $tag_query);
 
-        return view('pages.news', ['title' => 'Tag Related Posts', 'baseUrl' => $baseUrl]);
+        return view('pages.news', [
+            'title' => 'Tag Related Posts',
+            'baseUrl' => $baseUrl
+        ]);
     }
 
     public function getTagFeed(Request $request)

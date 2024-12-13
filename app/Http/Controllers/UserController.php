@@ -17,9 +17,11 @@ class UserController extends Controller
 
     public function userPosts(User $user, Request $request)
     {
-        $title = "{$user->public_name}'s Posts";
-
-        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.posts', $user->id), 'user' => $user]);
+        return view('pages.user', [
+            'title' => "{$user->public_name}'s Posts",
+            'baseUrl' => route('api.user.posts', $user->id),
+            'user' => $user
+        ]);
     }
 
     public function getUserPosts(User $user, Request $request)
@@ -27,15 +29,16 @@ class UserController extends Controller
         $news_posts = NewsPost::where('author_id', $user->id)
             ->orderBy('created_at', 'desc');
 
-
         return $this->news_post_page($news_posts, $request);
     }
 
     public function userUpvotes(User $user, Request $request)
     {
-        $title = "{$user->public_name}'s Upvoted Posts";
-
-        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.upvotes', $user->id), 'user' => $user]);
+        return view('pages.user', [
+            'title' => "{$user->public_name}'s Upvoted Posts",
+            'baseUrl' => route('api.user.upvotes', $user->id),
+            'user' => $user
+        ]);
     }
 
     public function getUserUpvotes(User $user, Request $request)

@@ -116,6 +116,7 @@ Route::middleware(['auth', 'blocked'])->controller(UserController::class)->group
 });
 
 Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->group(function () {
+    // User
     Route::post('/users/{user}/follow', 'followUser')->name('user.follow');
     Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('user.unfollow');
 
@@ -125,14 +126,12 @@ Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->gro
     Route::get('api/users/{user}/followers', 'getFollowers');
     Route::get('api/users/{user}/following', 'getFollowing');
 
+    // Tag
     Route::post('tag/store/{tag}', 'followTag')->name('user.follow_tag');
     Route::delete('tag/delete/{tag}', 'unfollowTag')->name('user.unfollow_tag');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(TagController::class)->group(function () {
-    Route::get('api/tags', 'getFollowingTags');
-    Route::get('api/tags/all', 'getTags');
-
     Route::post('admin/tags/create', 'store')->middleware('admin');
     Route::delete('admin/tags/delete/{tag}', 'destroy')->middleware('admin');
     Route::get('admin/tags', 'show')->name('admin.tags')->middleware('admin');
@@ -141,7 +140,7 @@ Route::middleware(['auth', 'blocked'])->controller(TagController::class)->group(
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'showUsers')->name('admin');
+    Route::get('/', 'showUsers')->name('admin');    // TODO: criar realmente um dashboard, com estatistica?
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
@@ -162,11 +161,6 @@ Route::controller(SearchController::class)->group(function () {
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {
     Route::post('/upload', 'ajaxUpload');
-});
-
-Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkController::class)->group(function () {
-    Route::post('/', 'store')->name('bookmark.store');
-    Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
 });
 
 Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkController::class)->group(function () {
