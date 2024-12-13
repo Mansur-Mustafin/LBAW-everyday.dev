@@ -4,16 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 
 class TagController extends Controller
 {
-   public function getTags()
-   {
-      return Tag::all();
-   }
-
    public function show(Request $request)
    {
       return view('pages.admin.admin', ['show' => 'tags']);
@@ -47,18 +40,6 @@ class TagController extends Controller
       $tag->delete();
       return response()->json([
          "You have successfully delete $tag->name"
-      ]);
-   }
-
-   public function getFollowingTags()
-   {
-      $user = Auth::user();
-      $tags = $user->tags()->paginate(10);
-
-      return response()->json([
-         'tags' => $tags,
-         'next_page' => $tags->currentPage() + 1,
-         'last_page' => $tags->lastPage()
       ]);
    }
 }
