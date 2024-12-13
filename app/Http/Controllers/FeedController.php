@@ -33,18 +33,13 @@ class FeedController extends Controller
     public function getMyFeed(Request $request)
     {
         $user = Auth::user();
-        $following = $user->following()->pluck('id');
-        $news_posts_by_follow = NewsPost::whereIn('author_id', $following)
-            ->orderBy('created_at', 'desc')->get();
-        $news_posts_by_tag =  $user->tags()->get()->map(function ($tag, $key) {
-            return $tag->newsPosts()->get();
-        })->flatten();
 
-        if (!$news_posts_by_follow->merge($news_posts_by_tag)->isEmpty()) {
-            $news_posts = $news_posts_by_follow->merge($news_posts_by_tag)->toQuery();
-        } else {
-            $news_posts = NewsPost::query()->whereNull('id');
-        }
+        $news_posts = NewsPost::query()
+            ->whereIn('author_id', $user->following()->pluck('id'))
+            ->orWhereHas('tags', function ($query) use ($user) {
+                $query->whereIn('id', $user->tags()->pluck('id'));
+            });
+
         return $this->news_post_page($news_posts, $request);
     }
 
@@ -57,16 +52,16 @@ class FeedController extends Controller
     public function getBookmarkFeed(Request $request)
     {
         $user = Auth::user();
-        $news_posts = $user->bookmarkedPosts();
-        $tags = Tag::all()->pluck('name')->toArray();
-        return $this->news_post_page($news_posts, $request);
+        $newsPosts = $user->bookmarkedPosts()->getQuery();
+
+        return $this->news_post_page($newsPosts, $request);
     }
 
     public function postFeed(Request $request)
     {
         $search_query = $request->search;
-        // $baseUrl = "news/api/posts/{$search_query}";
         $baseUrl = route('api.posts.search', $search_query);
+
         return view('pages.news', ['title' => 'Related Posts', 'baseUrl' => $baseUrl]);
     }
 
@@ -81,9 +76,8 @@ class FeedController extends Controller
     public function tagFeed(Request $request)
     {
         $tag_query = $request->search;
-        // $baseUrl = "news/api/tags/{$tag_query}";
-        // $baseUrl = "/news/api/recent-feed?page=1&tags[]=AI&date_range=All%20Time&order_by=Sort%20by"
         $baseUrl = route('api.tags.search', $tag_query);
+
         return view('pages.news', ['title' => 'Tag Related Posts', 'baseUrl' => $baseUrl]);
     }
 

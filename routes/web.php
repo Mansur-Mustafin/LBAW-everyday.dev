@@ -116,17 +116,20 @@ Route::middleware(['auth', 'blocked'])->controller(UserController::class)->group
 });
 
 Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->group(function () {
-    Route::post('/users/{user}/follow', 'followUser')->name('users.follow');
-    Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('users.unfollow');
-    Route::get('users/{user}/followers', 'showFollowers')->name('users.followers');
-    Route::get('users/{user}/following', 'showFollowing')->name('users.following');
+    Route::post('/users/{user}/follow', 'followUser')->name('user.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('user.unfollow');
+
+    Route::get('users/{user}/followers', 'showFollowers')->name('user.followers');
+    Route::get('users/{user}/following', 'showFollowing')->name('user.following');
+
     Route::get('api/users/{user}/followers', 'getFollowers');
     Route::get('api/users/{user}/following', 'getFollowing');
+
+    Route::post('tag/store/{tag}', 'followTag')->name('user.follow_tag');
+    Route::delete('tag/delete/{tag}', 'unfollowTag')->name('user.unfollow_tag');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(TagController::class)->group(function () {
-    Route::post('tag/store/{tag}', 'store')->name('user.follow_tag');
-    Route::delete('tag/delete/{tag}', 'delete')->name('user.unfollow_tag');
     Route::get('api/tags', 'getFollowingTags');
     Route::get('api/tags/all', 'getTags');
 

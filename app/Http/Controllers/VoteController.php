@@ -16,12 +16,14 @@ class VoteController extends Controller
             'is_upvote' => 'required|boolean',
         ]);
 
-        $vote = new Vote();
-        $vote->vote_type = $validated['type'] === 'post' ? 'PostVote' : 'CommentVote';
-        $vote->is_upvote = $validated['is_upvote'];
-        $vote->user_id = Auth::id();
+        $voteType = $validated['type'] === 'post' ? 'PostVote' : 'CommentVote';
+        $vote = new Vote([
+            'vote_type' => $voteType,
+            'is_upvote' => $validated['is_upvote'],
+            'user_id' => Auth::id(),
+        ]);
 
-        if ($vote->vote_type === 'PostVote') {
+        if ($voteType === 'PostVote') {
             $vote->news_post_id = $validated['id'];
         } else {
             $vote->comment_id = $validated['id'];
