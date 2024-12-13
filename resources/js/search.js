@@ -130,18 +130,20 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
   const url = `${baseUrl}/users/${user.id}/posts`;
   return `
-        <div class="p-2 hover:bg-gray-700">
-            <a href="${url}" class="flex items-center">
-                <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
-                <div class="flex-1 min-w-0">
-                    <p class="align-middle">
-                        ${user.public_name}
-                    </p>
-                    <p class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
-                        ${user.username}
-                    </p>
-                </div>
-            </a>
-        </div>
-    `;
+    ${!user.username.includes('deleted_user') ? `
+      <div class="p-2 hover:bg-gray-700">
+          <a href="${url}" class="flex items-center">
+              <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
+              <div class="flex-1 min-w-0">
+                  <p class="align-middle">
+                      ${user.public_name}
+                  </p>
+                  <p class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
+                      ${user.username}
+                  </p>
+              </div>
+          </a>
+      </div>
+      ` : ''}
+  `;
 };
