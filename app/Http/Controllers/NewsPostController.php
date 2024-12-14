@@ -17,18 +17,15 @@ class NewsPostController extends Controller
 {
     public function showCreationForm()
     {
-        $tags = Tag::all();
-        return view('pages.create-news', ['tags' => $tags]);
+        return view('pages.create-news', ['tags' => Tag::all()]);
     }
 
     public function showSingleThread(NewsPost $newsPost, comment $comment)
     {
-        if (Gate::denies('belongsToPost', [$comment, $newsPost])) {
-            return redirect()->route('news.show', $newsPost->id)
-                ->withErrors('Comment does not belong to the correspondent news.');
-        }
+        $this->authorize('belongsToPost', [$comment, $newsPost]);
 
         $tags = $this->getAvailableTags($newsPost);
+        $this->preparePostForUser($newsPost);
         $this->processComments([$comment], Auth::user());
 
         return view('pages.post', [
@@ -44,20 +41,7 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
-        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
-        $newsPost->is_bookmarked = false;
-
-        if ($user) {
-            $vote = $newsPost->votes()->where('user_id', $user->id)->first();
-
-            if ($vote) {
-                $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
-                $newsPost->user_vote_id = $vote->id;
-            }
-
-            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
-        }
-
+        $this->preparePostForUser($newsPost);
         $this->processComments($newsPost->comments, $user);
 
         return view('pages.post', [
@@ -112,7 +96,6 @@ class NewsPostController extends Controller
     {
         $this->authorize('update', $newsPost);
 
-
         $validated = $request->validate([
             'title' => 'required|string|max:250',
             'content' => 'required|string',
@@ -121,8 +104,6 @@ class NewsPostController extends Controller
             'remove_image' => 'required|string',
             'content_images' => 'nullable|string'
         ]);
-
-
 
         $newsPost->update([
             'title' => $validated['title'],
@@ -142,11 +123,10 @@ class NewsPostController extends Controller
         if ($request->has('content_images')) {
             $paths = explode(',', $validated['content_images']);
 
-            // i bet there is a better way, without compromising so much performance
             FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, $paths);
 
             foreach ($paths as $path) {
-                // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
+                // creates a new record if doesn't exist.
                 if (!empty($path)) {
                     Image::insertOrIgnore([
                         'path' => $path,
@@ -174,6 +154,24 @@ class NewsPostController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 
+    private function preparePostForUser(NewsPost $newsPost)
+    {
+        $user = Auth::user();
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+        $newsPost->is_bookmarked = false;
+
+        if ($user) {
+            $vote = $newsPost->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $newsPost->user_vote_id = $vote->id;
+            }
+
+            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
+        }
+    }
+
     private function getAvailableTags(NewsPost $newsPost)
     {
         $existingTags = $newsPost->tags->pluck('name')->toArray();
@@ -193,6 +191,8 @@ class NewsPostController extends Controller
 
     static function processComments($comments, $user)
     {
+        // TODO: nos temos que processar todos os comments? nao podemos so processar quais vamos mostrar?
+
         if (!$user) {
             return;
         }

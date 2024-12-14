@@ -131,11 +131,11 @@ Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->gro
     Route::delete('tag/delete/{tag}', 'unfollowTag')->name('user.unfollow_tag');
 });
 
-Route::middleware(['auth', 'blocked'])->controller(TagController::class)->group(function () {
-    Route::post('admin/tags/create', 'store')->middleware('admin');
-    Route::delete('admin/tags/delete/{tag}', 'destroy')->middleware('admin');
-    Route::get('admin/tags', 'show')->name('admin.tags')->middleware('admin');
-    Route::get('admin/tags/create', 'showCreationForm')->middleware('admin');
+Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagController::class)->group(function () {
+    Route::get('/', 'show')->name('admin.tags');
+    Route::get('/create', 'showCreationForm');
+    Route::post('/create', 'store');
+    Route::delete('/delete/{tag}', 'destroy');
 });
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
@@ -171,7 +171,6 @@ Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkC
 Route::middleware(['auth', 'blocked'])->controller(TagProposalController::class)->group(function () {
     Route::get('tag_proposal/create', 'showCreationForm');
     Route::post('tag_proposals/create', 'store');
-    Route::get('/api/tag_proposals/all', 'showAll');
 
     Route::get('admin/tag_proposals', 'show')->middleware('admin')->name('admin.tag_proposals');
     Route::put('admin/tag_proposals/accept/{tag_proposal}', 'accept')->middleware('admin');

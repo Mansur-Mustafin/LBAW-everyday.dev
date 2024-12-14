@@ -15,26 +15,24 @@ class UnblockAppealController extends Controller
 
     public function store(Request $request)
     {
-        $credentials = $request->validate([
+        $validated = $request->validate([
             'description' => 'required|string|max:2000',
         ]);
 
-        $unblock_appeal = UnblockAppeal::where('user_id', Auth::id())->where('is_resolved', false)->get();
-        $user = Auth::user();
+        $existingAppeal = UnblockAppeal::where('user_id', Auth::id())->where('is_resolved', false)->exists();
 
-        if (!$unblock_appeal->isEmpty()) {
+        if ($existingAppeal) {
             return redirect()->route('blocked')
-                ->withError('There is already a request');
+                ->withError('There is already an active unblock appeal.');
         }
 
         UnblockAppeal::create([
-            'description' => $credentials['description'],
+            'description' => $validated['description'],
             'is_resolved' => false,
             'user_id' => Auth::id()
         ]);
 
-
-        $user->update([
+        Auth::user()->update([
             'status' => 'pending'
         ]);
 
@@ -45,11 +43,11 @@ class UnblockAppealController extends Controller
     public function destroy(Request $request, UnblockAppeal $unblock_appeal)
     {
         try {
-            $unblock_appeal->proposer()->get()->first()->update([
+            $unblock_appeal->proposer()->update([
                 'status' => 'blocked'
             ]);
-
             $unblock_appeal->delete();
+
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false]);
@@ -63,7 +61,7 @@ class UnblockAppealController extends Controller
                 'is_resolved' => true,
             ]);
 
-            $unblock_appeal->proposer()->get()->first()->update([
+            $unblock_appeal->proposer()->update([
                 'status' => 'active'
             ]);
 
