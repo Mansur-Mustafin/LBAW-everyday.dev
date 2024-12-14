@@ -157,6 +157,7 @@ CREATE TABLE news_post_tag (
 
 CREATE TABLE tag_proposal (
     id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
     description TEXT NOT NULL,
     is_resolved BOOLEAN NOT NULL DEFAULT FALSE,
     proposer_id INTEGER NOT NULL REFERENCES "user"(id)
@@ -191,6 +192,12 @@ CREATE TABLE notification_settings (
     comment_notifications BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+-- to create a unique link.
+CREATE TABLE password_resets (
+    email VARCHAR(256) NOT NULL UNIQUE,
+    token VARCHAR(256) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 --
 -- Unique Indexes

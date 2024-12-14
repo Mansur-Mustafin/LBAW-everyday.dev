@@ -90,11 +90,11 @@ class SendNotification implements ShouldBroadcast
             case NotificationTypeEnum::POST->value:
                 $payload['news_post'] = [
                     'id' => $this->notification->news_post_id,
-                    'title' => $this->notification->news_post->title,
+                    'title' => $this->notification->newsPost->title,
                     'author' => [
-                        'id' => $this->notification->news_post->author->id,
-                        'public_name' => $this->notification->news_post->author->public_name,
-                        'profile_image' => $this->notification->news_post->author->profileImage->url,
+                        'id' => $this->notification->newsPost->author->id,
+                        'public_name' => $this->notification->newsPost->author->public_name,
+                        'profile_image' => $this->notification->newsPost->author->profileImage->url,
                     ],
                 ];
                 break;

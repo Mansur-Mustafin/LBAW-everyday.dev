@@ -51,7 +51,7 @@
                 <div class="flex flex-col mb-2">
                     <label class="font-bold text-sm mb-2">E-Mail</label>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                        placeholder="Public name*" class="rounded-2xl bg-input outline-none p-3">
+                        placeholder="Email*" class="rounded-2xl bg-input outline-none p-3">
                     @error('email')
                         <span class="text-red-400 text-sm">{{ $message }}</span>
                     @enderror
@@ -83,7 +83,7 @@
                 </div>
 
                 <label class="inline-flex items-center text-sm mb-4">
-                    <input type="checkbox" name="age" id="ageCheckbox" class="bg-gray-600 rounded accent-[#5a7d99]">
+                    <input type="checkbox" name="age" id="ageCheckbox" class="form-checkbox bg-gray-600 rounded accent-[#5a7d99]">
                     <span class="ml-2">I confirm that I am over 13 years old</span>
                 </label>
                 <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>

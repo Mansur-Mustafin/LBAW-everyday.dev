@@ -3,8 +3,8 @@ import { sendAjaxRequest } from './utils';
 const searchBarDiv = document.getElementById('search-bar');
 const searchContainer = document.getElementById('search-container');
 const resultsDiv = document.getElementById('search-results');
-const baseUrl = searchBarDiv.dataset.url;
-const isAuth = searchBarDiv.dataset.auth;
+const baseUrl = searchBarDiv ? searchBarDiv.dataset.url : '';
+const isAuth = searchBarDiv ? searchBarDiv.dataset.auth : '';
 let loading = false;
 
 let clickedInsideResults = false;
@@ -79,7 +79,7 @@ const showElements = (elements, buildFunction) => {
 
 const addMorePosts = (searchQuery) => {
   const morePostsDiv = document.createElement('div');
-  const url = `${baseUrl}/search/posts/${searchQuery}`;
+  const url = `${baseUrl}/news/posts/${searchQuery}`;
 
   morePostsDiv.innerHTML = `
         <div class="p-2 hover:bg-gray-700 hover:text-white">
@@ -111,7 +111,8 @@ const buildPost = (post) => {
 };
 
 const buildTag = (tag) => {
-  const url = `${baseUrl}/search/tags/${tag.name}`;
+  const url = `${baseUrl}/news/tags/${tag.name}`;
+  console.log(tag.name)
   return `
         <div class="p-2 hover:bg-gray-700">
             <a href="${url}" class="flex items-center">

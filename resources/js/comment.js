@@ -53,6 +53,7 @@ function editCommentHandler(data) {
 }
 
 const commentForm = document.getElementById('commentForm');
+
 if (commentForm) {
   commentForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -114,6 +115,7 @@ function addButtonsBehaviour() {
       const form = document.getElementById(`subCommentForm-${commentSection.id.split('-')[1]}`);
 
       form.classList.add('flex');
+      form.classList.remove('hidden');
 
       commentSection.children[0].style.borderBottom = 0;
       commentSection.children[0].style.borderRadius = 0;
@@ -198,3 +200,4 @@ function addButtonsBehaviour() {
     });
   });
 }
+
