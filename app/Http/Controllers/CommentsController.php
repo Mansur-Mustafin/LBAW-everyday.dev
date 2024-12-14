@@ -28,9 +28,9 @@ class CommentsController extends Controller
 
         return response()->json([
             'thread' => view('partials.comment', [
-                'comment' => $thread_parent, 
-                'level' => 0, 
-                'post' => NewsPost::find($thread_parent->news_post_id), 
+                'comment' => $thread_parent,
+                'level' => 0,
+                'post' => NewsPost::find($thread_parent->news_post_id),
                 'thread' => $thread
             ])->render(),
             "thread_id" => $thread_parent->id
@@ -41,11 +41,11 @@ class CommentsController extends Controller
     {
         return response()->json([
             'thread' => view('partials.comment', [
-                'comment' => $comment, 
-                'level' => 0, 
-                'post' => NewsPost::find($comment->news_post_id), 
+                'comment' => $comment,
+                'level' => 0,
+                'post' => NewsPost::find($comment->news_post_id),
                 'thread' => $thread
-            ])->render(), 
+            ])->render(),
             "thread_id" => $comment->id
         ]);
     }
@@ -59,6 +59,7 @@ class CommentsController extends Controller
             'thread' => 'required|string'
         ]);
 
+
         $comment = Comment::create([
             'content' => $validated['content'],
             'news_post_id' => $validated['news_post_id'] ?? null,
@@ -66,7 +67,7 @@ class CommentsController extends Controller
             'author_id' => Auth::id()
         ]);
 
-        if ($validated['news_post_id']) {
+        if ($comment['news_post_id']) {
             return $this->buildComment($comment, $validated['thread']);
         } else {
             return $this->buildNestedComment($comment, $validated['thread']);

@@ -19,6 +19,7 @@
 
     <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     @vite('resources/css/app.css')
+    @vite('resources/js/utils.js')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
     @vite('resources/js/comment.js')
@@ -28,8 +29,14 @@
     @vite('resources/js/edit-image.js')
     @vite('resources/js/follow.js')
     @vite('resources/js/toggle-two.js')
+    @vite('resources/js/editor.js')
+    @vite('resources/js/feed.js')
     @vite('resources/js/bookmark.js')
     @vite('resources/js/notification.js')
+    @vite('resources/js/bookmark.js')
+    @vite('resources/js/admin.js')
+    @vite('resources/js/filter.js')
+    @vite('resources/js/sort-by.js')
 
 
     <script type="text/javascript">

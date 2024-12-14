@@ -27,34 +27,30 @@
             </li>
         </ul>
 
-        @if ($news_posts->isEmpty())
-            <p class="text-gray-500 text-center mt-10">
-                @if ($isPostsActive)
-                    {{ $user->public_name }} hasn't posted yet.
-                @elseif ($isUpvotesActive)
-                    {{ $user->public_name }} hasn't upvoted any posts yet.
-                @else
-                    No content available.
-                @endif
-            </p>
-        @else
-            <div class="container tablet:mx-auto w-full">
-                <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
-                <div data-last_page="{{ $news_posts->lastPage() }}" data-url="{{ $baseUrl }}" id="news-posts-container"
-                    class="grid grid-cols-1 gap-4">
-                    @foreach ($news_posts as $news)
-                        @include('partials.tile-post', ['news' => $news])
-                    @endforeach
-                </div>
-                <div id="loading-icon" class="hidden">
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>@include('partials.load-tile-post')</div>
-                        <div>@include('partials.load-tile-post')</div>
-                    </div>
-                    <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
-                </div>
+        {{-- <p class="text-gray-500 text-center mt-10">
+            @if ($isPostsActive)
+                {{ $user->public_name }} hasn't posted yet.
+            @elseif ($isUpvotesActive)
+                {{ $user->public_name }} hasn't upvoted any posts yet.
+            @else
+                No content available.
+            @endif
+        </p> --}}
+        
+        <div class="container tablet:mx-auto w-full">
+            <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
+            <div data-url="{{ $baseUrl }}" id="news-posts-container"
+                class="grid grid-cols-1 gap-4">
             </div>
-        @endif
+            <div id="loading-icon" class="hidden">
+                <div class="grid grid-cols-1 gap-4">
+                    <div>@include('partials.load-tile-post')</div>
+                    <div>@include('partials.load-tile-post')</div>
+                </div>
+                <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
+            </div>
+        </div>
+        
     </main>
 
     <aside class="order-1 tablet:order-none border-l border-gray-700">
@@ -103,22 +99,26 @@
                 @endif
             </p>
         </div>
-        {{-- <div class="p-4 mt-4">
+        <div class="p-4 mt-4">
             <h3 class="font-bold text-lg">Favorite Tags</h3>
             @include('partials.tags', ['tags' => $user->tag_names])
-        </div> --}}
+        </div>
 
-        <div class="p-4 flex items-center gap-2 justify-center">
+        <div class="p-4 flex flex-col gap-2 justify-center">
+            @if (Auth::check() and (Auth::id() == $user->id))
+                <a href="{{ url('/tag_proposal/create') }}"
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Create tag Proposal</a>
+            @endif
             @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1 self-end">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @endif
             @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/logout') }}"
-                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1 self-end">Logout</a>
+                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1">Logout</a>
             @endif
         </div>
 
