@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Image;
-use App\Models\User;
-use App\Models\NewsPost;
 use App\Enums\ImageTypeEnum;
+use App\Models\Image;
+use App\Models\NewsPost;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 

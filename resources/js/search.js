@@ -49,7 +49,7 @@ searchBarDiv.onkeyup = async () => {
     return;
   }
 
-  const searchQuery = `${baseUrl}/api/search/${searchBarDiv.value}`;
+  const searchQuery = `${baseUrl}/api/search?query=${searchBarDiv.value}`;
   sendAjaxRequest(
     searchQuery,
     (data) => {

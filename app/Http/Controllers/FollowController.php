@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\NotificationTypeEnum;
 use App\Models\Notification;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -77,9 +78,10 @@ class FollowController extends Controller
             'last_page' => $followers->lastPage(),
         ]);
     }
-    public function followTag(Request $request, Tag $tag) 
+
+    public function followTag(Request $request, Tag $tag)
     {
-        $this->authorize('store', $tag); 
+        $this->authorize('follow', $tag);
         try {
             Auth::user()->tags()->attach($request->tag);
 
@@ -89,15 +91,15 @@ class FollowController extends Controller
         }
     }
 
-    public function unfollowTag(Request $request,Tag $tag) 
+    public function unfollowTag(Request $request, Tag $tag)
     {
-        $this->authorize('delete', $tag); 
+        $this->authorize('unfollow', $tag);
         try {
             Auth::user()->tags()->detach($request->tag);
 
             return response()->json(['message' => "Successfully unfollowed {$request->tag}"]);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => "Cannot unfollow this {$request->tag}"], 403);
-        } 
+        }
     }
 }
