@@ -6,7 +6,6 @@ const deleteTag = async (tagId,baseUrl) => {
     `${baseUrl}/admin/tags/delete/${tagId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/tags`
     },
     'DELETE'
   )
@@ -16,7 +15,6 @@ const deleteTagProposal = async (tagProposalId,baseUrl) => {
     `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/tag_proposals`
     },
     'DELETE'
   )
@@ -26,7 +24,6 @@ const acceptTagProposal = async (tagProposalId,baseUrl) => {
     `${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/tag_proposals`
     },
     'PUT'
   )
@@ -36,7 +33,6 @@ const acceptUnblockAppeal = async (unblockAppealId,baseUrl) => {
     `${baseUrl}/admin/unblock_appeals/accept/${unblockAppealId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/unblock_appeals`
     },
     'PUT'
   )
@@ -46,7 +42,6 @@ const deleteUnblockAppeal = async (unblockAppealId,baseUrl) => {
     `${baseUrl}/admin/unblock_appeals/delete/${unblockAppealId}`,
     (data) => {
       console.log(data)
-      window.location = `${baseUrl}/admin/unblock_appeals`
     },
     'DELETE'
   )
@@ -57,7 +52,6 @@ const blockUser = async (userId,baseUrl) => {
     url,
     (data) => {
       console.log(data)
-      window.location =`${baseUrl}/admin` 
     },
     'PUT'
   )
@@ -68,7 +62,6 @@ const unblockUser = async (userId,baseUrl) => {
     url,
     (data) => {
       console.log(data)
-      window.location =`${baseUrl}/admin` 
     },
     'PUT'
   )
@@ -218,61 +211,68 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 }
 
 // Card Button Behaviours
-const addUserButtons = (resultDiv) => {
+const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
     const targetBlock = event.target.closest('.block-button')
     if(targetBlock) {
       event.preventDefault()
       const userId = targetBlock.id.split('-block-button')[0]
       blockUser(userId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
     const targetUnblock = event.target.closest('.unblock-button')
     if(targetUnblock) {
       event.preventDefault()
       const userId = targetUnblock.id.split('-unblock-button')[0]
       unblockUser(userId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
-const addTagButtons = (resultDiv) => {
+const addTagButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const tagId = targetDelete.id.split('-delete-button')[0]
       deleteTag(tagId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
-const addTagProposalButtons = (resultDiv) => {
+const addTagProposalButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
     const targetAccept = event.target.closest('.accept-button')
     if(targetAccept) {
       event.preventDefault()
       const tagProposalId = targetAccept.id.split('-accept-button')[0]
       acceptTagProposal(tagProposalId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const tagProposalId = targetDelete.id.split('-delete-button')[0]
       deleteTagProposal(tagProposalId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
-const addUnblockAppealButtons = (resultDiv) => {
+const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
     const targetAccept = event.target.closest('.accept-button')
     if(targetAccept) {
       event.preventDefault()
       const unblockAppealId = targetAccept.id.split('-accept-button')[0]
       acceptUnblockAppeal(unblockAppealId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const unblockAppealId = targetDelete.id.split('-delete-button')[0]
       deleteUnblockAppeal(unblockAppealId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
@@ -358,28 +358,38 @@ const tagsDiv           = document.getElementById('admin-search-tags-results')
 const tagProposalsDiv   = document.getElementById('admin-search-tag-proposals-results')
 const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results')
 
+const reloadData = (baseQuery,buildFunction,resultDiv) => {
+  resultDiv.innerHTML = '';
+  page = 1;
+  build(
+    baseQuery, 
+    buildFunction, 
+    resultDiv
+  );
+}
+
 // Build Cards
 if(usersDiv) {
   console.log(usersDiv)
   const baseQuery = baseUrl+'/api/search/users/'
   addInfinitePageBehaviour(baseQuery,buildUserCard,usersDiv)
-  addUserButtons(usersDiv)
+  addUserButtons(baseQuery,buildUserCard,usersDiv)
 }
 if(tagsDiv) {
   console.log(tagsDiv)
   const baseQuery = baseUrl+'/api/search/tags/'
   addInfinitePageBehaviour(baseQuery,buildTagCard,tagsDiv)
-  addTagButtons(tagsDiv)
+  addTagButtons(baseQuery,buildTagCard,tagsDiv)
 }
 if(tagProposalsDiv) {
   console.log(tagProposalsDiv)
   const baseQuery = baseUrl+'/api/search/tag_proposals/'
   addInfinitePageBehaviour(baseQuery,buildTagProposalCard,tagProposalsDiv)
-  addTagProposalButtons(tagProposalsDiv)
+  addTagProposalButtons(baseQuery,buildTagProposalCard,tagProposalsDiv)
 }
 if(unblockAppealsDiv) {
   console.log(unblockAppealsDiv)
   const baseQuery = baseUrl+'/api/search/unblock_appeals/'
   addInfinitePageBehaviour(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
-  addUnblockAppealButtons(unblockAppealsDiv)
+  addUnblockAppealButtons(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
 }
