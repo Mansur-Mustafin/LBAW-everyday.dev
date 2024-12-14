@@ -84,11 +84,11 @@
         </div>
         <div class="p-4 mt-4">
             <p>
-                <a href="{{ route('users.following', $user->id) }}">
+                <a href="{{ route('user.following', $user->id) }}">
                     <span class="mr-4">{{ $user->following()->count() }} <span
                             class="text-gray-500">following</span></span>
                 </a>
-                <a href="{{ route('users.followers', $user->id) }}">
+                <a href="{{ route('user.followers', $user->id) }}">
                     <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
                 </a>
             </p>

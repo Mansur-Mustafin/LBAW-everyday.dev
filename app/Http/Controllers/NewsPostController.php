@@ -3,32 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
+use App\Http\Requests\NewsPost\StoreRequest;
+use App\Http\Requests\NewsPost\UpdateRequest;
 use App\Models\Comment;
-use App\Models\NewsPost;
 use App\Models\Image;
+use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Services\FileService;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\RedirectResponse;
 
 class NewsPostController extends Controller
 {
     public function showCreationForm()
     {
-        $tags = Tag::all();
-        return view('pages.create-news', ['tags' => $tags]);
+        return view('pages.create-news', ['tags' => Tag::all()]);
     }
 
-    public function showSingleThread(NewsPost $newsPost, comment $comment)
+    public function showSingleThread(NewsPost $newsPost, comment $comment): View|Factory
     {
-        if (Gate::denies('belongsToPost', [$comment, $newsPost])) {
-            return redirect()->route('news.show', $newsPost->id)
-                ->withErrors('Comment does not belong to the correspondent news.');
-        }
+        $this->authorize('belongsToPost', [$comment, $newsPost]);
 
         $tags = $this->getAvailableTags($newsPost);
+        $this->preparePostForUser($newsPost);
         $this->processComments([$comment], Auth::user());
 
         return view('pages.post', [
@@ -39,25 +39,12 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function show(NewsPost $newsPost)
+    public function show(NewsPost $newsPost): View|Factory
     {
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
-        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
-        $newsPost->is_bookmarked = false;
-
-        if ($user) {
-            $vote = $newsPost->votes()->where('user_id', $user->id)->first();
-
-            if ($vote) {
-                $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
-                $newsPost->user_vote_id = $vote->id;
-            }
-
-            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
-        }
-
+        $this->preparePostForUser($newsPost);
         $this->processComments($newsPost->comments, $user);
 
         return view('pages.post', [
@@ -69,16 +56,9 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:250',
-            'content' => 'required|string',
-            'for_followers' => 'required|string',
-            'image' => 'nullable|image|max:2048',
-            'tags' => 'nullable|string',
-            'content_images' => 'nullable|string'
-        ]);
+        $validated = $request->validate();
 
         $post = NewsPost::create([
             'title' => $validated['title'],
@@ -108,21 +88,11 @@ class NewsPostController extends Controller
             ->withSuccess('You have successfully created post!');
     }
 
-    public function update(Request $request, newsPost $newsPost)
+    public function update(UpdateRequest $request, NewsPost $newsPost): RedirectResponse
     {
         $this->authorize('update', $newsPost);
 
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:250',
-            'content' => 'required|string',
-            'for_followers' => 'nullable|string',
-            'tags' => 'nullable|string',
-            'remove_image' => 'required|string',
-            'content_images' => 'nullable|string'
-        ]);
-
-
+        $validated = $request->validate();
 
         $newsPost->update([
             'title' => $validated['title'],
@@ -142,11 +112,9 @@ class NewsPostController extends Controller
         if ($request->has('content_images')) {
             $paths = explode(',', $validated['content_images']);
 
-            // i bet there is a better way, without compromising so much performance
             FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, $paths);
 
             foreach ($paths as $path) {
-                // creates a new record if doesn't exist. i was having problems with duplicated paths. ig increases performance
                 if (!empty($path)) {
                     Image::insertOrIgnore([
                         'path' => $path,
@@ -161,7 +129,7 @@ class NewsPostController extends Controller
             ->with('message', 'Post atualizado com sucesso!');
     }
 
-    public function destroy(NewsPost $newsPost)
+    public function destroy(NewsPost $newsPost): RedirectResponse
     {
         $this->authorize('delete', $newsPost);
 
@@ -174,13 +142,31 @@ class NewsPostController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 
-    private function getAvailableTags(NewsPost $newsPost)
+    private function preparePostForUser(NewsPost $newsPost): void
+    {
+        $user = Auth::user();
+        $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
+        $newsPost->is_bookmarked = false;
+
+        if ($user) {
+            $vote = $newsPost->votes()->where('user_id', $user->id)->first();
+
+            if ($vote) {
+                $newsPost->user_vote = $vote->is_upvote ? 'upvote' : 'downvote';
+                $newsPost->user_vote_id = $vote->id;
+            }
+
+            $newsPost->is_bookmarked = in_array($newsPost->id, $userBookmarks);
+        }
+    }
+
+    private function getAvailableTags(NewsPost $newsPost): Collection
     {
         $existingTags = $newsPost->tags->pluck('name')->toArray();
         return Tag::all()->reject(fn($tag) => in_array($tag->name, $existingTags));
     }
 
-    private function syncTags(NewsPost $post, string $tags)
+    private function syncTags(NewsPost $post, string $tags): void
     {
         if (empty($tags)) {
             return;
@@ -193,6 +179,8 @@ class NewsPostController extends Controller
 
     static function processComments($comments, $user)
     {
+        // TODO: nos temos que processar todos os comments? nao podemos so processar quais vamos mostrar?
+
         if (!$user) {
             return;
         }

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
-
     public function findMostParentComment($comment_id)
     {
         $comment = Comment::find($comment_id);
@@ -17,24 +16,17 @@ class CommentsController extends Controller
         while ($comment->parent_comment_id !== null) {
             $comment = Comment::find($comment->parent_comment_id);
         }
+
         return $comment;
     }
 
     public function buildNestedComment($comment, $thread)
     {
-        $thread_parent = $this->findMostParentComment($comment->id);
+        $threadParent = $this->findMostParentComment($comment->id);
 
-        NewsPostController::processComments([$thread_parent], Auth::user());
+        NewsPostController::processComments([$threadParent], Auth::user());
 
-        return response()->json([
-            'thread' => view('partials.comment', [
-                'comment' => $thread_parent,
-                'level' => 0,
-                'post' => NewsPost::find($thread_parent->news_post_id),
-                'thread' => $thread
-            ])->render(),
-            "thread_id" => $thread_parent->id
-        ]);
+        return $this->buildComment($threadParent, $thread);
     }
 
     public function buildComment($comment, $thread)
@@ -58,7 +50,6 @@ class CommentsController extends Controller
             'parent_comment_id' => 'nullable|string',
             'thread' => 'required|string'
         ]);
-
 
         $comment = Comment::create([
             'content' => $validated['content'],
