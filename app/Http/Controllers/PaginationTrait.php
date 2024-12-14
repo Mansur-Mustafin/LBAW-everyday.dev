@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Filters\NewsPostFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
 
 trait PaginationTrait
 {
-    public function news_post_page(Builder $newsPosts, Request $request, array $additionalData = [], string $view = 'pages.news')
+    public function news_post_page(Builder $newsPosts, Request $request)
     {
         $filter = new NewsPostFilter($request);
 

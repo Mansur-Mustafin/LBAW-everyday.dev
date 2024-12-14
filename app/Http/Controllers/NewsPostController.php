@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
+use App\Http\Requests\NewsPost\StoreRequest;
+use App\Http\Requests\NewsPost\UpdateRequest;
 use App\Models\Comment;
 use App\Models\Image;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Services\FileService;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\RedirectResponse;
 
 class NewsPostController extends Controller
 {
@@ -20,7 +23,7 @@ class NewsPostController extends Controller
         return view('pages.create-news', ['tags' => Tag::all()]);
     }
 
-    public function showSingleThread(NewsPost $newsPost, comment $comment)
+    public function showSingleThread(NewsPost $newsPost, comment $comment): View|Factory
     {
         $this->authorize('belongsToPost', [$comment, $newsPost]);
 
@@ -36,7 +39,7 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function show(NewsPost $newsPost)
+    public function show(NewsPost $newsPost): View|Factory
     {
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
@@ -53,16 +56,9 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:250',
-            'content' => 'required|string',
-            'for_followers' => 'required|string',
-            'image' => 'nullable|image|max:2048',
-            'tags' => 'nullable|string',
-            'content_images' => 'nullable|string'
-        ]);
+        $validated = $request->validate();
 
         $post = NewsPost::create([
             'title' => $validated['title'],
@@ -92,18 +88,11 @@ class NewsPostController extends Controller
             ->withSuccess('You have successfully created post!');
     }
 
-    public function update(Request $request, newsPost $newsPost)
+    public function update(UpdateRequest $request, NewsPost $newsPost): RedirectResponse
     {
         $this->authorize('update', $newsPost);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:250',
-            'content' => 'required|string',
-            'for_followers' => 'nullable|string',
-            'tags' => 'nullable|string',
-            'remove_image' => 'required|string',
-            'content_images' => 'nullable|string'
-        ]);
+        $validated = $request->validate();
 
         $newsPost->update([
             'title' => $validated['title'],
@@ -126,7 +115,6 @@ class NewsPostController extends Controller
             FileService::delete($newsPost, ImageTypeEnum::POST_CONTENT->value, $paths);
 
             foreach ($paths as $path) {
-                // creates a new record if doesn't exist.
                 if (!empty($path)) {
                     Image::insertOrIgnore([
                         'path' => $path,
@@ -141,7 +129,7 @@ class NewsPostController extends Controller
             ->with('message', 'Post atualizado com sucesso!');
     }
 
-    public function destroy(NewsPost $newsPost)
+    public function destroy(NewsPost $newsPost): RedirectResponse
     {
         $this->authorize('delete', $newsPost);
 
@@ -154,7 +142,7 @@ class NewsPostController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 
-    private function preparePostForUser(NewsPost $newsPost)
+    private function preparePostForUser(NewsPost $newsPost): void
     {
         $user = Auth::user();
         $userBookmarks = $user ? $user->bookmarkedPosts->pluck('id')->toArray() : [];
@@ -172,13 +160,13 @@ class NewsPostController extends Controller
         }
     }
 
-    private function getAvailableTags(NewsPost $newsPost)
+    private function getAvailableTags(NewsPost $newsPost): Collection
     {
         $existingTags = $newsPost->tags->pluck('name')->toArray();
         return Tag::all()->reject(fn($tag) => in_array($tag->name, $existingTags));
     }
 
-    private function syncTags(NewsPost $post, string $tags)
+    private function syncTags(NewsPost $post, string $tags): void
     {
         if (empty($tags)) {
             return;

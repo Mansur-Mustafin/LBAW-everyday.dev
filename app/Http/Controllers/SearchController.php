@@ -7,8 +7,8 @@ use App\Models\Tag;
 use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {

@@ -10,7 +10,7 @@ use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
-use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
@@ -38,10 +38,6 @@ use Illuminate\Support\Facades\Route;
 // Redirect root to /home
 Route::redirect('/', '/home')->name('home');
 Route::redirect('/home', '/news/recent-feed');
-
-Route::controller(BlockedController::class)->group(function () {
-    Route::get('/blocked', 'show')->name('blocked');
-});
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -150,13 +146,13 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::put('/users/{user}/unblock', 'unblockUser');
 });
 
-Route::controller(SearchController::class)->group(function () {
-    Route::get('api/search/tags/{search?}', 'searchTags');
-    Route::get('api/search/tag_proposals/{search?}', 'searchTagProposals');
-    Route::get('api/search/unblock_appeals/{search?}', 'searchUnblockAppeals');
-    Route::get('api/search/users/{search?}', 'searchUser')->middleware('admin');
-
-    Route::get('api/search', 'search');    // TODO: better pass api/search?query=<> or api/search/{search} ?
+// TODO:: add prefix
+Route::prefix('/api/search')->controller(SearchController::class)->group(function () {
+    Route::get('/tags/{search?}', 'searchTags');
+    Route::get('/tag_proposals/{search?}', 'searchTagProposals');
+    Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
+    Route::get('/users/{search?}', 'searchUser')->middleware('admin');
+    Route::get('/', 'search');    // TODO: better pass api/search?query=<>
 });
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {

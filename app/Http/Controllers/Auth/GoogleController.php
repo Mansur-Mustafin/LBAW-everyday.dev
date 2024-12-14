@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -15,7 +16,6 @@ class GoogleController extends Controller
 
     public function callbackGoogle()
     {
-
         $google_user = Socialite::driver('google')->stateless()->user();
         $user = User::where('google_id', $google_user->getId())->first();
 

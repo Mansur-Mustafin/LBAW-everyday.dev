@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TagProposalController extends Controller
 {
-    public function showCreationForm(Request $request)
+    public function showCreationForm()
     {
         return view('pages.create-tag-proposal');
     }
 
-    public function show(Request $request)
+    public function show()
     {
         return view('pages.admin.admin', ['show' => 'tag_proposals']);
     }
@@ -48,7 +48,7 @@ class TagProposalController extends Controller
             ->withSuccess('You have successfully created Tag Proposal!');
     }
 
-    public function destroy(Request $request, TagProposal $tagProposal)
+    public function destroy(TagProposal $tagProposal)
     {
         try {
             $tagProposal->delete();
@@ -58,7 +58,7 @@ class TagProposalController extends Controller
         }
     }
 
-    public function accept(Request $request, TagProposal $tagProposal)
+    public function accept(TagProposal $tagProposal)
     {
         try {
             $tagProposal->update([
