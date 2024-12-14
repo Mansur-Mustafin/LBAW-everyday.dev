@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class NotificationController extends Controller
 {
-    public function index()
+    public function index(): View|Factory
     {
         return view('pages.notifications', ['settings' => Auth::user()->notificationSetting]);
     }
 
-    public function getNotifications(Request $request)
+    public function getNotifications()
     {
         $notifications = Auth::user()->notifications()
             ->orderBy('created_at', 'desc')

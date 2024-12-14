@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BlockedCheck
 {
-  public function handle(Request $request, Closure $next): Response
+  public function handle(Request $request, Closure $next): Response|View
   {
     if (Auth::check() && ($request->user()->status == 'blocked' || $request->user()->status == 'pending')) {
-      return redirect('blocked');
+      return view('auth.blocked');
     }
     return $next($request);
   }

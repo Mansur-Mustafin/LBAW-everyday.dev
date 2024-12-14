@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UnblockAppealController extends Controller
 {
-    public function show(Request $request)
+    public function show()
     {
         return view('pages.admin.admin', ['show' => 'unblock_appeals']);
     }
@@ -22,7 +22,7 @@ class UnblockAppealController extends Controller
         $existingAppeal = UnblockAppeal::where('user_id', Auth::id())->where('is_resolved', false)->exists();
 
         if ($existingAppeal) {
-            return redirect()->route('blocked')
+            return redirect()->view('auth.blocked')
                 ->withError('There is already an active unblock appeal.');
         }
 
@@ -36,11 +36,11 @@ class UnblockAppealController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->route('blocked')
+        return redirect()->view('auth.blocked')
             ->withSuccess('You have successfully created an Unblock Appeal!');
     }
 
-    public function destroy(Request $request, UnblockAppeal $unblock_appeal)
+    public function destroy(UnblockAppeal $unblock_appeal)
     {
         try {
             $unblock_appeal->proposer()->update([
@@ -54,7 +54,7 @@ class UnblockAppealController extends Controller
         }
     }
 
-    public function accept(Request $request, UnblockAppeal $unblock_appeal)
+    public function accept(UnblockAppeal $unblock_appeal)
     {
         try {
             $unblock_appeal->update([

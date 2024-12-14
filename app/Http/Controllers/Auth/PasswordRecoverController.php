@@ -5,32 +5,33 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class PasswordRecoverController extends Controller
 {
-    public function showRecoverForm(Request $request)
+    public function showRecoverForm(): View|Factory
     {
         return view('auth.recover');
     }
 
-    public function showResetPasswordForm(Request $request)
+    public function showResetPasswordForm(Request $request): View|Factory
     {
         $validated = $request->validate([
             'email' => 'required|email',
             'token' => 'required',
         ]);
 
-        if (!$this->validateResetToken($validated['email'], $validated['token'])) {
-            return view('errors.invalid-link');
-        }
-
-        return view('auth.reset', ['email' => $validated['email'], 'token' => $validated['token']]);
+        return $this->validateResetToken($validated['email'], $validated['token'])
+            ? view('auth.reset', ['email' => $validated['email'], 'token' => $validated['token']])
+            : view('errors.invalid-link');
     }
 
-    public function recover(Request $request)
+    public function recover(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'token' => 'required',
@@ -50,19 +51,25 @@ class PasswordRecoverController extends Controller
         return redirect()->route('login')->withSuccess('Password reset successfully!');
     }
 
-    private function validateResetToken(string $email, string $token)
+    private function validateResetToken(string $email, string $token): bool
     {
         $resetEntry = DB::table('password_resets')->where('email', $email)->first();
 
-        if (!$resetEntry || !Hash::check($token, $resetEntry->token)) {
-            return false;
-        }
+        // TODO:: recheck
+        // if (
+        //     !$resetEntry ||
+        //     !Hash::check($token, $resetEntry->token) ||
+        //     Carbon::now()->diffInMinutes(Carbon::parse($resetEntry->created_at)) > 5
+        // ) {
+        //     return false;
+        // }
+        //
+        // return true;
 
-        $tokenCreatedTime = Carbon::parse($resetEntry->created_at);
-        if (Carbon::now()->diffInMinutes($tokenCreatedTime) > 5) {
-            return false;
-        }
-
-        return $resetEntry;
+        return (
+            $resetEntry &&
+            Hash::check($token, $resetEntry->token) &&
+            !Carbon::now()->diffInMinutes(Carbon::parse($resetEntry->created_at)) > 5
+        );
     }
 }

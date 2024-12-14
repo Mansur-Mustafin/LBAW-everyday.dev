@@ -23,11 +23,9 @@ class VoteController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        if ($voteType === 'PostVote') {
-            $vote->news_post_id = $validated['id'];
-        } else {
-            $vote->comment_id = $validated['id'];
-        }
+        $voteType === 'PostVote'
+            ? $vote->news_post_id = $validated['id']
+            : $vote->comment_id = $validated['id'];
 
         $vote->save();
 

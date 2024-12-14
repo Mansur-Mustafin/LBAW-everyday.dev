@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class, 'user_tag_subscribes', 'user_id', 'tag_id');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(NewsPost::class, 'author_id')->orderBy('created_at', 'desc');
+    }
+
     public function bookmarkedPosts()
     {
         return $this->belongsToMany(NewsPost::class, 'bookmarks', 'user_id', 'news_post_id');

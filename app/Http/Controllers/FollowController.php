@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\NotificationTypeEnum;
 use App\Models\Notification;
-use App\Models\User;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

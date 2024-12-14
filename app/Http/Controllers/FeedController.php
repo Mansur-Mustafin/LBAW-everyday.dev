@@ -40,6 +40,8 @@ class FeedController extends Controller
 
     public function getMyFeed(Request $request)
     {
+        // TODO:: check maybe has different variant
+        /** @var User $user */
         $user = Auth::user();
 
         $news_posts = NewsPost::query()
@@ -94,7 +96,7 @@ class FeedController extends Controller
         $baseUrl = route('api.tags.search', $tag_query);
 
         return view('pages.news', [
-            'title' => 'Tag Related Posts',
+            'title' => "$tag_query Related Posts",
             'baseUrl' => $baseUrl
         ]);
     }
@@ -105,6 +107,6 @@ class FeedController extends Controller
         $tag = Tag::where('name', $tag_query)->first();
 
         $news_posts = SearchController::getPostsByTag($tag);
-        return $this->news_post_page($news_posts, $request, ['tag' => $tag]);
+        return $this->news_post_page($news_posts, $request);
     }
 }

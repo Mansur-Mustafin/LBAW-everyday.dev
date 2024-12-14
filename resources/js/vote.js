@@ -2,11 +2,6 @@ import { redirectToLogin, sendAjaxRequest } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-// Removed due to calling all vote methods twice
-/* document.addEventListener('DOMContentLoaded', function () {
-    addVoteButtonBehaviour();
-}); */
-
 export function addVoteButtonBehaviour() {
   const voteContainers = document.querySelectorAll('.vote-container');
 
@@ -48,8 +43,6 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container) {
-  const url = '/vote';
-  const method = 'POST';
   const headers = {
     'Content-Type': 'application/json',
     'X-CSRF-TOKEN': csrfToken,
@@ -61,7 +54,7 @@ function submitVote(type, id, isUpvote, container) {
   });
 
   sendAjaxRequest(
-    url,
+    '/vote',
     (data) => {
       if (data.message === 'Saved') {
         container.dataset.voteId = data.vote_id;
@@ -69,18 +62,15 @@ function submitVote(type, id, isUpvote, container) {
         updateVoteUI(container, isUpvote, 'Saved');
       }
     },
-    method,
+    'POST',
     headers,
     body
   );
 }
 
 function removeVote(voteId, container) {
-  const url = `/vote/${voteId}`;
-  const method = 'DELETE';
-
   sendAjaxRequest(
-    url,
+    `/vote/${voteId}`,
     (data) => {
       if (data.message === 'Vote removed') {
         updateVoteUI(container, null, 'Vote removed');
@@ -88,13 +78,11 @@ function removeVote(voteId, container) {
         container.dataset.vote = '';
       }
     },
-    method
+    'DELETE'
   );
 }
 
 function updateVote(voteId, isUpvote, container) {
-  const url = `/vote/${voteId}`;
-  const method = 'PUT';
   const headers = {
     'Content-Type': 'application/json',
     'X-CSRF-TOKEN': csrfToken,
@@ -104,7 +92,7 @@ function updateVote(voteId, isUpvote, container) {
   });
 
   sendAjaxRequest(
-    url,
+    `/vote/${voteId}`,
     (data) => {
       if (data.message === 'Vote updated') {
         container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
@@ -112,7 +100,7 @@ function updateVote(voteId, isUpvote, container) {
         updateVoteUI(container, isUpvote, 'Vote updated');
       }
     },
-    method,
+    'PUT',
     headers,
     body
   );

@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-   public function show(Request $request)
+   public function show()
    {
       return view('pages.admin.admin', ['show' => 'tags']);
    }
 
-   public function showCreationForm(Request $request)
+   public function showCreationForm()
    {
       return view('pages.admin.create-tag');
    }
