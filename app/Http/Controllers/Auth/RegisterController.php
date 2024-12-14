@@ -20,8 +20,6 @@ class RegisterController extends Controller
     {
         $credentials = $request->validated();
 
-        dd($credentials);
-
         User::create($credentials);
 
         Auth::attempt([
