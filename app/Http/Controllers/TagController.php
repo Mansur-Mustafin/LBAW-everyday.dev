@@ -19,16 +19,14 @@ class TagController extends Controller
 
    public function store(Request $request)
    {
-      $credentials = $request->validate([
-         'name' => 'required|string|max:250'
+      $validated = $request->validate([
+         'name' => 'required|string|max:250|unique:tag,name'
+      ], [
+         'name.unique' => 'This tag name is already in use.',
       ]);
 
-      if (!Tag::where('name', $credentials['name'])->get()->isEmpty()) {
-         return redirect()->back()->withErrors('Tag already exists');
-      }
-
       Tag::create([
-         'name' => $credentials['name']
+         'name' => $validated['name']
       ]);
 
       return redirect()->route('admin.tags')
@@ -37,9 +35,14 @@ class TagController extends Controller
 
    public function destroy(Tag $tag)
    {
-      $tag->delete();
-      return response()->json([
-         "You have successfully delete $tag->name"
-      ]);
+      try {
+         $tag->delete();
+         return response()->json([
+            "You have successfully delete $tag->name"
+         ]);
+      } catch (\Exception $e) {
+         // TODO: do we handle this in front?
+         return response()->json(['success' => false]);
+      }
    }
 }
