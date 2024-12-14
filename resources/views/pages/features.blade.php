@@ -13,7 +13,7 @@
             <div>
                 <h2 class="text-xl font-semibold text-purple-700">1. Community-Driven News Feed</h2>
                 <p class="text-gray-400 mt-2">
-                    everyday.dev provides a platform where developers can share, discuss, and curate industry news, enhanced with AI-driven personalization.
+                    Everyday.dev provides a platform where developers can share, discuss, and curate industry news.
                 </p>
                 <img src="{{ asset('assets/community.jpg') }}" alt="Community-Driven News Feed" class="mt-4 rounded-md shadow-md">
             </div>
@@ -66,7 +66,7 @@
             <div>
                 <h2 class="text-xl font-semibold text-purple-700">8. Tag Management</h2>
                 <p class="text-gray-400 mt-2">
-                    Tags organize news items, with admins managing their creation and editing for optimal user experience.
+                    Tags organize news items, with admins managing their creation, editing, and deletion to ensure an optimal user experience. Authenticated users can follow tags and/or propose new ones, fostering community engagement and content curation.
                 </p>
                 <img src="{{ asset('assets/tag.jpg') }}" alt="Tag" class="mt-4 rounded-md shadow-md w-full">
             </div>
@@ -87,17 +87,24 @@
             </div>
 
             <div>
-                <h2 class="text-xl font-semibold text-purple-700">11. Comments and Votes</h2>
+                <h2 cclass="text-xl font-semibold text-purple-700">11. News Items</h2>
                 <p class="text-gray-400 mt-2">
-                    Engage with the community by commenting on or voting for news items, fostering meaningful discussions.
+                    A news item is a user-submitted update in the tech world, featuring details like the author, publication date, comments, and votes, encouraging community engagement.
                 </p>
-                <img src="{{ asset('assets/comment.jpg') }}" alt="Oauth" class="mt-4 rounded-md shadow-md">
             </div>
 
             <div>
-                <h2 class="text-xl font-semibold text-purple-700">12. Appeals for Blocked Users</h2>
+                <h2 class="text-xl font-semibold text-purple-700">12. Comments and Votes</h2>
                 <p class="text-gray-400 mt-2">
-                    Blocked users can appeal to regain access, ensuring fairness and transparency in moderation decisions.
+                    Engage with the community by commenting on or voting for news items, fostering meaningful discussions.
+                </p>
+                <img src="{{ asset('assets/comment.jpg') }}" alt="Comments" class="mt-4 rounded-md shadow-md">
+            </div>
+
+            <div>
+                <h2 cclass="text-xl font-semibold text-purple-700">13. Blocked User</h2>
+                <p class="text-gray-400 mt-2">
+                    Blocked Users are users which have their account blocked. They can't access their personal information, and have to appeal for their account to be unblocked.
                 </p>
             </div>
         </div>

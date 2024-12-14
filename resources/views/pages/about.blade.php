@@ -6,7 +6,7 @@
     <section class="flex flex-col w-full laptop:w-[45rem] px-10 py-12 border-x border-gray-700">
         <h1 class="text-2xl font-bold text-purple-700">About Us</h1>
         <p class="mt-7 text-gray-400 leading-relaxed">
-            Everyday.dev is a platform dedicated to developers, providing a comprehensive suite of tools, resources, and learning opportunities to help you excel in your career. From insightful articles to in-depth tutorials, we are committed to making your journey as a developer productive and enjoyable.
+            Everyday.dev is a platform where developers and tech enthusiasts come together to learn, collaborate, and share knowledge, fostering a dynamic and thriving community. It empowers developers to stay on top of industry trends, sharpen their skills, and accelerate their growth through continuous learning and collaboration.
         </p>
 
         <div class="flex flex-col laptop:flex-row items-center gap-6 mt-12">
