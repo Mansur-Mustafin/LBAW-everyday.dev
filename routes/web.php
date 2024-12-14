@@ -101,6 +101,7 @@ Route::middleware(['auth','blocked'])->controller(UserController::class)->group(
     Route::get('/users/{user}/upvotes', 'showUserUpvotes')->name('user.upvotes');
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
+    Route::put('/users/{user}/anonymize','deleteUser');
 });
 
 Route::middleware(['auth','blocked'])->controller(FollowController::class)->group(function () {
