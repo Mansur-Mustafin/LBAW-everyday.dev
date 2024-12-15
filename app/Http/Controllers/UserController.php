@@ -10,6 +10,9 @@ use App\Models\Vote;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -90,5 +93,25 @@ class UserController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
+    }
+
+    public function destroy(User $user, Request $request)
+    {
+        $this->authorize('delete',$user);
+        $user->delete();
+
+        if($request->ajax()) {
+            return response()->json([
+                'success'=>'You have successfully deleted a user!'
+            ]);
+        }
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('news.recent')
+            ->withSuccess('You have deleted your account successfully!');
     }
 }
