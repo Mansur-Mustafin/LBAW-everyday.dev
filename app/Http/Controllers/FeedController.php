@@ -24,7 +24,8 @@ class FeedController extends Controller
 
     public function getRecentFeed(Request $request)
     {
-        $news_posts = NewsPost::query();
+        $news_posts = NewsPost::query()
+            ->where('is_omitted','!=','true');
         return $this->news_post_page($news_posts, $request);
     }
 
@@ -48,8 +49,8 @@ class FeedController extends Controller
             ->whereIn('author_id', $user->following()->pluck('id'))
             ->orWhereHas('tags', function ($query) use ($user) {
                 $query->whereIn('id', $user->tags()->pluck('id'));
-            });
-
+            })
+            ->where('is_omitted','!=',true);
         return $this->news_post_page($news_posts, $request);
     }
 
@@ -66,7 +67,8 @@ class FeedController extends Controller
     public function getBookmarkFeed(Request $request)
     {
         $user = Auth::user();
-        $newsPosts = $user->bookmarkedPosts()->getQuery();
+        $newsPosts = $user->bookmarkedPosts()->getQuery()
+            ->where('is_omitted','!=','true');
 
         return $this->news_post_page($newsPosts, $request);
     }

@@ -17,6 +17,7 @@ class SearchController extends Controller
     public static function getPosts(string $searchQuery): Builder
     {
         return NewsPost::query()
+            ->where('is_omitted','!=','true')
             ->join('user', 'user.id', '=', "news_post.id")
             ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\',?) OR title=?)', [$searchQuery, $searchQuery])
             ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC', [$searchQuery]);
@@ -25,6 +26,7 @@ class SearchController extends Controller
     public static function getPostsByTag(Tag $tag): Builder
     {
         return NewsPost::query()
+            ->where('is_omitted','!=','true')
             ->join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
     }

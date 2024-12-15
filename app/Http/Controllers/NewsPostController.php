@@ -39,13 +39,17 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function show(NewsPost $newsPost): View|Factory
+    public function show(NewsPost $newsPost): View|Factory|RedirectResponse
     {
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
         $this->preparePostForUser($newsPost);
         $this->processComments($newsPost->comments, $user);
+
+        if($newsPost->is_omitted && !$user->is_admin) {
+            return redirect('home');
+        }
 
         return view('pages.post', [
             'post' => $newsPost,
@@ -140,6 +144,26 @@ class NewsPostController extends Controller
 
         return redirect()->route('news.recent')
             ->withSuccess('Post deleted successfully!');
+    }
+
+    public function omit(NewsPost $newsPost)
+    {
+        $newsPost->update([
+            'is_omitted'=>"true"
+        ]);
+
+        return redirect()->route('news.show',['news_post'=>$newsPost->id])
+            ->with('message','Post omitted successfully!');
+    }
+
+    public function unomit(NewsPost $newsPost)
+    {
+        $newsPost->update([
+            'is_omitted'=>'false'
+        ]);
+
+        return redirect()->route('news.show',['news_post'=>$newsPost->id])
+            ->with('message','Post un-omitted successfully!');
     }
 
     private function preparePostForUser(NewsPost $newsPost): void

@@ -85,6 +85,10 @@ Route::prefix('news')->controller(NewsPostController::class)->group(function () 
         Route::put('/{news_post}', 'update')->name('news.update');
         Route::delete('/{news_post}', 'destroy');
     });
+    Route::middleware('admin')->group(function () {
+        route::put('/{news_post}/omit','omit')->name('news.omit');
+        route::put('/{news_post}/unomit','unomit')->name('news.unomit');
+    });
     Route::get('/{news_post}', 'show')->name('news.show');
     Route::get('/{news_post}/comment/{comment}', 'showSingleThread');
 });
