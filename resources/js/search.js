@@ -112,7 +112,6 @@ const buildPost = (post) => {
 
 const buildTag = (tag) => {
   const url = `${baseUrl}/news/tags/${tag.name}`;
-  console.log(tag.name)
   return `
         <div class="p-2 hover:bg-gray-700">
             <a href="${url}" class="flex items-center">
@@ -131,7 +130,6 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
   const url = `${baseUrl}/users/${user.id}/posts`;
   return `
-    ${!user.username.includes('deleted_user') ? `
       <div class="p-2 hover:bg-gray-700">
           <a href="${url}" class="flex items-center">
               <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
@@ -145,6 +143,5 @@ const buildUser = (user) => {
               </div>
           </a>
       </div>
-      ` : ''}
-  `;
+      `
 };

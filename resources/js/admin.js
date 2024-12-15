@@ -73,7 +73,6 @@ const deleteUser = async (userId,baseUrl) => {
     url,
     (data) => {
       console.log(data)
-      window.location =`${baseUrl}/admin` 
     },
     'PUT'
   )
@@ -112,7 +111,7 @@ const buildUserCard = (user) => {
       <div class="flex justify-between">
         <div class="flex-grow">
           <a href="${pageUrl}" class="text-md tablet:text-2xl flex place items-center gap-1">
-            <span class="max-w-32 truncate">${user.public_name}</span>
+            <span class="max-w-32 tablet:max-w-60 truncate ">${user.public_name}</span>
             ${user.status == 'blocked' ? blockedBadge : ''}    
             ${user.status == 'pending' ? pendingBadge : ''}    
             ${user.is_admin == true ? adminBadge : ''}
@@ -190,27 +189,17 @@ const buildTagProposalCard = (tagProposal) => {
           </p>
         </div>
         <div class="flex flex-col tablet:flex-row">
-          ${
-            !tagProposal.is_resolved 
-            ? `
-              <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
-                  <path d="M20 6 9 17l-5-5"/>
-                </svg>
-              </a>  
-              <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
-                <path d="M18 6 6 18"/>
-                  <path d="m6 6 12 12"/>
-                </svg>
-              </a>  
-            `
-            : `
-              <p class="place-content-center m-3">
-              Accepted
-              </p>
-            `
-          }
+          <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </a>  
+          <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+            <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a>  
         </div>
       </div>
       `;
@@ -229,27 +218,17 @@ const buildUnblockAppealCard = (unblockAppeal) => {
           <p class="">${unblockAppeal.description}</p>
         </div>
         <div class="flex flex-col tablet:flex-row">
-          ${
-            !unblockAppeal.is_resolved 
-            ? `
-              <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
-                  <path d="M20 6 9 17l-5-5"/>
-                </svg>
-              </a>  
-              <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
-                  <path d="M18 6 6 18"/>
-                  <path d="m6 6 12 12"/>
-                </svg>
-              </a>  
-            `
-            : `
-              <p class="place-content-center m-3">
-              Accepted
-              </p>
-            `
-          }
+          <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </a>  
+          <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a>  
         </div>
       </div>
   `;
@@ -277,6 +256,7 @@ const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const userId = targetDelete.id.split('-delete-button')[0]
       deleteUser(userId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }

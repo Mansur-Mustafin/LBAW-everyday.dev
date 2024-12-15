@@ -12,7 +12,7 @@
       </path>
     </svg>
     <input data-url="{{ url('') }}" id="admin-search-bar" type="text"
-      class="laptop:h-full laptop:p-2 outline-none rounded-t laptop:w-full text-lg laptop:text-xl">
+      class="laptop:h-full laptop:p-2 outline-none rounded-t w-full text-lg laptop:text-xl">
   </div>
 
   @if ($show == 'users')
