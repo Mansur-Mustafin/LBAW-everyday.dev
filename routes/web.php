@@ -22,6 +22,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -180,6 +181,10 @@ Route::controller(UnblockAppealController::class)->group(function () {
     Route::get('admin/unblock_appeals', 'show')->middleware('admin')->name('admin.unblock_appeals');
     Route::put('admin/unblock_appeals/accept/{unblock_appeal}', 'accept')->middleware('admin');
     Route::delete('admin/unblock_appeals/delete/{unblock_appeal}', 'destroy')->middleware('admin');
+});
+
+Route::controller(ReportController::class)->group(function (){
+    Route::get('admin/reports', 'show')->middleware('admin')->name('admin.reports');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(NotificationController::class)->group(function () {

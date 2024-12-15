@@ -219,6 +219,17 @@ const buildUnblockAppealCard = (unblockAppeal) => {
   `;
 }
 
+const buildReportCard = (report) => {
+  //const pageUrl = `${baseUrl}/users/${report.id}/posts`;
+  return `
+      <div id="${report.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+        <div class="flex flex-col flex-grow ">
+          <p class="">${report.description}</p>
+        </div>
+      </div>
+  `;
+}
+
 // Card Button Behaviours
 const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
@@ -366,6 +377,7 @@ const usersDiv          = document.getElementById('admin-search-users-results')
 const tagsDiv           = document.getElementById('admin-search-tags-results')
 const tagProposalsDiv   = document.getElementById('admin-search-tag-proposals-results')
 const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results')
+const reportsDiv        = document.getElementById('admin-search-reports-results')
 
 const reloadData = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.innerHTML = '';
@@ -402,3 +414,9 @@ if(unblockAppealsDiv) {
   addInfinitePageBehaviour(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
   addUnblockAppealButtons(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
 }
+if(reportsDiv) {
+  console.log(reportsDiv)
+  const baseQuery = baseUrl+'/api/search/reports/'
+  addInfinitePageBehaviour(baseQuery,buildReportCard,reportsDiv)
+}
+

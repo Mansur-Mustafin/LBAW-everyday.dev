@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
 use App\Models\User;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -97,5 +98,16 @@ class SearchController extends Controller
             ->whereRaw("LOWER(username) like ?", [$searchQuery]);
 
         return $this->paginate($unblock_appeals, $request, 10);
+    }
+
+    public function searchReports(Request $request)
+    {
+        $searchQuery = "%" . strtolower($request->search) . "%";
+
+        $reports = Report::select('user.*', 'report.*')
+            ->leftJoin('user', 'user.id', '=', 'report.reporter_id')
+            ->whereRaw("LOWER(username) like ?", [$searchQuery]);
+
+        return $this->paginate($reports, $request, 10);
     }
 }

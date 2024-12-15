@@ -43,6 +43,10 @@
     <div id="admin-search-unblock-appeals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
   @endif
 
+  @if($show == 'reports')
+    <div id="admin-search-reports-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+  @endif
+
   <div id="loading-icon" class="my-6">
     <img class="w-12 h-12 mx-auto" src="{{url('/assets/loading-icon.gif')}}" alt="Loading...">
   </div>
