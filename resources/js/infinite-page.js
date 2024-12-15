@@ -42,7 +42,6 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
 const postContainer = document.getElementById('news-posts-container');
 
 if (postContainer) {
-  const footer = document.getElementById('profile-footer');
   const filter = document.getElementById('filter');
   const sortByPopup = document.getElementById('sort-popup');
   const newsTitle = document.getElementById('news-page-title');
@@ -159,7 +158,6 @@ if (postContainer) {
       }
       if (page > lastPage) {
         loadingIcon?.classList.add('hidden');
-        footer?.classList.remove('hidden');
       }
     }
   });

@@ -2,16 +2,18 @@
 
 @section('content')
 
-<section class="flex w-full h-full laptop:m-auto laptop:max-w-[64rem]">
-    <section class="flex flex-col w-full laptop:w-[45rem] px-10 py-12 border-x border-gray-700">
-        <h1 class="text-2xl font-bold text-purple-700">About Us</h1>
+<section
+    class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
+    <section class="flex flex-col w-full laptop:w-[50.5rem] px-10 py-12 border-x border-gray-700">
+
+        <h2 class="text-4xl font-bold  mb-4">About Us</h2>
         <p class="mt-7 text-gray-400 leading-relaxed">
-            Everyday.dev is a platform where developers and tech enthusiasts come together to learn, collaborate, and share knowledge, fostering a dynamic and thriving community. It empowers developers to stay on top of industry trends, sharpen their skills, and accelerate their growth through continuous learning and collaboration.
+            <span class="font-bold">everyday.dev</span> is a community-driven platform designed to revolutionize how developers and tech enthusiasts share, discuss, and curate industry news. It will empower developers to stay updated with industry trends, enhance their skills, and streamline their learning.
         </p>
 
         <div class="flex flex-col laptop:flex-row items-center gap-6 mt-12">
             <div class="laptop:w-1/2">
-                <blockquote class="mt-6 p-4 border-l-4 border-purple-700 text-gray-300 italic bg-gray-800 rounded-md">
+                <blockquote class="mt-6 p-4 border-l-4 border-purple-500 text-gray-300 italic bg-gray-800 rounded-md">
                     "Empowering developers to build the future, one line of code at a time."
                 </blockquote>
             </div>
@@ -21,14 +23,35 @@
             </div>
         </div>
 
-        <h2 class="mt-10 text-2xl font-bold text-purple-700">Team Members</h2>
+        <h2 class="mt-10 text-2xl font-bold text-purple-500">Team Members</h2>
 
-        <div class="flex gap-6 mt-10 ml-2">
-            <img src="{{ asset('assets/Afonso.jpg') }}" alt="Team Member 1" class="w-16 h-16 rounded-full shadow-md">
-            <img src="{{ asset('assets/Goiana.jpg') }}" alt="Team Member 2" class="w-16 h-16 rounded-full shadow-md">
-            <img src="{{ asset('assets/Mansur.jpg') }}" alt="Team Member 3" class="w-16 h-16 rounded-full shadow-md">
-            <img src="{{ asset('assets/Rubem.png') }}" alt="Team Member 4" class="w-16 h-16 rounded-full shadow-md">
+                <div class="flex flex-col tablet:flex-row items-center space-between mt-5">
+            <div class="flex flex-col items-center grow">
+                <img src="{{ asset('assets/Afonso.jpg') }}" alt="Team Member 2" class="w-20 h-20 rounded-full shadow-md mb-5">
+                <p>
+                    Afonso Moura
+                </p>
+            </div>
+            <div class="flex flex-col items-center grow">
+                <img src="{{ asset('assets/Goiana.jpg') }}" alt="Team Member 2" class="w-20 h-20 rounded-full shadow-md mb-5">
+                <p>
+                    Diogo Goiana
+                </p>
+            </div>
+            <div class="flex flex-col items-center grow">
+                <img src="{{ asset('assets/Mansur.jpg') }}" alt="Team Member 3" class="w-20 h-20 rounded-full shadow-md mb-5">
+                <p>
+                    Mansur Mustafin
+                </p>
+            </div>
+            <div class="flex flex-col items-center grow">
+                <img src="{{ asset('assets/Rubem.png') }}" alt="Team Member 4" class="w-20 h-20 rounded-full shadow-md mb-5">
+                <p>
+                    Rubem Neto
+                </p>
+            </div>
         </div>
+
     </section>
 </section>
 
