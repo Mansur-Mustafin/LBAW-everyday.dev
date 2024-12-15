@@ -107,18 +107,27 @@
         <div class="p-4 flex flex-col gap-2 justify-center">
             @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/tag_proposal/create') }}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Create tag Proposal</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Create tag Proposal</a>
             @endif
             @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Edit Profile</a>
             @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
                     class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @endif
             @if (Auth::check() and (Auth::id() == $user->id))
+                <form action="{{ url('/users/' . $user->id . '/anonymize') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center w-full">
+                        Delete My Account
+                    </button>
+                </form>
+            @endif
+            @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/logout') }}"
-                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1">Logout</a>
+                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1 text-center">Logout</a>
             @endif
         </div>
 
