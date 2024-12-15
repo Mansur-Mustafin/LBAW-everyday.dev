@@ -16,17 +16,12 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
-<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\PageController;
-=======
->>>>>>> 2eb646cd0253755cf06cae79a997f76ce66c588a
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 
