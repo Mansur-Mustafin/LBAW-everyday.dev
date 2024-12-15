@@ -15,6 +15,14 @@ class UserPolicy
     }
 
     /**
+     * Deletes model.
+     */
+    public function delete(User $authUser,User $user) : bool
+    {
+        return $authUser->id === $user->id || $authUser->is_admin;
+    }
+
+    /**
      * Determine whether the user can follow another user.
      */
     public function follow(User $currentUser, User $userToFollow)
@@ -22,6 +30,7 @@ class UserPolicy
         return $currentUser->id !== $userToFollow->id
             && !$currentUser->following()->where('followed_id', $userToFollow->id)->exists();
     }
+
 
     /**
      * Determine whether the user can unfollow another user.

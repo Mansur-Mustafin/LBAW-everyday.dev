@@ -68,7 +68,7 @@ const unblockUser = async (userId,baseUrl) => {
 }
 
 const deleteUser = async (userId,baseUrl) => {
-  const url = `${baseUrl}/admin/users/${userId}/anonymize`
+  const url = `${baseUrl}/users/${userId}/anonymize`
   sendAjaxRequest(
     url,
     (data) => {

@@ -95,25 +95,16 @@ class UserController extends Controller
             ->withSuccess('You have successfully updated!');
     }
 
-    public function deleteUser(User $user, Request $request)
-    {   
-        $user->update([
-            'username' => 'deleted_user_' . $user->id,
-            'public_name' => 'Anonymous',
-            'email' => 'deleted_' . $user->id . '@example.com',
-            'password' => '', 
-            'status' => 'deleted',
-        ]);
+    public function destroy(User $user, Request $request)
+    {
+        $this->authorize('delete',$user);
+        $user->delete();
 
-        DB::table('user_tag_subscribes')->where('user_id', $user->id)->delete();
-        DB::table('notification_settings')->where('user_id', $user->id)->delete();
-        DB::table('follows')->where('follower_id', $user->id)->orWhere('followed_id', $user->id)->delete();
-        DB::table('bookmarks')->where('user_id', $user->id)->delete();
-
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
+        if($request->ajax()) {
+            return response()->json([
+                'success'=>'You have successfully deleted a user!'
+            ]);
+        }
         return redirect()->route('news.recent')
             ->withSuccess('You have deleted your account successfully!');
     }

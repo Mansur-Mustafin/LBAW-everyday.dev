@@ -735,23 +735,21 @@ EXECUTE FUNCTION adjust_comment_votes();
 CREATE OR REPLACE FUNCTION anonymize_user_on_status_change()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF TG_OP = 'UPDATE' AND NEW.status = 'deleted' THEN
-        NEW.username := CONCAT('deleted_user_', OLD.id);
-        NEW.public_name := 'Anonymous';
-        NEW.email := CONCAT('deleted_', OLD.id, '@example.com');
-        NEW.password := '';
-        
-        DELETE FROM user_tag_subscribes WHERE user_id = OLD.id;
-        DELETE FROM notification_settings WHERE user_id = OLD.id;
-        DELETE FROM follows WHERE follower_id = OLD.id OR followed_id = OLD.id;
-        DELETE FROM bookmarks WHERE user_id = OLD.id;
-    END IF;
+    NEW.username := CONCAT('deleted_user_', OLD.id);
+    NEW.public_name := 'Anonymous';
+    NEW.email := CONCAT('deleted_', OLD.id, '@example.com');
+    NEW.password := '';
+    
+    DELETE FROM user_tag_subscribes WHERE user_id = OLD.id;
+    DELETE FROM notification_settings WHERE user_id = OLD.id;
+    DELETE FROM follows WHERE follower_id = OLD.id OR followed_id = OLD.id;
+    DELETE FROM bookmarks WHERE user_id = OLD.id;
 
-    RETURN NEW;
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_anonymize_user_on_status_change
-BEFORE UPDATE ON "user"
+BEFORE DELETE ON "user"
 FOR EACH ROW
 EXECUTE FUNCTION anonymize_user_on_status_change();
