@@ -153,6 +153,7 @@ Route::prefix('/api/search')->controller(SearchController::class)->group(functio
     Route::get('/tags/{search?}', 'searchTags');
     Route::get('/tag_proposals/{search?}', 'searchTagProposals');
     Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
+    Route::get('/reports/{search?}', 'searchReports');
     Route::get('/users/{search?}', 'searchUser')->middleware('admin');
     Route::get('/', 'search');    // TODO: better pass api/search?query=<>
 });
