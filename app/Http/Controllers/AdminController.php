@@ -3,80 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
+use App\Http\Requests\Auth\AdminRegisterRequest;
+use App\Http\Requests\User\AdminUpdateRequest;
 use App\Models\User;
-use App\Models\Tag;
-use App\Models\TagProposal;
-use App\Models\UnblockAppeal;
 use App\Services\FileService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
-    public function showUsers(Request $request)
+    public function showUsers()
     {
-        return view('pages.admin.admin',['show'=> 'users']);
+        return view('pages.admin.admin', ['show' => 'users']);
     }
 
-    public function showEditForm(User $user, Request $request)
+    public function showEditForm(User $user)
     {
         return view('pages.admin.edit-user', ['user' => $user]);
     }
 
-    public function showCreateForm(Request $request)
+    public function showCreateForm()
     {
         return view('pages.admin.create-user');
     }
 
-    public function register(Request $request)
+    public function register(AdminRegisterRequest $request)
     {
-        $credentials = $request->validate([
-            'public_name' => 'required|string|max:250',
-            'username' => 'required|string|max:40',
-            'email' => 'required|email|max:250|unique:user',
-            'password' => 'required|min:4',
-            'reputation' => 'required|integer',
-            'is_admin' => 'required|string',
-        ]);
+        $credentials = $request->validated();
 
-        User::create([
-            'username' => $credentials['username'],
-            'public_name' => $credentials['public_name'],
-            'email' => $credentials['email'],
-            'password' => Hash::make($credentials['password']),
-            'reputation' => $credentials['reputation'],
-            'is_admin' => $credentials['is_admin']
-        ]);
+        User::create($credentials);
 
         return redirect()->route('admin')
             ->withSuccess('You have successfully created an account!');
     }
 
-    public function update(User $user, Request $request)
+    public function update(User $user, AdminUpdateRequest $request)
     {
         $this->authorize('update', $user);
-        
-        $validated = $request->validate([
-            'public_name' => 'required|string|max:250',
-            'username' => [
-                'required',
-                'string',
-                'max:40',
-                Rule::unique('user')->ignore($user->id),
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:250',
-                Rule::unique('user')->ignore($user->id),
-            ],
-            'reputation' => 'nullable',
-            'is_admin' => 'required|string',
-            'new_password' => 'nullable|string|min:4',
-            'remove_image' => 'required|string',
-            'adm_password' => 'nullable|string'
-        ]);
+
+        $validated = $request->validated();
 
         if ($validated['is_admin'] == 'false' && $user->is_admin) { // case demote admin
             $adminPassword = env('ADMIN_SECRET_PASSWORD');
@@ -84,7 +48,7 @@ class AdminController extends Controller
             if (!Hash::check($validated['adm_password'], $adminPassword)) {
                 return redirect()->back()->withErrors(['adm_password' => 'The administrative password is incorrect.']);
             }
-        } 
+        }
 
         $user->update([
             'reputation' => $validated['reputation'],
@@ -110,25 +74,25 @@ class AdminController extends Controller
             ->withSuccess('You have successfully updated!');
     }
 
-    public function blockUser(User $user,Request $request)
+    public function blockUser(User $user)
     {
         $user->update([
-            'status'=>'blocked'
+            'status' => 'blocked'
         ]);
 
         return response()->json([
-            'sucess'=>'You have successfully banned a user'
+            'sucess' => 'You have successfully banned a user'
         ]);
     }
 
-    public function unblockUser(User $user,Request $request)
+    public function unblockUser(User $user)
     {
         $user->update([
-            'status'=>'active'
+            'status' => 'active'
         ]);
 
         return response()->json([
-            'sucess'=>'You have successfully unbanned a user'
+            'sucess' => 'You have successfully unbanned a user'
         ]);
     }
 }
