@@ -43,7 +43,7 @@ class SearchController extends Controller
             ->get();
 
         $users = User::query()
-            ->whereRaw('LOWER(username) LIKE ? OR LOWER(public_name) LIKE ?', [$query, $query])
+            ->whereRaw("LOWER(username) LIKE ? OR LOWER(public_name) LIKE ? AND status <> 'deleted'", [$query, $query])
             ->limit(3)
             ->get()
             ->unique('id');
