@@ -214,7 +214,7 @@
             </div>
             <div class="self-end">
                 <p class="text-lg">The content is private</p>
-                <p class="text-gray-400 text-lg">Follow the author to see post's content.</p>
+                <p class="text-gray-400 text-lg">Signup or login to see post's content.</p>
             </div>
         </div>
         @endcannot
