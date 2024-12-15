@@ -4,28 +4,31 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordRecoverController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BlockedController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
-use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\SearchController;
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\PageController;
+=======
+>>>>>>> 2eb646cd0253755cf06cae79a997f76ce66c588a
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
-// use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +44,6 @@ use Illuminate\Support\Facades\Route;
 // Redirect root to /home
 Route::redirect('/', '/home')->name('home');
 Route::redirect('/home', '/news/recent-feed');
-
-Route::controller(BlockedController::class)->group(function () {
-    Route::get('/blocked', 'show')->name('blocked');
-});
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -119,30 +118,31 @@ Route::middleware(['auth', 'blocked'])->controller(UserController::class)->group
 });
 
 Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->group(function () {
-    Route::post('/users/{user}/follow', 'followUser')->name('users.follow');
-    Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('users.unfollow');
-    Route::get('users/{user}/followers', 'showFollowers')->name('users.followers');
-    Route::get('users/{user}/following', 'showFollowing')->name('users.following');
+    // User
+    Route::post('/users/{user}/follow', 'followUser')->name('user.follow');
+    Route::delete('/users/{user}/unfollow', 'unfollowUser')->name('user.unfollow');
+
+    Route::get('users/{user}/followers', 'showFollowers')->name('user.followers');
+    Route::get('users/{user}/following', 'showFollowing')->name('user.following');
+
     Route::get('api/users/{user}/followers', 'getFollowers');
     Route::get('api/users/{user}/following', 'getFollowing');
 
+    // Tag
+    Route::post('tag/store/{tag}', 'followTag')->name('user.follow_tag');
+    Route::delete('tag/delete/{tag}', 'unfollowTag')->name('user.unfollow_tag');
 });
 
-Route::middleware(['auth', 'blocked'])->controller(TagController::class)->group(function () {
-    Route::post('tag/store/{tag}', 'store')->name('user.follow_tag');
-    Route::delete('tag/delete/{tag}', 'delete')->name('user.unfollow_tag');
-    Route::get('api/tags', 'getFollowingTags');
-    Route::get('api/tags/all', 'getTags');
-
-    Route::post('admin/tags/create', 'store')->middleware('admin');
-    Route::delete('admin/tags/delete/{tag}', 'destroy')->middleware('admin');
-    Route::get('admin/tags', 'show')->name('admin.tags')->middleware('admin');
-    Route::get('admin/tags/create', 'showCreationForm')->middleware('admin');
+Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagController::class)->group(function () {
+    Route::get('/', 'show')->name('admin.tags');
+    Route::get('/create', 'showCreationForm');
+    Route::post('/create', 'store');
+    Route::delete('/delete/{tag}', 'destroy');
 });
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'showUsers')->name('admin');
+    Route::get('/', 'showUsers')->name('admin');    // TODO: criar realmente um dashboard, com estatistica?
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
@@ -152,21 +152,13 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::put('/users/{user}/unblock', 'unblockUser');
 });
 
-Route::controller(SearchController::class)->group(function () {
-    Route::get('api/search/tags', 'searchTags');
-    Route::get('api/search/tags/{search}', 'searchTags');
-
-    Route::get('api/search/tag_proposals', 'searchTagProposals');
-    Route::get('api/search/tag_proposals/{search}', 'searchTagProposals');
-
-    Route::get('api/search/unblock_appeals', 'searchUnblockAppeals');
-    Route::get('api/search/unblock_appeals/{search}', 'searchUnblockAppeals');
-
-    Route::get('api/search/users', 'searchUser')->middleware('admin');
-    Route::get('api/search/users/{search}', 'searchUser')->middleware('admin');
-
-
-    Route::get('api/search/{search}', 'search');
+// TODO:: add prefix
+Route::prefix('/api/search')->controller(SearchController::class)->group(function () {
+    Route::get('/tags/{search?}', 'searchTags');
+    Route::get('/tag_proposals/{search?}', 'searchTagProposals');
+    Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
+    Route::get('/users/{search?}', 'searchUser')->middleware('admin');
+    Route::get('/', 'search');    // TODO: better pass api/search?query=<>
 });
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {
@@ -178,15 +170,9 @@ Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkC
     Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
 });
 
-Route::prefix('bookmark')->middleware(['auth', 'blocked'])->controller(BookmarkController::class)->group(function () {
-    Route::post('/', 'store')->name('bookmark.store');
-    Route::delete('/{post}', 'destroy')->name('bookmark.destroy');
-});
-
 Route::middleware(['auth', 'blocked'])->controller(TagProposalController::class)->group(function () {
     Route::get('tag_proposal/create', 'showCreationForm');
     Route::post('tag_proposals/create', 'store');
-    Route::get('/api/tag_proposals/all', 'showAll');
 
     Route::get('admin/tag_proposals', 'show')->middleware('admin')->name('admin.tag_proposals');
     Route::put('admin/tag_proposals/accept/{tag_proposal}', 'accept')->middleware('admin');

@@ -36,11 +36,9 @@ class MailController extends Controller
             ['token' => Hash::make($token), 'created_at' => now()]
         );
 
-        $resetLink = route('recover.reset', ['token' => $token, 'email' => $request->email]);
-
         $mailData = [
             'email' => $request->email,
-            'resetLink' => $resetLink,
+            'resetLink' => route('recover.reset', ['token' => $token, 'email' => $request->email]),
             'name' => $user->public_name,
         ];
 

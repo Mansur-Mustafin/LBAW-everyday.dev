@@ -10,10 +10,6 @@
             <h1 class="text-3xl font-bold">{{ $post->title }}</h1>
             <div class="flex flex-wrap mt-5 gap-2" id="tags-section" data-url="{{url('')}}">
                 @foreach ($post->tags as $tag)
-
-                    <span
-                        class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md">#{{ $tag->name }}</span>
-
                     <div class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md flex gap-2">
                         #{{ $tag->name }}
                         @if(Auth::check())
@@ -25,7 +21,6 @@
                                 class="{{Auth::user()->tags->contains($tag) ? 'hidden' : ''}}">+</a>
                         @endif
                     </div>
-
                 @endforeach
             </div>
             @if (Auth::check())

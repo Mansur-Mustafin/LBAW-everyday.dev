@@ -3,39 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Models\NewsPost;
 use App\Models\User;
 use App\Models\Vote;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     use PaginationTrait;
 
-    public function userPosts(User $user, Request $request)
+    public function userPosts(User $user)
     {
-        $title = "{$user->public_name}'s Posts";
-
-        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.posts', $user->id), 'user' => $user]);
+        return view('pages.user', [
+            'title' => "{$user->public_name}'s Posts",
+            'baseUrl' => route('api.user.posts', $user->id),
+            'user' => $user
+        ]);
     }
 
     public function getUserPosts(User $user, Request $request)
     {
-        $news_posts = NewsPost::where('author_id', $user->id)
-            ->orderBy('created_at', 'desc');
-
-
-        return $this->news_post_page($news_posts, $request);
+        return $this->news_post_page($user->posts()->getQuery(), $request);
     }
 
-    public function userUpvotes(User $user, Request $request)
+    public function userUpvotes(User $user)
     {
-        $title = "{$user->public_name}'s Upvoted Posts";
-
-        return view('pages.user', ['title' => $title, 'baseUrl' => route('api.user.upvotes', $user->id), 'user' => $user]);
+        return view('pages.user', [
+            'title' => "{$user->public_name}'s Upvoted Posts",
+            'baseUrl' => route('api.user.upvotes', $user->id),
+            'user' => $user
+        ]);
     }
 
     public function getUserUpvotes(User $user, Request $request)
@@ -51,36 +51,18 @@ class UserController extends Controller
         return $this->news_post_page($news_posts, $request);
     }
 
-    public function showEditForm(User $user, Request $request)
+    public function showEditForm(User $user)
     {
         $this->authorize('update', $user);
 
         return view('pages.edit-user', ['user' => $user]);
     }
 
-    public function update(User $user, Request $request)
+    public function update(User $user, UserUpdateRequest $request)
     {
         $this->authorize('update', $user);
 
-        $validated = $request->validate([
-            'public_name' => 'required|string|max:250',
-            'username' => [
-                'required',
-                'string',
-                'max:40',
-                Rule::unique('user')->ignore($user->id),
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:250',
-                Rule::unique('user')->ignore($user->id),
-            ],
-            'reputation' => 'nullable',
-            'old_password' => 'nullable|string',
-            'new_password' => 'nullable|string|min:4|confirmed',
-            'remove_image' => 'required|string',
-        ]);
+        $validated = $request->validated();
 
         $user->update([
             'public_name' => $validated['public_name'],
@@ -101,7 +83,7 @@ class UserController extends Controller
                     return redirect()->back()->withErrors(['old_password' => 'The provided password does not match your current password.']);
                 }
             }
-    
+
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
         }

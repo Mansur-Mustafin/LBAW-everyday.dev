@@ -17,7 +17,7 @@
             <input data-url="{{ url('') }}" data-auth="{{ Auth::check() }}" id="search-bar" type="text"
                 class="bg-input outline-none w-full" placeholder="Type to search...">
         </div>
-        <div id="search-results" class="bg-input z-20 absolute laptop:w-96 desktop:w-96 w-80 rounded-b-xl"></div>
+        <div id="search-results" class="bg-input z-20 absolute laptop:w-80 desktop:w-96 w-80 rounded-b-xl"></div>
     </div>
 
     <div class="flex gap-2">
