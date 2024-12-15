@@ -79,7 +79,7 @@
 
                 <div class="mb-5">
                     <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
-                    <input type="text" name="title" id="title" value="{{ $post->title }}"
+                    <input type="text" name="title" id="title" value="{{ $post->title }}" placeholder="Post Title*"
                         class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
                 </div>
 
