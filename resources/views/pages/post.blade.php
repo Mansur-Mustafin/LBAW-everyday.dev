@@ -224,7 +224,7 @@
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
 
-        <div class="flex gap-2" id="edit-button">
+        <div class="flex flex-col gap-1" id="edit-button">
             @can('update', $post)
                 <div class="flex-1">
                     <button onclick="toggleEdit()"
@@ -243,6 +243,28 @@
                     </form>
                 </div>
             @endcan
+            @if (Auth::check() && Auth::user()->isAdmin())
+                @if(!$post->is_omitted) 
+                    <div class="flex-1">
+                        <form method="POST" action="/news/{{ $post->id }}/omit">
+                            @csrf
+                            @method('PUT')
+                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
+                                type="submit">Omit post</button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex-1">
+                        <form method="POST" action="/news/{{ $post->id }}/unomit">
+                            @csrf
+                            @method('PUT')
+                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
+                                type="submit">Un-Omit post</button>
+                        </form>
+                    </div>
+                @endif
+            @endif
+            <p>{{$post->is_omitted ? 'omitted' : 'not omitted'}}</p>
         </div>
 
         @can('update', $post)

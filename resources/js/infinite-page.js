@@ -112,6 +112,7 @@ if (postContainer) {
         loading = false;
         loadingIcon?.classList.add('hidden');
         if (data.news_posts == '') {
+          console.log(data)
           return;
         }
         postContainer.innerHTML += data.news_posts;

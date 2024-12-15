@@ -1,7 +1,7 @@
 <div class="p-4 rounded shadow-sm flex flex-col justify-between">
-    <img src="{{ url($news->titleImage->url) }}" alt="" class="w-full h-48 object-cover mb-2 rounded-md">
 
     <a href="{{ url('/news/' . $news->id) }}">
+        <img src="{{ url($news->titleImage->url) }}" alt="" class="w-full h-48 object-cover mb-2 rounded-md">
         <h3 class="text-lg font-bold">{{ $news->title }}</h3>
     </a>
 
@@ -76,7 +76,7 @@
                 <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
             </div>
             @if ($news->for_followers)
-                <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
+                <span class="bg-purple-700 text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
             @endif
         </div>
         
