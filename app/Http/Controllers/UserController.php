@@ -105,6 +105,12 @@ class UserController extends Controller
                 'success'=>'You have successfully deleted a user!'
             ]);
         }
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('news.recent')
             ->withSuccess('You have deleted your account successfully!');
     }
