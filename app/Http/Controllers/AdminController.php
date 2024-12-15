@@ -98,15 +98,4 @@ class AdminController extends Controller
             'sucess' => 'You have successfully unbanned a user'
         ]);
     }
-
-    public function deleteUser(User $user, Request $request)
-    {   
-        $user->update([
-            'status'=>'deleted'
-        ]);
-
-        return response()->json([
-            'sucess'=>'You have successfully deleted a user'
-        ]);
-    }
 }

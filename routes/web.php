@@ -110,7 +110,7 @@ Route::middleware(['auth', 'blocked'])->controller(UserController::class)->group
 
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
-    Route::put('/users/{user}/anonymize','deleteUser');
+    Route::put('/users/{user}/anonymize','destroy');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->group(function () {
@@ -146,7 +146,6 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::put('/{user}', 'update')->name('admin.update');
     Route::put('/users/{user}/block','blockUser');
     Route::put('/users/{user}/unblock','unblockUser');
-    Route::put('/users/{user}/anonymize','deleteUser');
 });
 
 // TODO:: add prefix
