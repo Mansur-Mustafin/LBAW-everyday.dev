@@ -1,4 +1,5 @@
 import { sendAjaxRequest } from './utils.js' 
+import { tranformLoadingButton } from './loading-button.js' 
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -75,6 +76,10 @@ if (createForm) {
 
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    
+    // call this function after validation
+    tranformLoadingButton(createForm.querySelector("#post-button"));
+
     let post_tags = [];
 
     Array.from(selectedTags.children).forEach((child) => {
