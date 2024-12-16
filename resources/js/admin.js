@@ -66,16 +66,6 @@ const unblockUser = async (userId,baseUrl) => {
     'PUT'
   )
 }
-const deleteUser = async (userId,baseUrl) => {
-  const url = `${baseUrl}/users/${userId}/anonymize`
-  sendAjaxRequest(
-    url,
-    (data) => {
-      console.log(data)
-    },
-    'PUT'
-  )
-}
 const deleteReport = async (reportId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/reports/delete/${reportId}`,
