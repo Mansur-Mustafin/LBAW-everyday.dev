@@ -66,6 +66,16 @@ const unblockUser = async (userId,baseUrl) => {
     'PUT'
   )
 }
+const deleteUser = async (userId,baseUrl) => {
+  const url = `${baseUrl}/users/${userId}/anonymize`
+  sendAjaxRequest(
+    url,
+    (data) => {
+      console.log(data)
+    },
+    'PUT'
+  )
+}
 const deleteReport = async (reportId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/reports/delete/${reportId}`,
@@ -267,9 +277,9 @@ const buildReportCard = (report) => {
           <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400"  data-baseurl="${baseUrl}">
             Block User
           </a>
-          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+          <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
             Delete User
-          </button>
+          </a>
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
@@ -396,6 +406,14 @@ const addReportButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const [reportId, userId] = targetBlock.id.split('-block-button')[0].split('-');
       blockUser(userId,baseUrl)
+      deleteReport(reportId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
+    }
+    const targetDeleteUser = event.target.closest('.deleteUser-button')
+    if(targetDeleteUser) {
+      event.preventDefault()
+      const [reportId, userId] = targetDeleteUser.id.split('-deleteUser-button')[0].split('-');
+      deleteUser(userId,baseUrl)
       deleteReport(reportId,baseUrl)
       reloadData(baseQuery,buildFunction,resultDiv)
     }
