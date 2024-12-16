@@ -132,12 +132,15 @@
 
 
         @can('view', $post)
-            <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
-                <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-                    class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-                    placeholder="Share your thoughts" id="commentInput" />
-                <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
-            </form>
+            @if (Auth::check())
+                <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
+                    <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
+                        class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                        placeholder="Share your thoughts" id="commentInput" />
+                    <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+                </form>
+            @endif
+
 
             <section class="mt-10">
 
@@ -157,9 +160,12 @@
                     @forelse ($comments->where('parent_comment_id', null) as $comment)
                         @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
                     @empty
-                        <div class="text-gray-400" id="no-comments">
-                            No comments yet. Be the first to comment!
-                        </div>
+                        @if (Auth::check())
+                            <div class="text-gray-400" id="no-comments">
+                                No comments yet. Be the first to comment!
+                            </div>
+                        @endif
+
                     @endforelse
                 </div>
             </section>
@@ -214,11 +220,7 @@
             </div>
             <div class="self-end">
                 <p class="text-lg">The content is private</p>
-                @if (!Auth::user())
-                    <p class="text-gray-400 text-lg">Signup or login to see post's content.</p>
-                @else
-                    <p class="text-gray-400 text-lg">Follow the author to see post's content.</p>
-                @endif
+                <p class="text-gray-400 text-lg">Follow the author to see post's content.</p>
             </div>
         </div>
         @endcannot

@@ -25,7 +25,9 @@ class NewsPostController extends Controller
 
     public function showSingleThread(NewsPost $newsPost, comment $comment): View|Factory
     {
-        $this->authorize('belongsToPost', [$comment, $newsPost]);
+        if (!$newsPost->comments->contains($comment)) {
+            abort(403);
+        }
 
         $tags = $this->getAvailableTags($newsPost);
         $this->preparePostForUser($newsPost);
