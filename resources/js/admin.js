@@ -264,9 +264,9 @@ const buildReportCard = (report) => {
         `;
       case 'UserReport':
         return `
-          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400">
+          <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400"  data-baseurl="${baseUrl}">
             Block User
-          </button>
+          </a>
           <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
             Delete User
           </button>
@@ -388,6 +388,14 @@ const addReportButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetDelete) {
       event.preventDefault()
       const reportId = targetDelete.id.split('-delete-button')[0]
+      deleteReport(reportId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
+    }
+    const targetBlock = event.target.closest('.block-button')
+    if(targetBlock) {
+      event.preventDefault()
+      const [reportId, userId] = targetBlock.id.split('-block-button')[0].split('-');
+      blockUser(userId,baseUrl)
       deleteReport(reportId,baseUrl)
       reloadData(baseQuery,buildFunction,resultDiv)
     }
