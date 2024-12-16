@@ -37,6 +37,7 @@
     @vite('resources/js/admin.js')
     @vite('resources/js/filter.js')
     @vite('resources/js/sort-by.js')
+    @vite('resources/js/loading-button.js')
 
 
     <script type="text/javascript">
