@@ -220,15 +220,92 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 }
 
 const buildReportCard = (report) => {
-  //const pageUrl = `${baseUrl}/users/${report.id}/posts`;
+  const typeColors = {
+    PostReport: 'bg-blue-200',
+    CommentReport: 'bg-green-200',
+    UserReport: 'bg-red-200',
+  };
+  const reportTypeColor = typeColors[report.report_type] || 'bg-gray-200'
+
+  const actionButtons = () => {
+    switch (report.report_type) {
+      case 'PostReport':
+        return `
+          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+            Omit Post
+          </button>
+          <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a> 
+        `;
+      case 'CommentReport':
+        return `
+          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+            Omit Comment
+          </button>
+          <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a> 
+        `;
+      case 'UserReport':
+        return `
+          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400">
+            Block User
+          </button>
+          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+            Delete User
+          </button>
+          <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a> 
+        `;
+      default:
+        return `
+          <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+              <path d="M18 6 6 18"/>
+              <path d="m6 6 12 12"/>
+            </svg>
+          </a> 
+        `;
+    }
+  };
+
   return `
       <div id="${report.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
-        <div class="flex flex-col flex-grow ">
-          <p class="">${report.description}</p>
+        <div class="flex flex-col flex-grow">
+          <h1 class="text-xl">
+            ${new Date(report.created_at).toLocaleDateString()}
+          </h1>
+        
+          <p class="text-sm mb-3">
+            ${report.description}
+          </p>
+
+          <div class="text-xs text-gray-600 flex flex-wrap gap-2">
+            <span class="${reportTypeColor} px-2 py-1 rounded-lg">Type: ${report.report_type}</span>
+            <span class="bg-gray-200 px-2 py-1 rounded-lg">Reporter: ${report.username}</span>
+            ${report.news_post_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Post ID: ${report.news_post_id}</span>` : ""}
+            ${report.comment_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Comment ID: ${report.comment_id}</span>` : ""}
+            ${report.reported_user_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">User ID: ${report.reported_user_id}</span>` : ""}
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          ${actionButtons()}
         </div>
       </div>
   `;
-}
+};
 
 // Card Button Behaviours
 const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
