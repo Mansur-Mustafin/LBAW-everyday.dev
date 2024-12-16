@@ -145,8 +145,8 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::get('/users/create', 'showCreateForm');
     Route::post('/register', 'register');
     Route::put('/{user}', 'update')->name('admin.update');
-    Route::put('/users/{user}/block', 'blockUser');
-    Route::put('/users/{user}/unblock', 'unblockUser');
+    Route::put('/users/{user}/block','blockUser');
+    Route::put('/users/{user}/unblock','unblockUser');
 });
 
 // TODO:: add prefix

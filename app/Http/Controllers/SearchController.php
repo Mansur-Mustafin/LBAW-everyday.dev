@@ -44,7 +44,7 @@ class SearchController extends Controller
             ->get();
 
         $users = User::query()
-            ->whereRaw('LOWER(username) LIKE ? OR LOWER(public_name) LIKE ?', [$query, $query])
+            ->whereRaw("LOWER(username) LIKE ? OR LOWER(public_name) LIKE ? AND status <> 'deleted'", [$query, $query])
             ->limit(3)
             ->get()
             ->unique('id');
@@ -71,7 +71,7 @@ class SearchController extends Controller
         $searchQuery = "%" . strtolower($request->search) . "%";
 
         $users = User::query()
-            ->whereRaw("LOWER(username) like ? OR LOWER(public_name) like ?", [$searchQuery, $searchQuery]);
+            ->whereRaw("LOWER(username) like ? OR LOWER(public_name) like ? AND status <> 'deleted'", [$searchQuery, $searchQuery]);
 
         return $this->paginate($users, $request, 10);
     }
@@ -82,7 +82,7 @@ class SearchController extends Controller
 
         $tag_proposals = TagProposal::query()
             ->with('proposer')
-            ->whereRaw("LOWER(name) like ?", [$searchQuery]);
+            ->whereRaw("LOWER(name) like ? AND is_resolved <> true", [$searchQuery]);
 
         return $this->paginate($tag_proposals, $request, 10);
     }
