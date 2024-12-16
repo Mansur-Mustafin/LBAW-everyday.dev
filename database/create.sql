@@ -752,6 +752,7 @@ BEGIN
     DELETE FROM notification_settings WHERE user_id = OLD.id;
     DELETE FROM follows WHERE follower_id = OLD.id OR followed_id = OLD.id;
     DELETE FROM bookmarks WHERE user_id = OLD.id;
+    DELETE FROM report WHERE reporter_id = OLD.id OR reported_user_id = OLD.id;
 
     RETURN NULL;
 END;

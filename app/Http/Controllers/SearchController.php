@@ -103,10 +103,6 @@ class SearchController extends Controller
     public function searchReports(Request $request)
     {
         $searchQuery = "%" . strtolower($request->search) . "%";
-
-        /* $reports = Report::select('user.*', 'report.*')
-            ->leftJoin('user', 'user.id', '=', 'report.reporter_id')
-            ->whereRaw("LOWER(username) like ?", [$searchQuery]);  */
         
         $reports = Report::select(
             'report.*',
@@ -116,12 +112,11 @@ class SearchController extends Controller
             'reported.username as reported_username',
             'reported.status as reported_status'
         )
-        ->leftJoin('user as reporter', 'reporter.id', '=', 'report.reporter_id') // Join para o reporter
-        ->leftJoin('user as reported', 'reported.id', '=', 'report.reported_user_id') // Join para o reported user
-        ->whereRaw("LOWER(reporter.username) like ?", [$searchQuery]) // Filtra pelo nome do reporter
-        ->orWhereRaw("LOWER(reported.username) like ?", [$searchQuery]); // Ou pelo nome do reported user
+        ->leftJoin('user as reporter', 'reporter.id', '=', 'report.reporter_id') 
+        ->leftJoin('user as reported', 'reported.id', '=', 'report.reported_user_id') 
+        ->whereRaw("LOWER(reporter.username) like ?", [$searchQuery]) 
+        ->orWhereRaw("LOWER(reported.username) like ?", [$searchQuery]); 
         
-
         return $this->paginate($reports, $request, 10);
     }
 }

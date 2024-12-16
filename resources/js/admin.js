@@ -279,18 +279,13 @@ const buildReportCard = (report) => {
         `;
       case 'UserReport':
         return `
-          ${report.reported_status === 'deleted' ? `
-            <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 border-red-400 text-center">
-              User is deleted
-            </div>
-          ` : report.reported_status === 'blocked' ? `
+          ${report.reported_status === 'blocked' ? `
             <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 border-yellow-400 text-center">
               User is blocked
             </div>
             <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
               Delete User
             </a>
-
           ` : `
             <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400" data-baseurl="${baseUrl}">
               Block User
