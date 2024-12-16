@@ -11,4 +11,15 @@ class ReportController extends Controller
     {
         return view('pages.admin.admin', ['show' => 'reports']);
     }
+
+    public function destroy(Report $report)
+    {
+        try {
+            $report->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);
+        }
+    }
 }

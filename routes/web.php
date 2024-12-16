@@ -186,6 +186,7 @@ Route::controller(UnblockAppealController::class)->group(function () {
 
 Route::controller(ReportController::class)->group(function (){
     Route::get('admin/reports', 'show')->middleware('admin')->name('admin.reports');
+    Route::delete('admin/reports/delete/{report}', 'destroy')->middleware('admin');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(NotificationController::class)->group(function () {

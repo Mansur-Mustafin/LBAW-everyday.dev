@@ -66,6 +66,15 @@ const unblockUser = async (userId,baseUrl) => {
     'PUT'
   )
 }
+const deleteReport = async (reportId,baseUrl) => {
+  sendAjaxRequest(
+    `${baseUrl}/admin/reports/delete/${reportId}`,
+    (data) => {
+      console.log(data)
+    },
+    'DELETE'
+  )
+}
 
 // Card Builder Functions
 const buildUserCard = (user) => {
@@ -373,6 +382,17 @@ const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
     }
   })
 }
+const addReportButtons = (baseQuery,buildFunction,resultDiv) => {
+  resultDiv.addEventListener('click',(event) => {
+    const targetDelete = event.target.closest('.delete-button')
+    if(targetDelete) {
+      event.preventDefault()
+      const reportId = targetDelete.id.split('-delete-button')[0]
+      deleteReport(reportId,baseUrl)
+      reloadData(baseQuery,buildFunction,resultDiv)
+    }
+  })
+}
 
 // Global Variables
 let lastPage      = 0;
@@ -495,5 +515,6 @@ if(reportsDiv) {
   console.log(reportsDiv)
   const baseQuery = baseUrl+'/api/search/reports/'
   addInfinitePageBehaviour(baseQuery,buildReportCard,reportsDiv)
+  addReportButtons(baseQuery,buildReportCard,reportsDiv)
 }
 
