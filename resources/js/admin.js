@@ -279,12 +279,26 @@ const buildReportCard = (report) => {
         `;
       case 'UserReport':
         return `
-          <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400"  data-baseurl="${baseUrl}">
-            Block User
-          </a>
-          <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
-            Delete User
-          </a>
+          ${report.reported_status === 'deleted' ? `
+            <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 border-red-400 text-center">
+              User is deleted
+            </div>
+          ` : report.reported_status === 'blocked' ? `
+            <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 border-yellow-400 text-center">
+              User is blocked
+            </div>
+            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
+              Delete User
+            </a>
+
+          ` : `
+            <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400" data-baseurl="${baseUrl}">
+              Block User
+            </a>
+            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
+              Delete User
+            </a>
+          `}
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
@@ -317,7 +331,7 @@ const buildReportCard = (report) => {
 
           <div class="text-xs text-gray-600 flex flex-wrap gap-2">
             <span class="${reportTypeColor} px-2 py-1 rounded-lg">Type: ${report.report_type}</span>
-            <span class="bg-gray-200 px-2 py-1 rounded-lg">Reporter: ${report.username}</span>
+            <span class="bg-gray-200 px-2 py-1 rounded-lg">Reporter: ${report.reporter_username}</span>
             ${report.news_post_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Post ID: ${report.news_post_id}</span>` : ""}
             ${report.comment_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Comment ID: ${report.comment_id}</span>` : ""}
             ${report.reported_user_id ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">User ID: ${report.reported_user_id}</span>` : ""}
