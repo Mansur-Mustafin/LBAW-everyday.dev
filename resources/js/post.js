@@ -1,41 +1,36 @@
-import { sendAjaxRequest } from './utils.js' 
+import { sendAjaxRequest } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
 
 const createForm = document.getElementById('createForm');
-const title = document.getElementById('title');
 
-const tagsSection = document.getElementById('tags-section')
-if(tagsSection) {
-  const baseUrl = tagsSection.dataset.url
+const tagsSection = document.getElementById('tags-section');
+if (tagsSection) {
+  const baseUrl = tagsSection.dataset.url;
 
-  tagsSection.addEventListener('click',(e) => {
-    e.preventDefault()
+  tagsSection.addEventListener('click', (e) => {
+    e.preventDefault();
 
-    if(e.target.id.endsWith('-follow')) {
-      const tagId = e.target.id.split('-follow')[0]
-      const url = `${baseUrl}/tag/store/${tagId}`
-      sendAjaxRequest(url, (data) => {},'POST')
-      document.getElementById(`${tagId}-follow`).classList.add('hidden')
-      document.getElementById(`${tagId}-unfollow`).classList.remove('hidden')
+    if (e.target.id.endsWith('-follow')) {
+      const tagId = e.target.id.split('-follow')[0];
+      const url = `${baseUrl}/tag/store/${tagId}`;
+      sendAjaxRequest(url, (data) => {}, 'POST');
+      document.getElementById(`${tagId}-follow`).classList.add('hidden');
+      document.getElementById(`${tagId}-unfollow`).classList.remove('hidden');
     }
-    if(e.target.id.endsWith('-unfollow')) {
-      const tagId = e.target.id.split('-unfollow')[0]
-      const url = `${baseUrl}/tag/delete/${tagId}`
-      sendAjaxRequest(url, (data) => {},'DELETE')
-      document.getElementById(`${tagId}-follow`).classList.remove('hidden')
-      document.getElementById(`${tagId}-unfollow`).classList.add('hidden')
+    if (e.target.id.endsWith('-unfollow')) {
+      const tagId = e.target.id.split('-unfollow')[0];
+      const url = `${baseUrl}/tag/delete/${tagId}`;
+      sendAjaxRequest(url, (data) => {}, 'DELETE');
+      document.getElementById(`${tagId}-follow`).classList.remove('hidden');
+      document.getElementById(`${tagId}-unfollow`).classList.add('hidden');
     }
-  })
+  });
 }
 
 // Create Post
 if (createForm) {
-  title.addEventListener('change', function (evt) {
-    title.style.borderWidth = '0px';
-  });
-
   tagSelector.addEventListener('change', function () {
     const selectedTag = tagSelector.value;
     if (selectedTag) {
@@ -82,12 +77,6 @@ if (createForm) {
     });
 
     if (post_tags.length >= 0) document.getElementById('tagsInput').value = post_tags.join(',');
-
-    if (!title.value.length) {
-      title.style.borderWidth = '1px';
-      title.style.borderColor = 'red';
-      return;
-    }
   });
 }
 
