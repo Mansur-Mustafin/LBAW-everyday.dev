@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './utils.js';
+import { copyToClipboard, sendAjaxRequest } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -194,7 +194,5 @@ if (editForm) {
 const shareButton = document.getElementById('share-post');
 
 if (shareButton) {
-  shareButton.addEventListener('click', function () {
-    navigator.clipboard.writeText(window.location.href);
-  });
+  copyToClipboard(shareButton);
 }
