@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './utils';
+import { copyToClipboard, sendAjaxRequest } from './utils';
 
 document.addEventListener('DOMContentLoaded', function () {
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -42,3 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+const shareProfileButton = document.getElementById('share-profile');
+
+if (shareProfileButton) {
+  copyToClipboard(shareProfileButton);
+}
