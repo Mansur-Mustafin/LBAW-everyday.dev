@@ -10,7 +10,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string|unique:news_post,title|max:250',
-            'content' => 'required|unique:news_post,content|string',
+            'content' => 'required|string',
             'for_followers' => 'required|string',
             'image' => 'nullable|image|max:2048',
             'tags' => 'nullable|string',
