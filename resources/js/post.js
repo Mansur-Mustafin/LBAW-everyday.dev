@@ -1,5 +1,4 @@
-import { sendAjaxRequest } from './utils.js' 
-import { tranformLoadingButton } from './loading-button.js' 
+import { sendAjaxRequest, tranformLoadingButton } from './utils.js'
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');

@@ -32,7 +32,7 @@
         <input class="hidden" type="file" id="realFileInput" name="image">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
-        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*">
+        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*"> {{-- TODO: add "required" here? => no need check in JS --}}
         <div class="flex flex-col">
             <div id="editor-create-container" class="text-gray-400 rounded-xl bg-input !border-none"></div>
             <input class="hidden" id="create-content-input" name="content">
