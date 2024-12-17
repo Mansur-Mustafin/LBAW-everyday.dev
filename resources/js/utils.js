@@ -92,6 +92,18 @@ export function uploadBase64Image(dataUrl) {
 
 export function copyToClipboard(elem) {
   elem.addEventListener('click', function () {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(window.location.href).then(() => {
+    
+      const feedback = elem.querySelector('.copied-feedback');
+      
+
+      feedback.classList.remove('opacity-0');
+      feedback.classList.add('opacity-100');
+
+      setTimeout(() => {
+        feedback.classList.add('opacity-0');
+      feedback.classList.remove('opacity-100');
+      }, 1000);
+    });
   });
 }

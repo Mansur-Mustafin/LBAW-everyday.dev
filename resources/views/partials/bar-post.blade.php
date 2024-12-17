@@ -67,7 +67,8 @@
             </button>
 
 
-            <button class="flex gap-1 group items-center cursor-pointer" id="share-post">
+            <button class="flex gap-1 group items-center cursor-pointer relative" id="share-post">
+                <span class="copied-feedback absolute bottom-10 left-6 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
                 <div
                     class="p-2 rounded-xl group-hover:text-purple-400 group-hover:bg-purple-700 group-hover:bg-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
