@@ -48,37 +48,43 @@
             @endif
 
             @can('view', $post)
-            <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
-                <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-                    class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-                    placeholder="Share your thoughts" id="commentInput" />
-                <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
-            </form>
-
-            <section class="mt-10">
-
-                @if ($thread == 'single')
-                    <div class="flex justify-between mb-5 items-center">
-                        <h1 class="pl-1 pr-3 text-sm">Single thread discussion
-                        </h1>
-                        <hr class="flex-grow opacity-20 text-gray-700">
-                        </hr>
-                        <a href="{{ url('news/' . $post->id) }}" class="pr-1 pl-3 text-sm hover:underline">See full
-                            discussion</a>
-                    </div>
+                @if (Auth::check())
+                    <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
+                        <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
+                            class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                            placeholder="Share your thoughts" id="commentInput" />
+                        <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+                    </form>
                 @endif
 
-                <div class="flex flex-col gap-3" id="comment-section">
 
-                    @forelse ($comments->where('parent_comment_id', null) as $comment)
-                        @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
-                    @empty
-                        <div class="text-gray-400" id="no-comments">
-                            No comments yet. Be the first to comment!
+                <section class="mt-10">
+
+                    @if ($thread == 'single')
+                        <div class="flex justify-between mb-5 items-center">
+                            <h1 class="pl-1 pr-3 text-sm">Single thread discussion
+                            </h1>
+                            <hr class="flex-grow opacity-20 text-gray-700">
+                            </hr>
+                            <a href="{{ url('news/' . $post->id) }}" class="pr-1 pl-3 text-sm hover:underline">See full
+                                discussion</a>
                         </div>
-                    @endforelse
-                </div>
-            </section>
+                    @endif
+
+                    <div class="flex flex-col gap-3" id="comment-section">
+
+                        @forelse ($comments->where('parent_comment_id', null) as $comment)
+                            @include('partials.comment', ['comment' => $comment, 'level' => 0, 'post' => $post, 'thread' => $thread])
+                        @empty
+                            @if (Auth::check())
+                                <div class="text-gray-400" id="no-comments">
+                                    No comments yet. Be the first to comment!
+                                </div>
+                            @endif
+
+                        @endforelse
+                    </div>
+                </section>
             @endcan
             @cannot('view', $post)
             <div class="mt-4 flex flex-row gap-4">
@@ -167,7 +173,7 @@
 
                 <div class="mb-5">
                     <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
-                    <input type="text" name="title" id="title" value="{{ $post->title }}"
+                    <input type="text" name="title" id="title" value="{{ $post->title }}" placeholder="Post Title*"
                         class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
                 </div>
 
@@ -217,6 +223,7 @@
                 <input class="hidden" name="tags" id="tagsInput">
             </form>
         </div>
+
     </section>
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">

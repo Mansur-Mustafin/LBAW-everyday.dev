@@ -24,11 +24,9 @@ searchBarDiv.addEventListener('blur', () => {
 });
 
 searchBarDiv.addEventListener('focus', () => {
-  if (searchBarDiv.dataset.auth) {
-    resultsDiv.classList.remove('hidden');
-    searchContainer.classList.add('rounded-t-2xl');
-    searchContainer.classList.remove('rounded-2xl');
-  }
+  resultsDiv.classList.remove('hidden');
+  searchContainer.classList.add('rounded-t-2xl');
+  searchContainer.classList.remove('rounded-2xl');
 });
 
 searchBarDiv.onkeyup = async () => {
@@ -39,10 +37,8 @@ searchBarDiv.onkeyup = async () => {
     resultsDiv.innerHTML = '';
     return;
   } else {
-    if (searchBarDiv.dataset.auth) {
-      searchContainer.classList.remove('rounded-2xl');
-      searchContainer.classList.add('rounded-t-2xl');
-    }
+    searchContainer.classList.remove('rounded-2xl');
+    searchContainer.classList.add('rounded-t-2xl');
   }
 
   if (loading) {
