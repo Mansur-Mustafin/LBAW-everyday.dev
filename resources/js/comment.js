@@ -199,5 +199,59 @@ function addButtonsBehaviour() {
       );
     });
   });
+
+  document.querySelectorAll('.omit-comment').forEach(function (element) {
+    element.addEventListener('click',function (event) {
+      event.preventDefault();
+      const comment_id = element.id.split('-')[2];
+
+      const url = '/comments/' + comment_id + '/omit';
+      const method = 'POST';
+      sendAjaxRequest(
+        url,
+        (data) => {
+          // sendAjaxRequest catches errors
+          console.log(data)
+          const omitComment = document.getElementById('omit-comment-' + comment_id);
+          const unOmitComment = document.getElementById('unomit-comment-' + comment_id);
+
+          omitComment.classList.add('hidden');
+          unOmitComment.classList.remove('hidden');
+
+          const comment = document.getElementById('comment-' + comment_id);
+          comment.classList.add('opacity-50');
+
+        },
+        method
+      );
+    })
+  })
+
+  document.querySelectorAll('.unomit-comment').forEach(function (element) {
+    element.addEventListener('click',function (event) {
+      event.preventDefault();
+      const comment_id = element.id.split('-')[2];
+
+      const url = '/comments/' + comment_id + '/unomit';
+      const method = 'POST';
+      sendAjaxRequest(
+        url,
+        (data) => {
+          console.log(data)
+          // sendAjaxRequest catches errors
+          const omitComment = document.getElementById('omit-comment-' + comment_id);
+          const unOmitComment = document.getElementById('unomit-comment-' + comment_id);
+
+          omitComment.classList.remove('hidden');
+          unOmitComment.classList.add('hidden');
+
+          const comment = document.getElementById('comment-' + comment_id);
+          comment.classList.remove('opacity-50');
+          comment.classList.add('opacity-100');
+        },
+        method
+      );
+    })
+  })
 }
 

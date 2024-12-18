@@ -90,4 +90,22 @@ class CommentsController extends Controller
             return response()->json(['success' => false]);  // TODO: return 500?
         }
     }
+
+    public function omit(Comment $comment)
+    {
+        $comment->update([
+            'is_omitted'=>"true"
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unomit(Comment $comment)
+    {
+        $comment->update([
+            'is_omitted'=>"false"
+        ]);
+
+        return response()->json(['success' => true]);
+    }
 }

@@ -44,8 +44,16 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
+        if($user->is_admin) {
+            $comments = $newsPost->comments;
+        } else {
+            $comments = $newsPost->comments->where('is_omitted','!=','true');
+        }
+
+        //dd($comments);
+       
         $this->preparePostForUser($newsPost);
-        $this->processComments($newsPost->comments, $user);
+        $this->processComments($comments, $user);
 
         if($newsPost->is_omitted && !$user->is_admin) {
             return redirect('home');
@@ -56,7 +64,7 @@ class NewsPostController extends Controller
             'tags' => $tags,
             'availableTags' => $tags,
             'thread' => 'multi',
-            'comments' => $newsPost->comments
+            'comments' => $comments
         ]);
     }
 
@@ -220,7 +228,16 @@ class NewsPostController extends Controller
             }
 
             if ($comment->replies) {
-                self::processComments($comment->replies, $user);
+                if($user->is_admin) {
+                    $replies = $comment->replies;
+                    self::processComments($comment->replies, $user);
+                } else {
+                    $replies = $comment->replies->where('is_omitted','!=','true');
+/*                     dd($replies->map(function ($element) {
+                        return $element->content;
+                    })); */
+                    self::processComments($replies,$user);
+                }
             }
         }
     }
