@@ -29,7 +29,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <a href="{{ route('login') }}" class="text-gray-300 hover:text-white hover:underline transition duration-200">Back to Login</a>
                     <button type="submit" id="submitButton"
-                        class="w-1/2 bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
+                        class="loading-button w-1/2 bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
                         Send Reset Link
                     </button>
                 </div>

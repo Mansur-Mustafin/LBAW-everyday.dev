@@ -1,27 +1,26 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordRecoverController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\BlockedController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FollowController;
-use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\VoteController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 

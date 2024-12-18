@@ -90,19 +90,41 @@ export function uploadBase64Image(dataUrl) {
   return blob;
 }
 
+export const transformLoadingButton = (button) => {
+  console.log(button);
+
+  button.classList.remove('text-input', 'bg-white', 'font-bold', 'px-6', 'py-2');
+
+  button.classList.add(
+    'text-gray-100',
+    'font-semibold',
+    'pr-3',
+    'py-1',
+    'bg-[#4C4B63]',
+    'flex',
+    'items-center',
+    'justify-center'
+  );
+
+  button.disabled = true;
+
+  button.innerHTML = `
+      <img class="w-8 h-8" src="/assets/loading-icon.gif" alt="Loading...">
+      Sending...
+    `;
+};
+
 export function copyToClipboard(elem) {
   elem.addEventListener('click', function () {
     navigator.clipboard.writeText(window.location.href).then(() => {
-    
       const feedback = elem.querySelector('.copied-feedback');
-      
 
       feedback.classList.remove('opacity-0');
       feedback.classList.add('opacity-100');
 
       setTimeout(() => {
         feedback.classList.add('opacity-0');
-      feedback.classList.remove('opacity-100');
+        feedback.classList.remove('opacity-100');
       }, 1000);
     });
   });

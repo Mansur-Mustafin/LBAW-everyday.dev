@@ -73,7 +73,7 @@ class NewsPostController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         $post = NewsPost::create([
             'title' => $validated['title'],
@@ -89,11 +89,13 @@ class NewsPostController extends Controller
         if ($request->has('content_images')) {
             $paths = explode(',', $validated['content_images']);
             foreach ($paths as $path) {
-                Image::create([
-                    'path' => $path,
-                    'image_type' => ImageTypeEnum::POST_CONTENT,
-                    'news_post_id' => $post->id,
-                ]);
+                if (!empty($path)) {
+                    Image::create([
+                        'path' => $path,
+                        'image_type' => ImageTypeEnum::POST_CONTENT,
+                        'news_post_id' => $post->id,
+                    ]);
+                }
             }
         }
 
@@ -107,7 +109,7 @@ class NewsPostController extends Controller
     {
         $this->authorize('update', $newsPost);
 
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         $newsPost->update([
             'title' => $validated['title'],
