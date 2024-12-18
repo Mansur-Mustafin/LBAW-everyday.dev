@@ -47,18 +47,18 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
-        if($user && $user->is_admin) {
+        if ($user && $user->is_admin) {
             $comments = $newsPost->comments;
         } else {
-            $comments = $newsPost->comments->where('is_omitted','!=','true');
+            $comments = $newsPost->comments->where('is_omitted', '!=', 'true');
         }
 
         //dd($comments);
-       
+
         $this->preparePostForUser($newsPost);
         $this->processComments($comments, $user);
 
-        if($newsPost->is_omitted && !$user->is_admin) {
+        if ($newsPost->is_omitted && !$user->is_admin) {
             return redirect('home');
         }
 
@@ -159,35 +159,36 @@ class NewsPostController extends Controller
 
     public function omit(Request $request, NewsPost $newsPost)
     {
+        // TODO try catch
+        $this->authorize('omit', $newsPost);
         $newsPost->update([
-            'is_omitted'=>"true"
+            'is_omitted' => "true"
         ]);
 
-        if($request->ajax()) {
-            return response()->json([
-                'sucess'=>'true'
-            ]);
+        if ($request->ajax()) {
+            return response()->json(['sucess' => true]);
         }
-        return redirect()->route('news.show',['news_post'=>$newsPost->id])
-            ->with('message','Post omitted successfully!');
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
+            ->with('message', 'Post omitted successfully!');
     }
 
     public function unomit(Request $request, NewsPost $newsPost)
     {
+        // TODO try catch
+        $this->authorize('omit', $newsPost);
         $newsPost->update([
-            'is_omitted'=>'false'
+            'is_omitted' => 'false'
         ]);
 
-        if($request->ajax()) {
-            return response()->json([
-                'sucess'=>'true'
-            ]);
+        if ($request->ajax()) {
+            return response()->json(['sucess' => true]);
         }
-        return redirect()->route('news.show',['news_post'=>$newsPost->id])
-            ->with('message','Post un-omitted successfully!');
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
+            ->with('message', 'Post un-omitted successfully!');
     }
 
-    public function showOmittedPosts() {
+    public function showOmittedPosts()
+    {
         return view('pages.admin.admin', ['show' => 'omitted_posts']);
     }
 
@@ -245,15 +246,12 @@ class NewsPostController extends Controller
             }
 
             if ($comment->replies) {
-                if($user->is_admin) {
+                if ($user->is_admin) {
                     $replies = $comment->replies;
                     self::processComments($comment->replies, $user);
                 } else {
-                    $replies = $comment->replies->where('is_omitted','!=','true');
-/*                     dd($replies->map(function ($element) {
-                        return $element->content;
-                    })); */
-                    self::processComments($replies,$user);
+                    $replies = $comment->replies->where('is_omitted', '!=', 'true');
+                    self::processComments($replies, $user);
                 }
             }
         }
