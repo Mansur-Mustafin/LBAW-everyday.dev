@@ -90,7 +90,7 @@ export function uploadBase64Image(dataUrl) {
   return blob;
 }
 
-export const tranformLoadingButton = (button) => {
+export const transformLoadingButton = (button) => {
   console.log(button);
 
   button.classList.remove('text-input', 'bg-white', 'font-bold', 'px-6', 'py-2');
