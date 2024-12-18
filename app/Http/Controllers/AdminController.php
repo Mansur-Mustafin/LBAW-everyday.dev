@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
+use App\Http\Controllers\ChartController;
 use App\Http\Requests\Auth\AdminRegisterRequest;
 use App\Http\Requests\User\AdminUpdateRequest;
 use App\Models\User;
@@ -14,6 +15,13 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function show() 
+    {  
+        $usersChart= ChartController::usersChart();
+        $newsPostsChart= ChartController::newsChart();
+        return view('pages.admin.dashboard',['users'=>$usersChart,'news_posts'=>$newsPostsChart]);
+    }
+
     public function showUsers()
     {
         return view('pages.admin.admin', ['show' => 'users']);
