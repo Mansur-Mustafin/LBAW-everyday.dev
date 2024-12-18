@@ -1,4 +1,4 @@
-import { copyToClipboard, sendAjaxRequest, tranformLoadingButton } from './utils.js'
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js'
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -77,7 +77,7 @@ if (createForm) {
     evt.preventDefault();
     
     // call this function after validation
-    tranformLoadingButton(createForm.querySelector("#post-button"));
+    transformLoadingButton(createForm.querySelector("#post-button"));
 
     let post_tags = [];
 
