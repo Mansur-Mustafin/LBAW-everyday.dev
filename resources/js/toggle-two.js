@@ -16,7 +16,7 @@ toggleTwoDivs.forEach((div, index) => {
             <input type="checkbox" id="${toggleId}" class="toggleTwoInput peer sr-only">
             <div class="block h-8 rounded-full dark:bg-dark-2 bg-input w-14"></div>
             <div
-                class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple-900">
+                class="absolute w-6 h-6 transition bg-white rounded-full dot dark:bg-dark-4 left-1 top-1 peer-checked:translate-x-full peer-checked:bg-purple">
             </div>
         </div>
         ${name}
