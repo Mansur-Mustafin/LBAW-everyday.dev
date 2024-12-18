@@ -48,6 +48,7 @@ if (createForm) {
       toolbar: toolbarOptions,
     },
     theme: 'snow',
+    placeholder: 'Content*'
   });
 
   document

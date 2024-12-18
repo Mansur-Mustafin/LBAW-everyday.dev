@@ -24,11 +24,9 @@ searchBarDiv.addEventListener('blur', () => {
 });
 
 searchBarDiv.addEventListener('focus', () => {
-  if (searchBarDiv.dataset.auth) {
-    resultsDiv.classList.remove('hidden');
-    searchContainer.classList.add('rounded-t-2xl');
-    searchContainer.classList.remove('rounded-2xl');
-  }
+  resultsDiv.classList.remove('hidden');
+  searchContainer.classList.add('rounded-t-2xl');
+  searchContainer.classList.remove('rounded-2xl');
 });
 
 searchBarDiv.onkeyup = async () => {
@@ -39,10 +37,8 @@ searchBarDiv.onkeyup = async () => {
     resultsDiv.innerHTML = '';
     return;
   } else {
-    if (searchBarDiv.dataset.auth) {
-      searchContainer.classList.remove('rounded-2xl');
-      searchContainer.classList.add('rounded-t-2xl');
-    }
+    searchContainer.classList.remove('rounded-2xl');
+    searchContainer.classList.add('rounded-t-2xl');
   }
 
   if (loading) {
@@ -112,7 +108,6 @@ const buildPost = (post) => {
 
 const buildTag = (tag) => {
   const url = `${baseUrl}/news/tags/${tag.name}`;
-  console.log(tag.name)
   return `
         <div class="p-2 hover:bg-gray-700">
             <a href="${url}" class="flex items-center">
@@ -131,18 +126,18 @@ const buildTag = (tag) => {
 const buildUser = (user) => {
   const url = `${baseUrl}/users/${user.id}/posts`;
   return `
-        <div class="p-2 hover:bg-gray-700">
-            <a href="${url}" class="flex items-center">
-                <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
-                <div class="flex-1 min-w-0">
-                    <p class="align-middle">
-                        ${user.public_name}
-                    </p>
-                    <p class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
-                        ${user.username}
-                    </p>
-                </div>
-            </a>
-        </div>
-    `;
+      <div class="p-2 hover:bg-gray-700">
+          <a href="${url}" class="flex items-center">
+              <p class="bg-green-200 px-3 py-1 h-7 mr-2 rounded-full text-sm text-input">User</p>
+              <div class="flex-1 min-w-0">
+                  <p class="align-middle">
+                      ${user.public_name}
+                  </p>
+                  <p class="text-sm text-nowrap text-ellipsis overflow-hidden align-middle">
+                      ${user.username}
+                  </p>
+              </div>
+          </a>
+      </div>
+      `
 };
