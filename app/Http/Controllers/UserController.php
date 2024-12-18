@@ -18,6 +18,8 @@ class UserController extends Controller
 
     public function userPosts(User $user)
     {
+        $this->authorize('view', $user);
+
         return view('pages.user', [
             'title' => "{$user->public_name}'s Posts",
             'baseUrl' => route('api.user.posts', $user->id),
@@ -27,11 +29,15 @@ class UserController extends Controller
 
     public function getUserPosts(User $user, Request $request)
     {
+        $this->authorize('view', $user);
+
         return $this->news_post_page($user->posts()->getQuery(), $request);
     }
 
     public function userUpvotes(User $user)
     {
+        $this->authorize('view', $user);
+
         return view('pages.user', [
             'title' => "{$user->public_name}'s Upvoted Posts",
             'baseUrl' => route('api.user.upvotes', $user->id),
@@ -41,6 +47,8 @@ class UserController extends Controller
 
     public function getUserUpvotes(User $user, Request $request)
     {
+        $this->authorize('view', $user);
+
         $upvotedPostIds = Vote::where('user_id', $user->id)
             ->where('is_upvote', true)
             ->where('vote_type', 'PostVote')
