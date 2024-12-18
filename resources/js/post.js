@@ -77,11 +77,7 @@ if (createForm) {
     evt.preventDefault();
 
     // call this function after validation
-<<<<<<< HEAD
-    tranformLoadingButton(createForm.querySelector('#post-button'));
-=======
     transformLoadingButton(createForm.querySelector("#post-button"));
->>>>>>> main
 
     let post_tags = [];
 
