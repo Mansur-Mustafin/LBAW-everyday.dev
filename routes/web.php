@@ -97,6 +97,8 @@ Route::prefix('comments')->middleware(['auth', 'blocked'])->controller(CommentsC
     Route::post('/', 'store');
     Route::put('/{comment}', 'update');
     Route::delete('/{comment}', 'destroy');
+    Route::post('/{comment}/omit','omit');
+    Route::post('/{comment}/unomit','unomit');
 });
 
 Route::prefix('vote')->middleware(['auth', 'blocked'])->controller(VoteController::class)->group(function () {
