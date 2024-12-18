@@ -44,7 +44,7 @@ class NewsPostController extends Controller
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
-        if($user->is_admin) {
+        if($user && $user->is_admin) {
             $comments = $newsPost->comments;
         } else {
             $comments = $newsPost->comments->where('is_omitted','!=','true');

@@ -94,7 +94,7 @@ Route::controller(NewsPostController::class)->group(function () {
     Route::get('news/{news_post}/comment/{comment}', 'showSingleThread');
 });
 
-Route::prefix('comments')->middleware(['auth', 'blocked'])->controller(CommentsController::class)->group(function () {
+Route::middleware(['auth', 'blocked'])->controller(CommentsController::class)->group(function () {
     Route::post('comments/', 'store');
     Route::put('comments/{comment}', 'update');
     Route::delete('comments/{comment}', 'destroy');

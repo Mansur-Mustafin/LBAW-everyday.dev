@@ -93,20 +93,32 @@ class CommentsController extends Controller
 
     public function omit(Comment $comment)
     {
-        $comment->update([
-            'is_omitted'=>"true"
-        ]);
+        try {
+            $this->authorize('omit', $comment);
+            $comment->update([
+                'is_omitted'=>"true"
+            ]);
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);  // TODO: return 500?
+        }
+
+
     }
 
     public function unomit(Comment $comment)
     {
-        $comment->update([
-            'is_omitted'=>"false"
-        ]);
+        try {
+            $this->authorize('omit', $comment);
+            $comment->update([
+                'is_omitted'=>"false"
+            ]);
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);  // TODO: return 500?
+        }
     }
 
     public function showOmittedComments() {
