@@ -11,6 +11,9 @@ class Report extends Model
 
     protected $table = 'report';
 
+    public const UPDATED_AT = null;
+    public const CREATED_AT = null;
+
     protected $fillable = [
         'created_at',
         'description',

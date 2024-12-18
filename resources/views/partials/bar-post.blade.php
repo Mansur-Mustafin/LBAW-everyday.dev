@@ -47,7 +47,7 @@
             </button>
         </div>
 
-        <button class="bookmark-button flex gap-1 group items-center cursor-pointer">
+        <button class="bookmark-button flex group items-center cursor-pointer">
             <div class="p-2 rounded-xl group-hover:text-rose-400 group-hover:bg-rose-700 group-hover:bg-opacity-50">
                 <svg class="{{ $post->is_bookmarked ? 'hidden' : '' }}"
                     id="post-bookmark-outline-{{ $post->id }}"
@@ -66,6 +66,47 @@
             </div>
             <label class="hidden tablet:inline group-hover:text-rose-400 cursor-pointer">Bookmark</label>
         </button>
+
+        <button class="report-button flex group items-center cursor-pointer ml-3" data-post-id="{{ $post->id }}">
+            <div class="p-2 rounded-xl group-hover:text-purple-700 group-hover:bg-purple-700 group-hover:bg-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-flag">
+                    <path d="M3 3v18" />
+                    <path d="M3 3h11l4 5-4 5H3" />
+                </svg>
+            </div>
+            <label class="hidden tablet:inline group-hover:text-purple-700 cursor-pointer">Report</label>
+        </button>
+
+        <div id="report-popup-{{ $post->id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg w-96">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Report Post</h3>
+                
+                <form action="{{ route('report.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="news_post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="reporter_id" value="{{ Auth::id() }}">
+                    <input type="hidden" name="report_type" value="PostReport">
+                    <input type="hidden" name="comment_id" value="">
+                    <input type="hidden" name="reported_user_id" value="">
+                    
+                    <textarea name="description" id="report-comment-{{ $post->id }}" 
+                            class="w-full p-2 border rounded-lg text-gray-700" 
+                            placeholder="Write report's motive" required></textarea>
+                    
+                    <div class="mt-4 flex justify-end gap-2">
+                        <button type="button" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 report-popup-close"
+                                data-post-id="{{ $post->id }}">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </div>
 
