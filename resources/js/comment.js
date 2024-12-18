@@ -201,3 +201,22 @@ function addButtonsBehaviour() {
   });
 }
 
+document.querySelectorAll('.report-button').forEach(button => {
+  button.addEventListener('click', function () {
+      const commentId = this.getAttribute('data-comment-id');
+      const popup = document.getElementById(`report-popup-${commentId}`);
+      if (popup) {
+          popup.classList.remove('hidden');
+      }
+  });
+});
+
+document.querySelectorAll('.report-popup-close').forEach(button => {
+  button.addEventListener('click', function () {
+      const commentId = this.getAttribute('data-comment-id');
+      const popup = document.getElementById(`report-popup-${commentId}`);
+      if (popup) {
+          popup.classList.add('hidden');
+      }
+  });
+});
