@@ -1,4 +1,4 @@
-import { redirectToLogin, sendAjaxRequest } from './utils';
+import { redirectToLogin, sendAjaxRequest, showSuccessMessage } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -32,8 +32,9 @@ function handleVote(container, isUpvote) {
     if ((isUpvote && currentVote === 'upvote') || (!isUpvote && currentVote === 'downvote')) {
       updateVoteUI(container, null, 'Vote removed');
       container.dataset.voteId = '';
+      const oldVote = container.dataset.vote == 'upvote';
       container.dataset.vote = '';
-      removeVote(voteId, container);
+      removeVote(voteId, container, oldVote);
     } else {
       container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
       updateVoteUI(container, isUpvote, 'Vote updated');
@@ -42,7 +43,6 @@ function handleVote(container, isUpvote) {
   } else {
     upvoteButton.disabled = true;
     downvoteButton.disabled = true;
-    console.log(upvoteButton, downvoteButton);
     updateVoteUI(container, isUpvote, 'Saved');
     submitVote(type, itemId, isUpvote, container, () => {
       upvoteButton.disabled = false;
@@ -61,14 +61,16 @@ function submitVote(type, id, isUpvote, container, onComplete) {
     id: id,
     is_upvote: isUpvote,
   });
-
   sendAjaxRequest(
     '/vote',
     (data) => {
-      console.log(data);
       if (data.message === 'Saved') {
         container.dataset.voteId = data.vote_id;
         container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+      } else {
+        updateVoteUI(container, isUpvote, 'Vote removed');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while saving your vote. Please try again.");
       }
       if (onComplete) onComplete();
     },
@@ -78,11 +80,15 @@ function submitVote(type, id, isUpvote, container, onComplete) {
   );
 }
 
-function removeVote(voteId, container) {
+function removeVote(voteId, container, oldVote) {
   sendAjaxRequest(
     `/vote/${voteId}`,
     (data) => {
-      console.log(data);
+      if (data.message === 'Error on delete') {
+        updateVoteUI(container, oldVote, 'Saved');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while removing your vote. Please try again.");
+      }
     },
     'DELETE'
   );
@@ -100,7 +106,11 @@ function updateVote(voteId, isUpvote, container) {
   sendAjaxRequest(
     `/vote/${voteId}`,
     (data) => {
-      console.log(data);
+      if (data.message === 'Error on update') {
+        updateVoteUI(container, !isUpvote, 'Vote updated');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while updating your vote. Please try again.");
+      }
     },
     'PUT',
     headers,
