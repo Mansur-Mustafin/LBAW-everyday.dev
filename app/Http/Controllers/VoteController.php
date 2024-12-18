@@ -18,8 +18,6 @@ class VoteController extends Controller
             'is_upvote' => 'required|boolean',
         ]);
 
-        sleep(1);
-
         $voteType = $validated['type'] === 'post' ? 'PostVote' : 'CommentVote';
         $vote = new Vote([
             'vote_type' => $voteType,
@@ -44,8 +42,6 @@ class VoteController extends Controller
     {
         $this->authorize('delete', $vote);
 
-        sleep(1);
-
         try {
             $vote->delete();
         } catch (QueryException $e) {
@@ -58,8 +54,6 @@ class VoteController extends Controller
     public function update(Request $request, Vote $vote)
     {
         $this->authorize('update', $vote);
-
-        sleep(1);
 
         $validated = $request->validate([
             'is_upvote' => 'required|boolean',
