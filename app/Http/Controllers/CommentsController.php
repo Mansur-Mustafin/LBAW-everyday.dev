@@ -96,15 +96,13 @@ class CommentsController extends Controller
         try {
             $this->authorize('omit', $comment);
             $comment->update([
-                'is_omitted'=>"true"
+                'is_omitted' => "true"
             ]);
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false]);  // TODO: return 500?
         }
-
-
     }
 
     public function unomit(Comment $comment)
@@ -112,7 +110,7 @@ class CommentsController extends Controller
         try {
             $this->authorize('omit', $comment);
             $comment->update([
-                'is_omitted'=>"false"
+                'is_omitted' => "false"
             ]);
 
             return response()->json(['success' => true]);
@@ -121,7 +119,8 @@ class CommentsController extends Controller
         }
     }
 
-    public function showOmittedComments() {
+    public function showOmittedComments()
+    {
         return view('pages.admin.admin', ['show' => 'omitted_comments']);
     }
 }
