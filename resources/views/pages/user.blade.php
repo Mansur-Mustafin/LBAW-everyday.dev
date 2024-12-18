@@ -29,18 +29,17 @@
 
         {{-- <p class="text-gray-500 text-center mt-10">
             @if ($isPostsActive)
-                {{ $user->public_name }} hasn't posted yet.
+            {{ $user->public_name }} hasn't posted yet.
             @elseif ($isUpvotesActive)
-                {{ $user->public_name }} hasn't upvoted any posts yet.
+            {{ $user->public_name }} hasn't upvoted any posts yet.
             @else
-                No content available.
+            No content available.
             @endif
         </p> --}}
-        
+
         <div class="container tablet:mx-auto w-full">
             <h1 class="text-2xl font-semibold my-4 mx-4">{{ $title }}</h1>
-            <div data-url="{{ $baseUrl }}" id="news-posts-container"
-                class="grid grid-cols-1 gap-4">
+            <div data-url="{{ $baseUrl }}" id="news-posts-container" class="grid grid-cols-1 gap-4">
             </div>
             <div id="loading-icon" class="hidden">
                 <div class="grid grid-cols-1 gap-4">
@@ -50,7 +49,7 @@
                 <img class="w-20 h-20 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
             </div>
         </div>
-        
+
     </main>
 
     <aside class="order-1 tablet:order-none border-l border-gray-700">
@@ -64,6 +63,16 @@
                 <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
                     data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
             @endcan
+            <button id="share-profile" class="relative">
+                <span class="copied-feedback absolute bottom-7 -left-4 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-link">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+            </button>
+
         </header>
         <div class="rounded flex justify-center m-5">
             <img src="{{ $user->profileImage->url }}" alt="Your profile image"
@@ -107,18 +116,27 @@
         <div class="p-4 flex flex-col gap-2 justify-center">
             @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/tag_proposal/create') }}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Create tag Proposal</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Create tag Proposal</a>
             @endif
             @if (Auth::user()->id === $user->id)
                 <a href="{{url('/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Edit Profile</a>
             @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
                     class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
             @endif
             @if (Auth::check() and (Auth::id() == $user->id))
+                <form action="{{ url('/users/' . $user->id . '/anonymize') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center w-full">
+                        Delete My Account
+                    </button>
+                </form>
+            @endif
+            @if (Auth::check() and (Auth::id() == $user->id))
                 <a href="{{ url('/logout') }}"
-                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1">Logout</a>
+                    class="text-input bg-red-400 font-bold rounded-lg px-4 py-1 text-center">Logout</a>
             @endif
         </div>
 
