@@ -191,20 +191,20 @@ if (editForm) {
   }
 }
 
-document.querySelectorAll('.report-button').forEach(button => {
+document.querySelectorAll('.reportPost-button').forEach(button => {
   button.addEventListener('click', function () {
       const postId = this.getAttribute('data-post-id');
-      const popup = document.getElementById(`report-popup-${postId}`);
+      const popup = document.getElementById(`reportPost-popup-${postId}`);
       if (popup) {
           popup.classList.remove('hidden');
       }
   });
 });
 
-document.querySelectorAll('.report-popup-close').forEach(button => {
+document.querySelectorAll('.reportPost-popup-close').forEach(button => {
   button.addEventListener('click', function () {
       const postId = this.getAttribute('data-post-id');
-      const popup = document.getElementById(`report-popup-${postId}`);
+      const popup = document.getElementById(`reportPost-popup-${postId}`);
       if (popup) {
           popup.classList.add('hidden');
       }
