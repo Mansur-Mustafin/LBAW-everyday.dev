@@ -7,18 +7,18 @@
     </div>
 
     @include('partials.filter-checkbox-section', [
-        'title' => 'Tags',
-        'items' => $tags,
-        'name' => 'tags',
-    ])
+    'title' => 'Tags',
+    'items' => $tags,
+    'name' => 'tags',
+])
     @include('partials.filter-checkbox-section', [
-        'title' => 'Author Rank',
-        'items' => $rankings,
-        'name' => 'ranks',
-    ])
+    'title' => 'Author Rank',
+    'items' => $rankings,
+    'name' => 'ranks',
+])
     @include('partials.filter-radio-section', [
-        'title' => 'Date Range',
-        'options' => ['All Time', 'Last Day', 'Last Week', 'Last Month', 'Last Year'],
-        'name' => 'date_range',
-    ])
+    'title' => 'Date Range',
+    'options' => ['All Time', 'Last Day', 'Last Week', 'Last Month', 'Last Year'],
+    'name' => 'date_range',
+])
 </div>
