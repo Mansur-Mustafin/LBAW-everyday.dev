@@ -13,7 +13,7 @@
       </path>
     </svg>
     <input data-url="{{ url('') }}" id="admin-search-bar" type="text"
-      class="laptop:h-full laptop:p-2 outline-none rounded-t w-full text-lg laptop:text-xl">
+      class="laptop:h-full laptop:p-2 outline-none rounded-t w-full text-lg laptop:text-xl" placeholder="Search...">
   </div>
 
   @if ($show == 'users')
@@ -42,6 +42,14 @@
 
   @if($show == 'unblock_appeals')
     <div id="admin-search-unblock-appeals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+  @endif
+
+  @if($show == 'omitted_posts')
+    <div id="admin-search-omitted-posts-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+  @endif
+
+  @if($show == 'omitted_comments')
+    <div id="admin-search-omitted-comments-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
   @endif
 
   <div id="loading-icon" class="my-6">

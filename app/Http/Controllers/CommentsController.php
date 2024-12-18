@@ -90,4 +90,37 @@ class CommentsController extends Controller
             return response()->json(['success' => false]);  // TODO: return 500?
         }
     }
+
+    public function omit(Comment $comment)
+    {
+        try {
+            $this->authorize('omit', $comment);
+            $comment->update([
+                'is_omitted' => "true"
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);  // TODO: return 500?
+        }
+    }
+
+    public function unomit(Comment $comment)
+    {
+        try {
+            $this->authorize('omit', $comment);
+            $comment->update([
+                'is_omitted' => "false"
+            ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false]);  // TODO: return 500?
+        }
+    }
+
+    public function showOmittedComments()
+    {
+        return view('pages.admin.admin', ['show' => 'omitted_comments']);
+    }
 }

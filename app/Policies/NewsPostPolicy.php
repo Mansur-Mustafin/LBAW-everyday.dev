@@ -63,4 +63,12 @@ class NewsPostPolicy
 
         return $user->id === $newsPost->author_id;
     }
+
+    /**
+     * Determine whether the user can omit the model.
+     */
+    public function omit(User $user, NewsPost $newsPost): bool
+    {
+        return $user->is_admin;
+    }
 }
