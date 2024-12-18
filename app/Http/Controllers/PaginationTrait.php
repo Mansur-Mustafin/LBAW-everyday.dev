@@ -13,12 +13,12 @@ trait PaginationTrait
     {
         $filter = new NewsPostFilter($request);
 
-        $newsPosts = $filter->apply($newsPosts);
+        $newsPosts = $filter->apply($newsPosts)->where('is_omitted', '!=', 'true');
         $user = Auth::user();
 
         if ($user) {
             $newsPosts->with([
-                'votes' => fn ($query) => $query->where('user_id', $user->id),
+                'votes' => fn($query) => $query->where('user_id', $user->id),
             ]);
         }
 
@@ -28,9 +28,9 @@ trait PaginationTrait
         //     $news->user_vote = $user && $news->votes->isNotEmpty()
         //         ? ($news->votes->first()->is_upvote ? 'upvote' : 'downvote')
         //         : null;
-    
+
         //     $news->is_bookmarked = $user && $user->bookmarkedPosts->pluck('id')->contains($news->id);
-    
+
         //     return $news;
         // });
 

@@ -8,6 +8,7 @@ use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
 use App\Models\User;
 use App\Models\Report;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class SearchController extends Controller
     public static function getPostsByTag(Tag $tag): Builder
     {
         return NewsPost::query()
+            ->where('is_omitted', '!=', 'true')
             ->join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
     }
@@ -34,7 +36,7 @@ class SearchController extends Controller
     {
         $searchQuery = $request->input('query', '');
 
-        $newsPosts = self::getPosts($searchQuery)->limit(3)->get();
+        $newsPosts = self::getPosts($searchQuery)->where('is_omitted', '!=', 'true')->limit(3)->get();
 
         $query = empty($searchQuery) ? '' : "%" . strtolower($searchQuery) . "%";
 
@@ -103,7 +105,7 @@ class SearchController extends Controller
     public function searchReports(Request $request)
     {
         $searchQuery = "%" . strtolower($request->search) . "%";
-        
+
         $reports = Report::select(
             'report.*',
             'reporter.id as reporter_id',
@@ -112,11 +114,33 @@ class SearchController extends Controller
             'reported.username as reported_username',
             'reported.status as reported_status'
         )
-        ->leftJoin('user as reporter', 'reporter.id', '=', 'report.reporter_id') 
-        ->leftJoin('user as reported', 'reported.id', '=', 'report.reported_user_id') 
-        ->whereRaw("LOWER(reporter.username) like ?", [$searchQuery]) 
-        ->orWhereRaw("LOWER(reported.username) like ?", [$searchQuery]); 
-        
+            ->leftJoin('user as reporter', 'reporter.id', '=', 'report.reporter_id')
+            ->leftJoin('user as reported', 'reported.id', '=', 'report.reported_user_id')
+            ->whereRaw("LOWER(reporter.username) like ?", [$searchQuery])
+            ->orWhereRaw("LOWER(reported.username) like ?", [$searchQuery]);
+
         return $this->paginate($reports, $request, 10);
+    }
+
+    public function searchOmittedPosts(Request $request)
+    {
+        if ($request->search == '') {
+            $omitted_posts = NewsPost::where('is_omitted', 'true');
+            return $this->paginate($omitted_posts, $request, 10);
+        } else {
+            $searchQuery = "%" . strtolower($request->search) . "%";
+            $omitted_posts = self::getPosts($searchQuery)->where('is_omitted', 'true');
+            return $this->paginate($omitted_posts, $request, 10);
+        }
+    }
+
+    public function searchOmittedComments(Request $request)
+    {
+        $searchQuery = "%" . strtolower($request->search) . "%";
+        $omitted_comments = Comment::select('user.*', 'comment.*')
+            ->leftJoin('user', 'user.id', '=', 'comment.author_id')
+            ->where('is_omitted', 'true')
+            ->whereRaw("LOWER(username) like ?", [$searchQuery]);
+        return $this->paginate($omitted_comments, $request, 10);
     }
 }

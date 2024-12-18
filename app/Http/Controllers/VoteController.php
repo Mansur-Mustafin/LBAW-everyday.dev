@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vote;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,11 @@ class VoteController extends Controller
             ? $vote->news_post_id = $validated['id']
             : $vote->comment_id = $validated['id'];
 
-        $vote->save();
+        try {
+            $vote->save();
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Error on save']);
+        }
 
         return response()->json(['message' => 'Saved', 'vote_id' => $vote->id]);
     }
@@ -36,7 +41,11 @@ class VoteController extends Controller
     {
         $this->authorize('delete', $vote);
 
-        $vote->delete();
+        try {
+            $vote->delete();
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Error on delete']);
+        }
 
         return response()->json(['message' => 'Vote removed']);
     }
@@ -49,10 +58,12 @@ class VoteController extends Controller
             'is_upvote' => 'required|boolean',
         ]);
 
-        $vote->update([
-            'is_upvote' => $validated['is_upvote'],
-        ]);
+        try {
+            $vote->update(['is_upvote' => $validated['is_upvote']]);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Error on update']);
+        }
 
-        return response()->json(['message' => 'Vote updated', 'vote_id' => $vote->id]);
+        return response()->json(['message' => 'Vote updated']);
     }
 }
