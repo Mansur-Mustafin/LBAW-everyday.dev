@@ -75,7 +75,7 @@ if (createForm) {
 
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    
+
     // call this function after validation
     transformLoadingButton(createForm.querySelector("#post-button"));
 
