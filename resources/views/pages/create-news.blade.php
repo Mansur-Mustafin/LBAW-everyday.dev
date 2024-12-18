@@ -32,7 +32,7 @@
         <input class="hidden" type="file" id="realFileInput" name="image">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
-        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*">
+        <input name="title" id="title" class="rounded-2xl bg-input outline-none p-3" placeholder="Post title*"> {{-- TODO: add "required" here? => no need check in JS --}}
         <div class="flex flex-col">
             <label class="text-sm font-medium text-gray-300">Content</label>
             <div id="editor-create-container" class="!text-white rounded-xl bg-input !border-none"></div>
@@ -59,7 +59,7 @@
         <div id="selectedTags" class="flex gap-1 flex-wrap"></div>
 
         <input class="hidden" name="tags" id="tagsInput">
-        <button class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Post</button>
+        <button id="post-button" class="text-input bg-white font-bold rounded-xl px-6 py-2 self-end" type="submit">Post</button>
     </form>
 </section>
 @endsection

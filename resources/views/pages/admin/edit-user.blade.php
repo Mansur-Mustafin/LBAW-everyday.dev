@@ -134,7 +134,7 @@
 
         <div class="flex gap-2 self-end">
             <a href="{{ url('/admin') }}" class="text-input bg-white font-bold rounded-xl px-6 py-2">Cancel</a>
-            <button class="text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Save Changes</button>
+            <button class="loading-button text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Save Changes</button>
         </div>
     </form>
 </section>
