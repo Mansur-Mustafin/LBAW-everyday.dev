@@ -42,4 +42,9 @@ class CommentPolicy
 
         return $user->id === $comment->author_id;
     }
+
+    public function omit(User $user, Comment $comment) : bool
+    {
+        return $user->is_admin;
+    }
 }
