@@ -185,7 +185,7 @@
         @include('partials.comment-input', ['comment-id' => $comment->id])
 
         @foreach ($comment->replies as $reply)
-            @if(Auth::user()->is_admin || $reply->is_omitted == false) 
+            @if((Auth::check() && Auth::user()->is_admin) || $reply->is_omitted == false) 
                 @include('partials.comment', [
                     'comment' => $reply,
                     'level' => $level + 1,
@@ -385,7 +385,7 @@
             </a>
         @else
             @foreach ($comment->replies as $reply)
-                @if(Auth::user()->is_admin || $reply->is_omitted == false) 
+                @if((Auth::check() && Auth::user()->is_admin) || $reply->is_omitted == false) 
                     @include('partials.comment', [
                         'comment' => $reply,
                         'level' => $level + 1,
