@@ -114,7 +114,41 @@
                     class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Edit Profile</a>
             @elseif (Auth::user()->is_admin)
                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                    class="text-input bg-white font-bold rounded-lg px-4 py-1">Edit Profile</a>
+                    class="text-input bg-white font-bold rounded-lg px-4 py-1 text-center">Edit Profile</a>
+            @endif
+            @if (Auth::user()->id !== $user->id and Auth::check())
+                <button class="reportUser-button text-input bg-white font-bold rounded-lg px-4 py-1" data-user-id="{{ $user->id }}">
+                    Report User
+                </button>
+
+                <div id="reportUser-popup-{{ $user->id }}" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div class="bg-white p-6 rounded-lg w-96">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Report User</h3>
+                        
+                        <form action="{{ route('report.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="news_post_id" value="">
+                            <input type="hidden" name="reporter_id" value="{{ Auth::id() }}">
+                            <input type="hidden" name="report_type" value="UserReport">
+                            <input type="hidden" name="comment_id" value="">
+                            <input type="hidden" name="reported_user_id" value="{{ $user->id }}">
+                            
+                            <textarea name="description" id="report-comment-{{ $user->id }}" 
+                                    class="w-full p-2 border rounded-lg text-gray-700" 
+                                    placeholder="Write report's motive" required></textarea>
+                            
+                            <div class="mt-4 flex justify-end gap-2">
+                                <button type="button" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 reportUser-popup-close"
+                                        data-user-id="{{ $user->id }}">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             @endif
             @if (Auth::check() and (Auth::id() == $user->id))
                 <form action="{{ url('/users/' . $user->id . '/anonymize') }}" method="POST">

@@ -51,6 +51,10 @@ class ReportController extends Controller
             return redirect()->route('news.show', $post_id)
                 ->with('success', 'You have successfully reported the comment!');
         }
+        else if($request->report_type === 'UserReport' && $request->reported_user_id){
+            return redirect()->route('user.posts', ['user' => $request->reported_user_id])
+                ->with('success', 'You have successfully reported the user!');
+        }
     }
 
     public function destroy(Report $report)
