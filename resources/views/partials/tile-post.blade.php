@@ -1,7 +1,8 @@
 <div class="p-4 rounded shadow-sm flex flex-col justify-between">
-    <img src="{{ url($news->titleImage->url) }}" alt="" class="w-full h-48 object-cover mb-2 rounded-md">
-
+    
     <a href="{{ url('/news/' . $news->id) }}">
+        <img src="{{ url($news->titleImage->url) }}" alt="" class="w-full h-48 object-cover mb-2 rounded-md">
+        
         <h3 class="text-lg font-bold">{{ $news->title }}</h3>
     </a>
 

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vote;
-use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
 
 class VoteController extends Controller
 {
