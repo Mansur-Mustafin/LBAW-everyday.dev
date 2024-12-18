@@ -66,36 +66,13 @@ const unblockUser = async (userId,baseUrl) => {
     'PUT'
   )
 }
-const omitPost = async (postId,baseUrl) => {
-  const url = `${baseUrl}/news/${postId}/omit`
-  sendAjaxRequest(
-    url,
-    (data) => {
-      console.log(data)
-    },
-    'PUT'
-  )
-}
 
 const unOmitPost = async (postId,baseUrl) => {
   const url = `${baseUrl}/news/${postId}/unomit`
   sendAjaxRequest(
     url,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'PUT'
-  )
-}
-
-const omitComment = async (commentId,baseUrl) => {
-  const url = `${baseUrl}/comments/${commentId}/omit`
-  sendAjaxRequest(
-    url,
-    (data) => {
-      console.log(data)
-    },
-    'POST'
   )
 }
 
@@ -103,9 +80,7 @@ const unOmitComment = async (commentId,baseUrl) => {
   const url = `${baseUrl}/comments/${commentId}/unomit`
   sendAjaxRequest(
     url,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'POST'
   )
 }
@@ -288,7 +263,7 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 const buildOmittedPost = (omittedPost) => {
   const pageUrl = `${baseUrl}/news/${omittedPost.id}`;
   return `
-    <div class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedPost.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
       <a href="${pageUrl}" class="flex flex-col flex-grow w-full">
         ${omittedPost.author.public_name}
         <div class="text-gray-600">
@@ -311,7 +286,7 @@ const buildOmittedPost = (omittedPost) => {
 
 const buildOmittedComment = (omittedComment) => {
   return `
-    <div class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedComment.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
       <div class="flex flex-col flex-grow w-full">
         ${omittedComment.public_name}
         <div class="text-gray-600">
@@ -414,7 +389,9 @@ const addUnomitPostButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const unomitPostId= targetUnomit.id.split('-unomit-post-button')[0]
       unOmitPost(unomitPostId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const omittedPostCard = document.getElementById(unomitPostId+'-card')
+      omittedPostCard.classList.add('hidden')
+      //reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
@@ -427,7 +404,9 @@ const addUnomitCommentButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const unomitCommentId= targetUnomit.id.split('-unomit-comment-button')[0]
       unOmitComment(unomitCommentId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const omittedCommentCard = document.getElementById(unomitCommentId+'-card')
+      omittedCommentCard.classList.add('hidden')
+      //reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
 }
