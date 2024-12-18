@@ -12,8 +12,6 @@ const loadingIcon = document.getElementById('loading-icon');
 let lastPage = 0;
 let loading = false;
 let page = 1;
-const alreadyBlockButton = []
-const alreadyUnblockButton = []
 
 const buildByRequest = async (url, buildUser, resultsDiv) => {
   if (loading) return;
@@ -27,8 +25,8 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
-      if(data.users) {
-        data.users.forEach((user) => {
+      if(data.data) {
+        data.data.forEach((user) => {
           resultsDiv.innerHTML += buildUser(user);
         });
       } 

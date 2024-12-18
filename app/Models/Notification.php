@@ -74,7 +74,7 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Isso precisa para contruir a mensagem de notificacao
+    // To build the notification message.
     public function newsPost()
     {
         return $this->belongsTo(NewsPost::class, 'news_post_id')

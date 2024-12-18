@@ -4,45 +4,35 @@ import { sendAjaxRequest } from "./utils"
 const deleteTag = async (tagId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/tags/delete/${tagId}`,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'DELETE'
   )
 }
 const deleteTagProposal = async (tagProposalId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
-    (data) => {
-      console.log(data)
-    },
+    (data) => {},
     'DELETE'
   )
 }
 const acceptTagProposal = async (tagProposalId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'PUT'
   )
 }
 const acceptUnblockAppeal = async (unblockAppealId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/unblock_appeals/accept/${unblockAppealId}`,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'PUT'
   )
 }
 const deleteUnblockAppeal = async (unblockAppealId,baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/unblock_appeals/delete/${unblockAppealId}`,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'DELETE'
   )
 }
@@ -50,9 +40,7 @@ const blockUser = async (userId,baseUrl) => {
   const url = `${baseUrl}/admin/users/${userId}/block`
   sendAjaxRequest(
     url,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'PUT'
   )
 }
@@ -60,9 +48,7 @@ const unblockUser = async (userId,baseUrl) => {
   const url = `${baseUrl}/admin/users/${userId}/unblock`
   sendAjaxRequest(
     url,
-    (data) => {
-      console.log(data)
-    },
+    (_data) => {},
     'PUT'
   )
 }
@@ -98,41 +84,26 @@ const deleteUser = async (userId,baseUrl) => {
 
 // Card Builder Functions
 const buildUserCard = (user) => {
-/*   const adminBadge = `
-    <span class="">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
-    </span>
-  `; */
-  const adminBadge = `
-    <p class=" text-gray-400">(Admin)</p> 
+  const adminBadge = (status) => `
+    <p id=${user.id}-admin-badge class=" text-gray-400 ${status == 'admin' ? '' : 'hidden'}">(Admin)</p> 
   `
-/*   const blockedBadge = `
-    <span class="">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
-    </span>
-  ` */
-  const blockedBadge = `
-    <p class=" text-gray-400">(Blocked)</p> 
+  const blockedBadge = (status) => `
+    <p id=${user.id}-blocked-badge class=" text-gray-400 ${status == 'blocked' ? '' : 'hidden'}">(Blocked)</p> 
   `
-/*   const pendingBadge = `
-    <span class="">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed"><path d="M10.1 2.182a10 10 0 0 1 3.8 0"/><path d="M13.9 21.818a10 10 0 0 1-3.8 0"/><path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/><path d="M2.182 13.9a10 10 0 0 1 0-3.8"/><path d="M20.279 17.609a10 10 0 0 1-2.7 2.69"/><path d="M21.818 10.1a10 10 0 0 1 0 3.8"/><path d="M3.721 6.391a10 10 0 0 1 2.7-2.69"/><path d="M6.391 20.279a10 10 0 0 1-2.69-2.7"/></svg>
-    </span>
-  ` */
-  const pendingBadge= `
-    <p class=" text-gray-400">(Pending)</p> 
+  const pendingBadge= (status) => `
+    <p id=${user.id}-pending-badge class=" text-gray-400 ${status == 'pending' ? '' : 'hidden'}">(Pending)</p> 
   `
   const pageUrl = `${baseUrl}/users/${user.id}/posts`;
   const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
   return `
-    <div class="flex flex-col p-2 border rounded border-gray-700 bg-input">
+    <div class="flex flex-col p-2 border rounded border-gray-700 bg-input" id="${user.id}-card">
       <div class="flex justify-between">
         <div class="flex-grow">
           <a href="${pageUrl}" class="text-md tablet:text-2xl flex place items-center gap-1">
             <span class="max-w-32 tablet:max-w-60 truncate ">${user.public_name}</span>
-            ${user.status == 'blocked' ? blockedBadge : ''}    
-            ${user.status == 'pending' ? pendingBadge : ''}    
-            ${user.is_admin == true ? adminBadge : ''}
+            ${adminBadge(user.is_admin ? 'admin' : '')}
+            ${blockedBadge(user.status)}
+            ${pendingBadge(user.status)}
           </a>
           <h3 class="text-gray-400 ">${user.rank}</h3>
           <h3 class="text-gray-400 max-w-40 truncate">${user.username}</h3>
@@ -141,17 +112,14 @@ const buildUserCard = (user) => {
         <div class="flex flex-col tablet:flex-row">
           ${
             !user.is_admin 
-              ? user.status != 'blocked'
                 ? `
-                  <a id="${user.id}-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center" href="">
+                  <a id="${user.id}-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center ${user.status != 'blocked' ? '' : 'hidden'}" href="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban">
                       <circle cx="12" cy="12" r="10"/>
                       <path d="m4.9 4.9 14.2 14.2"/>
                     </svg>
                   </a>
-                `
-                : `
-                  <a id="${user.id}-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center" href="">
+                  <a id="${user.id}-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center ${user.status != 'blocked' ? 'hidden' : ''}" href="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed">
                       <path d="M10.1 2.182a10 10 0 0 1 3.8 0"/>
                       <path d="M13.9 21.818a10 10 0 0 1-3.8 0"/>
@@ -311,25 +279,38 @@ const buildOmittedComment = (omittedComment) => {
 const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.addEventListener('click',(event) => {
     const targetBlock = event.target.closest('.block-button')
+    const targetUnblock = event.target.closest('.unblock-button')
+
     if(targetBlock) {
       event.preventDefault()
       const userId = targetBlock.id.split('-block-button')[0]
+      const blockedBadge = document.getElementById(userId+'-blocked-badge')
+      const pendingBadge = document.getElementById(userId+'-pending-badge')
+      pendingBadge.classList.add('hidden')
+      blockedBadge.classList.remove('hidden')
+      const unblockButton = document.getElementById(userId+'-unblock-button')
       blockUser(userId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      targetBlock.classList.add('hidden')
+      unblockButton.classList.remove('hidden')
     }
-    const targetUnblock = event.target.closest('.unblock-button')
     if(targetUnblock) {
       event.preventDefault()
       const userId = targetUnblock.id.split('-unblock-button')[0]
+      const blockedBadge = document.getElementById(userId+'-blocked-badge')
+      blockedBadge.classList.add('hidden')
+      const blockButton = document.getElementById(userId+'-block-button')
       unblockUser(userId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      blockButton.classList.remove('hidden')
+      targetUnblock.classList.add('hidden')
+
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const userId = targetDelete.id.split('-delete-button')[0]
       deleteUser(userId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const userCard = document.getElementById(userId+'-card')
+      userCard.classList.add('hidden')
     }
   })
 }
@@ -340,7 +321,8 @@ const addTagButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const tagId = targetDelete.id.split('-delete-button')[0]
       deleteTag(tagId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const tagCard = document.getElementById(tagId+'-card')
+      tagCard.classList.add('hidden')
     }
   })
 }
@@ -351,14 +333,16 @@ const addTagProposalButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const tagProposalId = targetAccept.id.split('-accept-button')[0]
       acceptTagProposal(tagProposalId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const tagproposalcard = document.getElementById(tagProposalId+'-card')
+      tagproposalcard.classList.add('hidden')
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const tagProposalId = targetDelete.id.split('-delete-button')[0]
       deleteTagProposal(tagProposalId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const tagproposalcard = document.getElementById(tagProposalId+'-card')
+      tagproposalcard.classList.add('hidden')
     }
   })
 }
@@ -369,14 +353,17 @@ const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
       event.preventDefault()
       const unblockAppealId = targetAccept.id.split('-accept-button')[0]
       acceptUnblockAppeal(unblockAppealId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
+      console.log(tagproposalcard)
+      tagproposalcard.classList.add('hidden')
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const unblockAppealId = targetDelete.id.split('-delete-button')[0]
       deleteUnblockAppeal(unblockAppealId,baseUrl)
-      reloadData(baseQuery,buildFunction,resultDiv)
+      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
+      tagproposalcard.classList.add('hidden')
     }
   })
 }
