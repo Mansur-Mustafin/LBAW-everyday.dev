@@ -1,4 +1,4 @@
-import { tranformLoadingButton } from './utils.js'
+import { transformLoadingButton } from './utils.js'
 
 document.querySelectorAll('.loading-button').forEach((button) => {
   const form = button.closest('form');
@@ -10,6 +10,6 @@ document.querySelectorAll('.loading-button').forEach((button) => {
       return;
     }
 
-    tranformLoadingButton(button);
+    transformLoadingButton(button);
   });
 });
