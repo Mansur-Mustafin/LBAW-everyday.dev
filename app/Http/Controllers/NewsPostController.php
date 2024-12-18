@@ -15,6 +15,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class NewsPostController extends Controller
 {
@@ -41,26 +42,38 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function show(NewsPost $newsPost): View|Factory
+    public function show(NewsPost $newsPost): View|Factory|RedirectResponse
     {
         $tags = $this->getAvailableTags($newsPost);
         $user = Auth::user();
 
+        if ($user && $user->is_admin) {
+            $comments = $newsPost->comments;
+        } else {
+            $comments = $newsPost->comments->where('is_omitted', '!=', 'true');
+        }
+
+        //dd($comments);
+
         $this->preparePostForUser($newsPost);
-        $this->processComments($newsPost->comments, $user);
+        $this->processComments($comments, $user);
+
+        if ($newsPost->is_omitted && !$user->is_admin) {
+            return redirect('home');
+        }
 
         return view('pages.post', [
             'post' => $newsPost,
             'tags' => $tags,
             'availableTags' => $tags,
             'thread' => 'multi',
-            'comments' => $newsPost->comments
+            'comments' => $comments
         ]);
     }
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         $post = NewsPost::create([
             'title' => $validated['title'],
@@ -76,11 +89,13 @@ class NewsPostController extends Controller
         if ($request->has('content_images')) {
             $paths = explode(',', $validated['content_images']);
             foreach ($paths as $path) {
-                Image::create([
-                    'path' => $path,
-                    'image_type' => ImageTypeEnum::POST_CONTENT,
-                    'news_post_id' => $post->id,
-                ]);
+                if (!empty($path)) {
+                    Image::create([
+                        'path' => $path,
+                        'image_type' => ImageTypeEnum::POST_CONTENT,
+                        'news_post_id' => $post->id,
+                    ]);
+                }
             }
         }
 
@@ -94,7 +109,7 @@ class NewsPostController extends Controller
     {
         $this->authorize('update', $newsPost);
 
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         $newsPost->update([
             'title' => $validated['title'],
@@ -142,6 +157,41 @@ class NewsPostController extends Controller
 
         return redirect()->route('news.recent')
             ->withSuccess('Post deleted successfully!');
+    }
+
+    public function omit(Request $request, NewsPost $newsPost)
+    {
+        // TODO try catch
+        $this->authorize('omit', $newsPost);
+        $newsPost->update([
+            'is_omitted' => "true"
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(['sucess' => true]);
+        }
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
+            ->with('message', 'Post omitted successfully!');
+    }
+
+    public function unomit(Request $request, NewsPost $newsPost)
+    {
+        // TODO try catch
+        $this->authorize('omit', $newsPost);
+        $newsPost->update([
+            'is_omitted' => 'false'
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(['sucess' => true]);
+        }
+        return redirect()->route('news.show', ['news_post' => $newsPost->id])
+            ->with('message', 'Post un-omitted successfully!');
+    }
+
+    public function showOmittedPosts()
+    {
+        return view('pages.admin.admin', ['show' => 'omitted_posts']);
     }
 
     private function preparePostForUser(NewsPost $newsPost): void
@@ -198,7 +248,13 @@ class NewsPostController extends Controller
             }
 
             if ($comment->replies) {
-                self::processComments($comment->replies, $user);
+                if ($user->is_admin) {
+                    $replies = $comment->replies;
+                    self::processComments($comment->replies, $user);
+                } else {
+                    $replies = $comment->replies->where('is_omitted', '!=', 'true');
+                    self::processComments($replies, $user);
+                }
             }
         }
     }

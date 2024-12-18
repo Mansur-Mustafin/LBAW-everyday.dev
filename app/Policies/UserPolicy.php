@@ -7,6 +7,15 @@ use App\Models\User;
 class UserPolicy
 {
     /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $authUser, User $user): bool
+    {
+        return $user->status != 'deleted';
+    }
+
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $authUser, User $user): bool
@@ -30,7 +39,6 @@ class UserPolicy
         return $currentUser->id !== $userToFollow->id
             && !$currentUser->following()->where('followed_id', $userToFollow->id)->exists();
     }
-
 
     /**
      * Determine whether the user can unfollow another user.
