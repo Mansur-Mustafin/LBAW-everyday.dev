@@ -270,7 +270,6 @@
                     </div>
                 @endif
             @endif
-            <p>{{$post->is_omitted ? 'omitted' : 'not omitted'}}</p>
         </div>
 
         @can('update', $post)
