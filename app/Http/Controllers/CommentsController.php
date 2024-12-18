@@ -108,4 +108,8 @@ class CommentsController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function showOmittedComments() {
+        return view('pages.admin.admin', ['show' => 'omitted_comments']);
+    }
 }

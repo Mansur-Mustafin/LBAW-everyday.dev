@@ -174,6 +174,10 @@ class NewsPostController extends Controller
             ->with('message','Post un-omitted successfully!');
     }
 
+    public function showOmittedPosts() {
+        return view('pages.admin.admin', ['show' => 'omitted_posts']);
+    }
+
     private function preparePostForUser(NewsPost $newsPost): void
     {
         $user = Auth::user();

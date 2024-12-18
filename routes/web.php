@@ -78,27 +78,31 @@ Route::prefix('news')->middleware('blocked')->controller(FeedController::class)-
     Route::get('api/posts/{search}', 'getPostFeed')->name('api.posts.search');
 });
 
-Route::prefix('news')->controller(NewsPostController::class)->group(function () {
+Route::controller(NewsPostController::class)->group(function () {
     Route::middleware(['auth', 'blocked'])->group(function () {
-        Route::get('/create-post', 'showCreationForm')->name('news.create');
-        Route::post('/', 'store')->name('news');
-        Route::put('/{news_post}', 'update')->name('news.update');
-        Route::delete('/{news_post}', 'destroy');
+        Route::get('news/create-post', 'showCreationForm')->name('news.create');
+        Route::post('news/', 'store')->name('news');
+        Route::put('news/{news_post}', 'update')->name('news.update');
+        Route::delete('news/{news_post}', 'destroy');
     });
     Route::middleware('admin')->group(function () {
-        route::put('/{news_post}/omit','omit')->name('news.omit');
-        route::put('/{news_post}/unomit','unomit')->name('news.unomit');
+        Route::put('news/{news_post}/omit','omit')->name('news.omit');
+        Route::put('news/{news_post}/unomit','unomit')->name('news.unomit');
+        Route::get('admin/news/omitted_posts','showOmittedPosts')->name('admin.omitted_posts');
     });
-    Route::get('/{news_post}', 'show')->name('news.show');
-    Route::get('/{news_post}/comment/{comment}', 'showSingleThread');
+    Route::get('news/{news_post}', 'show')->name('news.show');
+    Route::get('news/{news_post}/comment/{comment}', 'showSingleThread');
 });
 
 Route::prefix('comments')->middleware(['auth', 'blocked'])->controller(CommentsController::class)->group(function () {
-    Route::post('/', 'store');
-    Route::put('/{comment}', 'update');
-    Route::delete('/{comment}', 'destroy');
-    Route::post('/{comment}/omit','omit');
-    Route::post('/{comment}/unomit','unomit');
+    Route::post('comments/', 'store');
+    Route::put('comments/{comment}', 'update');
+    Route::delete('comments/{comment}', 'destroy');
+    Route::middleware('admin')->group(function () {
+        Route::post('comments/{comment}/omit','omit');
+        Route::post('comments/{comment}/unomit','unomit');
+        Route::get('admin/news/omitted_comments','showOmittedComments')->name('admin.omitted_comments');
+    });
 });
 
 Route::prefix('vote')->middleware(['auth', 'blocked'])->controller(VoteController::class)->group(function () {
