@@ -6,12 +6,12 @@ const defaultHeaders = {
 
 export function encodeForAjax(data) {
   if (data == null) return null;
-  
+
   const params = [];
   for (const key in data) {
     const value = data[key];
     if (Array.isArray(value)) {
-      value.forEach(val => {
+      value.forEach((val) => {
         params.push(encodeURIComponent(key) + '[]=' + encodeURIComponent(val));
       });
     } else {
@@ -20,7 +20,6 @@ export function encodeForAjax(data) {
   }
   return params.join('&');
 }
-
 
 export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined) {
   fetch(url, {
@@ -114,3 +113,19 @@ export const tranformLoadingButton = (button) => {
       Sending...
     `;
 };
+
+export function copyToClipboard(elem) {
+  elem.addEventListener('click', function () {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      const feedback = elem.querySelector('.copied-feedback');
+
+      feedback.classList.remove('opacity-0');
+      feedback.classList.add('opacity-100');
+
+      setTimeout(() => {
+        feedback.classList.add('opacity-0');
+        feedback.classList.remove('opacity-100');
+      }, 1000);
+    });
+  });
+}
