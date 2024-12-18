@@ -77,21 +77,31 @@ Route::prefix('news')->middleware('blocked')->controller(FeedController::class)-
     Route::get('api/posts/{search}', 'getPostFeed')->name('api.posts.search');
 });
 
-Route::prefix('news')->controller(NewsPostController::class)->group(function () {
+Route::controller(NewsPostController::class)->group(function () {
     Route::middleware(['auth', 'blocked'])->group(function () {
-        Route::get('/create-post', 'showCreationForm')->name('news.create');
-        Route::post('/', 'store')->name('news');
-        Route::put('/{news_post}', 'update')->name('news.update');
-        Route::delete('/{news_post}', 'destroy');
+        Route::get('news/create-post', 'showCreationForm')->name('news.create');
+        Route::post('news/', 'store')->name('news');
+        Route::put('news/{news_post}', 'update')->name('news.update');
+        Route::delete('news/{news_post}', 'destroy');
     });
-    Route::get('/{news_post}', 'show')->name('news.show');
-    Route::get('/{news_post}/comment/{comment}', 'showSingleThread');
+    Route::middleware('admin')->group(function () {
+        Route::put('news/{news_post}/omit', 'omit')->name('news.omit');
+        Route::put('news/{news_post}/unomit', 'unomit')->name('news.unomit');
+        Route::get('admin/news/omitted_posts', 'showOmittedPosts')->name('admin.omitted_posts');
+    });
+    Route::get('news/{news_post}', 'show')->name('news.show');
+    Route::get('news/{news_post}/comment/{comment}', 'showSingleThread');
 });
 
-Route::prefix('comments')->middleware(['auth', 'blocked'])->controller(CommentsController::class)->group(function () {
-    Route::post('/', 'store');
-    Route::put('/{comment}', 'update');
-    Route::delete('/{comment}', 'destroy');
+Route::middleware(['auth', 'blocked'])->controller(CommentsController::class)->group(function () {
+    Route::post('comments/', 'store');
+    Route::put('comments/{comment}', 'update');
+    Route::delete('comments/{comment}', 'destroy');
+    Route::middleware('admin')->group(function () {
+        Route::post('comments/{comment}/omit', 'omit');
+        Route::post('comments/{comment}/unomit', 'unomit');
+        Route::get('admin/news/omitted_comments', 'showOmittedComments')->name('admin.omitted_comments');
+    });
 });
 
 Route::prefix('vote')->middleware(['auth', 'blocked'])->controller(VoteController::class)->group(function () {
@@ -109,7 +119,7 @@ Route::middleware(['auth', 'blocked'])->controller(UserController::class)->group
 
     Route::get('/users/{user}/edit', 'showEditForm')->name('user.edit');
     Route::put('/users/{user}', 'update')->name('user.update');
-    Route::put('/users/{user}/anonymize','destroy');
+    Route::put('/users/{user}/anonymize', 'destroy');
 });
 
 Route::middleware(['auth', 'blocked'])->controller(FollowController::class)->group(function () {
@@ -137,23 +147,27 @@ Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagCon
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'showUsers')->name('admin');    // TODO: criar realmente um dashboard, com estatistica?
+    Route::get('/', 'showUsers')->name('admin');
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
     Route::post('/register', 'register');
     Route::put('/{user}', 'update')->name('admin.update');
-    Route::put('/users/{user}/block','blockUser');
-    Route::put('/users/{user}/unblock','unblockUser');
+    Route::put('/users/{user}/block', 'blockUser');
+    Route::put('/users/{user}/unblock', 'unblockUser');
 });
 
 // TODO:: add prefix
 Route::prefix('/api/search')->controller(SearchController::class)->group(function () {
     Route::get('/tags/{search?}', 'searchTags');
-    Route::get('/tag_proposals/{search?}', 'searchTagProposals');
-    Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
-    Route::get('/users/{search?}', 'searchUser')->middleware('admin');
-    Route::get('/', 'search');    // TODO: better pass api/search?query=<>
+    Route::middleware('admin')->group(function () {
+        Route::get('/tag_proposals/{search?}', 'searchTagProposals');
+        Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
+        Route::get('/omitted_posts/{search?}', 'searchOmittedPosts');
+        Route::get('/omitted_comments/{search?}', 'searchOmittedComments');
+        Route::get('/users/{search?}', 'searchUser');
+    });
+    Route::get('/', 'search');
 });
 
 Route::prefix('file')->middleware(['auth', 'blocked'])->controller(FileController::class)->group(function () {
@@ -196,9 +210,8 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-Route::controller(PageController::class)->group(function(){
+Route::controller(PageController::class)->group(function () {
     Route::get('/contacts', 'contacts')->name('contacts');
     Route::get('/about-us', 'about')->name('about');
     Route::get('/main-features', 'features')->name('features');
 });
-

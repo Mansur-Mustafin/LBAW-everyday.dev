@@ -81,7 +81,7 @@
                 <p class="text-sm text-gray-500">Posted {{ $news->created_at->diffForHumans() }}</p>
             </div>
             @if ($news->for_followers)
-                <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
+                <span class="bg-purple-700 text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
             @endif
         </div>
 

@@ -40,7 +40,6 @@ class UserPolicy
             && !$currentUser->following()->where('followed_id', $userToFollow->id)->exists();
     }
 
-
     /**
      * Determine whether the user can unfollow another user.
      */
