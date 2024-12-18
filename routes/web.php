@@ -160,9 +160,13 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
 // TODO:: add prefix
 Route::prefix('/api/search')->controller(SearchController::class)->group(function () {
     Route::get('/tags/{search?}', 'searchTags');
-    Route::get('/tag_proposals/{search?}', 'searchTagProposals');
-    Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
-    Route::get('/users/{search?}', 'searchUser')->middleware('admin');
+    Route::middleware('admin')->group(function () {
+        Route::get('/tag_proposals/{search?}', 'searchTagProposals');
+        Route::get('/unblock_appeals/{search?}', 'searchUnblockAppeals');
+        Route::get('/omitted_posts/{search?}','searchOmittedPosts');
+        Route::get('/omitted_comments/{search?}','searchOmittedComments');
+        Route::get('/users/{search?}', 'searchUser');
+    });
     Route::get('/', 'search');    // TODO: better pass api/search?query=<>
 });
 

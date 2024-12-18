@@ -44,11 +44,11 @@
   @endif
 
   @if($show == 'omitted_posts')
-    <div id="admin-omitted-posts-appeals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-omitted-posts-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
   @endif
 
   @if($show == 'omitted_comments')
-    <div id="admin-omitted-comments-appeals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-omitted-comments-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
   @endif
 
   <div id="loading-icon" class="my-6">

@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,6 @@ class SearchController extends Controller
     public static function getPosts(string $searchQuery): Builder
     {
         return NewsPost::query()
-            ->where('is_omitted','!=','true')
             ->join('user', 'user.id', '=', "news_post.id")
             ->whereRaw('(tsvectors @@ plainto_tsquery(\'english\',?) OR title=?)', [$searchQuery, $searchQuery])
             ->orderByRaw('ts_rank(tsvectors,plainto_tsquery(\'english\',?)) DESC', [$searchQuery]);
@@ -35,7 +35,7 @@ class SearchController extends Controller
     {
         $searchQuery = $request->input('query', '');
 
-        $newsPosts = self::getPosts($searchQuery)->limit(3)->get();
+        $newsPosts = self::getPosts($searchQuery)->where('is_omitted','!=','true')->limit(3)->get();
 
         $query = empty($searchQuery) ? '' : "%" . strtolower($searchQuery) . "%";
 
@@ -99,5 +99,27 @@ class SearchController extends Controller
             ->whereRaw("LOWER(username) like ?", [$searchQuery]);
 
         return $this->paginate($unblock_appeals, $request, 10);
+    }
+
+    public function searchOmittedPosts(Request $request)
+    {
+        if($request->search == '') {
+            $omitted_posts = NewsPost::where('is_omitted','true');
+            return $this->paginate($omitted_posts,$request,10);
+        } else {
+            $searchQuery = "%" . strtolower($request->search) . "%";
+            $omitted_posts = self::getPosts($searchQuery)->where('is_omitted','true');
+            return $this->paginate($omitted_posts,$request,10);
+        }
+    }
+
+    public function searchOmittedComments(Request $request)
+    {
+        $searchQuery = "%" . strtolower($request->search) . "%";
+        $omitted_comments = Comment::select('user.*', 'comment.*')
+            ->leftJoin('user', 'user.id', '=', 'comment.author_id')
+            ->where('is_omitted','true')
+            ->whereRaw("LOWER(username) like ?",[$searchQuery]);
+        return $this->paginate($omitted_comments,$request,10);
     }
 }
