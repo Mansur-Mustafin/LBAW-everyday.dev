@@ -108,5 +108,25 @@
                 <rect x="13" y="15" width="8" height="5" rx="1" />
             </svg>
         </a>
+        <a href="{{ route('admin.omitted_posts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-pencil-off">
+                <path
+                    d="m10 10-6.157 6.162a2 2 0 0 0-.5.833l-1.322 4.36a.5.5 0 0 0 .622.624l4.358-1.323a2 2 0 0 0 .83-.5L14 13.982" />
+                <path d="m12.829 7.172 4.359-4.346a1 1 0 1 1 3.986 3.986l-4.353 4.353" />
+                <path d="m15 5 4 4" />
+                <path d="m2 2 20 20" />
+            </svg>
+        </a>
+        <a href="{{ route('admin.omitted_comments') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-message-circle-off">
+                <path d="M20.5 14.9A9 9 0 0 0 9.1 3.5" />
+                <path d="m2 2 20 20" />
+                <path d="M5.6 5.6C3 8.3 2.2 12.5 4 16l-2 6 6-2c3.4 1.8 7.6 1.1 10.3-1.7" />
+            </svg>
+        </a>
     </div>
 </aside>

@@ -15,6 +15,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class NewsPostController extends Controller
 {
@@ -154,22 +155,32 @@ class NewsPostController extends Controller
             ->withSuccess('Post deleted successfully!');
     }
 
-    public function omit(NewsPost $newsPost)
+    public function omit(Request $request, NewsPost $newsPost)
     {
         $newsPost->update([
             'is_omitted'=>"true"
         ]);
 
+        if($request->ajax()) {
+            return response()->json([
+                'sucess'=>'true'
+            ]);
+        }
         return redirect()->route('news.show',['news_post'=>$newsPost->id])
             ->with('message','Post omitted successfully!');
     }
 
-    public function unomit(NewsPost $newsPost)
+    public function unomit(Request $request, NewsPost $newsPost)
     {
         $newsPost->update([
             'is_omitted'=>'false'
         ]);
 
+        if($request->ajax()) {
+            return response()->json([
+                'sucess'=>'true'
+            ]);
+        }
         return redirect()->route('news.show',['news_post'=>$newsPost->id])
             ->with('message','Post un-omitted successfully!');
     }
