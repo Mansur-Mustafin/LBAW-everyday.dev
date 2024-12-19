@@ -237,16 +237,23 @@
                     </button>
                 </div>
             @endcan
-            @can('delete', $post)
-                <div class="flex-1">
-                    <form method="POST" action="/news/{{ $post->id }}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                            type="submit">Delete post</button>
-                    </form>
-                </div>
-            @endcan
+            
+            <div class="flex-1">
+                <form method="POST" action="/news/{{ $post->id }}">
+                    @csrf
+                    @method('DELETE')
+                    <button
+                        type="submit"
+                        id="delete-post-button"
+                        @class([
+                            'border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full',
+                            'hidden' => Gate::denies('delete', $post)
+                        ])>
+                        Delete post
+                    </button>
+                </form>
+            </div>            
+            
             @if (Auth::check() && Auth::user()->isAdmin())
                 @if(!$post->is_omitted) 
                     <div class="flex-1">
