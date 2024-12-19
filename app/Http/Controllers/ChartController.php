@@ -52,10 +52,11 @@ class ChartController extends Controller
         $period = CarbonPeriod::create($start, "1 month", $end);
 
         $usersPerMonth = collect($period)->map(function ($date) {
-            $endDate = $date->copy()->endOfMonth();
+            $startDate = $date->copy()->startOfMonth();
+            $endDate   = $date->copy()->endOfMonth();
 
             return [
-                "count" => User::where("created_at", "<=", $endDate)->count(),
+                "count" => User::whereBetween("created_at", [$startDate,$endDate])->count(),
                 "month" => $endDate->format("Y-m-d")
             ];
         });
@@ -72,17 +73,18 @@ class ChartController extends Controller
         $end = Carbon::now();
         $period = CarbonPeriod::create($start, "1 month", $end);
 
-        $usersPerMonth = collect($period)->map(function ($date) {
-            $endDate = $date->copy()->endOfMonth();
+        $newsPerMonth = collect($period)->map(function ($date) {
+            $startDate = $date->copy()->startOfMonth();
+            $endDate   = $date->copy()->endOfMonth();
 
             return [
-                "count" => NewsPost::where("created_at", "<=", $endDate)->count(),
+                "count" => NewsPost::whereBetween("created_at", [$startDate,$endDate])->count(),
                 "month" => $endDate->format("Y-m-d")
             ];
         });
 
-        $data = $usersPerMonth->pluck("count")->toArray();
-        $labels = $usersPerMonth->pluck("month")->toArray();
+        $data = $newsPerMonth->pluck("count")->toArray();
+        $labels = $newsPerMonth->pluck("month")->toArray();
 
         return self::buildChart("NewsPostCreation","News Post Creation",$labels,$data,$start);
     }
