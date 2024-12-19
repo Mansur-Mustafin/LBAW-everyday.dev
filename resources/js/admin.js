@@ -1,5 +1,6 @@
 import { sendAjaxRequest, stripHtml } from "./utils"
 
+
 // API Requests
 const deleteTag = async (tagId,baseUrl) => {
   sendAjaxRequest(
@@ -286,31 +287,39 @@ const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
       const userId = targetBlock.id.split('-block-button')[0]
       const blockedBadge = document.getElementById(userId+'-blocked-badge')
       const pendingBadge = document.getElementById(userId+'-pending-badge')
-      pendingBadge.classList.add('hidden')
-      blockedBadge.classList.remove('hidden')
-      const unblockButton = document.getElementById(userId+'-unblock-button')
-      blockUser(userId,baseUrl)
-      targetBlock.classList.add('hidden')
-      unblockButton.classList.remove('hidden')
+      const actionBlock = () => {
+        pendingBadge.classList.add('hidden')
+        blockedBadge.classList.remove('hidden')
+        const unblockButton = document.getElementById(userId+'-unblock-button')
+        blockUser(userId,baseUrl)
+        targetBlock.classList.add('hidden')
+        unblockButton.classList.remove('hidden')
+      }
+      handleDialog(actionBlock,userId)
     }
     if(targetUnblock) {
       event.preventDefault()
       const userId = targetUnblock.id.split('-unblock-button')[0]
       const blockedBadge = document.getElementById(userId+'-blocked-badge')
-      blockedBadge.classList.add('hidden')
-      const blockButton = document.getElementById(userId+'-block-button')
-      unblockUser(userId,baseUrl)
-      blockButton.classList.remove('hidden')
-      targetUnblock.classList.add('hidden')
-
+      const actionUnblock = () => {
+        blockedBadge.classList.add('hidden')
+        const blockButton = document.getElementById(userId+'-block-button')
+        unblockUser(userId,baseUrl)
+        blockButton.classList.remove('hidden')
+        targetUnblock.classList.add('hidden')
+      }
+      handleDialog(actionUnblock,userId)
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const userId = targetDelete.id.split('-delete-button')[0]
-      deleteUser(userId,baseUrl)
-      const userCard = document.getElementById(userId+'-card')
-      userCard.classList.add('hidden')
+      const actionDelete = () => {
+        deleteUser(userId,baseUrl)
+        const userCard = document.getElementById(userId+'-card')
+        userCard.classList.add('hidden')
+      }
+      handleDialog(actionDelete,userId)
     }
   })
 }
@@ -320,9 +329,12 @@ const addTagButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetDelete) {
       event.preventDefault()
       const tagId = targetDelete.id.split('-delete-button')[0]
-      deleteTag(tagId,baseUrl)
-      const tagCard = document.getElementById(tagId+'-card')
-      tagCard.classList.add('hidden')
+      const actionDeleteTag = () => {
+        deleteTag(tagId,baseUrl)
+        const tagCard = document.getElementById(tagId+'-card')
+        tagCard.classList.add('hidden')
+      }
+      handleDialog(actionDeleteTag,tagId)
     }
   })
 }
@@ -332,17 +344,23 @@ const addTagProposalButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetAccept) {
       event.preventDefault()
       const tagProposalId = targetAccept.id.split('-accept-button')[0]
-      acceptTagProposal(tagProposalId,baseUrl)
-      const tagproposalcard = document.getElementById(tagProposalId+'-card')
-      tagproposalcard.classList.add('hidden')
+      const actionAcceptTagProposal = () => {
+        acceptTagProposal(tagProposalId,baseUrl)
+        const tagproposalcard = document.getElementById(tagProposalId+'-card')
+        tagproposalcard.classList.add('hidden')
+      }
+      handleDialog(actionAcceptTagProposal,tagProposalId)
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const tagProposalId = targetDelete.id.split('-delete-button')[0]
-      deleteTagProposal(tagProposalId,baseUrl)
-      const tagproposalcard = document.getElementById(tagProposalId+'-card')
-      tagproposalcard.classList.add('hidden')
+      const actionDeleteTagProposal = () => {
+        deleteTagProposal(tagProposalId,baseUrl)
+        const tagproposalcard = document.getElementById(tagProposalId+'-card')
+        tagproposalcard.classList.add('hidden')
+      }
+      handleDialog(actionDeleteTagProposal,tagProposalId)
     }
   })
 }
@@ -352,18 +370,23 @@ const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetAccept) {
       event.preventDefault()
       const unblockAppealId = targetAccept.id.split('-accept-button')[0]
-      acceptUnblockAppeal(unblockAppealId,baseUrl)
-      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
-      console.log(tagproposalcard)
-      tagproposalcard.classList.add('hidden')
+      const actionAcceptUnblockAppeal = () => {
+        acceptUnblockAppeal(unblockAppealId,baseUrl)
+        const tagproposalcard = document.getElementById(unblockAppealId+'-card')
+        tagproposalcard.classList.add('hidden')
+      }
+      handleDialog(actionAcceptUnblockAppeal,unblockAppealId)
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
       event.preventDefault()
       const unblockAppealId = targetDelete.id.split('-delete-button')[0]
-      deleteUnblockAppeal(unblockAppealId,baseUrl)
-      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
-      tagproposalcard.classList.add('hidden')
+      const actionDeleteUnblockAppeal = () => {
+        deleteUnblockAppeal(unblockAppealId,baseUrl)
+        const tagproposalcard = document.getElementById(unblockAppealId+'-card')
+        tagproposalcard.classList.add('hidden')
+      }
+      handleDialog(actionDeleteUnblockAppeal,unblockAppealId)
     }
   })
 }
@@ -375,9 +398,12 @@ const addUnomitPostButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetUnomit) {
       event.preventDefault()
       const unomitPostId= targetUnomit.id.split('-unomit-post-button')[0]
-      unOmitPost(unomitPostId,baseUrl)
-      const omittedPostCard = document.getElementById(unomitPostId+'-card')
-      omittedPostCard.classList.add('hidden')
+      const actionUnomitPost = () => {
+        unOmitPost(unomitPostId,baseUrl)
+        const omittedPostCard = document.getElementById(unomitPostId+'-card')
+        omittedPostCard.classList.add('hidden')
+      }
+      handleDialog(actionUnomitPost,unomitPostId)
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
   })
@@ -390,10 +416,12 @@ const addUnomitCommentButtons = (baseQuery,buildFunction,resultDiv) => {
     if(targetUnomit) {
       event.preventDefault()
       const unomitCommentId= targetUnomit.id.split('-unomit-comment-button')[0]
-      unOmitComment(unomitCommentId,baseUrl)
-      const omittedCommentCard = document.getElementById(unomitCommentId+'-card')
-      omittedCommentCard.classList.add('hidden')
-      //reloadData(baseQuery,buildFunction,resultDiv)
+      const actionUnomitComment = () => {
+        unOmitComment(unomitCommentId,baseUrl)
+        const omittedCommentCard = document.getElementById(unomitCommentId+'-card')
+        omittedCommentCard.classList.add('hidden')
+      }
+      handleDialog(actionUnomitComment,unomitCommentId)
     }
   })
 }
@@ -405,6 +433,31 @@ let page          = 1;
 const loadingIcon = document.getElementById('loading-icon');
 const searchBar   = document.getElementById('admin-search-bar');
 const baseUrl     = searchBar ? searchBar.dataset.url : ''
+
+const handleDialog = (action,elementId) => {
+  const confirmPopup = document.getElementById('confirm-popup')
+  const confirmButton = document.getElementById('confirm-button')
+  const cancelButton = document.getElementById('cancel-button')
+
+  if(confirmPopup) {
+    confirmPopup.classList.remove('hidden')
+    confirmButton.addEventListener('click',(event) => {
+      event.preventDefault()
+      confirmPopup.classList.add('hidden')
+      action(elementId,baseUrl)
+    })
+    cancelButton.addEventListener('click',(event) => {
+      event.preventDefault()
+      confirmPopup.classList.add('hidden')
+    })
+
+    document.addEventListener('keydown',(event) => {
+      if(event.key == "Escape" && !confirmPopup.classList.contains('hidden')) {
+        confirmPopup.classList.add('hidden')
+      }
+    })
+  }
+}
 
 // Auxiliary Functions
 const build = (url, buildCardFunction, resultDiv) => {
@@ -480,16 +533,6 @@ const tagProposalsDiv   = document.getElementById('admin-search-tag-proposals-re
 const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results')
 const omittedPostsDiv   = document.getElementById('admin-search-omitted-posts-results')
 const omittedCommentsDiv= document.getElementById('admin-search-omitted-comments-results')
-
-const reloadData = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.innerHTML = '';
-  page = 1;
-  build(
-    baseQuery, 
-    buildFunction, 
-    resultDiv
-  );
-}
 
 // Build Cards
 if(usersDiv) {

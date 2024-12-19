@@ -5,6 +5,7 @@
 @include('partials.success-popup')
 
 <div
+  id="overlay"
   class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full laptop:p-5">
   <div class="flex text-black bg-white rounded p-2 mt-20">
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" viewBox="0 0 30 30">
@@ -57,4 +58,13 @@
   </div>
 </div>
 
+<div id="confirm-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-input p-6 rounded-lg w-96 text-black">
+    <h3 class="text-lg font-semibold text-white mb-4">Are you sure?</h3>
+    <div class="flex justify-end gap-2">
+      <a id="cancel-button" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400" href="">Cancel</a>
+      <a id="confirm-button" class="px-4 py-2 bg-purple-900 text-white rounded-lg hover:bg-purple-700" href="">Confirm</a>
+    </div>
+  </div>
+</div>
 @endsection
