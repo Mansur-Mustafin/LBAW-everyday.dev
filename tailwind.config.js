@@ -38,12 +38,18 @@ export default {
               margin: '0',
               color: 'inherit',
             },
+            strong: {
+              color: 'inherit',  
+            },
             span: {
               backgroundColor: 'transparent',
             },
             img: {
               margin: '0',
             },
+            a: {
+              color: '#06c',
+            }
           },
         },
       }),

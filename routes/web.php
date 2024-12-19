@@ -14,7 +14,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
@@ -210,7 +210,7 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-Route::controller(PageController::class)->group(function () {
+Route::controller(StaticPageController::class)->group(function () {
     Route::get('/contacts', 'contacts')->name('contacts');
     Route::get('/about-us', 'about')->name('about');
     Route::get('/main-features', 'features')->name('features');
