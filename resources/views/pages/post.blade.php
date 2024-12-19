@@ -254,27 +254,33 @@
                 </form>
             </div>            
             
-            @if (Auth::check() && Auth::user()->isAdmin())
-                @if(!$post->is_omitted) 
-                    <div class="flex-1">
-                        <form method="POST" action="/news/{{ $post->id }}/omit">
-                            @csrf
-                            @method('PUT')
-                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                type="submit">Omit post</button>
-                        </form>
-                    </div>
-                @else
-                    <div class="flex-1">
-                        <form method="POST" action="/news/{{ $post->id }}/unomit">
-                            @csrf
-                            @method('PUT')
-                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                type="submit">Un-Omit post</button>
-                        </form>
-                    </div>
-                @endif
-            @endif
+            @can('omit',$post)
+                <div id='omit-section' data-url='{{ url('') }}' data-post={{ $post->id }}>
+                    <button id="omit-button" class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full {{ $post->is_omitted ? 'hidden' : '' }}"
+                        type="submit">Omit post</button>
+                    <button id="unomit-button" class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full {{ $post->is_omitted ? '' : 'hidden' }}"
+                        type="submit">Un-Omit post</button>
+{{--                     @if(!$post->is_omitted) 
+                        <div class="flex-1">
+                            <form method="POST" action="/news/{{ $post->id }}/omit">
+                                @csrf
+                                @method('PUT')
+                                <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
+                                    type="submit">Omit post</button>
+                            </form>
+                        </div>
+                    @else
+                        <div class="flex-1">
+                            <form method="POST" action="/news/{{ $post->id }}/unomit">
+                                @csrf
+                                @method('PUT')
+                                <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
+                                    type="submit">Un-Omit post</button>
+                            </form>
+                        </div>
+                    @endif --}}
+                </div>
+            @endcan
         </div>
 
         @can('update', $post)
