@@ -15,7 +15,7 @@
 
             <div class="md:w-1/2 p-8 w-full">
                 <form method="POST" action="{{ route('unblock.create') }}" id="blockedForm">
-                    {{ csrf_field() }}
+                    @csrf
                     <h2 class="text-2xl font-bold mb-4 text-center">Why should you be unbanned?</h2>
                     <div class="flex flex-col mb-2">
                         <textarea form="blockedForm" id="description" name="description" rows="5" class="text-black outline-none rounded m-1 p-2" autofocus></textarea>
