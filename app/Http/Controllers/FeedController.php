@@ -49,7 +49,6 @@ class FeedController extends Controller
             ->orWhereHas('tags', function ($query) use ($user) {
                 $query->whereIn('id', $user->tags()->pluck('id'));
             });
-
         return $this->news_post_page($news_posts, $request);
     }
 
