@@ -8,8 +8,6 @@
     <section class="flex flex-col w-full laptop:w-2/3 px-10 py-12 laptop:border-x border-gray-700">
         <div id="display-section">
             <div class="flex justify-between items-center">
-
-
                 <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
                     {{ $post->title }}
                 </h1>
@@ -255,7 +253,7 @@
                 @endif
                 @if ($post->is_omitted)
                     <div class="flex">
-                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Ommited</span>
+                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Omitted</span>
                     </div>
                 @endif
             </div>
