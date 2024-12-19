@@ -75,7 +75,7 @@ class NewsPostController extends Controller
     {
         $validated = $request->validated();
 
-        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img>');
+        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><a>');
         $post = NewsPost::create([
             'title' => $validated['title'],
             'content' => $content,
@@ -112,7 +112,7 @@ class NewsPostController extends Controller
 
         $validated = $request->validated();
 
-        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><br>');
+        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><br><a>');
         $newsPost->update([
             'title' => $validated['title'],
             'content' => $content,
