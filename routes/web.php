@@ -217,12 +217,7 @@ Route::controller(StaticPageController::class)->group(function () {
     Route::get('/main-features', 'features')->name('features');
 });
 
-Route::controller(ChartController::class)->group(function(){
-    Route::get('chart/users', 'usersChart')->name('chart.users');
-    Route::get('chart/posts', 'postsChart')->name('chart.posts');
-    Route::get('chart/tags', 'tagsChart')->name('chart.tags');
-});
 
-Route::controller(StatisticsController::class)->group(function(){
-    Route::get('api/stats','show')->middleware('admin');
+Route::controller(StatisticsController::class)->group(function () {
+    Route::get('api/stats', 'show')->middleware('admin');
 });
