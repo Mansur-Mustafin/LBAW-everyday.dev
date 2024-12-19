@@ -1,7 +1,11 @@
-<aside
-    class="p-5 border-r border-solid border-gray-700 hidden laptop:h-full laptop:flex laptop:flex-col laptop:min-w-56">
-    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col">
-        <a href="{{ route('admin.users') }}" class="flex p-2 rounded-md hover:bg-gray-700 mt-4 gap-2">
+<?php
+$urlParts = explode('/', url()->current());
+$page = end($urlParts);
+?>
+<aside class="p-5 border-r border-solid border-gray-700 hidden laptop:h-full laptop:flex laptop:flex-col">
+    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:gap-1">
+        <a href="{{ route('admin.users') }}"
+            class="flex p-2 rounded-md hover:bg-gray-700 {{ $page == 'users' ? 'bg-gray-800' : '' }} gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users">
@@ -12,7 +16,8 @@
             </svg>
             Users
         </a>
-        <a href="{{ route('admin.tags') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.tags') }}"
+            class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'tags' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-tags">
@@ -23,7 +28,8 @@
             </svg>
             Tags
         </a>
-        <a href="{{ route('admin.tag_proposals') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.tag_proposals') }}"
+            class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'tag_proposals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-hand-helping">
@@ -33,7 +39,8 @@
             </svg>
             Tag Proposals
         </a>
-        <a href="{{ route('admin.unblock_appeals') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.unblock_appeals') }}"
+            class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'unblock_appeals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-message-square-lock">
@@ -43,7 +50,7 @@
             </svg>
             Unblock Appeals
         </a>
-        <a href="{{ route('admin.omitted_posts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.omitted_posts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'omitted_posts' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-pencil-off">
@@ -55,7 +62,7 @@
             </svg>
             Omitted Posts
         </a>
-        <a href="{{ route('admin.omitted_comments') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.omitted_comments') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'omitted_comments' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-message-circle-off">
@@ -69,8 +76,8 @@
 </aside>
 
 <aside class="min-w-16 border-r border-solid border-gray-700 laptop:hidden h-full flex flex-col items-center gap-2">
-    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:items-center">
-        <a href="{{ route('admin.users') }}" class="block p-2 rounded-md hover:bg-gray-700 mt-4">
+    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:items-center ">
+        <a href="{{ route('admin.users') }}" class="block p-2 rounded-md hover:bg-gray-700 mt-4 {{ $page == 'users' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users">
@@ -80,17 +87,17 @@
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
         </a>
-        <a href="{{ route('admin.tags') }}" class="block p-2 rounded-md hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="lucide lucide-tags">
+        <a href="{{ route('admin.tags') }}" class="block p-2 rounded-md hover:bg-gray-700 {{ $page == 'tags' ? 'bg-gray-800' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-tags">
                 <path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19" />
                 <path
                     d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z" />
                 <circle cx="6.5" cy="9.5" r=".5" fill="currentColor" />
             </svg>
         </a>
-        <a href="{{ route('admin.tag_proposals') }}" class="block p-2 rounded-md hover:bg-gray-700">
+        <a href="{{ route('admin.tag_proposals') }}" class="block p-2 rounded-md hover:bg-gray-700 {{ $page == 'tag_proposals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" class="lucide lucide-hand-helping">
@@ -99,7 +106,7 @@
                 <path d="m2 13 6 6" />
             </svg>
         </a>
-        <a href="{{ route('admin.unblock_appeals') }}" class="block p-2 rounded-md hover:bg-gray-700">
+        <a href="{{ route('admin.unblock_appeals') }}" class="block p-2 rounded-md hover:bg-gray-700 {{ $page == 'unblock_appeals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" class="lucide lucide-message-square-lock">
@@ -108,7 +115,7 @@
                 <rect x="13" y="15" width="8" height="5" rx="1" />
             </svg>
         </a>
-        <a href="{{ route('admin.omitted_posts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.omitted_posts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'omitted_posts' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-pencil-off">
@@ -119,7 +126,7 @@
                 <path d="m2 2 20 20" />
             </svg>
         </a>
-        <a href="{{ route('admin.omitted_comments') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('admin.omitted_comments') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2 {{ $page == 'omitted_comments' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-message-circle-off">
