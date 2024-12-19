@@ -295,7 +295,7 @@ const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
         targetBlock.classList.add('hidden')
         unblockButton.classList.remove('hidden')
       }
-      handleDialog(actionBlock,userId)
+      actionBlock()
     }
     if(targetUnblock) {
       event.preventDefault()
@@ -308,7 +308,7 @@ const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
         blockButton.classList.remove('hidden')
         targetUnblock.classList.add('hidden')
       }
-      handleDialog(actionUnblock,userId)
+      actionUnblock()
     }
     const targetDelete = event.target.closest('.delete-button')
     if(targetDelete) {
