@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function show() 
-    {  
-        $usersChart= ChartController::usersChart();
-        $newsPostsChart= ChartController::newsChart();
-        return view('pages.admin.dashboard',['users'=>$usersChart,'news_posts'=>$newsPostsChart]);
+    public function show()
+    {
+        $usersChart = ChartController::usersChart();
+        $newsPostsChart = ChartController::newsChart();
+        return view('pages.admin.dashboard', ['users' => $usersChart, 'news_posts' => $newsPostsChart]);
     }
 
     public function showUsers()
