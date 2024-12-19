@@ -253,7 +253,10 @@ VALUES
 ('post/tNHwX1K2O9nAX7gsX437sDreGVJZKHJzcK35UoZk.jpg', 'PostTitle', 15, NULL),
 ('post/91t6hUBk7Viw9cJNHGhwKIJn2h6pIi4fHim7oV7H.jpg', 'PostTitle', 16, NULL),
 ('post/CXfnXjKtjI9WtDa01XhcF1Yp86As3JuwB8zAogap.jpg', 'PostTitle', 17, NULL),
-('post/qZsEnWGYlGFc4G8TofPZiH7oSkzCHbbVHZkzc5A4.jpg', 'PostTitle', 18, NULL);
+('post/qZsEnWGYlGFc4G8TofPZiH7oSkzCHbbVHZkzc5A4.jpg', 'PostTitle', 18, NULL),
+('post/4bLhpc8uLI4LW4NgQuuz6nODbuOhOcWRxpqaCRoI.jpg', 'PostTitle', 19, NULL),
+('post/T92f1jtE2yFhTLDl0CTUD72Zm0dsx3ppkDd9oTC9.jpg', 'PostTitle', 20, NULL),
+('post/rE7luglk5BFAJDLJalIbGoRthgFr2r8X26TOxBCd.jpg', 'PostTitle', 21, NULL);
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
