@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\TagProposal;
@@ -25,6 +26,7 @@ class SearchController extends Controller
     public static function getPostsByTag(Tag $tag): Builder
     {
         return NewsPost::query()
+            ->where('is_omitted', '!=', 'true')
             ->join('news_post_tag', 'news_post_id', '=', 'news_post.id')
             ->where('tag_id', $tag->id);
     }
@@ -33,7 +35,7 @@ class SearchController extends Controller
     {
         $searchQuery = $request->input('query', '');
 
-        $newsPosts = self::getPosts($searchQuery)->limit(3)->get();
+        $newsPosts = self::getPosts($searchQuery)->where('is_omitted', '!=', 'true')->limit(3)->get();
 
         $query = empty($searchQuery) ? '' : "%" . strtolower($searchQuery) . "%";
 
@@ -97,5 +99,27 @@ class SearchController extends Controller
             ->whereRaw("LOWER(username) like ?", [$searchQuery]);
 
         return $this->paginate($unblock_appeals, $request, 10);
+    }
+
+    public function searchOmittedPosts(Request $request)
+    {
+        if ($request->search == '') {
+            $omitted_posts = NewsPost::where('is_omitted', 'true');
+            return $this->paginate($omitted_posts, $request, 10);
+        } else {
+            $searchQuery = "%" . strtolower($request->search) . "%";
+            $omitted_posts = self::getPosts($searchQuery)->where('is_omitted', 'true');
+            return $this->paginate($omitted_posts, $request, 10);
+        }
+    }
+
+    public function searchOmittedComments(Request $request)
+    {
+        $searchQuery = "%" . strtolower($request->search) . "%";
+        $omitted_comments = Comment::select('user.*', 'comment.*')
+            ->leftJoin('user', 'user.id', '=', 'comment.author_id')
+            ->where('is_omitted', 'true')
+            ->whereRaw("LOWER(username) like ?", [$searchQuery]);
+        return $this->paginate($omitted_comments, $request, 10);
     }
 }

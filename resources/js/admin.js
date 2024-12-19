@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from "./utils"
+import { sendAjaxRequest, stripHtml } from "./utils"
 
 // API Requests
 const deleteTag = async (tagId,baseUrl) => {
@@ -50,6 +50,24 @@ const unblockUser = async (userId,baseUrl) => {
     url,
     (_data) => {},
     'PUT'
+  )
+}
+
+const unOmitPost = async (postId,baseUrl) => {
+  const url = `${baseUrl}/news/${postId}/unomit`
+  sendAjaxRequest(
+    url,
+    (_data) => {},
+    'PUT'
+  )
+}
+
+const unOmitComment = async (commentId,baseUrl) => {
+  const url = `${baseUrl}/comments/${commentId}/unomit`
+  sendAjaxRequest(
+    url,
+    (_data) => {},
+    'POST'
   )
 }
 
@@ -185,21 +203,76 @@ const buildUnblockAppealCard = (unblockAppeal) => {
           </a>
           <p class="">${unblockAppeal.description}</p>
         </div>
-        <div class="flex flex-col tablet:flex-row">
-          <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
-              <path d="M20 6 9 17l-5-5"/>
-            </svg>
-          </a>  
-          <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
-              <path d="M18 6 6 18"/>
-              <path d="m6 6 12 12"/>
-            </svg>
-          </a>  
-        </div>
+        ${
+          !unblockAppeal.is_resolved 
+          ? `
+            <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </a>  
+            <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3 " data-baseurl="${baseUrl}">  
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+                <path d="M18 6 6 18"/>
+                <path d="m6 6 12 12"/>
+              </svg>
+            </a>  
+          `
+          : `
+            <p class="place-content-center m-3">
+            Accepted
+            </p>
+          `
+        }
       </div>
   `;
+}
+
+const buildOmittedPost = (omittedPost) => {
+  const pageUrl = `${baseUrl}/news/${omittedPost.id}`;
+  return `
+    <div id="${omittedPost.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <a href="${pageUrl}" class="flex flex-col flex-grow w-full">
+        ${omittedPost.author.public_name}
+        <div class="text-gray-600">
+          @${omittedPost.author.username}
+        </div>
+        <p class="max-w-52 truncate">${stripHtml(omittedPost.content)}</p>
+      </a>
+      <a href="" class="unomit-post-button place-content-center m-3" id="${omittedPost.id}-unomit-post-button ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-eye">
+              <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+              <circle cx="12" cy="12" r="3" />
+          </svg>
+      </a>
+    </div>
+  `
+}
+
+const buildOmittedComment = (omittedComment) => {
+  return `
+    <div id="${omittedComment.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <div class="flex flex-col flex-grow w-full">
+        ${omittedComment.public_name}
+        <div class="text-gray-600">
+          @${omittedComment.username}
+        </div>
+        <p class="max-w-52 truncate">${omittedComment.content}</p>
+      </div>
+      <a href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-eye">
+              <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+              <circle cx="12" cy="12" r="3" />
+          </svg>
+      </a>
+    </div>
+  `
 }
 
 // Card Button Behaviours
@@ -295,6 +368,36 @@ const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
   })
 }
 
+const addUnomitPostButtons = (baseQuery,buildFunction,resultDiv) => {
+  resultDiv.addEventListener('click',(event) => {
+    const targetUnomit = event.target.closest('.unomit-post-button')
+    console.log(targetUnomit)
+    if(targetUnomit) {
+      event.preventDefault()
+      const unomitPostId= targetUnomit.id.split('-unomit-post-button')[0]
+      unOmitPost(unomitPostId,baseUrl)
+      const omittedPostCard = document.getElementById(unomitPostId+'-card')
+      omittedPostCard.classList.add('hidden')
+      //reloadData(baseQuery,buildFunction,resultDiv)
+    }
+  })
+}
+
+const addUnomitCommentButtons = (baseQuery,buildFunction,resultDiv) => {
+  resultDiv.addEventListener('click',(event) => {
+    const targetUnomit = event.target.closest('.unomit-comment-button')
+    console.log(targetUnomit)
+    if(targetUnomit) {
+      event.preventDefault()
+      const unomitCommentId= targetUnomit.id.split('-unomit-comment-button')[0]
+      unOmitComment(unomitCommentId,baseUrl)
+      const omittedCommentCard = document.getElementById(unomitCommentId+'-card')
+      omittedCommentCard.classList.add('hidden')
+      //reloadData(baseQuery,buildFunction,resultDiv)
+    }
+  })
+}
+
 // Global Variables
 let lastPage      = 0;
 let loading       = false;
@@ -375,6 +478,8 @@ const usersDiv          = document.getElementById('admin-search-users-results')
 const tagsDiv           = document.getElementById('admin-search-tags-results')
 const tagProposalsDiv   = document.getElementById('admin-search-tag-proposals-results')
 const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results')
+const omittedPostsDiv   = document.getElementById('admin-search-omitted-posts-results')
+const omittedCommentsDiv= document.getElementById('admin-search-omitted-comments-results')
 
 const reloadData = (baseQuery,buildFunction,resultDiv) => {
   resultDiv.innerHTML = '';
@@ -405,9 +510,24 @@ if(tagProposalsDiv) {
   addInfinitePageBehaviour(baseQuery,buildTagProposalCard,tagProposalsDiv)
   addTagProposalButtons(baseQuery,buildTagProposalCard,tagProposalsDiv)
 }
+
 if(unblockAppealsDiv) {
   console.log(unblockAppealsDiv)
   const baseQuery = baseUrl+'/api/search/unblock_appeals/'
   addInfinitePageBehaviour(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
   addUnblockAppealButtons(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
+}
+
+if(omittedPostsDiv) {
+  console.log(omittedPostsDiv)
+  const baseQuery = baseUrl+'/api/search/omitted_posts/'
+  addInfinitePageBehaviour(baseQuery,buildOmittedPost,omittedPostsDiv)
+  addUnomitPostButtons(baseQuery,buildOmittedPost,omittedPostsDiv)
+}
+
+if(omittedCommentsDiv) {
+  console.log(omittedCommentsDiv)
+  const baseQuery = baseUrl+'/api/search/omitted_comments/'
+  addInfinitePageBehaviour(baseQuery,buildOmittedComment,omittedCommentsDiv)
+  addUnomitCommentButtons(baseQuery,buildOmittedComment,omittedCommentsDiv)
 }

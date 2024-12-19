@@ -19,14 +19,15 @@
 }
 
 /* Quill placeholder styles */
-#editor-create-container .ql-editor.ql-blank::before{
+#editor-create-container .ql-editor.ql-blank::before,
+#editor-edit-container .ql-editor.ql-blank::before{
     font-family: system-ui;
     font-style: normal;
     font-size: 16px;
     color: #9ca3af;
 }
 
-#editor-create-container {
+#editor-create-container, #editor-edit-container {
     font-size: 16px;
     font-family: system-ui;
 }
