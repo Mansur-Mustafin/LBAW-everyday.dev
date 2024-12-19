@@ -5,9 +5,27 @@
 @include('partials.success-popup')
 
 <section class="flex w-full h-full laptop:m-auto laptop:max-w-[64rem]">
-    <section class="flex flex-col w-full laptop:w-[42rem] px-10 py-12 border-x border-gray-700">
+    <section class="flex flex-col w-full laptop:w-2/3 px-10 py-12 laptop:border-x border-gray-700">
         <div id="display-section">
-            <h1 class="text-3xl font-bold">{{ $post->title }}</h1>
+            <div class="flex justify-between items-center">
+
+
+                <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
+                    {{ $post->title }}
+                </h1>
+                <div class="relative laptop:hidden">
+                    <button class="hover:bg-input p-2 rounded-xl post-options">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-ellipsis-vertical">
+                            <circle cx="12" cy="12" r="1" />
+                            <circle cx="12" cy="5" r="1" />
+                            <circle cx="12" cy="19" r="1" />
+                        </svg>
+                    </button>
+                    @include('partials.post-options')
+                </div>
+            </div>
             <div class="flex flex-wrap mt-5 gap-2" id="tags-section" data-url="{{url('')}}">
                 @foreach ($post->tags as $tag)
                     <div class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md flex gap-2">
@@ -228,54 +246,17 @@
     </section>
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
-
-        <div class="flex flex-col gap-1" id="edit-button">
-            @can('update', $post)
-                <div class="flex-1">
-                    <button onclick="toggleEdit()"
-                        class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full">
-                        Edit
-                    </button>
-                </div>
-            @endcan
-            
-            <div class="flex-1">
-                <form method="POST" action="/news/{{ $post->id }}">
-                    @csrf
-                    @method('DELETE')
-                    <button
-                        type="submit"
-                        id="delete-post-button"
-                        @class([
-                            'border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full',
-                            'hidden' => Gate::denies('delete', $post)
-                        ])>
-                        Delete post
-                    </button>
-                </form>
-            </div>            
-            
-            @if (Auth::check() && Auth::user()->isAdmin())
-                @if(!$post->is_omitted)
-                    <div class="flex-1">
-                        <form method="POST" action="/news/{{ $post->id }}/omit">
-                            @csrf
-                            @method('PUT')
-                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                type="submit">Omit post</button>
-                        </form>
-                    </div>
-                @else
-                    <div class="flex-1">
-                        <form method="POST" action="/news/{{ $post->id }}/unomit">
-                            @csrf
-                            @method('PUT')
-                            <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                type="submit">Un-Omit post</button>
-                        </form>
-                    </div>
-                @endif
-            @endif
+        <div class="relative self-end">
+            <button class="hover:bg-input p-2 rounded-xl post-options">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-ellipsis-vertical">
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                </svg>
+            </button>
+            @include('partials.post-options')
         </div>
 
         @can('update', $post)
