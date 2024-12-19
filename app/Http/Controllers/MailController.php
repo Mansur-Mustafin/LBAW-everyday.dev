@@ -31,10 +31,16 @@ class MailController extends Controller
 
         $token = Str::random(60);
 
-        DB::table('password_resets')->updateOrInsert(
-            ['email' => $request->email],
-            ['token' => Hash::make($token), 'created_at' => now()]
+        DB::table('password_resets')->upsert(
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => now(),
+            ],
+            ['email'],
+            ['token', 'created_at']
         );
+
 
         $mailData = [
             'email' => $request->email,

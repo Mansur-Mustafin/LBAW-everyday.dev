@@ -9,9 +9,6 @@ use App\Http\Requests\User\AdminUpdateRequest;
 use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
