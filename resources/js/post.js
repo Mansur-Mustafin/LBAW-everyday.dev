@@ -7,6 +7,9 @@ const createForm = document.getElementById('createForm');
 const title = document.getElementById('title');
 
 const tagsSection = document.getElementById('tags-section');
+
+const omitSection = document.getElementById('omit-section')
+
 if (tagsSection) {
   const baseUrl = tagsSection.dataset.url;
 
@@ -28,6 +31,37 @@ if (tagsSection) {
       document.getElementById(`${tagId}-unfollow`).classList.add('hidden');
     }
   });
+}
+
+// Omit Post
+if(omitSection) {
+  const omitButton = document.getElementById('omit-button');
+  const unomitButton = document.getElementById('unomit-button');
+
+  const baseUrl = omitSection.dataset.url
+  const postId  = omitSection.dataset.post
+
+
+  omitButton.addEventListener('click',() => {
+    omitButton.classList.add('hidden')
+    unomitButton.classList.remove('hidden')
+    const url = `${baseUrl}/news/${postId}/omit`
+    sendAjaxRequest(
+      url,
+      (_data) => {},
+      'PUT'
+    )
+  })
+  unomitButton.addEventListener('click',() => {
+    omitButton.classList.remove('hidden')
+    unomitButton.classList.add('hidden')
+    const url = `${baseUrl}/news/${postId}/unomit`
+    sendAjaxRequest(
+      url,
+      (_data) => {},
+      'PUT'
+    )
+  })
 }
 
 // Create Post
