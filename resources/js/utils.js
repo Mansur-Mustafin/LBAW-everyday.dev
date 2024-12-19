@@ -129,3 +129,23 @@ export function copyToClipboard(elem) {
     });
   });
 }
+
+export const toggleDeleteButton = () => {
+  const commentSection = document.getElementById('comment-section');
+  const voteCountElement = document.querySelector('.vote-container .vote-count');
+  const deleteButton = document.getElementById('delete-post-button');
+
+  const hasComments = !(
+    commentSection.children[0]?.innerHTML.trim() == '' ||
+    commentSection.innerHTML.trim() == '' ||
+    commentSection.children[0]?.id == 'no-comments'
+  );
+
+  const hasVotes = parseInt(voteCountElement.textContent, 10) != 0;
+
+  if (hasComments || hasVotes) {
+    deleteButton?.classList.add('hidden');
+  } else {
+    deleteButton?.classList.remove('hidden');
+  }
+};
