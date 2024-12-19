@@ -8,11 +8,12 @@ SET search_path TO lbaw2441;
 --
 INSERT INTO "user" (username, public_name, password, email, rank, status, reputation, is_admin)
 VALUES
-('johndoe', 'John Doe', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'johndoe@example.com', 'noobie', 'active', 0, TRUE),
+('johndoe', 'John Doe', '$2y$10$OPdnB2v9KY.JUiCYMaF8SubcUvrQ.rWN5DjTbNIhYGoRWAnGxvIXG', 'admin@example.com', 'noobie', 'active', 0, TRUE),
 ('rubem', 'Rubem Neto', '$2y$10$ICGiPHxxCcFA8tFC.YR69OcYynMlf93xbHY3XjBHZY.4MZ43JTamS', 'rubem@example.com', 'noobie', 'active', 0, FALSE),
 ('mansur', 'Mansur Mustafin', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'mansur@example.com', 'noobie', 'active', 0, FALSE),
+('afonso', 'Afonso Moura', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'afonso@example.com', 'noobie', 'active', 0, FALSE),
+('diogo', 'Diogo Goiana', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'diogo@example.com', 'noobie', 'active', 0, FALSE),
 ('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
-('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
 ('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'pending', 20, FALSE),
 ('lindajones', 'Linda Jones', 'lindapass', 'lindajones@example.com', 'noobie', 'pending', 250, FALSE),
 ('mikebrown', 'Mike Brown', 'mikepassword', 'mikebrown@example.com', '10x developer', 'pending', 500, FALSE),
@@ -256,7 +257,12 @@ VALUES
 ('post/qZsEnWGYlGFc4G8TofPZiH7oSkzCHbbVHZkzc5A4.jpg', 'PostTitle', 18, NULL),
 ('post/zjftIOrtS1NTYP2LDZfFSM9bWge5BNDcrexpr5xr.jpg', 'PostTitle', 19, NULL),
 ('post/T92f1jtE2yFhTLDl0CTUD72Zm0dsx3ppkDd9oTC9.jpg', 'PostTitle', 20, NULL),
-('post/rE7luglk5BFAJDLJalIbGoRthgFr2r8X26TOxBCd.jpg', 'PostTitle', 21, NULL);
+('post/rE7luglk5BFAJDLJalIbGoRthgFr2r8X26TOxBCd.jpg', 'PostTitle', 21, NULL),
+('profile/ZFV93i5ULCBFwWcmXzbXcxXiaG5kEUo8hXmW5NW3.jpg', 'Profile', NULL, 1),
+('profile/KlbynaujSbHAWB1XRwzxhbjS6QCFueOh3Wp5bM57.jpg', 'Profile', NULL, 2),
+('profile/bGzKY5wo3IFwUAQAe4ojAkffUry8OfyrBa1U5xRZ.jpg', 'Profile', NULL, 3),
+('profile/agYNUoz8yPGe7wna1PV4uFYizj1NhlW2I0fP9cNq.jpg', 'Profile', NULL, 4),
+('profile/HW8RcMgA3C11hMCLnM6bI2Yrrgs6tshNxsfk0mcp.jpg', 'Profile', NULL, 5);
 
 INSERT INTO comment (created_at, content, author_id, news_post_id, parent_comment_id)
 VALUES
