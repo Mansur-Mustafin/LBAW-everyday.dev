@@ -2,19 +2,19 @@
     $level = $level ?? 0;
 @endphp
 
-@if($level == 0)
-    <div class="border border-solid border-gray-700 rounded-xl flex flex-col" id="{{ 'comment-' . $comment->id }}"
-        data-auth="{{Auth::user() && Auth::user()->id}}"
-        data-replies="{{count($comment->replies) == 0 ? 'false' : 'true'}}">
-        <div class="{{ count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700'}} rounded-xl p-4">
+@if ($level == 0)
+    <div class="border border-solid border-gray-700 rounded-xl flex flex-col {{ $comment->is_omitted ? 'opacity-50' : '' }} " id="{{ 'comment-' . $comment->id }}"
+        data-auth="{{ Auth::user() && Auth::user()->id }}"
+        data-replies="{{ count($comment->replies) == 0 ? 'false' : 'true' }}">
+        <div class="{{ count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700' }} rounded-xl p-4">
             <div class="text-sm text-gray-400 flex justify-between items-start">
-                @if(Auth::user())
+                @if (Auth::user())
                     <div class="flex gap-2 flex-grow">
                         <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8">
                         <div class="flex flex-col">
-                            <h2 class="text-white text-sm font-semibold">{{$comment->author->public_name}}</h2>
-                            <h3 class="text-xs text-gray-500">{{'@' . $comment->author->username}} ·
-                                {{$comment->created_at->diffForHumans()}}
+                            <h2 class="text-white text-sm font-semibold">{{ $comment->author->public_name }}</h2>
+                            <h3 class="text-xs text-gray-500">{{ '@' . $comment->author->username }} ·
+                                {{ $comment->created_at->diffForHumans() }}
                             </h3>
                         </div>
                     </div>
@@ -22,37 +22,37 @@
                     <div class="flex gap-2 flex-grow">
                         <div class="flex flex-col">
                             <h2 class="text-white text-sm font-semibold">Anonymous</h2>
-                            <h3 class="text-xs text-gray-500">{{'@' . 'anonymous'}}</h3>
+                            <h3 class="text-xs text-gray-500">{{ '@' . 'anonymous' }}</h3>
                         </div>
                     </div>
                 @endif
                 <div class="flex gap-2 items-center">
 
                     @can('update', $comment)
-                        <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-pencil">
+                        <button class="edit-comment" id="{{ 'edit_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-pencil">
                                 <path
                                     d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
                                 <path d="m15 5 4 4" />
                             </svg>
                         </button>
 
-                        <button class="abort-edit hidden" id="{{'abort_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-circle-x">
+                        <button class="abort-edit hidden" id="{{ 'abort_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-circle-x">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="m15 9-6 6" />
                                 <path d="m9 9 6 6" />
                             </svg>
                         </button>
 
-                        <button class="hidden" id="{{'save_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-check">
+                        <button class="hidden" id="{{ 'save_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-check">
                                 <path d="M20 6 9 17l-5-5" />
                             </svg>
                         </button>
@@ -60,10 +60,10 @@
 
 
                     @can('delete', $comment)
-                        <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-trash-2">
+                        <button class="delete-comment" id="{{ 'delete_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-trash-2">
                                 <path d="M3 6h18" />
                                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                 <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -72,14 +72,37 @@
                             </svg>
                         </button>
                     @endcan
+                    @can('omit',$comment)
+                        <button class="omit-comment {{ $comment->is_omitted ? 'hidden' : '' }}" id="{{ 'omit-comment-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-eye-off">
+                                <path
+                                    d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                                <path
+                                    d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                                <path d="m2 2 20 20" />
+                            </svg>
+                        </button>
+                        <button class="unomit-comment {{ $comment->is_omitted ? '' : 'hidden' }}" id="{{ 'unomit-comment-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-eye">
+                                <path
+                                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    @endcan
                 </div>
             </div>
-            <form class="hidden" id="{{'comment-form-' . $comment->id}}">
-                <textarea id="{{'comment-input-' . $comment->id}}"
+            <form class="hidden" id="{{ 'comment-form-' . $comment->id }}">
+                <textarea id="{{ 'comment-input-' . $comment->id }}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
-            <div class="mt-4" id={{'comment-content-' . $comment->id}}>
-                {{ $comment->content}}
+            <div class="mt-4" id={{ 'comment-content-' . $comment->id }}>
+                {{ $comment->content }}
             </div>
             @if (Auth::check())
                 <div class="vote-container mt-3 text-sm flex gap-2 items-center" data-type="comment"
@@ -129,9 +152,9 @@
 
                     <a
                         class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
-                        <svg xmlns=" http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-message-circle">
+                        <svg xmlns=" http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-message-circle">
                             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                         </svg>
                     </a>
@@ -162,23 +185,29 @@
         @include('partials.comment-input', ['comment-id' => $comment->id])
 
         @foreach ($comment->replies as $reply)
-            @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $comment, 'thread' => $thread])
+            @if((Auth::check() && Auth::user()->is_admin) || $reply->is_omitted == false) 
+                @include('partials.comment', [
+                    'comment' => $reply,
+                    'level' => $level + 1,
+                    'parent' => $comment,
+                    'thread' => $thread,
+                ])
+            @endif
         @endforeach
     </div>
-
 @else
-    <div id="{{ 'comment-' . $comment->id }}" data-auth="{{Auth::user() && Auth::user()->id}}"
-        class="{{ count($comment->parent->replies) > 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : ''}} flex flex-col ml-3 tablet:ml-8">
+    <div id="{{ 'comment-' . $comment->id }}" data-auth="{{ Auth::user() && Auth::user()->id }}"
+        class="{{ count($comment->parent->replies) > 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : '' }} flex flex-col ml-3 tablet:ml-8 {{ $comment->is_omitted ? 'opacity-50' : '' }}">
         <div
-            class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl'}} {{count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl'}}  p-4">
+            class="{{ $level == 1 && count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700 rounded-bl-xl' }} {{ count($comment->parent->replies) <= 1 ? 'border-l border-opacity-50 border-solid border-gray-700' : 'rounded-xl' }}  p-4">
             <div class="text-sm text-gray-400 flex justify-between items-start">
-                @if(Auth::user())
+                @if (Auth::user())
                     <div class="flex gap-2 flex-grow">
                         <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8">
                         <div class="flex flex-col">
-                            <h2 class="text-white text-sm font-semibold">{{$comment->author->public_name}}</h2>
-                            <h3 class="text-xs text-gray-500">{{'@' . $comment->author->username}} ·
-                                {{$comment->created_at->diffForHumans()}}
+                            <h2 class="text-white text-sm font-semibold">{{ $comment->author->public_name }}</h2>
+                            <h3 class="text-xs text-gray-500">{{ '@' . $comment->author->username }} ·
+                                {{ $comment->created_at->diffForHumans() }}
                             </h3>
                         </div>
                     </div>
@@ -186,45 +215,45 @@
                     <div class="flex gap-2 flex-grow">
                         <div class="flex flex-col">
                             <h2 class="text-white text-sm font-semibold">Anonymous</h2>
-                            <h3 class="text-xs text-gray-500">{{'@' . 'anonymous'}}</h3>
+                            <h3 class="text-xs text-gray-500">{{ '@' . 'anonymous' }}</h3>
                         </div>
                     </div>
                 @endif
                 <div class="flex gap-2 items-center">
                     @can('update', $comment)
-                        <button class="edit-comment" id="{{'edit_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-pencil">
+                        <button class="edit-comment" id="{{ 'edit_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-pencil">
                                 <path
                                     d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
                                 <path d="m15 5 4 4" />
                             </svg>
                         </button>
 
-                        <button class="abort-edit hidden" id="{{'abort_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-circle-x">
+                        <button class="abort-edit hidden" id="{{ 'abort_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-circle-x">
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="m15 9-6 6" />
                                 <path d="m9 9 6 6" />
                             </svg>
                         </button>
-                        <button class="hidden" id="{{'save_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-check">
+                        <button class="hidden" id="{{ 'save_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-check">
                                 <path d="M20 6 9 17l-5-5" />
                             </svg>
                         </button>
                     @endcan
 
                     @can('delete', $comment)
-                        <button class="delete-comment" id="{{'delete_button-' . $comment->id}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-trash-2">
+                        <button class="delete-comment" id="{{ 'delete_button-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-trash-2">
                                 <path d="M3 6h18" />
                                 <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                 <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -233,14 +262,37 @@
                             </svg>
                         </button>
                     @endcan
+                    @can('omit',$comment)
+                        <button class="omit-comment {{ $comment->is_omitted ? 'hidden' : '' }}" id="{{ 'omit-comment-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-eye-off">
+                                <path
+                                    d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                                <path
+                                    d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                                <path d="m2 2 20 20" />
+                            </svg>
+                        </button>
+                        <button class="unomit-comment {{ $comment->is_omitted ? '' : 'hidden' }}" id="{{ 'unomit-comment-' . $comment->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-eye">
+                                <path
+                                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    @endcan
                 </div>
             </div>
-            <form class="hidden" id="{{'comment-form-' . $comment->id}}">
-                <textarea id="{{'comment-input-' . $comment->id}}"
+            <form class="hidden" id="{{ 'comment-form-' . $comment->id }}">
+                <textarea id="{{ 'comment-input-' . $comment->id }}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
-            <div class="mt-4" id={{'comment-content-' . $comment->id}}>
-                {{ $comment->content}}
+            <div class="mt-4" id={{ 'comment-content-' . $comment->id }}>
+                {{ $comment->content }}
             </div>
 
             @if (Auth::check())
@@ -292,9 +344,9 @@
 
                     <a
                         class="p-2 rounded-xl cursor-pointer hover:text-cyan-400 hover:bg-cyan-700 hover:bg-opacity-50 sub-comment">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-message-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-message-circle">
                             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
                         </svg>
                     </a>
@@ -328,12 +380,19 @@
         @if($level > 1 && $thread == 'multi' && count($comment->replies))
             <a href="{{ url('/news/' . $post->id . '/comment/' . $parent->id) }}"
                 class="my-3 ml-3 text-sm hover:underline show-more">
-                Show {{ count($comment->replies)}} more
-                {{count($comment->replies) == 1 ? 'answer' : 'answers' }}
+                Show {{ count($comment->replies) }} more
+                {{ count($comment->replies) == 1 ? 'answer' : 'answers' }}
             </a>
         @else
             @foreach ($comment->replies as $reply)
-                @include('partials.comment', ['comment' => $reply, 'level' => $level + 1, 'parent' => $parent, 'thread' => $thread])
+                @if((Auth::check() && Auth::user()->is_admin) || $reply->is_omitted == false) 
+                    @include('partials.comment', [
+                        'comment' => $reply,
+                        'level' => $level + 1,
+                        'parent' => $parent,
+                        'thread' => $thread,
+                    ])
+                @endif
             @endforeach
         @endif
     </div>

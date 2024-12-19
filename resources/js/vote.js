@@ -1,4 +1,4 @@
-import { redirectToLogin, sendAjaxRequest } from './utils';
+import { redirectToLogin, sendAjaxRequest, showSuccessMessage, toggleDeleteButton } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -14,13 +14,8 @@ export function addVoteButtonBehaviour() {
       upvoteButton.addEventListener('click', redirectToLogin);
       downvoteButton.addEventListener('click', redirectToLogin);
     } else {
-      upvoteButton.addEventListener('click', function () {
-        handleVote(container, true);
-      });
-
-      downvoteButton.addEventListener('click', function () {
-        handleVote(container, false);
-      });
+      upvoteButton.addEventListener('click', () => handleVote(container, true));
+      downvoteButton.addEventListener('click', () => handleVote(container, false));
     }
   });
 }
@@ -30,19 +25,34 @@ function handleVote(container, isUpvote) {
   const itemId = container.dataset.id;
   let voteId = container.dataset.voteId;
   const currentVote = container.dataset.vote;
+  const upvoteButton = container.querySelector('.upvote-button');
+  const downvoteButton = container.querySelector('.downvote-button');
 
   if (voteId) {
     if ((isUpvote && currentVote === 'upvote') || (!isUpvote && currentVote === 'downvote')) {
-      removeVote(voteId, container);
+      updateVoteUI(container, null, 'Vote removed');
+      container.dataset.voteId = '';
+      const oldVote = container.dataset.vote == 'upvote';
+      container.dataset.vote = '';
+      removeVote(voteId, container, oldVote);
     } else {
+      container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
+      updateVoteUI(container, isUpvote, 'Vote updated');
       updateVote(voteId, isUpvote, container);
     }
   } else {
-    submitVote(type, itemId, isUpvote, container);
+    upvoteButton.disabled = true;
+    downvoteButton.disabled = true;
+    updateVoteUI(container, isUpvote, 'Saved');
+    submitVote(type, itemId, isUpvote, container, () => {
+      upvoteButton.disabled = false;
+      downvoteButton.disabled = false;
+    });
   }
+  toggleDeleteButton();
 }
 
-function submitVote(type, id, isUpvote, container) {
+function submitVote(type, id, isUpvote, container, onComplete) {
   const headers = {
     'Content-Type': 'application/json',
     'X-CSRF-TOKEN': csrfToken,
@@ -52,15 +62,18 @@ function submitVote(type, id, isUpvote, container) {
     id: id,
     is_upvote: isUpvote,
   });
-
   sendAjaxRequest(
     '/vote',
     (data) => {
       if (data.message === 'Saved') {
         container.dataset.voteId = data.vote_id;
         container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-        updateVoteUI(container, isUpvote, 'Saved');
+      } else {
+        updateVoteUI(container, isUpvote, 'Vote removed');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while saving your vote. Please try again.");
       }
+      if (onComplete) onComplete();
     },
     'POST',
     headers,
@@ -68,14 +81,14 @@ function submitVote(type, id, isUpvote, container) {
   );
 }
 
-function removeVote(voteId, container) {
+function removeVote(voteId, container, oldVote) {
   sendAjaxRequest(
     `/vote/${voteId}`,
     (data) => {
-      if (data.message === 'Vote removed') {
-        updateVoteUI(container, null, 'Vote removed');
-        container.dataset.voteId = '';
-        container.dataset.vote = '';
+      if (data.message === 'Error on delete') {
+        updateVoteUI(container, oldVote, 'Saved');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while removing your vote. Please try again.");
       }
     },
     'DELETE'
@@ -94,10 +107,10 @@ function updateVote(voteId, isUpvote, container) {
   sendAjaxRequest(
     `/vote/${voteId}`,
     (data) => {
-      if (data.message === 'Vote updated') {
-        container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-        container.dataset.voteId = data.vote_id;
-        updateVoteUI(container, isUpvote, 'Vote updated');
+      if (data.message === 'Error on update') {
+        updateVoteUI(container, !isUpvote, 'Vote updated');
+        // TODO: showErrorMessage
+        showSuccessMessage("An error occurred while updating your vote. Please try again.");
       }
     },
     'PUT',
@@ -123,31 +136,31 @@ function updateVoteUI(container, isUpvote, message) {
   downvoteOutline.classList.remove('hidden');
   downvoteFill.classList.add('hidden');
 
-  if (message === 'Saved') {
-    if (isUpvote) {
-      upvoteOutline.classList.add('hidden');
-      upvoteFill.classList.remove('hidden');
-      voteCountElement.textContent = currentCount + 1;
-    } else {
-      downvoteOutline.classList.add('hidden');
-      downvoteFill.classList.remove('hidden');
-      voteCountElement.textContent = currentCount - 1;
-    }
-  } else if (message === 'Vote updated') {
-    if (isUpvote) {
-      upvoteOutline.classList.add('hidden');
-      upvoteFill.classList.remove('hidden');
-      voteCountElement.textContent = currentCount + 2;
-    } else {
-      downvoteOutline.classList.add('hidden');
-      downvoteFill.classList.remove('hidden');
-      voteCountElement.textContent = currentCount - 2;
-    }
-  } else if (message === 'Vote removed') {
-    if (container.dataset.vote === 'upvote') {
-      voteCountElement.textContent = currentCount - 1;
-    } else if (container.dataset.vote === 'downvote') {
-      voteCountElement.textContent = currentCount + 1;
-    }
+  isUpvote = isUpvote ?? container.dataset.vote === 'upvote';
+  const changeCount = message == 'Vote updated' ? 2 : 1;
+
+  switch (message) {
+    case 'Saved':
+    case 'Vote updated':
+      if (isUpvote) {
+        upvoteOutline.classList.add('hidden');
+        upvoteFill.classList.remove('hidden');
+        voteCountElement.textContent = currentCount + changeCount;
+      } else {
+        downvoteOutline.classList.add('hidden');
+        downvoteFill.classList.remove('hidden');
+        voteCountElement.textContent = currentCount - changeCount;
+      }
+      break;
+
+    case 'Vote removed':
+      if (isUpvote) {
+        voteCountElement.textContent = currentCount - changeCount;
+      } else {
+        voteCountElement.textContent = currentCount + changeCount;
+      }
+
+    default:
+      break;
   }
 }

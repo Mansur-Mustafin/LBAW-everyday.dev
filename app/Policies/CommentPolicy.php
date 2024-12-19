@@ -34,4 +34,12 @@ class CommentPolicy
 
         return $user->id === $comment->author_id;
     }
+
+    /**
+     * Determine whether the user can omit the model.
+     */
+    public function omit(User $user, Comment $comment): bool
+    {
+        return $user->is_admin;
+    }
 }
