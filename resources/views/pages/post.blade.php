@@ -180,7 +180,7 @@
                 <div class="mb-5">
                     <label for="content" class="block text-sm font-medium text-gray-300">Content</label>
 
-                    <div id="editor-edit-container" class="text-white rounded-xl bg-input !border-none">
+                    <div id="editor-edit-container" class="!text-white rounded-xl bg-input !border-none">
                         {!! $post->content !!}
                     </div>
                     <input class="hidden" id="edit-content-input" name="content">
