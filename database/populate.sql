@@ -8,9 +8,11 @@ SET search_path TO lbaw2441;
 --
 INSERT INTO "user" (username, public_name, password, email, rank, status, reputation, is_admin)
 VALUES
-('johndoe', 'John Doe', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'johndoe@example.com', 'noobie', 'active', 0, TRUE),
+('johndoe', 'John Doe', '$2y$10$OPdnB2v9KY.JUiCYMaF8SubcUvrQ.rWN5DjTbNIhYGoRWAnGxvIXG', 'admin@example.com', 'noobie', 'active', 0, TRUE),
 ('rubem', 'Rubem Neto', '$2y$10$ICGiPHxxCcFA8tFC.YR69OcYynMlf93xbHY3XjBHZY.4MZ43JTamS', 'rubem@example.com', 'noobie', 'active', 0, FALSE),
 ('mansur', 'Mansur Mustafin', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'mansur@example.com', 'noobie', 'active', 0, FALSE),
+('afonso', 'Afonso Moura', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'afonso@example.com', 'noobie', 'active', 0, FALSE),
+('diogo', 'Diogo Goiana', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'diogo@example.com', 'noobie', 'active', 0, FALSE),
 ('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE),
 ('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE),
 ('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'pending', 20, FALSE),
