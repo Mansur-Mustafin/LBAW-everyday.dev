@@ -216,7 +216,6 @@ Route::controller(StaticPageController::class)->group(function () {
     Route::get('/about-us', 'about')->name('about');
     Route::get('/main-features', 'features')->name('features');
 });
-<<<<<<< HEAD
 
 Route::controller(ChartController::class)->group(function(){
     Route::get('chart/users', 'usersChart')->name('chart.users');
@@ -227,5 +226,3 @@ Route::controller(ChartController::class)->group(function(){
 Route::controller(StatisticsController::class)->group(function(){
     Route::get('api/stats','show')->middleware('admin');
 });
-=======
->>>>>>> main
