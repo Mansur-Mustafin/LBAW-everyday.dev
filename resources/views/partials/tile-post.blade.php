@@ -3,7 +3,7 @@
 
     <div class="flex flex-col justify-between flex-grow">
         <a href="{{ url('/news/' . $news->id) }}">
-            <h3 class="text-lg font-bold">{{ $news->title }}</h3>
+            <h3 class="text-lg font-bold break-words">{{ $news->title }}</h3>
         </a>
 
         @include('partials.tags', ['tags' => $news->tag_names])
