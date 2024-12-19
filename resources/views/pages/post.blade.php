@@ -246,17 +246,31 @@
     </section>
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
-        <div class="relative self-end">
-            <button class="hover:bg-input p-2 rounded-xl post-options">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-ellipsis-vertical">
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="12" cy="5" r="1" />
-                    <circle cx="12" cy="19" r="1" />
-                </svg>
-            </button>
-            @include('partials.post-options')
+        <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+                @if ($post->for_followers)
+                    <div class="flex">
+                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
+                    </div>
+                @endif
+                @if ($post->is_omitted)
+                    <div class="flex">
+                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Ommited</span>
+                    </div>
+                @endif
+            </div>
+            <div class="relative self-end">
+                <button class="hover:bg-input p-2 rounded-xl post-options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-ellipsis-vertical">
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                    </svg>
+                </button>
+                @include('partials.post-options')
+            </div>
         </div>
 
         @can('update', $post)
@@ -295,11 +309,6 @@
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>
-            @if ($post->for_followers)
-                <div class="flex mt-4">
-                    <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
-                </div>
-            @endif
         @endif
     </section>
 </section>
