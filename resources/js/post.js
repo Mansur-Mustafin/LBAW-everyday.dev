@@ -1,4 +1,4 @@
-import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js'
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -77,7 +77,7 @@ if (createForm) {
     evt.preventDefault();
 
     // call this function after validation
-    transformLoadingButton(createForm.querySelector("#post-button"));
+    transformLoadingButton(createForm.querySelector('#post-button'));
 
     let post_tags = [];
 
@@ -200,3 +200,20 @@ const shareButton = document.getElementById('share-post');
 if (shareButton) {
   copyToClipboard(shareButton);
 }
+
+// had to attach the event to the dom because the buttons are being added dynamically
+document.addEventListener('click', (event) => {
+  // if the click matches the button
+  if (event.target.closest('.post-options')) {
+    const button = event.target.closest('.post-options');
+
+    const popup = button.parentElement.querySelector('#post-options-popup');
+    if (popup) {
+      if (popup.classList.contains('opacity-0')) {
+        popup.classList.replace('opacity-0', 'opacity-100');
+      } else {
+        popup.classList.replace('opacity-100', 'opacity-0');
+      }
+    }
+  }
+});
