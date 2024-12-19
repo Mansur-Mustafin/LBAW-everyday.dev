@@ -1,4 +1,4 @@
-import { redirectToLogin, sendAjaxRequest, showSuccessMessage } from './utils';
+import { redirectToLogin, sendAjaxRequest, showSuccessMessage, toggleDeleteButton } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -49,6 +49,7 @@ function handleVote(container, isUpvote) {
       downvoteButton.disabled = false;
     });
   }
+  toggleDeleteButton();
 }
 
 function submitVote(type, id, isUpvote, container, onComplete) {
