@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class PageController extends Controller
+class StaticPageController extends Controller
 {
     public function contacts()
     {
