@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './utils';
+import { sendAjaxRequest, stripHtml, truncateWords } from './utils';
 
 const searchBarDiv = document.getElementById('search-bar');
 const searchContainer = document.getElementById('search-container');
@@ -95,10 +95,10 @@ const buildPost = (post) => {
                     <p class="bg-red-400 px-3 py-1 h-7 mr-1 rounded-full text-sm">Post</p>
                     <div class="flex-1 min-w-0">
                         <p>
-                            ${post.title}
+                            ${truncateWords(post.title, 5)}
                         </p>
                         <p class="text-sm text-nowrap text-ellipsis overflow-hidden">
-                            ${post.content}
+                            ${stripHtml(post.content)}
                         </p>
                     </div>
                 </a>

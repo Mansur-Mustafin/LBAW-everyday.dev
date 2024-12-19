@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from "./utils"
+import { sendAjaxRequest, stripHtml } from "./utils"
 
 // API Requests
 const deleteTag = async (tagId,baseUrl) => {
@@ -237,7 +237,7 @@ const buildOmittedPost = (omittedPost) => {
         <div class="text-gray-600">
           @${omittedPost.author.username}
         </div>
-        <p class="max-w-52 truncate">${omittedPost.content}</p>
+        <p class="max-w-52 truncate">${stripHtml(omittedPost.content)}</p>
       </a>
       <a href="" class="unomit-post-button place-content-center m-3" id="${omittedPost.id}-unomit-post-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
