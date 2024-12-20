@@ -120,9 +120,6 @@
                     <div class="text-sm text-gray-400 lowercase bg-input px-2 rounded-md">
                         #{{ $tag }}
                     </div>
-                    <div class="text-sm text-gray-400 lowercase bg-input px-2 rounded-md">
-                        #{{ $tag }}
-                    </div>
                 @endforeach
             </div>
         </div>
