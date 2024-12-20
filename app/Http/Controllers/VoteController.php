@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class VoteController extends Controller
 {
     public function store(Request $request)
-    {   
+    {
         $validated = $request->validate([
             'type' => 'required|string|in:post,comment',
             'id' => 'required|integer',

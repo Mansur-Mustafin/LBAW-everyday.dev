@@ -1,4 +1,5 @@
-import { redirectToLogin, showMessage, toggleDeleteButton } from './utils';
+import { data } from 'autoprefixer';
+import { redirectToLogin, showMessage, toggleDeleteButton, sendAjaxRequest } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -53,85 +54,94 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container, onComplete) {
-  
   const body = JSON.stringify({
     type: type,
     id: id,
     is_upvote: isUpvote,
   });
-  sendVoteAjaxRequest(
+  sendAjaxRequest(
     '/vote',
     (data) => {
       if (data.success) {
         container.dataset.voteId = data.vote_id;
         container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-      } else {
-        updateVoteUI(container, isUpvote, 'Vote removed');
-        showMessage('An error occurred. Please try again.', false);
       }
       if (onComplete) onComplete();
     },
     'POST',
-    body
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    body,
+    () => {
+      updateVoteUI(container, isUpvote, 'Vote removed');
+      showMessage('An error occurred. Please try again.', false);
+    }
   );
 }
 
 function removeVote(voteId, container, oldVote) {
-  
-  sendVoteAjaxRequest(
+  sendAjaxRequest(
     `/vote/${voteId}`,
-    (data) => {
-      if (data.success == false) {
-        updateVoteUI(container, oldVote, 'Saved');
-        showMessage('An error occurred. Please try again.', false);
-      }
-    },
+    (_data) => {},
     'DELETE',
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    undefined,
+    () => {
+      updateVoteUI(container, oldVote, 'Saved');
+      showMessage('An error occurred. Please try again.', false);
+    }
   );
 }
 
 function updateVote(voteId, isUpvote, container) {
-  
   const body = JSON.stringify({
     is_upvote: isUpvote,
   });
 
-  sendVoteAjaxRequest(
+  sendAjaxRequest(
     `/vote/${voteId}`,
-    (data) => {
-      if (data.success == false) {
-        updateVoteUI(container, !isUpvote, 'Vote updated');
-        showMessage('An error occurred. Please try again.', false);
-      }
-    },
+    (_data) => {},
     'PUT',
-    body
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    body,
+    () => {
+      updateVoteUI(container, !isUpvote, 'Vote updated');
+      showMessage('An error occurred. Please try again.', false);
+    }
   );
 }
 
-function sendVoteAjaxRequest(url, handler, method, body = undefined) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-CSRF-TOKEN': csrfToken,
-  };
+// function sendVoteAjaxRequest(url, handler, method, body = undefined) {
+//   const headers = {
+//     'Content-Type': 'application/json',
+//     'X-CSRF-TOKEN': csrfToken,
+//   };
 
-  fetch(url, {
-    method: method,
-    headers: headers,
-    body: body,
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then((data) => {
-      handler(data);
-    })
-    .catch((error) => {
-      console.log('Error', error);
-    });
-}
+//   fetch(url, {
+//     method: method,
+//     headers: headers,
+//     body: body,
+//   })
+//     .then((response) => {
+//       if (response.ok) {
+//         return response.json();
+//       }
+//     })
+//     .then((data) => {
+//       handler(data);
+//     })
+//     .catch((error) => {
+//       console.log('Error', error);
+//     });
+// }
 
 function updateVoteUI(container, isUpvote, message) {
   const postId = container.dataset.id;

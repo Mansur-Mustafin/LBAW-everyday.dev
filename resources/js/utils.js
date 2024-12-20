@@ -3,6 +3,9 @@ const defaultHeaders = {
   'X-CSRF-TOKEN': csrfToken,
   'X-Requested-With': 'XMLHttpRequest',
 };
+const defaultErrorHandler = () => {
+  showMessage('An error occurred. Please try again.', false);
+};
 
 export function encodeForAjax(data) {
   if (data == null) return null;
@@ -21,7 +24,7 @@ export function encodeForAjax(data) {
   return params.join('&');
 }
 
-export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined) {
+export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined, errorHandler = defaultErrorHandler) {
   fetch(url, {
     method: method,
     headers: headers,
@@ -36,7 +39,7 @@ export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, 
       if (data.success == true) {
         handler(data);
       } else if (data.success == false) {
-        showMessage('An error occurred. Please try again.', false);
+        errorHandler();
       } else {
         handler(data);
       }

@@ -82,11 +82,11 @@
                     @enderror
                 </div>
 
-                <label class="inline-flex items-center text-sm mb-4">
+                <label class="inline-flex items-center text-sm mb-2">
                     <input type="checkbox" name="age" id="ageCheckbox" class="form-checkbox bg-gray-600 rounded accent-[#5a7d99]">
                     <span class="ml-2">I confirm that I am over 13 years old</span>
                 </label>
-                <span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span>
+                <p class="mb-4"><span id="checkboxError" class="text-red-500 text-sm hidden">You need to confirm that you're over 13 years old.</span></p>
                 
                 <div class="flex items-center justify-between mb-4">
                     <a href="{{ route('login') }}" class="text-gray-300 hover:text-white hover:underline transition duration-200">Back to Login</a>
