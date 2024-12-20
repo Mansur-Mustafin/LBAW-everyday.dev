@@ -221,9 +221,11 @@ document.addEventListener('click', (event) => {
     const popup = button.parentElement.querySelector('#post-options-popup');
     if (popup) {
       if (popup.classList.contains('opacity-0')) {
-        popup.classList.replace('opacity-0', 'opacity-100');
+        popup.classList.remove('opacity-0', 'pointer-events-none');
+        popup.classList.add('opacity-100');
       } else {
-        popup.classList.replace('opacity-100', 'opacity-0');
+        popup.classList.remove('opacity-100');
+        popup.classList.add('opacity-0', 'pointer-events-none');
       }
     }
   }

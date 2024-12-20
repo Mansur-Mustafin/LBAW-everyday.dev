@@ -1,5 +1,5 @@
 @if(session('success'))
-  <div id="success-popup" class="animate-slide-in flex flex-row  justify-start fixed bottom-4 right-4 bg-green-900 text-white p-4 rounded-xl shadow-lg">
+  <div id="success-popup" class="animate-slide-in flex flex-row justify-start fixed bottom-4 right-4 bg-green-900 text-white p-4 rounded-xl shadow-lg">
     {{ session('success') }}
     <button type="button" class="ms-auto -mx-1 -my-1 justify-center items-center flex-shrink-0 rounded-lg p-1.5 inline-flex h-8 w-8 text-gray-200 hover:text-white">
       <span class="sr-only">Close</span>
@@ -17,8 +17,8 @@
       const closeButton = successPopup.querySelector('button');
 
       const dismissPopUp = (popup) => {
-        successPopup.classList.replace('animate-slide-in', 'animate-slide-out');
-        successPopup.addEventListener('animationend', () => notificationElement.remove(), {
+        popup.classList.replace('animate-slide-in', 'animate-slide-out');
+        popup.addEventListener('animationend', () => popup.remove(), {
           once: true,
         });
       }

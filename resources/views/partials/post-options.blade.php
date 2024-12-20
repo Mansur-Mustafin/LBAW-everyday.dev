@@ -1,4 +1,4 @@
-<div id='post-options-popup' class="bg-input w-48 absolute top-11 right-0 flex flex-col opacity-0 rounded-xl">
+<div id='post-options-popup' class="pointer-events-none transition ease-out bg-input w-48 absolute top-11 right-0 flex flex-col opacity-0 rounded-xl">
 
    @can('update', $post)
       <button onclick="toggleEdit()"
@@ -14,14 +14,15 @@
       </button>
    @endcan
 
-
    <form method="POST" action="/news/{{ $post->id }}">
       @csrf
       @method('DELETE')
-      <button type="submit" id="delete-post-button" @class([
-   'text-black px-3 py-2 rounded-xl w-full text-sm flex items-center hover:bg-gray-700 text-gray-400 gap-2',
-   'hidden' => Gate::denies('delete', $post)
-])>
+      <button
+         type="submit"
+         @class([
+            'delete-post-button px-3 py-2 rounded-xl w-full text-sm flex items-center hover:bg-gray-700 text-gray-400 gap-2',
+            'hidden' => Gate::denies('delete', $post)
+         ])>
          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-trash">
