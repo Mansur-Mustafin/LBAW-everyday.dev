@@ -19,6 +19,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
@@ -147,7 +148,7 @@ Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagCon
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'showUsers')->name('admin');
+    Route::get('/', 'show')->name('admin.dashboard');    // TODO: criar realmente um dashboard, com estatistica?
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
@@ -214,4 +215,9 @@ Route::controller(StaticPageController::class)->group(function () {
     Route::get('/contacts', 'contacts')->name('contacts');
     Route::get('/about-us', 'about')->name('about');
     Route::get('/main-features', 'features')->name('features');
+});
+
+
+Route::controller(StatisticsController::class)->group(function () {
+    Route::get('api/stats', 'show')->middleware('admin');
 });

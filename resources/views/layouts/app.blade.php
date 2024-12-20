@@ -18,8 +18,11 @@
     </script>
 
     <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+    
     @vite('resources/css/app.css')
     @vite('resources/js/utils.js')
+    @vite('resources/js/dashboard.js')
+    @vite('resources/js/app.js')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
     @vite('resources/js/comment.js')
