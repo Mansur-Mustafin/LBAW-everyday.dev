@@ -4,6 +4,17 @@ $page = end($urlParts);
 ?>
 <aside class="p-5 border-r border-solid border-gray-700 hidden laptop:h-full laptop:flex laptop:flex-col">
     <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:gap-1">
+        <a href="{{ route('admin.dashboard') }}"
+            class="flex p-2 rounded-md hover:bg-gray-700 {{ $page == 'dashboard' ? 'bg-gray-800' : '' }} mt-4 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-circle-gauge">
+                <path d="M15.6 2.7a10 10 0 1 0 5.7 5.7" />
+                <circle cx="12" cy="12" r="2" />
+                <path d="M13.4 10.6 19 5" />
+            </svg>
+            Dashboard
+        </a>
         <a href="{{ route('admin.users') }}"
             class="flex p-2 rounded-md hover:bg-gray-700 {{ $page == 'users' ? 'bg-gray-800' : '' }} gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -76,7 +87,16 @@ $page = end($urlParts);
 </aside>
 
 <aside class="min-w-16 border-r border-solid border-gray-700 laptop:hidden h-full flex flex-col items-center gap-2">
-    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:items-center ">
+    <div class="sticky top-[6rem] mt-3 laptop:flex laptop:flex-col laptop:items-center">
+        <a href="{{ route('admin.dashboard') }}" class="block p-2 rounded-md hover:bg-gray-700 mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-circle-gauge">
+                <path d="M15.6 2.7a10 10 0 1 0 5.7 5.7" />
+                <circle cx="12" cy="12" r="2" />
+                <path d="M13.4 10.6 19 5" />
+            </svg>
+        </a>
         <a href="{{ route('admin.users') }}" class="block p-2 rounded-md hover:bg-gray-700 mt-4 {{ $page == 'users' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
