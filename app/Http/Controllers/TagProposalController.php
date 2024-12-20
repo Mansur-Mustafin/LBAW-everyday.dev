@@ -30,11 +30,11 @@ class TagProposalController extends Controller
         ]);
 
         if (Tag::where('name', $validated['name'])->exists()) {
-            return redirect()->back()->withErrors('Tag already existed');
+            return redirect()->back()->withErrors(['name' => 'Tag already existed.']);
         }
 
         if (TagProposal::where('name', $validated['name'])->exists()) {
-            return redirect()->back()->withErrors('Tag already proposed');
+            return redirect()->back()->withErrors(['name' => 'Tag already proposed.']);
         }
 
         TagProposal::create([
