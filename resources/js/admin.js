@@ -142,9 +142,9 @@ const buildUserCard = (user) => {
 };
 const buildTagCard = (tag) => {
   return `
-      <div id="${tag.id}-card" class="flex flex-col p-2 border rounded border-gray-700 bg-input">
+      <div id="${tag.id}-card" class="p-3 rounded-xl bg-input">
           <div class="flex justify-between items-center">
-            <p class="text-2xl">${tag.name}</p>
+            <p class="text-lg">${tag.name}</p>
             <a href="" id="${tag.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
