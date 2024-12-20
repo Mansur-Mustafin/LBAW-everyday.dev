@@ -5,9 +5,25 @@
 @include('partials.success-popup')
 
 <section class="flex w-full h-full laptop:m-auto laptop:max-w-[64rem]">
-    <section class="flex flex-col w-full laptop:w-[42rem] px-10 py-12 border-x border-gray-700">
+    <section class="flex flex-col w-full laptop:w-2/3 px-10 py-12 laptop:border-x border-gray-700">
         <div id="display-section">
-            <h1 class="text-3xl font-bold">{{ $post->title }}</h1>
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
+                    {{ $post->title }}
+                </h1>
+                <div class="relative laptop:hidden">
+                    <button class="hover:bg-input p-2 rounded-xl post-options">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-ellipsis-vertical">
+                            <circle cx="12" cy="12" r="1" />
+                            <circle cx="12" cy="5" r="1" />
+                            <circle cx="12" cy="19" r="1" />
+                        </svg>
+                    </button>
+                    @include('partials.post-options')
+                </div>
+            </div>
             <div class="flex flex-wrap mt-5 gap-2" id="tags-section" data-url="{{url('')}}">
                 @foreach ($post->tags as $tag)
                     <div class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md flex gap-2">
@@ -90,7 +106,8 @@
             <div class="mt-4 flex flex-row gap-4">
                 <div>
                     <svg class="w-32 h-32" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="507.45276"
-                        height="499.98424" viewBox="50 0 207.45276 499.98424" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        height="499.98424" viewBox="50 0 207.45276 499.98424"
+                        xmlns:xlink="http://www.w3.org/1999/xlink">
                         <path id="ad903c08-5677-4dbe-a9c7-05a0eb46801f-1494" data-name="Path 461"
                             d="M252.30849,663.16553a22.728,22.728,0,0,0,21.947-3.866c7.687-6.452,10.1-17.081,12.058-26.924l5.8-29.112-12.143,8.362c-8.733,6.013-17.662,12.219-23.709,20.929s-8.686,20.6-3.828,30.024"
                             transform="translate(-196.27362 -200.00788)" fill="#e6e6e6" />
@@ -227,60 +244,31 @@
     </section>
     <section
         class="hidden laptop:flex laptop:flex-col laptop:border-r laptop:p-4 laptop:border-gray-700 laptop:w-[21rem]">
-
-        <div class="flex flex-col gap-1" id="edit-button">
-            @can('update', $post)
-                <div class="flex-1">
-                    <button onclick="toggleEdit()"
-                        class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full">
-                        Edit
-                    </button>
-                </div>
-            @endcan
-            
-            <div class="flex-1">
-                <form method="POST" action="/news/{{ $post->id }}">
-                    @csrf
-                    @method('DELETE')
-                    <button
-                        type="submit"
-                        id="delete-post-button"
-                        @class([
-                            'border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full',
-                            'hidden' => Gate::denies('delete', $post)
-                        ])>
-                        Delete post
-                    </button>
-                </form>
-            </div>            
-            
-            @can('omit',$post)
-                <div id='omit-section' data-url='{{ url('') }}' data-post={{ $post->id }}>
-                    <button id="omit-button" class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full {{ $post->is_omitted ? 'hidden' : '' }}"
-                        type="submit">Omit post</button>
-                    <button id="unomit-button" class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full {{ $post->is_omitted ? '' : 'hidden' }}"
-                        type="submit">Un-Omit post</button>
-{{--                     @if(!$post->is_omitted) 
-                        <div class="flex-1">
-                            <form method="POST" action="/news/{{ $post->id }}/omit">
-                                @csrf
-                                @method('PUT')
-                                <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                    type="submit">Omit post</button>
-                            </form>
-                        </div>
-                    @else
-                        <div class="flex-1">
-                            <form method="POST" action="/news/{{ $post->id }}/unomit">
-                                @csrf
-                                @method('PUT')
-                                <button class="border border-solid text-black bg-white font-bold px-3 py-2 mt-2 rounded-xl w-full"
-                                    type="submit">Un-Omit post</button>
-                            </form>
-                        </div>
-                    @endif --}}
-                </div>
-            @endcan
+        <div class="flex items-center justify-between">
+            <div class="flex gap-2">
+                @if ($post->for_followers)
+                    <div class="flex">
+                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
+                    </div>
+                @endif
+                @if ($post->is_omitted)
+                    <div class="flex">
+                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Omitted</span>
+                    </div>
+                @endif
+            </div>
+            <div class="relative self-end">
+                <button class="hover:bg-input p-2 rounded-xl post-options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-ellipsis-vertical">
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                    </svg>
+                </button>
+                @include('partials.post-options')
+            </div>
         </div>
 
         @can('update', $post)
@@ -319,11 +307,6 @@
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>
-            @if ($post->for_followers)
-                <div class="flex mt-4">
-                    <span class="bg-[#A480CF] text-gray-800 px-3 py-1 rounded-lg text-sm">Followers Only</span>
-                </div>
-            @endif
         @endif
     </section>
 </section>
