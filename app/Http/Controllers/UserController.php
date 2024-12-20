@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Vote;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -17,6 +18,8 @@ class UserController extends Controller
 
     public function userPosts(User $user)
     {
+        $this->authorize('view', $user);
+
         return view('pages.user', [
             'title' => "{$user->public_name}'s Posts",
             'baseUrl' => route('api.user.posts', $user->id),
@@ -26,11 +29,15 @@ class UserController extends Controller
 
     public function getUserPosts(User $user, Request $request)
     {
+        $this->authorize('view', $user);
+
         return $this->news_post_page($user->posts()->getQuery(), $request);
     }
 
     public function userUpvotes(User $user)
     {
+        $this->authorize('view', $user);
+
         return view('pages.user', [
             'title' => "{$user->public_name}'s Upvoted Posts",
             'baseUrl' => route('api.user.upvotes', $user->id),
@@ -40,6 +47,8 @@ class UserController extends Controller
 
     public function getUserUpvotes(User $user, Request $request)
     {
+        $this->authorize('view', $user);
+
         $upvotedPostIds = Vote::where('user_id', $user->id)
             ->where('is_upvote', true)
             ->where('vote_type', 'PostVote')
@@ -90,5 +99,25 @@ class UserController extends Controller
 
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
+    }
+
+    public function destroy(User $user, Request $request)
+    {
+        $this->authorize('delete',$user);
+        $user->delete();
+
+        if($request->ajax()) {
+            return response()->json([
+                'success'=>'You have successfully deleted a user!'
+            ]);
+        }
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('news.recent')
+            ->withSuccess('You have deleted your account successfully!');
     }
 }

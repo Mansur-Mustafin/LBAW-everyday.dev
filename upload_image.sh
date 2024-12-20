@@ -3,7 +3,7 @@
 # Stop execution if a step fails
 set -e
 
-IMAGE_NAME=gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24041
+IMAGE_NAME=gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24041:latest
 
 # Ensure that dependencies are available
 composer install
@@ -14,6 +14,4 @@ php artisan optimize
 # Tailwind
 npm run build
 
-# docker buildx build --push --platform linux/amd64 -t $IMAGE_NAME .
-docker build -t $IMAGE_NAME . --provenance=false
-docker push $IMAGE_NAME
+docker buildx build --push --platform linux/amd64,linux/arm64 -t $IMAGE_NAME . --provenance=false
