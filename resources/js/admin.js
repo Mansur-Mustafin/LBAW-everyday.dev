@@ -1,126 +1,115 @@
-import { sendAjaxRequest, stripHtml } from "./utils"
+import { sendAjaxRequest, stripHtml } from './utils';
 
 // API Requests
-const deleteTag = async (tagId,baseUrl) => {
-  sendAjaxRequest(
-    `${baseUrl}/admin/tags/delete/${tagId}`,
-    (_data) => {},
-    'DELETE'
-  )
-}
-const deleteTagProposal = async (tagProposalId,baseUrl) => {
-  sendAjaxRequest(
-    `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
-    (data) => {},
-    'DELETE'
-  )
-}
-const acceptTagProposal = async (tagProposalId,baseUrl) => {
-  sendAjaxRequest(
-    `${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`,
-    (_data) => {},
-    'PUT'
-  )
-}
-const acceptUnblockAppeal = async (unblockAppealId,baseUrl) => {
+const deleteTag = async (tagId, baseUrl) => {
+  sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (_data) => {}, 'DELETE');
+};
+const deleteTagProposal = async (tagProposalId, baseUrl) => {
+  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (data) => {}, 'DELETE');
+};
+const acceptTagProposal = async (tagProposalId, baseUrl) => {
+  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
+};
+const acceptUnblockAppeal = async (unblockAppealId, baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/unblock_appeals/accept/${unblockAppealId}`,
     (_data) => {},
     'PUT'
-  )
-}
-const deleteUnblockAppeal = async (unblockAppealId,baseUrl) => {
+  );
+};
+const deleteUnblockAppeal = async (unblockAppealId, baseUrl) => {
   sendAjaxRequest(
     `${baseUrl}/admin/unblock_appeals/delete/${unblockAppealId}`,
     (_data) => {},
     'DELETE'
-  )
-}
-const blockUser = async (userId,baseUrl) => {
-  const url = `${baseUrl}/admin/users/${userId}/block`
-  sendAjaxRequest(
-    url,
-    (_data) => {},
-    'PUT'
-  )
-}
-const unblockUser = async (userId,baseUrl) => {
-  const url = `${baseUrl}/admin/users/${userId}/unblock`
-  sendAjaxRequest(
-    url,
-    (_data) => {},
-    'PUT'
-  )
-}
+  );
+};
+const blockUser = async (userId, baseUrl) => {
+  const url = `${baseUrl}/admin/users/${userId}/block`;
+  sendAjaxRequest(url, (_data) => {}, 'PUT');
+};
+const unblockUser = async (userId, baseUrl) => {
+  const url = `${baseUrl}/admin/users/${userId}/unblock`;
+  sendAjaxRequest(url, (_data) => {}, 'PUT');
+};
 
-const unOmitPost = async (postId,baseUrl) => {
-  const url = `${baseUrl}/news/${postId}/unomit`
-  sendAjaxRequest(
-    url,
-    (_data) => {},
-    'PUT'
-  )
-}
+const unOmitPost = async (postId, baseUrl) => {
+  const url = `${baseUrl}/news/${postId}/unomit`;
+  sendAjaxRequest(url, (_data) => {}, 'PUT');
+};
 
-const unOmitComment = async (commentId,baseUrl) => {
-  const url = `${baseUrl}/comments/${commentId}/unomit`
-  sendAjaxRequest(
-    url,
-    (_data) => {},
-    'POST'
-  )
-}
+const unOmitComment = async (commentId, baseUrl) => {
+  const url = `${baseUrl}/comments/${commentId}/unomit`;
+  sendAjaxRequest(url, (_data) => {}, 'POST');
+};
 
-const deleteUser = async (userId,baseUrl) => {
-  const url = `${baseUrl}/users/${userId}/anonymize`
+const deleteUser = async (userId, baseUrl) => {
+  const url = `${baseUrl}/users/${userId}/anonymize`;
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data)
+      console.log(data);
     },
     'PUT'
-  )
-}
+  );
+};
 
 // Card Builder Functions
 const buildUserCard = (user) => {
   const adminBadge = (status) => `
-    <p id=${user.id}-admin-badge class=" text-gray-400 ${status == 'admin' ? '' : 'hidden'}">(Admin)</p> 
-  `
+    <p id=${user.id}-admin-badge class=" text-white bg-purple rounded-xl px-2 text-sm  ${
+    status == 'admin' ? '' : 'hidden'
+  }">Admin</p> 
+  `;
   const blockedBadge = (status) => `
-    <p id=${user.id}-blocked-badge class=" text-gray-400 ${status == 'blocked' ? '' : 'hidden'}">(Blocked)</p> 
-  `
-  const pendingBadge= (status) => `
-    <p id=${user.id}-pending-badge class=" text-gray-400 ${status == 'pending' ? '' : 'hidden'}">(Pending)</p> 
-  `
+    <p id=${user.id}-blocked-badge class=" text-white bg-purple rounded-xl px-2 text-sm  ${
+    status == 'blocked' ? '' : 'hidden'
+  }">Blocked</p> 
+  `;
+  const pendingBadge = (status) => `
+    <p id=${user.id}-pending-badge class=" text-white bg-purple rounded-xl px-2 text-sm ${
+    status == 'pending' ? '' : 'hidden'
+  }">Pending</p> 
+  `;
   const pageUrl = `${baseUrl}/users/${user.id}/posts`;
   const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
   return `
-    <div class="flex flex-col p-2 border rounded border-gray-700 bg-input" id="${user.id}-card">
+    <div class="flex flex-col p-3 border rounded-lg border-gray-700 bg-input" id="${user.id}-card">
       <div class="flex justify-between">
         <div class="flex-grow">
-          <a href="${pageUrl}" class="text-md tablet:text-2xl flex place items-center gap-1">
+          <a href="${pageUrl}" class="text-lg flex place items-center gap-3">
             <span class="max-w-32 tablet:max-w-60 truncate ">${user.public_name}</span>
+            
             ${adminBadge(user.is_admin ? 'admin' : '')}
             ${blockedBadge(user.status)}
             ${pendingBadge(user.status)}
           </a>
-          <h3 class="text-gray-400 ">${user.rank}</h3>
-          <h3 class="text-gray-400 max-w-40 truncate">${user.username}</h3>
-          <h3 class="text-gray-400">${user.email}</h3>
+          <div class="flex gap-1 text-sm">
+            <h3 class="text-gray-400">@${user.username} · </h3>
+            <h3 class="text-gray-400 tablet:max-w-full max-w-24 truncate">${user.email}</h3>
+          </div>
+         
         </div>
-        <div class="flex flex-col tablet:flex-row">
+        <div class="flex">
           ${
-            !user.is_admin 
-                ? `
-                  <a id="${user.id}-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center ${user.status != 'blocked' ? '' : 'hidden'}" href="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban">
+            !user.is_admin
+              ? `
+                  <a id="${
+                    user.id
+                  }-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center ${
+                  user.status != 'blocked' ? '' : 'hidden'
+                }" href="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban">
                       <circle cx="12" cy="12" r="10"/>
                       <path d="m4.9 4.9 14.2 14.2"/>
                     </svg>
                   </a>
-                  <a id="${user.id}-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center ${user.status != 'blocked' ? 'hidden' : ''}" href="">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed">
+                  <a id="${
+                    user.id
+                  }-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center ${
+                  user.status != 'blocked' ? 'hidden' : ''
+                }" href="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dashed">
                       <path d="M10.1 2.182a10 10 0 0 1 3.8 0"/>
                       <path d="M13.9 21.818a10 10 0 0 1-3.8 0"/>
                       <path d="M17.609 3.721a10 10 0 0 1 2.69 2.7"/>
@@ -135,11 +124,13 @@ const buildUserCard = (user) => {
               : ''
           }
           <a class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
           </a>
 
-          <a id="${user.id}-delete-button" data-url="${baseUrl}" class="delete-button flex flex-col p-2 justify-center" href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+          <a id="${
+            user.id
+          }-delete-button" data-url="${baseUrl}" class="delete-button flex flex-col p-2 justify-center" href="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
               <polyline points="3 6 5 6 21 6"/>
               <path d="M19 6l-1.34 14.22A2 2 0 0 1 15.67 22H8.33a2 2 0 0 1-1.99-1.78L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2m-7 0h8"/>
             </svg>
@@ -148,14 +139,14 @@ const buildUserCard = (user) => {
       </div>
     </div>
   `;
-}
+};
 const buildTagCard = (tag) => {
   return `
       <div id="${tag.id}-card" class="flex flex-col p-2 border rounded border-gray-700 bg-input">
           <div class="flex justify-between items-center">
             <p class="text-2xl">${tag.name}</p>
             <a href="" id="${tag.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
@@ -163,7 +154,7 @@ const buildTagCard = (tag) => {
           </div>
       </div>
   `;
-}
+};
 const buildTagProposalCard = (tagProposal) => {
   return `
       <div id="${tagProposal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
@@ -189,7 +180,7 @@ const buildTagProposalCard = (tagProposal) => {
         </div>
       </div>
       `;
-}
+};
 const buildUnblockAppealCard = (unblockAppeal) => {
   const pageUrl = `${baseUrl}/users/${unblockAppeal.user_id}/posts`;
   return `
@@ -204,8 +195,8 @@ const buildUnblockAppealCard = (unblockAppeal) => {
           <p class="">${unblockAppeal.description}</p>
         </div>
         ${
-          !unblockAppeal.is_resolved 
-          ? `
+          !unblockAppeal.is_resolved
+            ? `
             <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
@@ -218,7 +209,7 @@ const buildUnblockAppealCard = (unblockAppeal) => {
               </svg>
             </a>  
           `
-          : `
+            : `
             <p class="place-content-center m-3">
             Accepted
             </p>
@@ -226,7 +217,7 @@ const buildUnblockAppealCard = (unblockAppeal) => {
         }
       </div>
   `;
-}
+};
 
 const buildOmittedPost = (omittedPost) => {
   const pageUrl = `${baseUrl}/news/${omittedPost.id}`;
@@ -239,7 +230,9 @@ const buildOmittedPost = (omittedPost) => {
         </div>
         <p class="max-w-52 truncate">${stripHtml(omittedPost.content)}</p>
       </a>
-      <a href="" class="unomit-post-button place-content-center m-3" id="${omittedPost.id}-unomit-post-button ">
+      <a href="" class="unomit-post-button place-content-center m-3" id="${
+        omittedPost.id
+      }-unomit-post-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
@@ -249,8 +242,8 @@ const buildOmittedPost = (omittedPost) => {
           </svg>
       </a>
     </div>
-  `
-}
+  `;
+};
 
 const buildOmittedComment = (omittedComment) => {
   return `
@@ -272,139 +265,138 @@ const buildOmittedComment = (omittedComment) => {
           </svg>
       </a>
     </div>
-  `
-}
+  `;
+};
 
 // Card Button Behaviours
-const addUserButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetBlock = event.target.closest('.block-button')
-    const targetUnblock = event.target.closest('.unblock-button')
+const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetBlock = event.target.closest('.block-button');
+    const targetUnblock = event.target.closest('.unblock-button');
 
-    if(targetBlock) {
-      event.preventDefault()
-      const userId = targetBlock.id.split('-block-button')[0]
-      const blockedBadge = document.getElementById(userId+'-blocked-badge')
-      const pendingBadge = document.getElementById(userId+'-pending-badge')
-      pendingBadge.classList.add('hidden')
-      blockedBadge.classList.remove('hidden')
-      const unblockButton = document.getElementById(userId+'-unblock-button')
-      blockUser(userId,baseUrl)
-      targetBlock.classList.add('hidden')
-      unblockButton.classList.remove('hidden')
+    if (targetBlock) {
+      event.preventDefault();
+      const userId = targetBlock.id.split('-block-button')[0];
+      const blockedBadge = document.getElementById(userId + '-blocked-badge');
+      const pendingBadge = document.getElementById(userId + '-pending-badge');
+      pendingBadge.classList.add('hidden');
+      blockedBadge.classList.remove('hidden');
+      const unblockButton = document.getElementById(userId + '-unblock-button');
+      blockUser(userId, baseUrl);
+      targetBlock.classList.add('hidden');
+      unblockButton.classList.remove('hidden');
     }
-    if(targetUnblock) {
-      event.preventDefault()
-      const userId = targetUnblock.id.split('-unblock-button')[0]
-      const blockedBadge = document.getElementById(userId+'-blocked-badge')
-      blockedBadge.classList.add('hidden')
-      const blockButton = document.getElementById(userId+'-block-button')
-      unblockUser(userId,baseUrl)
-      blockButton.classList.remove('hidden')
-      targetUnblock.classList.add('hidden')
+    if (targetUnblock) {
+      event.preventDefault();
+      const userId = targetUnblock.id.split('-unblock-button')[0];
+      const blockedBadge = document.getElementById(userId + '-blocked-badge');
+      blockedBadge.classList.add('hidden');
+      const blockButton = document.getElementById(userId + '-block-button');
+      unblockUser(userId, baseUrl);
+      blockButton.classList.remove('hidden');
+      targetUnblock.classList.add('hidden');
+    }
+    const targetDelete = event.target.closest('.delete-button');
+    if (targetDelete) {
+      event.preventDefault();
+      const userId = targetDelete.id.split('-delete-button')[0];
+      deleteUser(userId, baseUrl);
+      const userCard = document.getElementById(userId + '-card');
+      userCard.classList.add('hidden');
+    }
+  });
+};
+const addTagButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetDelete = event.target.closest('.delete-button');
+    if (targetDelete) {
+      event.preventDefault();
+      const tagId = targetDelete.id.split('-delete-button')[0];
+      deleteTag(tagId, baseUrl);
+      const tagCard = document.getElementById(tagId + '-card');
+      tagCard.classList.add('hidden');
+    }
+  });
+};
+const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetAccept = event.target.closest('.accept-button');
+    if (targetAccept) {
+      event.preventDefault();
+      const tagProposalId = targetAccept.id.split('-accept-button')[0];
+      acceptTagProposal(tagProposalId, baseUrl);
+      const tagproposalcard = document.getElementById(tagProposalId + '-card');
+      tagproposalcard.classList.add('hidden');
+    }
+    const targetDelete = event.target.closest('.delete-button');
+    if (targetDelete) {
+      event.preventDefault();
+      const tagProposalId = targetDelete.id.split('-delete-button')[0];
+      deleteTagProposal(tagProposalId, baseUrl);
+      const tagproposalcard = document.getElementById(tagProposalId + '-card');
+      tagproposalcard.classList.add('hidden');
+    }
+  });
+};
+const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetAccept = event.target.closest('.accept-button');
+    if (targetAccept) {
+      event.preventDefault();
+      const unblockAppealId = targetAccept.id.split('-accept-button')[0];
+      acceptUnblockAppeal(unblockAppealId, baseUrl);
+      const tagproposalcard = document.getElementById(unblockAppealId + '-card');
+      console.log(tagproposalcard);
+      tagproposalcard.classList.add('hidden');
+    }
+    const targetDelete = event.target.closest('.delete-button');
+    if (targetDelete) {
+      event.preventDefault();
+      const unblockAppealId = targetDelete.id.split('-delete-button')[0];
+      deleteUnblockAppeal(unblockAppealId, baseUrl);
+      const tagproposalcard = document.getElementById(unblockAppealId + '-card');
+      tagproposalcard.classList.add('hidden');
+    }
+  });
+};
 
-    }
-    const targetDelete = event.target.closest('.delete-button')
-    if(targetDelete) {
-      event.preventDefault()
-      const userId = targetDelete.id.split('-delete-button')[0]
-      deleteUser(userId,baseUrl)
-      const userCard = document.getElementById(userId+'-card')
-      userCard.classList.add('hidden')
-    }
-  })
-}
-const addTagButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetDelete = event.target.closest('.delete-button')
-    if(targetDelete) {
-      event.preventDefault()
-      const tagId = targetDelete.id.split('-delete-button')[0]
-      deleteTag(tagId,baseUrl)
-      const tagCard = document.getElementById(tagId+'-card')
-      tagCard.classList.add('hidden')
-    }
-  })
-}
-const addTagProposalButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetAccept = event.target.closest('.accept-button')
-    if(targetAccept) {
-      event.preventDefault()
-      const tagProposalId = targetAccept.id.split('-accept-button')[0]
-      acceptTagProposal(tagProposalId,baseUrl)
-      const tagproposalcard = document.getElementById(tagProposalId+'-card')
-      tagproposalcard.classList.add('hidden')
-    }
-    const targetDelete = event.target.closest('.delete-button')
-    if(targetDelete) {
-      event.preventDefault()
-      const tagProposalId = targetDelete.id.split('-delete-button')[0]
-      deleteTagProposal(tagProposalId,baseUrl)
-      const tagproposalcard = document.getElementById(tagProposalId+'-card')
-      tagproposalcard.classList.add('hidden')
-    }
-  })
-}
-const addUnblockAppealButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetAccept = event.target.closest('.accept-button')
-    if(targetAccept) {
-      event.preventDefault()
-      const unblockAppealId = targetAccept.id.split('-accept-button')[0]
-      acceptUnblockAppeal(unblockAppealId,baseUrl)
-      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
-      console.log(tagproposalcard)
-      tagproposalcard.classList.add('hidden')
-    }
-    const targetDelete = event.target.closest('.delete-button')
-    if(targetDelete) {
-      event.preventDefault()
-      const unblockAppealId = targetDelete.id.split('-delete-button')[0]
-      deleteUnblockAppeal(unblockAppealId,baseUrl)
-      const tagproposalcard = document.getElementById(unblockAppealId+'-card')
-      tagproposalcard.classList.add('hidden')
-    }
-  })
-}
-
-const addUnomitPostButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetUnomit = event.target.closest('.unomit-post-button')
-    console.log(targetUnomit)
-    if(targetUnomit) {
-      event.preventDefault()
-      const unomitPostId= targetUnomit.id.split('-unomit-post-button')[0]
-      unOmitPost(unomitPostId,baseUrl)
-      const omittedPostCard = document.getElementById(unomitPostId+'-card')
-      omittedPostCard.classList.add('hidden')
+const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetUnomit = event.target.closest('.unomit-post-button');
+    console.log(targetUnomit);
+    if (targetUnomit) {
+      event.preventDefault();
+      const unomitPostId = targetUnomit.id.split('-unomit-post-button')[0];
+      unOmitPost(unomitPostId, baseUrl);
+      const omittedPostCard = document.getElementById(unomitPostId + '-card');
+      omittedPostCard.classList.add('hidden');
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
-  })
-}
+  });
+};
 
-const addUnomitCommentButtons = (baseQuery,buildFunction,resultDiv) => {
-  resultDiv.addEventListener('click',(event) => {
-    const targetUnomit = event.target.closest('.unomit-comment-button')
-    console.log(targetUnomit)
-    if(targetUnomit) {
-      event.preventDefault()
-      const unomitCommentId= targetUnomit.id.split('-unomit-comment-button')[0]
-      unOmitComment(unomitCommentId,baseUrl)
-      const omittedCommentCard = document.getElementById(unomitCommentId+'-card')
-      omittedCommentCard.classList.add('hidden')
+const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
+  resultDiv.addEventListener('click', (event) => {
+    const targetUnomit = event.target.closest('.unomit-comment-button');
+    console.log(targetUnomit);
+    if (targetUnomit) {
+      event.preventDefault();
+      const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
+      unOmitComment(unomitCommentId, baseUrl);
+      const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
+      omittedCommentCard.classList.add('hidden');
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
-  })
-}
+  });
+};
 
 // Global Variables
-let lastPage      = 0;
-let loading       = false;
-let page          = 1;
+let lastPage = 0;
+let loading = false;
+let page = 1;
 const loadingIcon = document.getElementById('loading-icon');
-const searchBar   = document.getElementById('admin-search-bar');
-const baseUrl     = searchBar ? searchBar.dataset.url : ''
+const searchBar = document.getElementById('admin-search-bar');
+const baseUrl = searchBar ? searchBar.dataset.url : '';
 
 // Auxiliary Functions
 const build = (url, buildCardFunction, resultDiv) => {
@@ -414,45 +406,33 @@ const build = (url, buildCardFunction, resultDiv) => {
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data)
+      console.log(data);
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
       data.data.forEach((element) => {
         resultDiv.innerHTML += buildCardFunction(element);
-      })
+      });
     },
     'GET'
-  )
-}
-const addInfinitePageBehaviour = (baseQuery,buildFunction,resultDiv) => {
+  );
+};
+const addInfinitePageBehaviour = (baseQuery, buildFunction, resultDiv) => {
   window.onload = async () => {
     resultDiv.innerHTML = '';
     page = 1;
-    build(
-      baseQuery, 
-      buildFunction, 
-      resultDiv
-    );
+    build(baseQuery, buildFunction, resultDiv);
   };
 
   const loadMoreData = async (page) => {
-    build(
-      baseQuery+`${searchBar.value}?page=${page}`, 
-      buildFunction , 
-      resultDiv
-    );
+    build(baseQuery + `${searchBar.value}?page=${page}`, buildFunction, resultDiv);
   };
 
   if (searchBar) {
     searchBar.onkeyup = async () => {
       resultDiv.innerHTML = '';
       page = 1;
-      build(
-        baseQuery+searchBar.value,
-        buildFunction,
-        resultDiv
-      );
+      build(baseQuery + searchBar.value, buildFunction, resultDiv);
     };
   }
 
@@ -471,63 +451,59 @@ const addInfinitePageBehaviour = (baseQuery,buildFunction,resultDiv) => {
       }
     }
   });
-}
+};
 
 // Result Divs
-const usersDiv          = document.getElementById('admin-search-users-results')
-const tagsDiv           = document.getElementById('admin-search-tags-results')
-const tagProposalsDiv   = document.getElementById('admin-search-tag-proposals-results')
-const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results')
-const omittedPostsDiv   = document.getElementById('admin-search-omitted-posts-results')
-const omittedCommentsDiv= document.getElementById('admin-search-omitted-comments-results')
+const usersDiv = document.getElementById('admin-search-users-results');
+const tagsDiv = document.getElementById('admin-search-tags-results');
+const tagProposalsDiv = document.getElementById('admin-search-tag-proposals-results');
+const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-results');
+const omittedPostsDiv = document.getElementById('admin-search-omitted-posts-results');
+const omittedCommentsDiv = document.getElementById('admin-search-omitted-comments-results');
 
-const reloadData = (baseQuery,buildFunction,resultDiv) => {
+const reloadData = (baseQuery, buildFunction, resultDiv) => {
   resultDiv.innerHTML = '';
   page = 1;
-  build(
-    baseQuery, 
-    buildFunction, 
-    resultDiv
-  );
-}
+  build(baseQuery, buildFunction, resultDiv);
+};
 
 // Build Cards
-if(usersDiv) {
-  console.log(usersDiv)
-  const baseQuery = baseUrl+'/api/search/users/'
-  addInfinitePageBehaviour(baseQuery,buildUserCard,usersDiv)
-  addUserButtons(baseQuery,buildUserCard,usersDiv)
+if (usersDiv) {
+  console.log(usersDiv);
+  const baseQuery = baseUrl + '/api/search/users/';
+  addInfinitePageBehaviour(baseQuery, buildUserCard, usersDiv);
+  addUserButtons(baseQuery, buildUserCard, usersDiv);
 }
-if(tagsDiv) {
-  console.log(tagsDiv)
-  const baseQuery = baseUrl+'/api/search/tags/'
-  addInfinitePageBehaviour(baseQuery,buildTagCard,tagsDiv)
-  addTagButtons(baseQuery,buildTagCard,tagsDiv)
+if (tagsDiv) {
+  console.log(tagsDiv);
+  const baseQuery = baseUrl + '/api/search/tags/';
+  addInfinitePageBehaviour(baseQuery, buildTagCard, tagsDiv);
+  addTagButtons(baseQuery, buildTagCard, tagsDiv);
 }
-if(tagProposalsDiv) {
-  console.log(tagProposalsDiv)
-  const baseQuery = baseUrl+'/api/search/tag_proposals/'
-  addInfinitePageBehaviour(baseQuery,buildTagProposalCard,tagProposalsDiv)
-  addTagProposalButtons(baseQuery,buildTagProposalCard,tagProposalsDiv)
-}
-
-if(unblockAppealsDiv) {
-  console.log(unblockAppealsDiv)
-  const baseQuery = baseUrl+'/api/search/unblock_appeals/'
-  addInfinitePageBehaviour(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
-  addUnblockAppealButtons(baseQuery,buildUnblockAppealCard,unblockAppealsDiv)
+if (tagProposalsDiv) {
+  console.log(tagProposalsDiv);
+  const baseQuery = baseUrl + '/api/search/tag_proposals/';
+  addInfinitePageBehaviour(baseQuery, buildTagProposalCard, tagProposalsDiv);
+  addTagProposalButtons(baseQuery, buildTagProposalCard, tagProposalsDiv);
 }
 
-if(omittedPostsDiv) {
-  console.log(omittedPostsDiv)
-  const baseQuery = baseUrl+'/api/search/omitted_posts/'
-  addInfinitePageBehaviour(baseQuery,buildOmittedPost,omittedPostsDiv)
-  addUnomitPostButtons(baseQuery,buildOmittedPost,omittedPostsDiv)
+if (unblockAppealsDiv) {
+  console.log(unblockAppealsDiv);
+  const baseQuery = baseUrl + '/api/search/unblock_appeals/';
+  addInfinitePageBehaviour(baseQuery, buildUnblockAppealCard, unblockAppealsDiv);
+  addUnblockAppealButtons(baseQuery, buildUnblockAppealCard, unblockAppealsDiv);
 }
 
-if(omittedCommentsDiv) {
-  console.log(omittedCommentsDiv)
-  const baseQuery = baseUrl+'/api/search/omitted_comments/'
-  addInfinitePageBehaviour(baseQuery,buildOmittedComment,omittedCommentsDiv)
-  addUnomitCommentButtons(baseQuery,buildOmittedComment,omittedCommentsDiv)
+if (omittedPostsDiv) {
+  console.log(omittedPostsDiv);
+  const baseQuery = baseUrl + '/api/search/omitted_posts/';
+  addInfinitePageBehaviour(baseQuery, buildOmittedPost, omittedPostsDiv);
+  addUnomitPostButtons(baseQuery, buildOmittedPost, omittedPostsDiv);
+}
+
+if (omittedCommentsDiv) {
+  console.log(omittedCommentsDiv);
+  const baseQuery = baseUrl + '/api/search/omitted_comments/';
+  addInfinitePageBehaviour(baseQuery, buildOmittedComment, omittedCommentsDiv);
+  addUnomitCommentButtons(baseQuery, buildOmittedComment, omittedCommentsDiv);
 }
