@@ -13,6 +13,7 @@ export default {
       colors: {
         input: '#1b1f24',
         background: '#0f1217',
+        purple: '#581c87',
       },
       typography: (theme) => ({
         DEFAULT: {
