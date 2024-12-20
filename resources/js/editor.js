@@ -20,7 +20,7 @@ const content_images_edit = document.getElementById('content-images-edit');
 
 const toolbarOptions = [
   //   header options
-  [{ header: [1, 2, 3] }],
+  [{ size: ['huge', 'large', false, 'small'] }],
 
   // text utilities
   ['bold', 'italic', 'underline', 'strike'],
@@ -29,16 +29,13 @@ const toolbarOptions = [
   [{ color: [] }, { background: [] }],
 
   // lists
-  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }, { align: [] }],
 
   // block quotes and code blocks
   ['blockquote', 'code-block'],
 
   // media
   ['link', 'image'],
-
-  // alignment
-  [{ align: [] }],
 ];
 
 if (createForm) {
@@ -48,6 +45,7 @@ if (createForm) {
       toolbar: toolbarOptions,
     },
     theme: 'snow',
+    placeholder: 'Content*',
   });
 
   document

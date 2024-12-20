@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { sendAjaxRequest } from './utils.js';
+=======
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js';
+>>>>>>> main
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -6,6 +10,8 @@ const selectedTags = document.getElementById('selectedTags');
 const createForm = document.getElementById('createForm');
 
 const tagsSection = document.getElementById('tags-section');
+const omitSection = document.getElementById('omit-section')
+
 if (tagsSection) {
   const baseUrl = tagsSection.dataset.url;
 
@@ -27,6 +33,37 @@ if (tagsSection) {
       document.getElementById(`${tagId}-unfollow`).classList.add('hidden');
     }
   });
+}
+
+// Omit Post
+if(omitSection) {
+  const omitButton = document.getElementById('omit-button');
+  const unomitButton = document.getElementById('unomit-button');
+
+  const baseUrl = omitSection.dataset.url
+  const postId  = omitSection.dataset.post
+
+
+  omitButton.addEventListener('click',() => {
+    omitButton.classList.add('hidden')
+    unomitButton.classList.remove('hidden')
+    const url = `${baseUrl}/news/${postId}/omit`
+    sendAjaxRequest(
+      url,
+      (_data) => {},
+      'PUT'
+    )
+  })
+  unomitButton.addEventListener('click',() => {
+    omitButton.classList.remove('hidden')
+    unomitButton.classList.add('hidden')
+    const url = `${baseUrl}/news/${postId}/unomit`
+    sendAjaxRequest(
+      url,
+      (_data) => {},
+      'PUT'
+    )
+  })
 }
 
 // Create Post
@@ -70,6 +107,10 @@ if (createForm) {
 
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
+
+    // call this function after validation
+    transformLoadingButton(createForm.querySelector('#post-button'));
+
     let post_tags = [];
 
     Array.from(selectedTags.children).forEach((child) => {
@@ -179,3 +220,26 @@ if (editForm) {
     });
   }
 }
+
+const shareButton = document.getElementById('share-post');
+
+if (shareButton) {
+  copyToClipboard(shareButton);
+}
+
+// had to attach the event to the dom because the buttons are being added dynamically
+document.addEventListener('click', (event) => {
+  // if the click matches the button
+  if (event.target.closest('.post-options')) {
+    const button = event.target.closest('.post-options');
+
+    const popup = button.parentElement.querySelector('#post-options-popup');
+    if (popup) {
+      if (popup.classList.contains('opacity-0')) {
+        popup.classList.replace('opacity-0', 'opacity-100');
+      } else {
+        popup.classList.replace('opacity-100', 'opacity-0');
+      }
+    }
+  }
+});

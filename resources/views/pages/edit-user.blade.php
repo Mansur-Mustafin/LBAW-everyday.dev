@@ -115,7 +115,7 @@
         <div class="flex gap-2 self-end mb-4">
             <a href="{{ url('/users/' . $user->id . '/posts') }}"
                 class="text-input bg-red-400 font-bold rounded-xl px-6 py-2">Cancel</a>
-            <button class="text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Save Changes</button>
+            <button class="loading-button text-input bg-white font-bold rounded-xl px-6 py-2" type="submit">Save Changes</button>
         </div>
 
     </form>

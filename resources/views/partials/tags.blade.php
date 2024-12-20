@@ -1,6 +1,6 @@
 <div class="hidden tablet:flex gap-2 mb-2 mt-1 items-center">
     @foreach (array_slice($tags, 0, 2) as $tag)
-        <div class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md flex gap-2">
+        <div class="text-sm text-gray-400 font-medium lowercase bg-input px-2 rounded-md flex gap-2">
             #{{ $tag }}
         </div>
     @endforeach
@@ -12,7 +12,7 @@
 
 <div class="flex tablet:hidden gap-2 mb-2 mt-1 items-center">
     @foreach (array_slice($tags, 0, 3) as $tag)
-        <div class="text-md text-gray-400 font-medium lowercase bg-input px-3 rounded-md flex gap-2">
+        <div class="text-sm text-gray-400 font-medium lowercase bg-input px-2 rounded-md flex gap-2">
             #{{ $tag }}
         </div>
     @endforeach
