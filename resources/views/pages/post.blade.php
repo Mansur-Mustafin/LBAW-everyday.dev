@@ -69,7 +69,7 @@
                         <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                             class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                             placeholder="Share your thoughts" id="commentInput" />
-                        <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+                        <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>
                     </form>
                 @endif
 
@@ -220,7 +220,7 @@
 
                 <div class="flex flex-wrap items-center mt-5 gap-2" id="selectedTags">
                     <button id="toggleTagSelector" type="button"
-                        class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">+</button>
+                        class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple hover:bg-opacity-50">+</button>
                     @foreach ($post->tags as $tag)
                         <div data-tag="{{ $tag->name }}" class="relative inline-block mr-2">
                             <span
@@ -277,11 +277,9 @@
                         <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
                     </div>
                 @endif
-                @if ($post->is_omitted)
-                    <div class="flex">
-                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Omitted</span>
-                    </div>
-                @endif
+                <div class="flex">
+                    <span id="omit-post-card" class="bg-purple text-white px-3 py-1 rounded-lg text-sm {{ $post->is_omitted ? '' : 'hidden' }}">Omitted</span>
+                </div>
             </div>
             <div class="relative self-end">
                 <button class="hover:bg-input p-2 rounded-xl post-options">
@@ -311,12 +309,12 @@
                 </a>
                 @can('follow', $post->author)
                     <button id="follow-button-refresh"
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="follow">Follow</button>
                 @endcan
                 @can('unfollow', $post->author)
                     <button id="unfollow-button-refresh"
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>

@@ -1,4 +1,4 @@
-import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js';
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton,showMessage } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -31,24 +31,36 @@ if (tagsSection) {
 
 // Omit Post
 if (omitSection) {
-  const omitButton = document.getElementById('omit-button');
-  const unomitButton = document.getElementById('unomit-button');
+  const omitButtons = document.querySelectorAll('.omit-post-button');
+  const unomitButtons = document.querySelectorAll('.unomit-post-button');
 
   const baseUrl = omitSection.dataset.url;
   const postId = omitSection.dataset.post;
 
-  omitButton.addEventListener('click', () => {
-    omitButton.classList.add('hidden');
-    unomitButton.classList.remove('hidden');
-    const url = `${baseUrl}/news/${postId}/omit`;
-    sendAjaxRequest(url, (_data) => {}, 'PUT');
-  });
-  unomitButton.addEventListener('click', () => {
-    omitButton.classList.remove('hidden');
-    unomitButton.classList.add('hidden');
-    const url = `${baseUrl}/news/${postId}/unomit`;
-    sendAjaxRequest(url, (_data) => {}, 'PUT');
-  });
+  const omitCard = document.getElementById('omit-post-card')
+
+  omitButtons.forEach((omitButton) => {
+    omitButton.addEventListener('click', () => {
+      omitCard.classList.remove('hidden');
+      omitButton.classList.add('hidden');
+      unomitButtons.forEach((unomitButton) => {
+        unomitButton.classList.remove('hidden');
+      })
+      const url = `${baseUrl}/news/${postId}/omit`;
+      sendAjaxRequest(url, (_data) => {}, 'PUT');
+    });
+  })
+  unomitButtons.forEach((unomitButton) => {
+    unomitButton.addEventListener('click', () => {
+      omitCard.classList.add('hidden');
+      omitButtons.forEach((unomitButton) => {
+        unomitButton.classList.remove('hidden');
+      })
+      unomitButton.classList.add('hidden');
+      const url = `${baseUrl}/news/${postId}/unomit`;
+      sendAjaxRequest(url, (_data) => {}, 'PUT');
+    });
+  })
 }
 
 // Create Post
