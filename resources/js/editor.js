@@ -1,5 +1,5 @@
 import Quill from 'quill';
-import { uploadBase64Image } from './utils';
+import { uploadBase64Image, transformLoadingButton, sendAjaxRequest } from './utils';
 import 'quill/dist/quill.snow.css';
 
 const createForm = document.getElementById('createForm');
@@ -52,9 +52,20 @@ if (createForm) {
     .querySelector('.ql-toolbar')
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700'); // styles the toolbar, ! is important to override the default styles
 
+  document.querySelector('.ql-editor').innerHTML = document.querySelector('#old-content').value; // TODO: check this!
+
   // this is the second submit event listener to this form and is the one that submits it.
   // it iterates through all images and replaces the src path to the one created when the image is uploaded.
-  createForm.addEventListener('submit', async (_) => {
+  createForm.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+
+    const isValid = await validateForm(createForm);
+    if (!isValid) {
+      return;
+    }
+
+    transformLoadingButton(createForm.querySelector('#post-button'));
+
     const imagesNotUploaded = Array.from(quill.root.querySelectorAll('img[src^="data:"]'));
 
     await Promise.all(getImagesPaths(imagesNotUploaded)); // had to do with a promise, otherwise the attribution below would be executed before all the images were uploaded.
@@ -84,7 +95,14 @@ if (editForm) {
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700');
 
   if (saveButton) {
-    saveButton.addEventListener('click', async (_) => {
+    saveButton.addEventListener('click', async (evt) => {
+      evt.preventDefault();
+
+      const isValid = await validateForm(editForm);
+      if (!isValid) {
+        return;
+      }
+
       const imagesNotUploaded = Array.from(quill.root.querySelectorAll('img[src^="data:"]'));
 
       await Promise.all(getImagesPaths(imagesNotUploaded));
@@ -141,3 +159,49 @@ async function uploadImage(source) {
     console.log(error);
   }
 }
+
+const validateForm = async (createForm) => {
+  const titleInput = createForm.querySelector('#title');
+  const titleError = createForm.querySelector('#title-error');
+
+  titleError.classList.add('hidden');
+  titleInput.classList.remove('border-red-500', 'border');
+
+  if (titleInput.value.trim() === '') {
+    titleError.textContent = 'Title cannot be empty.';
+    titleError.classList.remove('hidden');
+    titleInput.classList.add('border', 'border-red-500');
+    return false;
+  }
+
+  const isTitleValid = await checkTitleAvailability(titleInput.value);
+  if (!isTitleValid) {
+    titleError.textContent = 'A post with this title already exists.';
+    titleError.classList.remove('hidden');
+    titleInput.classList.add('border', 'border-red-500');
+    return false;
+  }
+
+  return true;
+};
+
+const checkTitleAvailability = (title) => {
+  return new Promise((resolve, reject) => {
+    sendAjaxRequest(
+      '/check-title',
+      (data) => {
+        resolve(!data.exists);
+      },
+      'POST',
+      {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      },
+      JSON.stringify({ title }),
+      (errorMessage) => {
+        console.error('Error checking title:', errorMessage);
+        reject(false);
+      }
+    );
+  });
+};
