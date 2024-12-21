@@ -48,4 +48,9 @@ class LoginController extends Controller
         return redirect()->route('news.recent')
             ->withSuccess('You have logged out successfully!');
     }
+
+    public function showBlocked(Request $request)
+    {
+        return view('auth.blocked');
+    }
 }

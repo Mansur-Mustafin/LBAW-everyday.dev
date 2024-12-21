@@ -1,11 +1,11 @@
-import { sendAjaxRequest, stripHtml } from './utils';
+import { sendAjaxRequest, showMessage, stripHtml } from './utils';
 
 // API Requests
 const deleteTag = async (tagId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (_data) => {}, 'DELETE');
+  sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (data) => {}, 'DELETE');
 };
 const deleteTagProposal = async (tagProposalId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (data) => {}, 'DELETE');
+  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (_data) => {}, 'DELETE'); // TODO: tem data?
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
@@ -49,6 +49,7 @@ const deleteUser = async (userId, baseUrl) => {
     url,
     (data) => {
       console.log(data);
+      showMessage(data.message);
     },
     'PUT'
   );
@@ -307,9 +308,12 @@ const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const userId = targetDelete.id.split('-delete-button')[0];
       const actionDelete = () => {
-        deleteUser(userId, baseUrl);
         const userCard = document.getElementById(userId + '-card');
-        userCard.classList.add('hidden');
+        if(!userCard.classList.contains('hidden')){ 
+          deleteUser(userId, baseUrl);
+          userCard.classList.add('hidden');
+          console.log('deleted user:'+userId);
+        }
       };
       handleDialog(actionDelete, userId);
     }
@@ -322,9 +326,11 @@ const addTagButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const tagId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTag = () => {
-        deleteTag(tagId, baseUrl);
         const tagCard = document.getElementById(tagId + '-card');
-        tagCard.classList.add('hidden');
+        if(!tagCard.classList.contains('hidden')) {
+          deleteTag(tagId, baseUrl);
+          tagCard.classList.add('hidden');
+        }
       };
       handleDialog(actionDeleteTag, tagId);
     }
@@ -337,9 +343,11 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const tagProposalId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptTagProposal = () => {
-        acceptTagProposal(tagProposalId, baseUrl);
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(tagproposalcard.classList.contains('hidden')) {
+          acceptTagProposal(tagProposalId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
       handleDialog(actionAcceptTagProposal, tagProposalId);
     }
@@ -348,9 +356,11 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const tagProposalId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTagProposal = () => {
-        deleteTagProposal(tagProposalId, baseUrl);
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(!tagproposalcard.classList.contains('hidden')) {
+          deleteTagProposal(tagProposalId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
       handleDialog(actionDeleteTagProposal, tagProposalId);
     }
@@ -363,9 +373,11 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unblockAppealId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptUnblockAppeal = () => {
-        acceptUnblockAppeal(unblockAppealId, baseUrl);
-        const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        tagproposalcard.classList.add('hidden');
+        const unblockAppealCard = document.getElementById(unblockAppealId + '-card');
+        if(!unblockAppealCard.classList.contains('hidden')) {
+          acceptUnblockAppeal(unblockAppealId, baseUrl);
+          unblockAppealCard.classList.add('hidden');
+        }
       };
       handleDialog(actionAcceptUnblockAppeal, unblockAppealId);
     }
@@ -374,9 +386,11 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unblockAppealId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteUnblockAppeal = () => {
-        deleteUnblockAppeal(unblockAppealId, baseUrl);
         const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(tagproposalcard.classList.contains('hidden')) {
+          deleteUnblockAppeal(unblockAppealId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
       handleDialog(actionDeleteUnblockAppeal, unblockAppealId);
     }
@@ -391,9 +405,11 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unomitPostId = targetUnomit.id.split('-unomit-post-button')[0];
       const actionUnomitPost = () => {
-        unOmitPost(unomitPostId, baseUrl);
         const omittedPostCard = document.getElementById(unomitPostId + '-card');
-        omittedPostCard.classList.add('hidden');
+        if(!omittedPostCard.classList.contains('hidden')) {
+          unOmitPost(unomitPostId, baseUrl);
+          omittedPostCard.classList.add('hidden');
+        }
       };
       handleDialog(actionUnomitPost, unomitPostId);
       //reloadData(baseQuery,buildFunction,resultDiv)
@@ -409,9 +425,11 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
       const actionUnomitComment = () => {
-        unOmitComment(unomitCommentId, baseUrl);
         const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-        omittedCommentCard.classList.add('hidden');
+        if(omittedCommentCard.classList.contains('hidden')) {
+          unOmitComment(unomitCommentId, baseUrl);
+          omittedCommentCard.classList.add('hidden');
+        }
       };
       handleDialog(actionUnomitComment, unomitCommentId);
     }
@@ -459,7 +477,6 @@ const build = (url, buildCardFunction, resultDiv) => {
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data);
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
