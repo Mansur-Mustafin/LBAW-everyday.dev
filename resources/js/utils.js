@@ -4,6 +4,14 @@ const defaultHeaders = {
   'X-Requested-With': 'XMLHttpRequest',
 };
 
+const defaultErrorHandler = (message) => {
+  if (message) {
+    showMessage(message, false);
+  } else {
+    showMessage('An error occurred. Please try again.', false);
+  }
+};
+
 export function encodeForAjax(data) {
   if (data == null) return null;
 
@@ -21,7 +29,14 @@ export function encodeForAjax(data) {
   return params.join('&');
 }
 
-export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined) {
+export function sendAjaxRequest(
+  url,
+  handler,
+  method,
+  headers = defaultHeaders,
+  body = undefined,
+  handlerError = defaultErrorHandler
+) {
   fetch(url, {
     method: method,
     headers: headers,
@@ -30,13 +45,33 @@ export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, 
     .then((response) => {
       if (response.ok) {
         return response.json();
+      } else {
+        return response.json().then((errorData) => {
+          throw { status: response.status, message: errorData.message || 'An error occurred.' };
+        });
       }
     })
     .then((data) => {
-      handler(data);
+      console.log(data);
+      if (data.success == true) {
+        handler(data);
+      } else if (data.success == false) {
+        handlerError(data.message);
+      } else {
+        handler(data);
+      }
     })
     .catch((error) => {
       console.log('Error', error);
+      // if (error.status == 500) {
+      //   handlerError(error.message);
+      // }
+      if (error.status == 403) {
+        handlerError("This action is not allowed :-(");
+      }
+      if (error.status == 404) {
+        handlerError('Page not Found');
+      }
     });
 }
 
@@ -58,18 +93,33 @@ export function truncateWords(str, maxWords = 10) {
   return str;
 }
 
-export function showSuccessMessage(message) {
+export const dismissPopUp = (popup) => {
+  popup.classList.replace('animate-slide-in', 'animate-slide-out');
+  popup.addEventListener('animationend', () => popup.remove(), {
+    once: true,
+  });
+};
+
+export function showMessage(message, success = true) {
   const popup = document.createElement('div');
   popup.id = 'success-popup';
-  popup.className = 'fixed bottom-4 right-4 bg-green-900 text-white p-4 rounded-xl shadow-lg';
-  popup.innerText = message;
+  popup.className = `animate-slide-in flex flex-row justify-start fixed bottom-4 right-4 ${
+    success ? 'bg-green-900' : 'bg-red-700'
+  } text-white p-4 rounded-xl shadow-lg`;
+  popup.innerHTML = `
+    ${message}
+    <button type="button" class="ms-auto -mx-1 -my-1 justify-center items-center flex-shrink-0 rounded-lg p-1.5 inline-flex h-8 w-8 text-gray-200 hover:text-white">
+      <span class="sr-only">Close</span>
+      <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+      </svg>
+    </button>
+  `;
 
   document.body.appendChild(popup);
 
-  setTimeout(() => {
-    popup.classList.add('hidden');
-    setTimeout(() => popup.remove(), 1000);
-  }, 4000);
+  setTimeout(() => dismissPopUp(popup), 4000);
+  popup.querySelector('button').addEventListener('click', () => dismissPopUp(popup));
 }
 
 // not by me
@@ -133,26 +183,29 @@ export function copyToClipboard(elem) {
 export const toggleDeleteButton = () => {
   const commentSection = document.getElementById('comment-section');
   const voteCountElement = document.querySelector('.vote-container .vote-count');
-  const deleteButton = document.getElementById('delete-post-button');
+  const deleteButton = document.querySelectorAll('.delete-post-button');
 
   const hasComments = !(
-    commentSection.children[0]?.innerHTML.trim() == '' ||
-    commentSection.innerHTML.trim() == '' ||
-    commentSection.children[0]?.id == 'no-comments'
+    commentSection?.children[0]?.innerHTML.trim() == '' ||
+    commentSection?.innerHTML.trim() == '' ||
+    commentSection?.children[0]?.id == 'no-comments'
   );
 
-  const hasVotes = parseInt(voteCountElement.textContent, 10) != 0;
+  const hasVotes = parseInt(voteCountElement?.textContent, 10) != 0;
 
   if (hasComments || hasVotes) {
-    deleteButton?.classList.add('hidden');
+    deleteButton?.forEach((button) => {
+      button?.classList.add('hidden');
+    });
   } else {
-    deleteButton?.classList.remove('hidden');
+    deleteButton?.forEach((button) => {
+      button?.classList.remove('hidden');
+    });
   }
 };
 
-
 export const stripHtml = (html) => {
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   div.innerHTML = html;
-  return div.textContent || div.innerText || "";
+  return div.textContent || div.innerText || '';
 };

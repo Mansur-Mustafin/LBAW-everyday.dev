@@ -8,11 +8,12 @@ SET search_path TO lbaw2441;
 --
 INSERT INTO "user" (username, public_name, password, email, rank, status, reputation, is_admin, created_at)
 VALUES
-('johndoe', 'John Doe', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'johndoe@example.com', 'noobie', 'active', 0, TRUE, NOW() - INTERVAL '5 months'),
+('johndoe', 'John Doe', '$2y$10$OPdnB2v9KY.JUiCYMaF8SubcUvrQ.rWN5DjTbNIhYGoRWAnGxvIXG', 'admin@example.com', 'noobie', 'active', 0, TRUE, NOW() - INTERVAL '5 months'),
 ('rubem', 'Rubem Neto', '$2y$10$ICGiPHxxCcFA8tFC.YR69OcYynMlf93xbHY3XjBHZY.4MZ43JTamS', 'rubem@example.com', 'noobie', 'active', 0, FALSE, NOW() - INTERVAL '9 months'),
 ('mansur', 'Mansur Mustafin', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'mansur@example.com', 'noobie', 'active', 0, FALSE, NOW() - INTERVAL '7 months'),
+('afonso', 'Afonso Moura', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'afonso@example.com', 'noobie', 'active', 0, FALSE, NOW()),
+('diogo', 'Diogo Goiana', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'diogo@example.com', 'noobie', 'active', 0, FALSE, NOW() - INTERVAL '5 months'),
 ('janedoe', 'Jane Doe', 'securepassword', 'janedoe@example.com', 'noobie', 'active', 150, FALSE, NOW() - INTERVAL '3 months'),
-('adminuser', 'Admin User', 'adminpass', 'admin@example.com', 'code monkey', 'active', 1000, TRUE, NOW() - INTERVAL '11 months'),
 ('samsmith', 'Sam Smith', 'samspassword', 'samsmith@example.com', 'code monkey', 'pending', 20, FALSE, NOW() - INTERVAL '10 months'),
 ('lindajones', 'Linda Jones', 'lindapass', 'lindajones@example.com', 'noobie', 'pending', 250, FALSE, NOW() - INTERVAL '6 months'),
 ('mikebrown', 'Mike Brown', 'mikepassword', 'mikebrown@example.com', '10x developer', 'pending', 500, FALSE, NOW() - INTERVAL '2 months'),

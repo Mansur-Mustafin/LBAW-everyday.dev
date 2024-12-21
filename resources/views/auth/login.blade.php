@@ -15,7 +15,7 @@
         </div>
 
         <div class="md:w-1/2 p-8 w-full">
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login') }}" novalidate class="group">
                 {{ csrf_field() }}
 
                 <h2 class="text-2xl font-bold mb-4 text-center">Log in</h2>
@@ -36,25 +36,41 @@
                 </div>
 
                 <div class="flex flex-col mb-2">
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                        placeholder="Email*" class="rounded-2xl bg-input outline-none p-3">
+                    <input id="email" 
+                        type="email" 
+                        name="email" 
+                        value="{{ old('email') }}" 
+                        required
+                        placeholder="Email*" 
+                        class="rounded-2xl bg-input outline-none p-3 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
+                        pattern="^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$">
+                    <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
+                        Please enter a valid email address
+                    </span>
                     @error('email')
                         <span class="text-red-400 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="flex flex-col relative w-full mb-7">
-                    <input id="password" type="password" name="password" required placeholder="Password*"
-                        class="rounded-2xl bg-input outline-none p-3">
+                    <input id="password" 
+                        type="password" 
+                        name="password" 
+                        required 
+                        placeholder="Password*"
+                        class="rounded-2xl bg-input outline-none p-3 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
+                        pattern=".{4,}">
                     <span
                         class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-3 text-gray-500">
                         visibility_off
+                    </span>
+                    <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
+                        Password must be at least 4 characters long
                     </span>
                     @error('password')
                         <span class="text-red-400 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-
 
                 <div class="flex items-center justify-between mb-4">
                     <label class="inline-flex items-center text-sm">
@@ -63,7 +79,8 @@
                         <span class="ml-2">Remember Me</span>
                     </label>
                     <button type="submit"
-                        class="w-1/2 bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
+                        class="w-1/2 bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200 
+                        group-invalid:pointer-events-none group-invalid:opacity-60">
                         Login
                     </button>
                 </div>
