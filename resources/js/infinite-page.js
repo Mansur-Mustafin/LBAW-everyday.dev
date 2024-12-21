@@ -240,7 +240,7 @@ if (resultsDivNotification) {
     is_viewed,
   }) => `
     <div class="bg-input p-4 flex flex-col rounded-xl">
-      <div class="flex gap-2 items-center justify-between">
+      <div class="flex gap-2 items-center justify-between relative">
         <div class="flex gap-2">
           <img src="${imageSrc}"
               alt="Profile Image" class="w-10 h-10 rounded-xl">
@@ -264,7 +264,7 @@ if (resultsDivNotification) {
           ${
             is_viewed
               ? ''
-              : '<div class="related bg-red-400 rounded-full w-3 h-3 absolute bottom-5 left-5"></div>'
+              : '<div class="related bg-red-400 rounded-full w-2 h-2 absolute bottom-7 right-0"></div>'
           }
       </div>
       <div class="flex justify-between">
