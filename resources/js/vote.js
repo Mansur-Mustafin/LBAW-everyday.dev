@@ -1,4 +1,5 @@
-import { redirectToLogin, sendAjaxRequest, showSuccessMessage, toggleDeleteButton } from './utils';
+import { data } from 'autoprefixer';
+import { redirectToLogin, showMessage, toggleDeleteButton, sendAjaxRequest } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -53,10 +54,6 @@ function handleVote(container, isUpvote) {
 }
 
 function submitVote(type, id, isUpvote, container, onComplete) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-CSRF-TOKEN': csrfToken,
-  };
   const body = JSON.stringify({
     type: type,
     id: id,
@@ -65,57 +62,60 @@ function submitVote(type, id, isUpvote, container, onComplete) {
   sendAjaxRequest(
     '/vote',
     (data) => {
-      if (data.message === 'Saved') {
+      if (data.success) {
         container.dataset.voteId = data.vote_id;
         container.dataset.vote = isUpvote ? 'upvote' : 'downvote';
-      } else {
-        updateVoteUI(container, isUpvote, 'Vote removed');
-        // TODO: showErrorMessage
-        showSuccessMessage("An error occurred while saving your vote. Please try again.");
       }
       if (onComplete) onComplete();
     },
     'POST',
-    headers,
-    body
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    body,
+    (_data) => {
+      updateVoteUI(container, isUpvote, 'Vote removed');
+      showMessage('Vote not saved. Please try again.', false);
+    }
   );
 }
 
 function removeVote(voteId, container, oldVote) {
   sendAjaxRequest(
     `/vote/${voteId}`,
-    (data) => {
-      if (data.message === 'Error on delete') {
-        updateVoteUI(container, oldVote, 'Saved');
-        // TODO: showErrorMessage
-        showSuccessMessage("An error occurred while removing your vote. Please try again.");
-      }
+    (_data) => {},
+    'DELETE',
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
     },
-    'DELETE'
+    undefined,
+    (_data) => {
+      updateVoteUI(container, oldVote, 'Saved');
+      showMessage('Vote not removed. Please try again.', false);
+    }
   );
 }
 
 function updateVote(voteId, isUpvote, container) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-CSRF-TOKEN': csrfToken,
-  };
   const body = JSON.stringify({
     is_upvote: isUpvote,
   });
 
   sendAjaxRequest(
     `/vote/${voteId}`,
-    (data) => {
-      if (data.message === 'Error on update') {
-        updateVoteUI(container, !isUpvote, 'Vote updated');
-        // TODO: showErrorMessage
-        showSuccessMessage("An error occurred while updating your vote. Please try again.");
-      }
-    },
+    (_data) => {},
     'PUT',
-    headers,
-    body
+    {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+    },
+    body,
+    (_data) => {
+      updateVoteUI(container, !isUpvote, 'Vote updated');
+      showMessage('Vote not changed. Please try again.', false);
+    }
   );
 }
 

@@ -69,7 +69,7 @@
                         <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                             class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                             placeholder="Share your thoughts" id="commentInput" />
-                        <button class="-ml-20 px-5 py-2 rounded-xl bg-purple" type="submit">Post</button>
+                        <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>
                     </form>
                 @endif
 
@@ -188,10 +188,22 @@
                 <input class="hidden" type="file" id="realFileInput" name="image">
                 <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
-                <div class="mb-5">
+                <div class="flex flex-col gap-2">
                     <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
-                    <input type="text" name="title" id="title" value="{{ $post->title }}" placeholder="Post Title*"
-                        class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
+                    <input name="title" 
+                        type="text"
+                        id="title" 
+                        class="rounded-2xl bg-input outline-none p-3 @error('title') border border-red-500 @else  @enderror" 
+                        placeholder="Post title*"
+                        value="{{ $post->title }}"
+                        required
+                        pattern=".*\S.*">
+                    <span class="hidden ml-4 text-red-400 text-sm mb-2" id="title-error">
+                        Title cannot be empty
+                    </span>
+                    @error('title')
+                        <span class="ml-4 text-red-400 text-sm" id="title-server-error">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-5">
@@ -208,7 +220,7 @@
 
                 <div class="flex flex-wrap items-center mt-5 gap-2" id="selectedTags">
                     <button id="toggleTagSelector" type="button"
-                        class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50">+</button>
+                        class="order-last ml-2 text-lg text-black bg-white rounded-xl px-3 font-medium hover:text-purple-400 hover:bg-purple hover:bg-opacity-50">+</button>
                     @foreach ($post->tags as $tag)
                         <div data-tag="{{ $tag->name }}" class="relative inline-block mr-2">
                             <span
@@ -237,6 +249,20 @@
                     <input class="hidden hiddenToggle" type="text" name="for_followers"
                         value='{{$post->for_followers ? 'true' : 'false'}}'>
                 </div>
+
+                @can('update', $post)
+                    <div id="save-cancel-buttons" class="flex justify-between gap-2 mt-4">
+                        <button id="saveButton" type="submit" form="editForm"
+                            class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
+                            Save
+                        </button>
+                        <button type="button" onclick="toggleEdit()"
+                            class="border border-solid bg-background text-white font-bold px-3 py-2 rounded-xl w-1/2">
+                            Cancel
+                        </button>
+                    </div>
+                @endcan
+
                 <input class="hidden" name="tags" id="tagsInput">
             </form>
         </div>
@@ -251,11 +277,9 @@
                         <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
                     </div>
                 @endif
-                @if ($post->is_omitted)
-                    <div class="flex">
-                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Omitted</span>
-                    </div>
-                @endif
+                <div class="flex">
+                    <span id="omit-post-card" class="bg-purple text-white px-3 py-1 rounded-lg text-sm {{ $post->is_omitted ? '' : 'hidden' }}">Omitted</span>
+                </div>
             </div>
             <div class="relative self-end">
                 <button class="hover:bg-input p-2 rounded-xl post-options">
@@ -271,19 +295,6 @@
             </div>
         </div>
 
-        @can('update', $post)
-            <div id="save-cancel-buttons" class="hidden flex justify-between gap-2 mt-2">
-                <button id="saveButton" type="submit" form="editForm"
-                    class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
-                    Save
-                </button>
-                <button type="button" onclick="toggleEdit()"
-                    class="border border-solid bg-background text-white font-bold px-3 py-2 rounded-xl w-1/2">
-                    Cancel
-                </button>
-            </div>
-        @endcan
-
         @if (Auth::check())
             <p class="mt-4 font-bold">Post's Author</p>
             <div class="flex items-center border border-gray-700 rounded-xl px-5 py-4 mt-4">
@@ -298,12 +309,12 @@
                 </a>
                 @can('follow', $post->author)
                     <button id="follow-button-refresh"
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="follow">Follow</button>
                 @endcan
                 @can('unfollow', $post->author)
                     <button id="unfollow-button-refresh"
-                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple-700 hover:bg-opacity-50 hover:border-none"
+                        class="follow-button ml-auto justify-end border border-solid text-white bg-background font-bold px-3 py-2 rounded-xl hover:text-purple-400 hover:bg-purple hover:bg-opacity-50 hover:border-none"
                         data-user-id="{{ $post->author->id }}" data-action="unfollow">Unfollow</button>
                 @endcan
             </div>
