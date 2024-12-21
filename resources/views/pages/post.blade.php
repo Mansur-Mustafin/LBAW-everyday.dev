@@ -277,11 +277,9 @@
                         <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Followers Only</span>
                     </div>
                 @endif
-                @if ($post->is_omitted)
-                    <div class="flex">
-                        <span class="bg-purple text-white px-3 py-1 rounded-lg text-sm">Omitted</span>
-                    </div>
-                @endif
+                <div class="flex">
+                    <span id="omit-post-card" class="bg-purple text-white px-3 py-1 rounded-lg text-sm {{ $post->is_omitted ? '' : 'hidden' }}">Omitted</span>
+                </div>
             </div>
             <div class="relative self-end">
                 <button class="hover:bg-input p-2 rounded-xl post-options">
