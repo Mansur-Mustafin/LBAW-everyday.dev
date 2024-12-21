@@ -1,8 +1,8 @@
 <aside
     class="border-r border-solid border-gray-700 hidden laptop:h-full laptop:flex laptop:flex-col laptop:min-w-56 p-5">
     <div class="sticky top-[6rem] laptop:flex laptop:flex-col">
-        <a href="{{ route('news.recent') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        <a href="{{ route('news.recent') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-clock">
                 <circle cx="12" cy="12" r="10" />
@@ -11,8 +11,8 @@
             Recent News
         </a>
         @if (Auth::check())
-            <a href="{{ route('news.my') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <a href="{{ route('news.my') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-house">
                     <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
@@ -24,8 +24,8 @@
 
             {{-- <div class="border-2 rounded-xl border-gray-500 w-9/12 my-3"></div> --}}
 
-            <a href="{{ route('news.bookmark') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <a href="{{ route('news.bookmark') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-bookmark-plus">
                     <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -38,8 +38,8 @@
     </div>
 
     <div class="fixed bottom-3 laptop:flex laptop:flex-col w-44">
-        <a href="{{ route('contacts') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        <a href="{{ route('contacts') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-notebook-tabs">
                 <path d="M2 6h4" />
@@ -54,8 +54,8 @@
             </svg>
             Contacts
         </a>
-        <a href="{{ route('about') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        <a href="{{ route('about') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users-round">
                 <path d="M18 21a8 8 0 0 0-16 0" />
@@ -64,8 +64,8 @@
             </svg>
             About Us
         </a>
-        <a href="{{ route('features') }}" class="flex p-2 rounded-md hover:bg-gray-700 gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="current"
+        <a href="{{ route('features') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="current"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-star">
                 <path
@@ -79,7 +79,7 @@
 <aside class="min-w-16 border-r border-solid border-gray-700 laptop:hidden h-full flex flex-col items-center gap-2">
     <div class="sticky top-[6rem] flex flex-col items-center gap-2">
         <a href="{{ route('news.recent') }}" class="block p-2 rounded-md hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-user-round">
                 <circle cx="12" cy="8" r="5" />
@@ -88,7 +88,7 @@
         </a>
         @if (Auth::check())
             <a href="{{ route('news.my') }}" class="block rounded-md p-2 hover:bg-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-house">
                     <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
@@ -100,7 +100,7 @@
             {{-- <div class="border-2 rounded-xl border-gray-500 w-9/12 my-3"></div> --}}
 
             <a href="{{ route('news.bookmark') }}" class="block rounded-md p-2 hover:bg-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-bookmark-plus">
                     <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -112,7 +112,7 @@
     </div>
     <div class="fixed bottom-3 flex flex-col items-center gap-2">
         <a href="{{ route('contacts') }}" class="block rounded-md p-2 hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-notebook-tabs">
                 <path d="M2 6h4" />
@@ -127,7 +127,7 @@
             </svg>
         </a>
         <a href="{{ route('about') }}" class="block rounded-md p-2 hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users-round">
                 <path d="M18 21a8 8 0 0 0-16 0" />
@@ -136,7 +136,7 @@
             </svg>
         </a>
         <a href="{{ route('features') }}" class="block p-2 rounded-md hover:bg-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="current"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="current"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-star">
                 <path
