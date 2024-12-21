@@ -1,5 +1,5 @@
 <aside
-    class="border-r border-solid border-gray-700 w-16 laptop:min-w-56 p-5 flex flex-col items-center laptop:items-start gap-1">
+    class="relative border-r border-solid border-gray-700 w-16 laptop:min-w-56 p-5 flex flex-col items-center laptop:items-start gap-1 top-[4.938rem]">
     <div class="sticky top-[6rem] flex flex-col gap-1 items-center laptop:items-start">
         <a href="{{ route('news.recent') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
