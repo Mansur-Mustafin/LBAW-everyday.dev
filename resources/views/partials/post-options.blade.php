@@ -35,9 +35,6 @@
    </form>
 
    @if (Auth::check() && Auth::user()->isAdmin())
-{{--       <form method="POST" action="/news/{{ $post->id }}/omit">
-      @csrf
-      @method('PUT') --}}
       <div id="omit-section" data-url='{{ url('') }}' data-post={{ $post->id }}>
          <button class="omit-post-button text-gray-400 px-3 py-2 rounded-xl w-full flex items-center gap-2 text-sm hover:bg-gray-700 {{ $post->is_omitted ? 'hidden' : '' }}"
             type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
@@ -49,10 +46,6 @@
             <path d="m2 2 20 20" />
             </svg>
             Omit post</button>
-   {{--       </form> --}}
-   {{--       <form method="POST" action="/news/{{ $post->id }}/unomit">
-         @csrf
-         @method('PUT') --}}
          <button class="unomit-post-button text-gray-400 text-sm px-3 py-2 rounded-xl w-full flex items-center gap-2 hover:bg-gray-700 {{ $post->is_omitted ? '' : 'hidden' }}"
             type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -62,7 +55,6 @@
             <circle cx="12" cy="12" r="3" />
             </svg>
             Un-Omit post</button>
-   {{--       </form> --}}
       </div>
    @endif
 
