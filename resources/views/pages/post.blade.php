@@ -69,7 +69,7 @@
                         <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                             class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                             placeholder="Share your thoughts" id="commentInput" />
-                        <button class="-ml-20 px-5 py-2 rounded-xl bg-purple-900" type="submit">Post</button>
+                        <button class="-ml-20 px-5 py-2 rounded-xl bg-purple" type="submit">Post</button>
                     </form>
                 @endif
 
