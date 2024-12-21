@@ -75,9 +75,10 @@ class NewsPostController extends Controller
     {
         $validated = $request->validated();
 
+        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><a>');
         $post = NewsPost::create([
             'title' => $validated['title'],
-            'content' => $validated['content'],
+            'content' => $content,
             'for_followers' => $validated['for_followers'],
             'author_id' => Auth::user()->id,
         ]);
@@ -111,9 +112,10 @@ class NewsPostController extends Controller
 
         $validated = $request->validated();
 
+        $content = strip_tags($validated['content'],'<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><br><a>');
         $newsPost->update([
             'title' => $validated['title'],
-            'content' => $validated['content'],
+            'content' => $content,
             'for_followers' => $validated['for_followers'],
         ]);
 
