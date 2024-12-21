@@ -5,7 +5,7 @@ $page = end($urlParts);
 <aside class="p-5 border-r border-solid border-gray-700 h-full w-16 laptop:min-w-56">
     <div class="sticky top-[6rem] flex flex-col items-center laptop:items-start gap-1">
         <a href="{{ route('admin.dashboard') }}"
-            class="flex p-2 rounded-md hover:bg-gray-700 items-center {{ $page == 'dashboard' ? 'bg-gray-800' : '' }} gap-2">
+            class="flex p-2 rounded-md hover:bg-gray-700 items-center {{ $page == 'admin' ? 'bg-gray-800' : '' }} gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-circle-gauge">
