@@ -5,7 +5,7 @@
 @include('partials.success-popup')
 
 <section
-    class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
+    class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[52rem] h-full">
     <main class="order-2 tablet:order-none flex-1">
         @php
             $isPostsActive = Route::currentRouteNamed('user.posts');
@@ -52,9 +52,17 @@
 
     </main>
 
-    <aside class="order-1 tablet:order-none border-l border-gray-700 tablet:w-[18rem]">
+    <aside class="order-1 tablet:order-none border-l border-gray-700 tablet:w-[19rem]">
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
+            @can('follow', $user)
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-2 py-1 mx-2 text-sm"
+                    data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
+            @endcan
+            @can('unfollow', $user)
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-2 py-1 mx-2 text-sm"
+                    data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
+            @endcan
             <button id="share-profile" class="relative hover:bg-input p-2 rounded-xl">
                 <span
                     class="copied-feedback absolute top-10 -left-4 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
@@ -133,15 +141,6 @@
                 </div>
             </div>
         @endif
-
-        @can('follow', $user)
-            <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
-                data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
-        @endcan
-        @can('unfollow', $user)
-            <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
-                data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
-        @endcan
     </aside>
 </section>
 

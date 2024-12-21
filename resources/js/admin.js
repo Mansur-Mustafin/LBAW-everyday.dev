@@ -75,11 +75,11 @@ const buildUserCard = (user) => {
   const pageUrl = `${baseUrl}/users/${user.id}/posts`;
   const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
   return `
-    <div class="flex flex-col p-3 border rounded-lg border-gray-700 bg-input" id="${user.id}-card">
+    <div class="flex flex-col p-3 rounded-lg bg-input" id="${user.id}-card">
       <div class="flex justify-between">
         <div class="flex-grow">
           <a href="${pageUrl}" class="text-lg flex place items-center gap-3">
-            <span class="max-w-32 tablet:max-w-60 truncate ">${user.public_name}</span>
+            <span class="max-w-32 tablet:max-w-60 truncate">${user.public_name}</span>
             
             ${adminBadge(user.is_admin ? 'admin' : '')}
             ${blockedBadge(user.status)}
@@ -131,7 +131,7 @@ const buildUserCard = (user) => {
           <a id="${
             user.id
           }-delete-button" data-url="${baseUrl}" class="delete-button flex flex-col p-2 justify-center" href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash hover:stroke-red-600">
               <polyline points="3 6 5 6 21 6"/>
               <path d="M19 6l-1.34 14.22A2 2 0 0 1 15.67 22H8.33a2 2 0 0 1-1.99-1.78L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2m-7 0h8"/>
             </svg>
@@ -158,22 +158,22 @@ const buildTagCard = (tag) => {
 };
 const buildTagProposalCard = (tagProposal) => {
   return `
-      <div id="${tagProposal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <div id="${tagProposal.id}-card" class="flex p-3 rounded-xl bg-input">
         <div class="flex-grow">
-          <p class="tablet:text-2xl">${tagProposal.name}</p>
-          <p class="">${tagProposal.description}</p>
-          <p class="text-gray-600">from ${tagProposal.proposer.public_name}
+          <p class="text-lg">${tagProposal.name}</p>
+          <p class="text-sm truncate max-w-32 tablet:max-w-60">${tagProposal.description}</p>
+          <p class="text-gray-400 text-sm">from ${tagProposal.proposer.public_name} ·
           <span class="">@${tagProposal.proposer.username}</span>
           </p>
         </div>
-        <div class="flex flex-col tablet:flex-row">
+        <div class="flex">
           <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
           </a>  
           <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
             <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -185,26 +185,26 @@ const buildTagProposalCard = (tagProposal) => {
 const buildUnblockAppealCard = (unblockAppeal) => {
   const pageUrl = `${baseUrl}/users/${unblockAppeal.user_id}/posts`;
   return `
-      <div id="${unblockAppeal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <div id="${unblockAppeal.id}-card" class="flex p-3 rounded-lg bg-input">
         <div class="flex flex-col flex-grow ">
-          <a href="${pageUrl}" class="tablet:text-2xl">
+          <a href="${pageUrl}" class="text-lg">
             ${unblockAppeal.public_name}
           </a>
-          <a class="text-gray-600">
+          <a class="text-gray-400 text-sm">
             @${unblockAppeal.username}
           </a>
-          <p class="">${unblockAppeal.description}</p>
+          <p class="text-sm mt-1">${unblockAppeal.description}</p>
         </div>
         ${
           !unblockAppeal.is_resolved
             ? `
             <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </a>  
             <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3 " data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
@@ -223,18 +223,19 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 const buildOmittedPost = (omittedPost) => {
   const pageUrl = `${baseUrl}/news/${omittedPost.id}`;
   return `
-    <div id="${omittedPost.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedPost.id}-card" class="flex p-3 rounded-lg bg-input">
       <a href="${pageUrl}" class="flex flex-col flex-grow w-full">
-        ${omittedPost.author.public_name}
-        <div class="text-gray-600">
-          @${omittedPost.author.username}
+        <span class="text-lg truncate max-w-52 tablet:max-w-full">${stripHtml(
+          omittedPost.title
+        )}</span>
+        <div class="text-gray-400 text-sm">
+          By ${omittedPost.author.public_name} · @${omittedPost.author.username}
         </div>
-        <p class="max-w-52 truncate">${stripHtml(omittedPost.content)}</p>
       </a>
       <a href="" class="unomit-post-button place-content-center m-3" id="${
         omittedPost.id
       }-unomit-post-button ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
               <path
@@ -248,16 +249,18 @@ const buildOmittedPost = (omittedPost) => {
 
 const buildOmittedComment = (omittedComment) => {
   return `
-    <div id="${omittedComment.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedComment.id}-card" class="flex p-3 rounded-lg bg-input">
       <div class="flex flex-col flex-grow w-full">
+      <span class="flex items-center gap-1">
         ${omittedComment.public_name}
-        <div class="text-gray-600">
-          @${omittedComment.username}
+        <div class="text-gray-400 text-sm">
+          · @${omittedComment.username}
         </div>
-        <p class="max-w-52 truncate">${omittedComment.content}</p>
+      </span>
+        <p class="max-w-52 truncate text-sm">${omittedComment.content}</p>
       </div>
       <a href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
               <path
