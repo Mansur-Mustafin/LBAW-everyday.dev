@@ -148,7 +148,7 @@ Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagCon
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'show')->name('admin.dashboard');    // TODO: criar realmente um dashboard, com estatistica?
+    Route::get('/', 'show')->name('admin.dashboard');
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');

@@ -53,8 +53,6 @@ class NewsPostController extends Controller
             $comments = $newsPost->comments->where('is_omitted', '!=', 'true');
         }
 
-        //dd($comments);
-
         $this->preparePostForUser($newsPost);
         $this->processComments($comments, $user);
 
@@ -161,14 +159,14 @@ class NewsPostController extends Controller
 
     public function omit(Request $request, NewsPost $newsPost)
     {
-        // TODO try catch
+        // TODO: copiar try/catch do comment omit
         $this->authorize('omit', $newsPost);
         $newsPost->update([
             'is_omitted' => "true"
         ]);
 
         if ($request->ajax()) {
-            return response()->json(['sucess' => true]);
+            return response()->json(['success' => true]);
         }
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
             ->with('message', 'Post omitted successfully!');
@@ -176,14 +174,14 @@ class NewsPostController extends Controller
 
     public function unomit(Request $request, NewsPost $newsPost)
     {
-        // TODO try catch
+        // TODO: copiar try/catch do comment omit
         $this->authorize('omit', $newsPost);
         $newsPost->update([
             'is_omitted' => 'false'
         ]);
 
         if ($request->ajax()) {
-            return response()->json(['sucess' => true]);
+            return response()->json(['success' => true]);
         }
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
             ->with('message', 'Post un-omitted successfully!');
@@ -231,8 +229,6 @@ class NewsPostController extends Controller
 
     static function processComments($comments, $user)
     {
-        // TODO: nos temos que processar todos os comments? nao podemos so processar quais vamos mostrar?
-
         if (!$user) {
             return;
         }

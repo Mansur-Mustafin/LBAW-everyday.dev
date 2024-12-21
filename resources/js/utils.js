@@ -3,8 +3,13 @@ const defaultHeaders = {
   'X-CSRF-TOKEN': csrfToken,
   'X-Requested-With': 'XMLHttpRequest',
 };
-const defaultErrorHandler = () => {
-  showMessage('An error occurred. Please try again.', false);
+
+const defaultErrorHandler = (message) => {
+  if (message) {
+    showMessage(message, false);
+  } else {
+    showMessage('An error occurred. Please try again.', false);
+  }
 };
 
 export function encodeForAjax(data) {
@@ -24,7 +29,14 @@ export function encodeForAjax(data) {
   return params.join('&');
 }
 
-export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, body = undefined, errorHandler = defaultErrorHandler) {
+export function sendAjaxRequest(
+  url,
+  handler,
+  method,
+  headers = defaultHeaders,
+  body = undefined,
+  handlerError = defaultErrorHandler
+) {
   fetch(url, {
     method: method,
     headers: headers,
@@ -33,19 +45,33 @@ export function sendAjaxRequest(url, handler, method, headers = defaultHeaders, 
     .then((response) => {
       if (response.ok) {
         return response.json();
+      } else {
+        return response.json().then((errorData) => {
+          throw { status: response.status, message: errorData.message || 'An error occurred.' };
+        });
       }
     })
     .then((data) => {
+      console.log(data);
       if (data.success == true) {
         handler(data);
       } else if (data.success == false) {
-        errorHandler();
+        handlerError(data.message);
       } else {
         handler(data);
       }
     })
     .catch((error) => {
       console.log('Error', error);
+      if (error.status == 500) {
+        handlerError(error.message);
+      }
+      if (error.status == 403) {
+        handlerError("This action is not allowed :-(");
+      }
+      if (error.status == 404) {
+        handlerError('AAAAAAAAAAAAAAAAAAAAA');
+      }
     });
 }
 

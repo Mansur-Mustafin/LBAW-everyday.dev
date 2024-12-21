@@ -1,11 +1,11 @@
-import { sendAjaxRequest, stripHtml } from './utils';
+import { sendAjaxRequest, showMessage, stripHtml } from './utils';
 
 // API Requests
 const deleteTag = async (tagId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (_data) => {}, 'DELETE');
 };
 const deleteTagProposal = async (tagProposalId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (data) => {}, 'DELETE');
+  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (data) => {}, 'DELETE'); // TODO: tem data?
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
@@ -49,6 +49,7 @@ const deleteUser = async (userId, baseUrl) => {
     url,
     (data) => {
       console.log(data);
+      showMessage(data.message);
     },
     'PUT'
   );
@@ -459,7 +460,6 @@ const build = (url, buildCardFunction, resultDiv) => {
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data);
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;
