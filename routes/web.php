@@ -44,6 +44,7 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->middleware(['auth'])->name('logout');
+    Route::get('/blocked', 'showBlocked')->name('blocked');
 });
 
 Route::controller(PasswordRecoverController::class)->group(function () {
