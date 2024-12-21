@@ -192,6 +192,20 @@ class NewsPostController extends Controller
         return view('pages.admin.admin', ['show' => 'omitted_posts']);
     }
 
+    public function postAlreadyExists(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:250',
+        ]);
+
+        $exists = NewsPost::where('title', $request->input('title'))->exists();
+
+        return response()->json([
+            'exists' => $exists,
+            'success' => true,
+        ]);
+    }
+
     private function preparePostForUser(NewsPost $newsPost): void
     {
         $user = Auth::user();

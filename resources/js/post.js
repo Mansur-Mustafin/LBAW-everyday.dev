@@ -93,9 +93,6 @@ if (createForm) {
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    // call this function after validation
-    transformLoadingButton(createForm.querySelector('#post-button'));
-
     let post_tags = [];
 
     Array.from(selectedTags.children).forEach((child) => {
@@ -103,6 +100,21 @@ if (createForm) {
     });
 
     if (post_tags.length >= 0) document.getElementById('tagsInput').value = post_tags.join(',');
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const titleInput = document.getElementById('title');
+    const serverError = document.getElementById('title-server-error');
+    const titleError = document.getElementById('title-error');
+
+    titleInput.addEventListener('input', function () {
+      if (serverError) {
+        serverError.classList.add('hidden');
+        titleError.classList.add('hidden');
+        titleInput.classList.remove('border-red-500');
+        titleInput.classList.remove('border');
+      }
+    });
   });
 }
 
@@ -207,7 +219,6 @@ if (editForm) {
 }
 
 const shareButton = document.getElementById('share-post');
-
 if (shareButton) {
   copyToClipboard(shareButton);
 }
