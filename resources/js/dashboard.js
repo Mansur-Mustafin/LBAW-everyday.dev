@@ -1,15 +1,16 @@
 import { sendAjaxRequest } from './utils.js';
 
 const statsDiv = document.getElementById('statistics');
-const baseUrl = statsDiv.dataset.url;
-// API Requests
-const getStats = async () => {
-  let finalData;
-  sendAjaxRequest(
-    `${baseUrl}/api/stats`,
-    (data) => {
-      if (statsDiv) {
-        statsDiv.innerHTML = `
+if (statsDiv) {
+  const baseUrl = statsDiv.dataset.url;
+  // API Requests
+  const getStats = async () => {
+    let finalData;
+    sendAjaxRequest(
+      `${baseUrl}/api/stats`,
+      (data) => {
+        if (statsDiv) {
+          statsDiv.innerHTML = `
                       <div class="bg-input flex flex-col rounded-lg p-3 w-40">
                           <p class="text-sm">Users</p>
                           <p class="text-3xl text-gray-400">${data.users}</p>
@@ -35,10 +36,11 @@ const getStats = async () => {
                           <p class="text-3xl text-gray-400">${data.omitted_posts}</p>
                       </div>
         `;
-      }
-    },
-    'GET'
-  );
-  return finalData;
-};
-getStats();
+        }
+      },
+      'GET'
+    );
+    return finalData;
+  };
+  getStats();
+}
