@@ -53,22 +53,20 @@
     <div id="admin-search-tags-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
-
-
   @if($show == 'tag_proposals')
-    <div id="admin-search-tag-proposals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-tag-proposals-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
   @if($show == 'unblock_appeals')
-    <div id="admin-search-unblock-appeals-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-unblock-appeals-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
   @if($show == 'omitted_posts')
-    <div id="admin-search-omitted-posts-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-omitted-posts-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
   @if($show == 'omitted_comments')
-    <div id="admin-search-omitted-comments-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-omitted-comments-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
   <div id="loading-icon" class="my-6">
