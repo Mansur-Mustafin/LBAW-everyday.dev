@@ -48,9 +48,15 @@ class UnblockAppealController extends Controller
             ]);
             $unblock_appeal->delete();
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Unblock appeal rejected'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while rejecting the unblock appeal'
+            ]);
         }
     }
 
@@ -65,9 +71,15 @@ class UnblockAppealController extends Controller
                 'status' => 'active'
             ]);
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'User has been unblocked.'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while accepting the unblock appeal.'
+            ]);
         }
     }
 }

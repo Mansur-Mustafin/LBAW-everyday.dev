@@ -10,19 +10,41 @@ class BookmarkController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $postId = $request->post_id;
+        $validated = $request->validate([
+            'post_id' => 'required|exists:news_post,id'
+        ]);
 
-        $user->bookmarkedPosts()->attach($postId);
+        try {
+            $user->bookmarkedPosts()->attach($validated['post_id']);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while bookmarking the post.'
+            ]);
+        }
 
-        return response()->json(['message' => 'Bookmarked']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Post bookmarked successfully.'
+        ]);
     }
 
-    public function destroy($postId)
+    public function destroy(int $postId)
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        $user->bookmarkedPosts()->detach($postId);
+            $user->bookmarkedPosts()->detach($postId);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while removing the bookmark.'
+            ]);
+        }
 
-        return response()->json(['message' => 'Bookmark removed']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Bookmark removed successfully.'
+        ]);
     }
 }

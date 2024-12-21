@@ -74,9 +74,9 @@ function submitVote(type, id, isUpvote, container, onComplete) {
       'X-CSRF-TOKEN': csrfToken,
     },
     body,
-    () => {
+    (_data) => {
       updateVoteUI(container, isUpvote, 'Vote removed');
-      showMessage('An error occurred. Please try again.', false);
+      showMessage('Vote not saved. Please try again.', false);
     }
   );
 }
@@ -91,9 +91,9 @@ function removeVote(voteId, container, oldVote) {
       'X-CSRF-TOKEN': csrfToken,
     },
     undefined,
-    () => {
+    (_data) => {
       updateVoteUI(container, oldVote, 'Saved');
-      showMessage('An error occurred. Please try again.', false);
+      showMessage('Vote not removed. Please try again.', false);
     }
   );
 }
@@ -112,36 +112,12 @@ function updateVote(voteId, isUpvote, container) {
       'X-CSRF-TOKEN': csrfToken,
     },
     body,
-    () => {
+    (_data) => {
       updateVoteUI(container, !isUpvote, 'Vote updated');
-      showMessage('An error occurred. Please try again.', false);
+      showMessage('Vote not changed. Please try again.', false);
     }
   );
 }
-
-// function sendVoteAjaxRequest(url, handler, method, body = undefined) {
-//   const headers = {
-//     'Content-Type': 'application/json',
-//     'X-CSRF-TOKEN': csrfToken,
-//   };
-
-//   fetch(url, {
-//     method: method,
-//     headers: headers,
-//     body: body,
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         return response.json();
-//       }
-//     })
-//     .then((data) => {
-//       handler(data);
-//     })
-//     .catch((error) => {
-//       console.log('Error', error);
-//     });
-// }
 
 function updateVoteUI(container, isUpvote, message) {
   const postId = container.dataset.id;

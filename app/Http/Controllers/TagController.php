@@ -37,12 +37,16 @@ class TagController extends Controller
    {
       try {
          $tag->delete();
+
          return response()->json([
-            "You have successfully delete $tag->name"
+            'success' => true,
+            'message' => "You have successfully delete $tag->name",
          ]);
       } catch (\Exception $e) {
-         // TODO: do we handle this in front?
-         return response()->json(['success' => false]);
+         return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while deleting the tag.',
+         ]);
       }
    }
 }
