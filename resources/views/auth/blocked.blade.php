@@ -47,7 +47,7 @@
             <div class="md:w-1/2 p-8 w-full">
                 <h2 class="text-2xl font-bold mb-4 text-center">Your request is pending</h2>
                 <p class="flex flex-col mb-2 text-center">
-                    Your request is know being analyzed by our administrators.
+                    Your request is now being analyzed by our administrators.
                 </p>
                 <a href="{{ url('logout') }}"
                     class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200 flex flex-col items-center">
