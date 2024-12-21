@@ -52,7 +52,7 @@ if (createForm) {
     .querySelector('.ql-toolbar')
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700'); // styles the toolbar, ! is important to override the default styles
 
-  document.querySelector('.ql-editor').innerHTML = document.querySelector('#old-content').value;
+  document.querySelector('.ql-editor').innerHTML = document.querySelector('#old-content').value; // TODO: check this!
 
   // this is the second submit event listener to this form and is the one that submits it.
   // it iterates through all images and replaces the src path to the one created when the image is uploaded.
@@ -95,7 +95,14 @@ if (editForm) {
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700');
 
   if (saveButton) {
-    saveButton.addEventListener('click', async (_) => {
+    saveButton.addEventListener('click', async (evt) => {
+      evt.preventDefault();
+
+      const isValid = await validateForm(editForm);
+      if (!isValid) {
+        return;
+      }
+
       const imagesNotUploaded = Array.from(quill.root.querySelectorAll('img[src^="data:"]'));
 
       await Promise.all(getImagesPaths(imagesNotUploaded));
@@ -161,9 +168,9 @@ const validateForm = async (createForm) => {
   titleInput.classList.remove('border-red-500', 'border');
 
   if (titleInput.value.trim() === '') {
+    titleError.textContent = 'Title cannot be empty.';
     titleError.classList.remove('hidden');
-    titleInput.classList.add('border');
-    titleInput.classList.add('border-red-500');
+    titleInput.classList.add('border', 'border-red-500');
     return false;
   }
 

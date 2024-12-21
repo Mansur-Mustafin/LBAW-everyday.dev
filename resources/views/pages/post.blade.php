@@ -188,10 +188,22 @@
                 <input class="hidden" type="file" id="realFileInput" name="image">
                 <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
-                <div class="mb-5">
+                <div class="flex flex-col gap-2">
                     <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
-                    <input type="text" name="title" id="title" value="{{ $post->title }}" placeholder="Post Title*"
-                        class="mt-1 block w-full p-3 border border-gray-700 bg-input rounded-xl outline-none">
+                    <input name="title" 
+                        type="text"
+                        id="title" 
+                        class="rounded-2xl bg-input outline-none p-3 @error('title') border border-red-500 @else  @enderror" 
+                        placeholder="Post title*"
+                        value="{{ $post->title }}"
+                        required
+                        pattern=".*\S.*">
+                    <span class="hidden ml-4 text-red-400 text-sm mb-2" id="title-error">
+                        Title cannot be empty
+                    </span>
+                    @error('title')
+                        <span class="ml-4 text-red-400 text-sm" id="title-server-error">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-5">
@@ -237,6 +249,20 @@
                     <input class="hidden hiddenToggle" type="text" name="for_followers"
                         value='{{$post->for_followers ? 'true' : 'false'}}'>
                 </div>
+
+                @can('update', $post)
+                    <div id="save-cancel-buttons" class="flex justify-between gap-2 mt-4">
+                        <button id="saveButton" type="submit" form="editForm"
+                            class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
+                            Save
+                        </button>
+                        <button type="button" onclick="toggleEdit()"
+                            class="border border-solid bg-background text-white font-bold px-3 py-2 rounded-xl w-1/2">
+                            Cancel
+                        </button>
+                    </div>
+                @endcan
+
                 <input class="hidden" name="tags" id="tagsInput">
             </form>
         </div>
@@ -270,19 +296,6 @@
                 @include('partials.post-options')
             </div>
         </div>
-
-        @can('update', $post)
-            <div id="save-cancel-buttons" class="hidden flex justify-between gap-2 mt-2">
-                <button id="saveButton" type="submit" form="editForm"
-                    class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
-                    Save
-                </button>
-                <button type="button" onclick="toggleEdit()"
-                    class="border border-solid bg-background text-white font-bold px-3 py-2 rounded-xl w-1/2">
-                    Cancel
-                </button>
-            </div>
-        @endcan
 
         @if (Auth::check())
             <p class="mt-4 font-bold">Post's Author</p>

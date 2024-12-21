@@ -41,7 +41,7 @@
                 required
                 pattern=".*\S.*">
             <span class="hidden ml-4 text-red-400 text-sm" id="title-error">
-                Title cannot be empty
+                Title cannot be empty.
             </span>
             @error('title')
                 <span class="ml-4 text-red-400 text-sm" id="title-server-error">{{ $message }}</span>
