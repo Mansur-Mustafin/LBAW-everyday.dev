@@ -246,7 +246,7 @@ if (resultsDivNotification) {
               alt="Profile Image" class="w-10 h-10 rounded-xl">
           <div class="flex flex-col">
             <span class="font-semibold text-gray-300">${triggeredBy}</span>
-            <span class="text-gray-500">${username}</span>
+            <span class="text-gray-500 text-sm">${username}</span>
           </div>
         </div>
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -269,7 +269,7 @@ if (resultsDivNotification) {
       </div>
       <div class="flex justify-between">
         <p class="mt-4">${text}</p>
-        <p class="text-gray-500 self-end">${time_ago}</p>
+        <p class="text-gray-500 self-end text-sm">${time_ago}</p>
       </div>
     </div>
   `;
