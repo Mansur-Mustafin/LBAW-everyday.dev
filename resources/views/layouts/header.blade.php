@@ -1,7 +1,8 @@
 <header
     class="fixed h-20 bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 w-full z-50">
     <div>
-        <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+        <h1 class="hidden tablet:block text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+        <a href="{{ url('/') }}"><img src="{{ asset('favicon.ico') }}" class="w-8 tablet:hidden"></a>
     </div>
 
     <div>
