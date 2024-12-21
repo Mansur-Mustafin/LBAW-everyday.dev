@@ -59,7 +59,7 @@ if (userId) {
         <div class="mb-3">${text}</div>
         ${
           hrefOpen !== '#'
-            ? `<a href="${hrefOpen}" class="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-white text-black hover:bg-purple-950 hover:text-white">Open</a>`
+            ? `<a href="${hrefOpen}" class="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-white text-black hover:bg-purple hover:text-white">Open</a>`
             : ''
         }
       </div>
