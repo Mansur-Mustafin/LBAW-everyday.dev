@@ -84,6 +84,7 @@ Route::controller(NewsPostController::class)->group(function () {
         Route::post('news/', 'store')->name('news');
         Route::put('news/{news_post}', 'update')->name('news.update');
         Route::delete('news/{news_post}', 'destroy');
+        Route::post('/check-title', 'postAlreadyExists')->name('news.exists');
     });
     Route::middleware('admin')->group(function () {
         Route::put('news/{news_post}/omit', 'omit')->name('news.omit');

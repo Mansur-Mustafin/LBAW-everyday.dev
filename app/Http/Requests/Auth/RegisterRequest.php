@@ -11,16 +11,17 @@ class RegisterRequest extends FormRequest
     {
         return [
             'public_name' => ['required', 'string', 'max:250'],
-            'username' => ['required', 'string', 'max:40', 'unique:user'],
+            'username' => ['required', 'string', 'max:40', 'unique:user', 'regex:/^\S*$/'],
             'email' => ['required', 'email', 'max:250', 'unique:user'],
-            'password' => ['required', 'min:4'],
+            'password' => ['required', 'min:4', 'confirmed'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'email.unique' => 'The email address is already registered.'
+            'email.unique' => 'The email address is already registered.',
+            'username.regex' => 'The username cannot contain spaces.'
         ];
     }
 

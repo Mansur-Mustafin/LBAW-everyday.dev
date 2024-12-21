@@ -11,6 +11,7 @@ class StoreRequest extends FormRequest
 {
     public function rules(): array
     {
+        // dd($this);
         return [
             'title' => 'required|string|unique:news_post,title|max:250',
             'content' => 'required|string',
@@ -18,20 +19,6 @@ class StoreRequest extends FormRequest
             'image' => 'nullable|image|max:2048',
             'tags' => 'nullable|string',
             'content_images' => 'nullable|string'
-        ];
-    }
-
-    public function after(): array
-    {
-        return [
-            function (Validator $validator) {
-                if (NewsPost::where('author_id', Auth::user()->id)
-                    ->where('title', $this->input('title'))
-                    ->where('content', $this->input('content'))
-                    ->exists()) {
-                    $validator->errors()->add('title', 'A post with the same title and content already exists.');
-                }
-            }
         ];
     }
 }

@@ -141,7 +141,7 @@ class NewsPostController extends Controller
         }
 
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post atualizado com sucesso!');
+            ->withSuccess('Post updated successfully!');
     }
 
     public function destroy(NewsPost $newsPost): RedirectResponse
@@ -190,6 +190,20 @@ class NewsPostController extends Controller
     public function showOmittedPosts()
     {
         return view('pages.admin.admin', ['show' => 'omitted_posts']);
+    }
+
+    public function postAlreadyExists(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:250',
+        ]);
+
+        $exists = NewsPost::where('title', $request->input('title'))->exists();
+
+        return response()->json([
+            'exists' => $exists,
+            'success' => true,
+        ]);
     }
 
     private function preparePostForUser(NewsPost $newsPost): void

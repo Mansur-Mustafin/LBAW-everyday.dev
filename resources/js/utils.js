@@ -63,9 +63,9 @@ export function sendAjaxRequest(
     })
     .catch((error) => {
       console.log('Error', error);
-      if (error.status == 500) {
-        handlerError(error.message);
-      }
+      // if (error.status == 500) {
+      //   handlerError(error.message);
+      // }
       if (error.status == 403) {
         handlerError("This action is not allowed :-(");
       }

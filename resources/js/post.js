@@ -93,9 +93,6 @@ if (createForm) {
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    // call this function after validation
-    transformLoadingButton(createForm.querySelector('#post-button'));
-
     let post_tags = [];
 
     Array.from(selectedTags.children).forEach((child) => {
@@ -207,7 +204,6 @@ if (editForm) {
 }
 
 const shareButton = document.getElementById('share-post');
-
 if (shareButton) {
   copyToClipboard(shareButton);
 }
@@ -229,4 +225,17 @@ document.addEventListener('click', (event) => {
       }
     }
   }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const titleInput = document.getElementById('title');
+  const serverError = document.getElementById('title-server-error');
+  const titleError = document.getElementById('title-error');
+
+  titleInput.addEventListener('input', function () {
+    serverError?.classList.add('hidden');
+    titleError?.classList.add('hidden');
+    titleInput.classList.remove('border-red-500');
+    titleInput.classList.remove('border');
+  });
 });
