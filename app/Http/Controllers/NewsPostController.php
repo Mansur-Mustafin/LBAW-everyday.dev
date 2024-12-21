@@ -159,17 +159,20 @@ class NewsPostController extends Controller
 
     public function omit(Request $request, NewsPost $newsPost)
     {
-        // TODO: copiar try/catch do comment omit
         $this->authorize('omit', $newsPost);
-        $newsPost->update([
-            'is_omitted' => "true"
-        ]);
 
-        if ($request->ajax()) {
-            return response()->json(['success' => true]);
+        try {
+            $newsPost->update([
+                'is_omitted' => "true"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to omit the post.'
+            ]);
         }
-        return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post omitted successfully!');
+
+        return response()->json(['success' => true]);
     }
 
     public function unomit(Request $request, NewsPost $newsPost)

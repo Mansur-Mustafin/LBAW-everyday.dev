@@ -189,16 +189,12 @@ function addButtonsBehaviour() {
 
       const url = '/comments/' + comment_id;
       const method = 'DELETE';
-      sendAjaxRequest(
-        url,
-        (_data) => {
-          // sendAjaxRequest catches errors
-          const comment = document.getElementById('comment-' + comment_id);
-          comment.remove();
-          toggleDeleteButton();
-        },
-        method
-      );
+      const comment = document.getElementById('comment-' + comment_id);
+      if(!comment.classList.contains('hidden')) {
+        sendAjaxRequest(url,(_data) => {}, method);
+        comment.classList.add('hidden');
+        toggleDeleteButton();
+      }
     });
   });
 

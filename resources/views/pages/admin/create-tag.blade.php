@@ -5,7 +5,7 @@
 @include('partials.success-popup')
 
 <section
-    class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
+    class="flex flex-col py-20 laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
     <form method="POST" action="{{ url('/admin/tags/create') }}" enctype="multipart/form-data"
         class="px-3 flex flex-col gap-4 mt-4" id="admin-edit-profile">
         @csrf
@@ -13,7 +13,7 @@
         <h3 class="font-bold text-lg flex-1">Tag Information</h3>
 
         <div class="flex flex-col">
-            <label class="font-bold text-sm">Tag</label>
+            <label class="font-bold text-sm">Name</label>
             <input name="name" class="rounded-2xl bg-input outline-none p-3" placeholder="Name*" value="">
             @error('name')
                 <span class="text-red-400 text-sm">{{ $message }}</span>

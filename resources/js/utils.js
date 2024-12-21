@@ -70,7 +70,7 @@ export function sendAjaxRequest(
         handlerError("This action is not allowed :-(");
       }
       if (error.status == 404) {
-        handlerError('AAAAAAAAAAAAAAAAAAAAA');
+        handlerError('Page not Found');
       }
     });
 }
