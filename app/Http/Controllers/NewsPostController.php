@@ -141,7 +141,7 @@ class NewsPostController extends Controller
         }
 
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post atualizado com sucesso!');
+            ->withSuccess('Post updated successfully!');
     }
 
     public function destroy(NewsPost $newsPost): RedirectResponse
