@@ -37,6 +37,7 @@ const buildByRequest = async (url, buildUser, resultsDiv) => {
 
 // Posts
 const postContainer = document.getElementById('news-posts-container');
+const noResults = document.getElementById('no-results')
 
 if (postContainer) {
   const filter = document.getElementById('filter');
@@ -48,6 +49,7 @@ if (postContainer) {
   let calledLoadMoreData = false;
 
   const refreshPage = () => {
+    noResults.classList.add('hidden')
     postContainer.innerHTML = '';
     page = 1;
     loadMoreData(page);
@@ -108,8 +110,8 @@ if (postContainer) {
       (data) => {
         loading = false;
         loadingIcon?.classList.add('hidden');
-        if (data.news_posts == '') {
-          console.log(data);
+        if (data.news_posts == '' && page === 1) {
+          noResults.classList.remove('hidden')
           return;
         }
         postContainer.innerHTML += data.news_posts;

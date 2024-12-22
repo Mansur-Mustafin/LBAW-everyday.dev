@@ -65,7 +65,13 @@
                 </div>
 
                 <div class="flex flex-col mb-2">
-                    <input id="email" type="email" name="email" value="{{ old('email') }}" required placeholder="Email*"
+                    <label for="email"></label>
+                    <input id="email" 
+                        type="email" 
+                        name="email" 
+                        value="{{ old('email') }}" 
+                        required
+                        placeholder="Email*" 
                         class="rounded-2xl bg-input outline-none p-3 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
                         pattern="^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$">
                     <span
@@ -78,7 +84,12 @@
                 </div>
 
                 <div class="flex flex-col relative w-full mb-7">
-                    <input id="password" type="password" name="password" required placeholder="Password*"
+                    <label for="password"></label>
+                    <input id="password" 
+                        type="password" 
+                        name="password" 
+                        required 
+                        placeholder="Password*"
                         class="rounded-2xl bg-input outline-none p-3 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
                         pattern=".{4,}">
                     <span title="change visibility"

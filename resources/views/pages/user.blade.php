@@ -1,5 +1,11 @@
 @extends('layouts.body.default')
 
+@if($user->id == Auth::id())
+    @section('title','Your Profile')
+@else
+    @section('title','User Profile')
+@endif
+
 @section('content')
 @include('partials.success-popup')
 
