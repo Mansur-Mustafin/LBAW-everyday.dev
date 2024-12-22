@@ -9,9 +9,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta property="og:title" content="everyday.dev - Where the news meet the devs" />
-    <meta property="og:link" content="#" />
-    <meta property="og:image" content="https://fastly.picsum.photos/id/1056/200/200.jpg?hmac=BpHmd2Nrxgn5zfvO7PpucBxqHz3jz2foKNNSFK1VG40" /> 
+    <meta property="og:title" content="everyday.dev - Where the news meet the devs" >
+    <meta property="og:link" content="#" >
+    <meta property="og:image" content="https://fastly.picsum.photos/id/1056/200/200.jpg?hmac=BpHmd2Nrxgn5zfvO7PpucBxqHz3jz2foKNNSFK1VG40" >
 
     <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
@@ -48,7 +48,7 @@
     @vite('resources/js/profile.js')
 
 
-    <script type="text/javascript">
+    <script>
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
