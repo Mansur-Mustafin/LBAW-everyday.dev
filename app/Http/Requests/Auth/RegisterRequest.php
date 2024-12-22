@@ -24,8 +24,6 @@ class RegisterRequest extends FormRequest
             'username.regex' => 'The username cannot contain spaces.'
         ];
     }
-
-    // TODO: Nem sei se isso funciona
     public function validated($key = null, $default = null)
     {
         $validated = parent::validated($key, $default);

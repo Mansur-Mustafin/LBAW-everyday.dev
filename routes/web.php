@@ -160,7 +160,6 @@ Route::prefix('admin')->middleware('admin')->controller(AdminController::class)-
     Route::put('/users/{user}/unblock', 'unblockUser');
 });
 
-// TODO:: add prefix
 Route::prefix('/api/search')->controller(SearchController::class)->group(function () {
     Route::get('/tags/{search?}', 'searchTags');
     Route::middleware('admin')->group(function () {

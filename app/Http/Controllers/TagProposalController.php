@@ -21,9 +21,6 @@ class TagProposalController extends Controller
 
     public function store(Request $request)
     {
-        // TODO: Create Policy
-        // $this->authorize('store',$tag_proposal');
-
         $validated = $request->validate([
             'name' => 'required|string|max:250',
             'description' => 'required|string|max:1000',
