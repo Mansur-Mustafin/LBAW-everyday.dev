@@ -28,7 +28,7 @@ Alternatively, you can start the database and the mail server using ```docker-co
 | news author   | afonso@example.com | 1234     |
 | basic account | diogo@example.com  | 1234     |
 
-###Mailtrap Credentials
+### Mailtrap Credentials
 
 | Login              | Password |
 | ------------------ | -------- |
