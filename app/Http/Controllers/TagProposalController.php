@@ -11,7 +11,7 @@ class TagProposalController extends Controller
 {
     public function showCreationForm()
     {
-        return view('pages.user.create-tag-proposal');
+        return view('pages.tags.create-tag-proposal');
     }
 
     public function show()
