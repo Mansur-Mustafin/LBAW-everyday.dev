@@ -29,7 +29,7 @@
                 </svg>
             </button>
         </div>
-        <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" type="file" id="realFileInput" name="image" accept=".png, .jpg, .jpeg, .gif">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <div class="flex flex-col gap-2">

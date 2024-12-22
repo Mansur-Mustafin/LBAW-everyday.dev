@@ -53,7 +53,7 @@
                 @endif
             @endif
 
-            <img src="{{ $post->titleImage->url }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
+            <img src="{{ $post->titleImage->url }}" alt="Post Title" class="rounded-xl mt-3 w-full h-80 object-cover">
             @can('view', $post)
                 <div class="mt-10 prose break-words">
                     {!! $post->content !!}
@@ -187,7 +187,7 @@
                         </svg>
                     </button>
                 </div>
-                <input class="hidden" type="file" id="realFileInput" name="image">
+                <input class="hidden" type="file" id="realFileInput" name="image" accept=".png, .jpg, .jpeg, .gif">
                 <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
                 <div class="flex flex-col gap-2">

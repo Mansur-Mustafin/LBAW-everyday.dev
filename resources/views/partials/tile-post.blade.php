@@ -1,7 +1,7 @@
 <div class="p-4 rounded shadow-sm flex flex-col">
     {{-- TODO: da para por dentro de outro link? linha 8? --}}
     <a href="{{ url('/news/' . $news->id) }}">
-        <img src="{{ url($news->titleImage->url) }}" alt="" class="w-full h-48 object-cover mb-2 rounded-md">
+        <img src="{{ url($news->titleImage->url) }}" alt="Post Title Image" class="w-full h-48 object-cover mb-2 rounded-md">
     </a>
 
     <div class="flex flex-col justify-between flex-grow">
