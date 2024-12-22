@@ -573,24 +573,42 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
     if (targetDelete) {
       event.preventDefault();
       const reportId = targetDelete.id.split('-delete-button')[0];
-      deleteReport(reportId, baseUrl);
-      reloadData(baseQuery, buildFunction, resultDiv);
+      const actionDeleteReport = () => {
+        const reportCard = document.getElementById(reportId + '-card');
+        if (!reportCard.classList.contains('hidden')) {
+          deleteReport(reportId, baseUrl);
+          reportCard.classList.add('hidden');
+        }
+      };
+      handleDialog(actionDeleteReport, baseUrl, reportId);
     }
     const targetBlock = event.target.closest('.block-button');
     if (targetBlock) {
       event.preventDefault();
       const [reportId, userId] = targetBlock.id.split('-block-button')[0].split('-');
-      blockUser(userId, baseUrl);
-      deleteReport(reportId, baseUrl);
-      reloadData(baseQuery, buildFunction, resultDiv);
+      const actionBlockUser = () => {
+        const reportCard = document.getElementById(reportId + '-card');
+        if (!reportCard.classList.contains('hidden')) {
+          blockUser(userId, baseUrl);
+          deleteReport(reportId, baseUrl);
+          reportCard.classList.add('hidden');
+        }
+      }
+      handleDialog(actionBlockUser, baseUrl, reportId);
     }
     const targetDeleteUser = event.target.closest('.deleteUser-button');
     if (targetDeleteUser) {
       event.preventDefault();
       const [reportId, userId] = targetDeleteUser.id.split('-deleteUser-button')[0].split('-');
-      deleteUser(userId, baseUrl);
-      deleteReport(reportId, baseUrl);
-      reloadData(baseQuery, buildFunction, resultDiv);
+      const actionDeleteUser = () => {
+        const reportCard = document.getElementById(reportId + '-card');
+        if (!reportCard.classList.contains('hidden')) {
+          deleteUser(userId, baseUrl);
+          deleteReport(reportId, baseUrl);
+          reportCard.classList.add('hidden');
+        }
+      }
+      handleDialog(actionDeleteUser, baseUrl, reportId);
     }
   });
 };
