@@ -52,7 +52,6 @@ export function sendAjaxRequest(
       }
     })
     .then((data) => {
-      console.log(data);
       if (data.success == true) {
         handler(data);
       } else if (data.success == false) {
@@ -62,10 +61,6 @@ export function sendAjaxRequest(
       }
     })
     .catch((error) => {
-      console.log('Error', error);
-      // if (error.status == 500) {
-      //   handlerError(error.message);
-      // }
       if (error.status == 403) {
         handlerError('This action is not allowed :-(');
       }
@@ -141,8 +136,6 @@ export function uploadBase64Image(dataUrl) {
 }
 
 export const transformLoadingButton = (button) => {
-  console.log(button);
-
   button.classList.remove('text-input', 'bg-white', 'font-bold', 'px-6', 'py-2');
 
   button.classList.add(
