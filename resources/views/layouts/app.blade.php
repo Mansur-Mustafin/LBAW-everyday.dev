@@ -13,7 +13,7 @@
     <meta property="og:link" content="#" />
     <meta property="og:image" content="https://fastly.picsum.photos/id/1056/200/200.jpg?hmac=BpHmd2Nrxgn5zfvO7PpucBxqHz3jz2foKNNSFK1VG40" /> 
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
     <script>
         const pusherAppKey = "{{ env('PUSHER_APP_KEY') }}";

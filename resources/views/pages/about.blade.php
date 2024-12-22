@@ -1,5 +1,7 @@
 @extends('layouts.body.default')
 
+@section('title','About Us')
+
 @section('content')
 
 <section

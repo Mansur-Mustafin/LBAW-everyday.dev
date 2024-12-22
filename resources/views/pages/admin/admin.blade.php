@@ -1,5 +1,7 @@
 @extends('layouts.body.admin')
 
+@section('title','Administrator Dashboard')
+
 @section('content')
 
 @include('partials.success-popup')

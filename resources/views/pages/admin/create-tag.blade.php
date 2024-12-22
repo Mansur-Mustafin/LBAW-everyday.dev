@@ -1,5 +1,7 @@
 @extends('layouts.body.admin')
 
+@section('title','Create Tag Admin')
+
 @section('content')
 
 @include('partials.success-popup')
