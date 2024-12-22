@@ -10,7 +10,7 @@
             <div class="text-sm text-gray-400 flex justify-between items-start">
                 @if (Auth::user())
                     <div class="flex gap-2 flex-grow">
-                        <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8 rounded-full">
+                        <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8 rounded-full" alt="Profile Image">
                         <div class="flex flex-col">
                             <h2 class="text-white text-sm font-semibold">{{ $comment->author->public_name }}</h2>
                             <h3 class="text-xs text-gray-500">{{ '@' . $comment->author->username }} ·
@@ -203,7 +203,7 @@
             <div class="text-sm text-gray-400 flex justify-between items-start">
                 @if (Auth::user())
                     <div class="flex gap-2 flex-grow">
-                        <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8 rounded-full">
+                        <img src="{{ $comment->author->profileImage->url }}" class="max-w-8 max-h-8 rounded-full" alt="Profile Image">
                         <div class="flex flex-col">
                             <h2 class="text-white text-sm font-semibold">{{ $comment->author->public_name }}</h2>
                             <h3 class="text-xs text-gray-500">{{ '@' . $comment->author->username }} ·

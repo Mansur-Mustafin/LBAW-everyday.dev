@@ -51,7 +51,7 @@
                 @endif
             @endif
 
-            <img src="{{ $post->titleImage->url }}" alt="" class="rounded-xl mt-3 w-full h-80 object-cover">
+            <img src="{{ $post->titleImage->url }}" alt="Post Title" class="rounded-xl mt-3 w-full h-80 object-cover">
             @can('view', $post)
                 <div class="mt-10 prose break-words">
                     {!! $post->content !!}

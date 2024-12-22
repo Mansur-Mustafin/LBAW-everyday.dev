@@ -29,7 +29,7 @@
 
         <div class="flex flex-col gap-4 tablet:flex-row items-center space-between mt-5">
             <div class="flex flex-col items-center grow">
-                <img src="{{ asset('assets/Afonso.jpg') }}" alt="Team Member 2"
+                <img src="{{ asset('assets/Afonso.jpg') }}" alt="Team Member 1"
                     class="w-20 h-20 rounded-full shadow-md mb-2">
                 <p>
                     Afonso Moura
