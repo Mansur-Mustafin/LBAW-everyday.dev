@@ -78,6 +78,13 @@ class AdminController extends Controller
             $user->save();
         }
 
+        $emailSent = MailController::notifyUserUpdate($user);
+
+        if (!$emailSent) {
+            return redirect()->route('user.posts', ['user' => $user->id])
+                ->withSuccess('User profile updated successfully, email notification failed to send.');
+        }
+
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
     }
