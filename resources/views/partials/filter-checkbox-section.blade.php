@@ -1,9 +1,9 @@
 <div class="filter-section">
     <h4 class="filter-header mb-2 flex flex-row cursor-pointer">
         <span class="text-gray-400 text-sm grow">{{$title}}</span>
-        <svg class="transition ease-out rotate-180" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" class="lucide lucide-chevron-up">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-chevron-up transition ease-out rotate-180">
             <path d="m18 15-6-6-6 6" />
         </svg>
     </h4>
@@ -12,9 +12,9 @@
         class="filter-list flex flex-col gap-1.5 pl-2 overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-0">
         @if (count($items) > 6)
             <div class="rounded-md px-2 py-1 mb-2 flex flex-row items-center">
-                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-search">
+                    class="lucide lucide-search mr-2">
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.3-4.3" />
                 </svg>
