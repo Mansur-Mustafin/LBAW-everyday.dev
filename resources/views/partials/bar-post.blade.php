@@ -8,7 +8,8 @@
         <div class="border-r border-solid border-gray-700 p-3 rounded-xl flex gap-1">
             <!-- Upvote Button -->
             <button type="submit"
-                class="upvote-button flex items-center justify-center mr-1 hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400">
+                class="upvote-button flex items-center justify-center mr-1 hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400"
+                title="upvote">
                 <svg class="{{$post->user_vote == 'upvote' ? 'hidden' : ''}}" id="post-upvote-outline-{{ $post->id }}"
                     rpl="" fill="currentColor" width="20" icon-name="upvote-outline" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +30,8 @@
 
             <!-- Downvote Button -->
             <button type="submit"
-                class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400">
+                class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400"
+                title="downvote">
                 <svg class="{{$post->user_vote == 'downvote' ? 'hidden' : ''}}"
                     id="post-downvote-outline-{{ $post->id }}" rpl="" fill="currentColor" width="20"
                     icon-name="downvote-outline" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

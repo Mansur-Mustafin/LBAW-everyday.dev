@@ -238,6 +238,7 @@ if (resultsDivNotification) {
     username,
     time_ago,
     is_viewed,
+    type,
   }) => `
     <div class="bg-input p-4 flex flex-col rounded-xl">
       <div class="flex gap-2 items-center justify-between relative">
@@ -249,6 +250,7 @@ if (resultsDivNotification) {
             <span class="text-gray-500 text-sm">${username}</span>
           </div>
         </div>
+        <div title="${type} notification">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -266,6 +268,7 @@ if (resultsDivNotification) {
               ? ''
               : '<div class="related bg-red-400 rounded-full w-2 h-2 absolute bottom-7 right-0"></div>'
           }
+        </div>
       </div>
       <div class="flex justify-between">
         <p class="mt-4">${text}</p>
@@ -291,6 +294,7 @@ if (resultsDivNotification) {
           }`,
       color: '#D264B6',
       username: `<a href="/users/${vote.user.id}/posts">@${vote.user.username}</a>`,
+      type: 'vote',
     }),
     CommentNotification: ({ comment }) => ({
       imageSrc: comment.author.profile_image.url,
@@ -300,6 +304,7 @@ if (resultsDivNotification) {
         : 'Replied to your comment.',
       color: '#A480CF',
       username: `<a href="/users/${comment.author.id}/posts">@${comment.author.username}</a>`,
+      type: 'comment',
     }),
     FollowNotification: ({ follower }) => ({
       imageSrc: follower.profile_image.url,
@@ -307,6 +312,7 @@ if (resultsDivNotification) {
       text: 'Followed you.',
       color: '#779BE7',
       username: `<a href="/users/${follower.id}/posts">@${follower.username}</a>`,
+      type: 'follow',
     }),
     PostNotification: ({ news_post }) => ({
       imageSrc: news_post.author.profile_image.url,
@@ -317,6 +323,7 @@ if (resultsDivNotification) {
       )}</a>`,
       color: '#49B6FF',
       username: `<a href="/users/${news_post.author.id}/posts">@${news_post.author.username}</a>`,
+      type: 'post',
     }),
   };
 

@@ -21,7 +21,7 @@
                     data-user_bookmark="{{$news->is_bookmarked ? 'true' : 'false'}}">
 
                     <!-- Upvote Button -->
-                    <button type="submit" class="upvote-button flex items-center justify-center mr-1">
+                    <button type="submit" class="upvote-button flex items-center justify-center mr-1" title="upvote">
                         <svg class="{{ $news->user_vote == 'upvote' ? 'hidden' : '' }}"
                             id="post-upvote-outline-{{ $news->id }}" rpl="" fill="currentColor" height="16"
                             icon-name="upvote-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +41,7 @@
                     <span class="vote-count font-bold text-sm">{{ $news->upvotes - $news->downvotes }}</span>
 
                     <!-- Downvote Button -->
-                    <button type="submit" class="downvote-button flex items-center justify-center ml-1">
+                    <button type="submit" class="downvote-button flex items-center justify-center ml-1" title="downvote">
                         <svg class="{{ $news->user_vote == 'downvote' ? 'hidden' : '' }}"
                             id="post-downvote-outline-{{ $news->id }}" rpl="" fill="currentColor" height="16"
                             icon-name="downvote-outline" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -59,7 +59,7 @@
                     </button>
 
                     <!-- Bookmark Button -->
-                    <button type="submit" class="bookmark-button flex items-center justify-center ml-3">
+                    <button type="submit" class="bookmark-button flex items-center justify-center ml-3" title="bookmark">
                         <svg class="{{ $news->is_bookmarked ? 'hidden' : '' }}" id="post-bookmark-outline-{{ $news->id }}"
                             xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
