@@ -59,7 +59,7 @@ if (createForm) {
   createForm.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
-    const isValid = await validateForm(createForm);
+    const isValid = await validateForm(createForm, false, null);
     if (!isValid) {
       return;
     }
@@ -98,7 +98,7 @@ if (editForm) {
     saveButton.addEventListener('click', async (evt) => {
       evt.preventDefault();
 
-      const isValid = await validateForm(editForm);
+      const isValid = await validateForm(editForm, true, editForm.dataset.post_id);
       if (!isValid) {
         return;
       }
@@ -160,7 +160,7 @@ async function uploadImage(source) {
   }
 }
 
-const validateForm = async (createForm) => {
+const validateForm = async (createForm, isUpdate, postId = null) => {
   const titleInput = createForm.querySelector('#title');
   const titleError = createForm.querySelector('#title-error');
 
@@ -174,7 +174,7 @@ const validateForm = async (createForm) => {
     return false;
   }
 
-  const isTitleValid = await checkTitleAvailability(titleInput.value);
+  const isTitleValid = await checkTitleAvailability(titleInput.value, isUpdate, postId);
   if (!isTitleValid) {
     titleError.textContent = 'A post with this title already exists.';
     titleError.classList.remove('hidden');
@@ -185,8 +185,15 @@ const validateForm = async (createForm) => {
   return true;
 };
 
-const checkTitleAvailability = (title) => {
+const checkTitleAvailability = (title, isUpdate, postId = null) => {
   return new Promise((resolve, reject) => {
+    const payload = { title };
+    if (isUpdate && postId) {
+      payload.post_id = postId;
+    }
+
+    console.log(payload);
+
     sendAjaxRequest(
       '/check-title',
       (data) => {
@@ -197,7 +204,7 @@ const checkTitleAvailability = (title) => {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       },
-      JSON.stringify({ title }),
+      JSON.stringify(payload),
       (errorMessage) => {
         console.error('Error checking title:', errorMessage);
         reject(false);
