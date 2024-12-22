@@ -11,7 +11,7 @@ class TagProposalController extends Controller
 {
     public function showCreationForm()
     {
-        return view('pages.create-tag-proposal');
+        return view('pages.user.create-tag-proposal');
     }
 
     public function show()
@@ -38,7 +38,7 @@ class TagProposalController extends Controller
         }
 
         TagProposal::create([
-            'name'        => $validated['name'],
+            'name' => $validated['name'],
             'description' => $validated['description'],
             'is_resolved' => false,
             'proposer_id' => Auth::id()

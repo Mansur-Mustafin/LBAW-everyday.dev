@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        return view('pages.user', [
+        return view('pages.user.user', [
             'title' => "{$user->public_name}'s Posts",
             'baseUrl' => route('api.user.posts', $user->id),
             'user' => $user
@@ -38,7 +38,7 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        return view('pages.user', [
+        return view('pages.user.user', [
             'title' => "{$user->public_name}'s Upvoted Posts",
             'baseUrl' => route('api.user.upvotes', $user->id),
             'user' => $user
@@ -64,7 +64,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        return view('pages.edit-user', ['user' => $user]);
+        return view('pages.user.user.edit-user', ['user' => $user]);
     }
 
     public function update(User $user, UserUpdateRequest $request)
@@ -108,7 +108,7 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            if($user->id == Auth::id()) {
+            if ($user->id == Auth::id()) {
                 Auth::logout();
 
                 $request->session()->invalidate();

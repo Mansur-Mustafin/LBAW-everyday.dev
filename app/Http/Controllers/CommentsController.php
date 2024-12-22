@@ -32,7 +32,7 @@ class CommentsController extends Controller
     public function buildComment(Comment $comment, string $thread)
     {
         return response()->json([
-            'thread' => view('partials.comment', [
+            'thread' => view('partials.comment.comment', [
                 'comment' => $comment,
                 'level' => 0,
                 'post' => NewsPost::find($comment->news_post_id),
