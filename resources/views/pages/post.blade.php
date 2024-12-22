@@ -11,6 +11,7 @@
                 <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
                     {{ $post->title }}
                 </h1>
+                @if(Auth::check())
                 <div class="relative laptop:hidden">
                     <button class="hover:bg-input p-2 rounded-xl post-options">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -23,6 +24,7 @@
                     </button>
                     @include('partials.post-options')
                 </div>
+                @endif
             </div>
             <div class="flex flex-wrap mt-5 gap-2" id="tags-section" data-url="{{url('')}}">
                 @foreach ($post->tags as $tag)
@@ -68,7 +70,7 @@
                     <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
                         <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                             class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-                            placeholder="Share your thoughts" id="commentInput" />
+                            placeholder="Share your thoughts" id="commentInput" /> 
                         <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>
                     </form>
                 @endif
@@ -166,14 +168,14 @@
                 @method('PUT')
                 <p class="block text-sm font-medium text-gray-300">Title Image</p>
                 <div class="flex mt-4 mb-5" id="edit-image">
-                    <button class="rounded flex justify-center m-5" id="personalizedFileInput"
+                    <button class="rounded flex justify-center" id="personalizedFileInput"
                         title="Click to upload new Image">
                         <img class="rounded-full w-48 h-48 object-cover border-2 border-white"
                             src="{{$post->titleImage->url}}" alt="Current Title Image">
                     </button>
                     <button class="hidden bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
                         title="Click to upload new Image">
-                        Upload Post Title Image
+                        Upload image
                     </button>
                     <button id="deleteThumbnail" class="self-start">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -206,7 +208,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-5">
+                <div class="my-5">
                     <label for="content" class="block text-sm font-medium text-gray-300">Content</label>
 
                     <div id="editor-edit-container" class="!text-white rounded-xl bg-input !border-none">
@@ -251,14 +253,14 @@
                 </div>
 
                 @can('update', $post)
-                    <div id="save-cancel-buttons" class="flex justify-between gap-2 mt-4">
-                        <button id="saveButton" type="submit" form="editForm"
-                            class="border border-solid text-black bg-white font-bold px-3 py-2 rounded-xl w-1/2">
-                            Save
-                        </button>
+                    <div id="save-cancel-buttons" class="flex gap-2 mt-4 justify-end">
                         <button type="button" onclick="toggleEdit()"
-                            class="border border-solid bg-background text-white font-bold px-3 py-2 rounded-xl w-1/2">
+                            class="border border-solid bg-white text-background font-bold px-3 py-2 rounded-xl">
                             Cancel
+                        </button>
+                        <button id="saveButton" type="submit" form="editForm"
+                            class="border border-solid bg-white text-background font-bold px-3 py-2 rounded-xl">
+                            Save
                         </button>
                     </div>
                 @endcan
@@ -281,6 +283,7 @@
                     <span id="omit-post-card" class="bg-purple text-white px-3 py-1 rounded-lg text-sm {{ $post->is_omitted ? '' : 'hidden' }}">Omitted</span>
                 </div>
             </div>
+            @if (Auth::check())
             <div class="relative self-end">
                 <button class="hover:bg-input p-2 rounded-xl post-options">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -293,6 +296,7 @@
                 </button>
                 @include('partials.post-options')
             </div>
+            @endif
         </div>
 
         @if (Auth::check())
