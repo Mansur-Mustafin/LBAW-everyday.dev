@@ -21,7 +21,7 @@
                 title="Click to upload new Image">
                 Upload image
             </button>
-            <button type="button" id="deleteThumbnail" class="self-start">
+            <button type="button" id="deleteThumbnail" class="self-start" title="delete image">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-circle-x">
@@ -50,33 +50,22 @@
 
         <div class="flex flex-col">
             <label for="username" class="font-bold text-sm mb-2">Username</label>
-            <input id="username" 
-                type="text" 
-                name="username" 
-                value="{{ old('username', $user->username) }}" 
-                required 
-                autofocus
-                placeholder="Username*" 
-                required
-                pattern="^\S+$"
+            <input id="username" type="text" name="username" value="{{ old('username', $user->username) }}" required
+                autofocus placeholder="Username*" required pattern="^\S+$"
                 class="rounded-2xl bg-input outline-none p-3 text-sm invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer">
             <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
                 Username cannot contain spaces.
             </span>
             @error('username')
-            <span class="text-red-400 text-sm">{{ $message }}</span>
+                <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
-    
+
         {{-- TODO: disabled? --}}
         <div class="flex flex-col mb-2">
             <label for="email" class="font-bold text-sm mb-2">E-Mail</label>
-            <input id="email" 
-                type="email" 
-                name="email" 
-                value="{{ old('email', $user->email) }}" 
-                required
-                placeholder="Email*" 
+            <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required
+                placeholder="Email*"
                 class="disabled rounded-2xl bg-input outline-none p-3 text-sm invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
                 pattern="^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$">
             <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
@@ -89,19 +78,18 @@
 
         <div>
             <h3 class="font-bold text-lg flex-1">Reset Password</h3>
-            <p class="text-sm text-gray-500">Leave the password fields empty if you do not wish to reset your password.</p>
+            <p class="text-sm text-gray-500">Leave the password fields empty if you do not wish to reset your password.
+            </p>
         </div>
 
         @if (!is_null($user->password))
             <div class="flex flex-col relative w-full">
                 <label for="old_password" class="font-bold text-sm mb-2">Old Password</label>
-                <input id="old_password" 
-                    name="old_password" 
-                    type="password" 
+                <input id="old_password" name="old_password" type="password"
                     class="rounded-2xl bg-input outline-none p-3 text-sm invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
-                    placeholder="Old Password*"
-                    pattern=".{4,}">
-                <span class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
+                    placeholder="Old Password*" pattern=".{4,}">
+                <span title="change visibility"
+                    class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
                     visibility_off
                 </span>
                 <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
@@ -115,13 +103,11 @@
 
         <div class="flex flex-col relative w-full">
             <label for="new_password" class="font-bold text-sm mb-2">New Password</label>
-            <input id="new_password" 
-                name="new_password" 
-                type="password" 
+            <input id="new_password" name="new_password" type="password"
                 class="rounded-2xl bg-input outline-none p-3 text-sm invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
-                placeholder="New Password*"
-                pattern=".{4,}">
-            <span class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
+                placeholder="New Password*" pattern=".{4,}">
+            <span title="change visibility"
+                class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
                 visibility_off
             </span>
             <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
@@ -134,13 +120,11 @@
 
         <div class="flex flex-col relative w-full">
             <label for="new_password_confirmation" class="font-bold text-sm mb-2">Confirm Password</label>
-            <input id="new_password_confirmation" 
-                name="new_password_confirmation" 
-                type="password" 
+            <input id="new_password_confirmation" name="new_password_confirmation" type="password"
                 class="rounded-2xl bg-input outline-none p-3 text-sm invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:border peer"
-                placeholder="Confirm Password*"
-                pattern=".{4,}">
-            <span class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
+                placeholder="Confirm Password*" pattern=".{4,}">
+            <span title="change visibility"
+                class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
                 visibility_off
             </span>
             <span class="hidden ml-4 text-red-400 text-sm peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">

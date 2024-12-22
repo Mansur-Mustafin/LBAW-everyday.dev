@@ -5,7 +5,11 @@ const deleteTag = async (tagId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (data) => {}, 'DELETE');
 };
 const deleteTagProposal = async (tagProposalId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (_data) => {}, 'DELETE'); // TODO: tem data?
+  sendAjaxRequest(
+    `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
+    (_data) => {},
+    'DELETE'
+  ); // TODO: tem data?
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
@@ -95,7 +99,7 @@ const buildUserCard = (user) => {
           ${
             !user.is_admin
               ? `
-                  <a id="${
+                  <a title="block" id="${
                     user.id
                   }-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center ${
                   user.status != 'blocked' ? '' : 'hidden'
@@ -105,7 +109,7 @@ const buildUserCard = (user) => {
                       <path d="m4.9 4.9 14.2 14.2"/>
                     </svg>
                   </a>
-                  <a id="${
+                  <a title="unblock" id="${
                     user.id
                   }-unblock-button" data-url="${baseUrl}" class="unblock-button flex flex-col p-2 justify-center ${
                   user.status != 'blocked' ? 'hidden' : ''
@@ -124,11 +128,11 @@ const buildUserCard = (user) => {
                 `
               : ''
           }
-          <a class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
+          <a title="edit" class="flex flex-col p-2 justify-center" href="${editProfileUrl}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
           </a>
 
-          <a id="${
+          <a title="delete" id="${
             user.id
           }-delete-button" data-url="${baseUrl}" class="delete-button flex flex-col p-2 justify-center" href="">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash hover:stroke-red-600">
@@ -146,7 +150,7 @@ const buildTagCard = (tag) => {
       <div id="${tag.id}-card" class="p-3 rounded-xl bg-input">
           <div class="flex justify-between items-center">
             <p class="text-lg">${tag.name}</p>
-            <a href="" id="${tag.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+            <a title="delete" href="" id="${tag.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
@@ -167,12 +171,12 @@ const buildTagProposalCard = (tagProposal) => {
           </p>
         </div>
         <div class="flex">
-          <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+          <a title="approve" href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
           </a>  
-          <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
+          <a title="deny" href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
             <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
@@ -198,12 +202,12 @@ const buildUnblockAppealCard = (unblockAppeal) => {
         ${
           !unblockAppeal.is_resolved
             ? `
-            <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
+            <a title="approve" href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </a>  
-            <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3 " data-baseurl="${baseUrl}">  
+            <a title="deny" href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3 " data-baseurl="${baseUrl}">  
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
@@ -232,7 +236,7 @@ const buildOmittedPost = (omittedPost) => {
           By ${omittedPost.author.public_name} · @${omittedPost.author.username}
         </div>
       </a>
-      <a href="" class="unomit-post-button place-content-center m-3" id="${
+      <a title="unomit" href="" class="unomit-post-button place-content-center m-3" id="${
         omittedPost.id
       }-unomit-post-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -259,7 +263,7 @@ const buildOmittedComment = (omittedComment) => {
       </span>
         <p class="max-w-52 truncate text-sm">${omittedComment.content}</p>
       </div>
-      <a href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
+      <a title="unomit" href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
@@ -312,13 +316,13 @@ const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
       const userId = targetDelete.id.split('-delete-button')[0];
       const actionDelete = () => {
         const userCard = document.getElementById(userId + '-card');
-        if(!userCard.classList.contains('hidden')){ 
+        if (!userCard.classList.contains('hidden')) {
           deleteUser(userId, baseUrl);
           userCard.classList.add('hidden');
-          console.log('deleted user:'+userId);
+          console.log('deleted user:' + userId);
         }
       };
-      handleDialog(actionDelete,baseUrl, userId);
+      handleDialog(actionDelete, baseUrl, userId);
     }
   });
 };
@@ -330,12 +334,12 @@ const addTagButtons = (baseQuery, buildFunction, resultDiv) => {
       const tagId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTag = () => {
         const tagCard = document.getElementById(tagId + '-card');
-        if(!tagCard.classList.contains('hidden')) {
+        if (!tagCard.classList.contains('hidden')) {
           deleteTag(tagId, baseUrl);
           tagCard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteTag,baseUrl, tagId);
+      handleDialog(actionDeleteTag, baseUrl, tagId);
     }
   });
 };
@@ -347,12 +351,12 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       const tagProposalId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptTagProposal = () => {
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        if(tagproposalcard.classList.contains('hidden')) {
+        if (tagproposalcard.classList.contains('hidden')) {
           acceptTagProposal(tagProposalId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionAcceptTagProposal,baseUrl, tagProposalId);
+      handleDialog(actionAcceptTagProposal, baseUrl, tagProposalId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
@@ -360,12 +364,12 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       const tagProposalId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTagProposal = () => {
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        if(!tagproposalcard.classList.contains('hidden')) {
+        if (!tagproposalcard.classList.contains('hidden')) {
           deleteTagProposal(tagProposalId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteTagProposal,baseUrl, tagProposalId);
+      handleDialog(actionDeleteTagProposal, baseUrl, tagProposalId);
     }
   });
 };
@@ -377,12 +381,12 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       const unblockAppealId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptUnblockAppeal = () => {
         const unblockAppealCard = document.getElementById(unblockAppealId + '-card');
-        if(!unblockAppealCard.classList.contains('hidden')) {
+        if (!unblockAppealCard.classList.contains('hidden')) {
           acceptUnblockAppeal(unblockAppealId, baseUrl);
           unblockAppealCard.classList.add('hidden');
         }
       };
-      handleDialog(actionAcceptUnblockAppeal,baseUrl, unblockAppealId);
+      handleDialog(actionAcceptUnblockAppeal, baseUrl, unblockAppealId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
@@ -390,12 +394,12 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       const unblockAppealId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteUnblockAppeal = () => {
         const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        if(tagproposalcard.classList.contains('hidden')) {
+        if (tagproposalcard.classList.contains('hidden')) {
           deleteUnblockAppeal(unblockAppealId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteUnblockAppeal,baseUrl, unblockAppealId);
+      handleDialog(actionDeleteUnblockAppeal, baseUrl, unblockAppealId);
     }
   });
 };
@@ -409,12 +413,12 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
       const unomitPostId = targetUnomit.id.split('-unomit-post-button')[0];
       const actionUnomitPost = () => {
         const omittedPostCard = document.getElementById(unomitPostId + '-card');
-        if(!omittedPostCard.classList.contains('hidden')) {
+        if (!omittedPostCard.classList.contains('hidden')) {
           unOmitPost(unomitPostId, baseUrl);
           omittedPostCard.classList.add('hidden');
         }
       };
-      handleDialog(actionUnomitPost,baseUrl, unomitPostId);
+      handleDialog(actionUnomitPost, baseUrl, unomitPostId);
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
   });
@@ -429,12 +433,12 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
       const actionUnomitComment = () => {
         const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-        if(omittedCommentCard.classList.contains('hidden')) {
+        if (omittedCommentCard.classList.contains('hidden')) {
           unOmitComment(unomitCommentId, baseUrl);
           omittedCommentCard.classList.add('hidden');
         }
       };
-      handleDialog(actionUnomitComment,baseUrl, unomitCommentId);
+      handleDialog(actionUnomitComment, baseUrl, unomitCommentId);
     }
   });
 };
@@ -446,7 +450,6 @@ let page = 1;
 const loadingIcon = document.getElementById('loading-icon');
 const searchBar = document.getElementById('admin-search-bar');
 const baseUrl = searchBar ? searchBar.dataset.url : '';
-
 
 // Auxiliary Functions
 const build = (url, buildCardFunction, resultDiv) => {

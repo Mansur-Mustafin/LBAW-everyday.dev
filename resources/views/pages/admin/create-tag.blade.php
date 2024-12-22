@@ -5,7 +5,7 @@
 @include('partials.success-popup')
 
 <section
-    class="flex flex-col py-20 laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
+    class="flex flex-col laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full p-5">
     <form method="POST" action="{{ url('/admin/tags/create') }}" enctype="multipart/form-data"
         class="flex flex-col gap-4" id="admin-edit-profile">
         @csrf
