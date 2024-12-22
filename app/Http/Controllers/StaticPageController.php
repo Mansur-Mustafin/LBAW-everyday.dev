@@ -6,16 +6,16 @@ class StaticPageController extends Controller
 {
     public function contacts()
     {
-        return view('pages.contacts');
+        return view('pages.static.contacts');
     }
 
     public function about()
     {
-        return view('pages.about');
+        return view('pages.static.about');
     }
 
     public function features()
     {
-        return view('pages.features');
+        return view('pages.static.features');
     }
 }

@@ -31,7 +31,7 @@ class SearchController extends Controller
             ->where('tag_id', $tag->id);
     }
 
-    public function search(Request $request)    // TODO: return type?
+    public function search(Request $request)
     {
         $searchQuery = $request->input('query', '');
 

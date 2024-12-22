@@ -1,4 +1,3 @@
--- TODO: deletar Trigger 8, 9, 10, 11;
 
 --
 -- Drop old schema
@@ -182,7 +181,6 @@ CREATE TABLE bookmarks (
     PRIMARY KEY (user_id, news_post_id)
 );
 
--- TODO: add in UML, delete table when delete user.
 CREATE TABLE notification_settings (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
@@ -300,7 +298,6 @@ CREATE INDEX idx_news_comment_search ON comment USING GIN (tsvectors);
 -- Triggers
 --
 
--- Trigger 0 TODO: add no Wiki (vai criar um notification setting para cada usuario que foi criado)
 CREATE OR REPLACE FUNCTION create_default_notification_settings()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -543,7 +540,6 @@ EXECUTE FUNCTION prevent_comment_deletion_with_references();
 -- EXECUTE FUNCTION notify_on_vote();
 
 
--- Trigger 12 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_reputation_on_post_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -578,7 +574,6 @@ FOR EACH ROW
 EXECUTE FUNCTION adjust_reputation_on_post_vote();
 
 
--- Trigger 13 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_reputation_on_comment_vote()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -657,7 +652,6 @@ WHEN (NEW.is_omitted = TRUE AND OLD.is_omitted = FALSE)
 EXECUTE FUNCTION adjust_reputation_on_successful_report();
 
 
--- Trigger 16 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_post_votes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -695,7 +689,6 @@ FOR EACH ROW
 EXECUTE FUNCTION adjust_post_votes();
 
 
--- Trigger 17 TODO: change in WIKI
 CREATE OR REPLACE FUNCTION adjust_comment_votes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -728,7 +721,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- Trigger 18 TODO: change in WIKI
 CREATE TRIGGER trigger_adjust_comment_votes
 AFTER INSERT OR DELETE OR UPDATE ON vote
 FOR EACH ROW

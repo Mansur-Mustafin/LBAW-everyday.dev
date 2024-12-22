@@ -21,7 +21,7 @@ class NewsPostController extends Controller
 {
     public function showCreationForm()
     {
-        return view('pages.create-news', ['tags' => Tag::all()]);
+        return view('pages.news.create-news', ['tags' => Tag::all()]);
     }
 
     public function showSingleThread(NewsPost $newsPost, comment $comment): View|Factory
@@ -34,7 +34,7 @@ class NewsPostController extends Controller
         $this->preparePostForUser($newsPost);
         $this->processComments([$comment], Auth::user());
 
-        return view('pages.post', [
+        return view('pages.news.post', [
             'post' => $newsPost,
             'comments' => new Collection([$comment]),
             'thread' => 'single',
@@ -60,7 +60,7 @@ class NewsPostController extends Controller
             return redirect('home');
         }
 
-        return view('pages.post', [
+        return view('pages.news.post', [
             'post' => $newsPost,
             'tags' => $tags,
             'availableTags' => $tags,
