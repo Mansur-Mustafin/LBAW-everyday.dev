@@ -35,7 +35,7 @@
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <div class="flex flex-col gap-2">
-            <label for="title"></label>
+            <label for="title" class="text-sm font-medium text-gray-300">Title</label>
             <input name="title" 
                 id="title" 
                 class="rounded-2xl bg-input outline-none p-3 @error('title') border border-red-500 @else  @enderror" 
