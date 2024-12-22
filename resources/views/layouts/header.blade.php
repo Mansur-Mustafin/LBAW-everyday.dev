@@ -25,7 +25,8 @@
     <div class="flex gap-2">
         @if (Auth::check())
             {{-- Notifications --}}
-            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('notifications.index') }}">
+            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('notifications.index') }}"
+                title="notifications">
                 <div class="w-6 h-6 rounded-md relative">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
