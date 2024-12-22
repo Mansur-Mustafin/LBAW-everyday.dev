@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-// TODO: profile image
-
 function addCommentHandler(data) {
   const thread = data.thread_id;
   const threadHTML = data.thread;
@@ -190,8 +188,8 @@ function addButtonsBehaviour() {
       const url = '/comments/' + comment_id;
       const method = 'DELETE';
       const comment = document.getElementById('comment-' + comment_id);
-      if(!comment.classList.contains('hidden')) {
-        sendAjaxRequest(url,(_data) => {}, method);
+      if (!comment.classList.contains('hidden')) {
+        sendAjaxRequest(url, (_data) => {}, method);
         comment.classList.add('hidden');
         toggleDeleteButton();
       }

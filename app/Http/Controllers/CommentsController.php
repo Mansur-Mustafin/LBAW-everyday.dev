@@ -32,7 +32,7 @@ class CommentsController extends Controller
     public function buildComment(Comment $comment, string $thread)
     {
         return response()->json([
-            'thread' => view('partials.comment', [
+            'thread' => view('partials.comment.comment', [
                 'comment' => $comment,
                 'level' => 0,
                 'post' => NewsPost::find($comment->news_post_id),
@@ -46,7 +46,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'content' => 'required|string|max:40',
+            'content' => 'required|string',
             'news_post_id' => 'nullable|string',
             'parent_comment_id' => 'nullable|string',
             'thread' => 'required|string'

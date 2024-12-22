@@ -9,7 +9,7 @@ const deleteTagProposal = async (tagProposalId, baseUrl) => {
     `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
     (_data) => {},
     'DELETE'
-  ); // TODO: tem data?
+  );
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
@@ -102,7 +102,7 @@ const buildUserCard = (user) => {
                   <a title="block" id="${
                     user.id
                   }-block-button" data-url="${baseUrl}" class="block-button flex flex-col p-2 justify-center ${
-                  user.status != 'blocked' ? '' : 'hidden'
+                  user.status != 'blocked' && user.status != 'pending' ? '' : 'hidden'
                 }" href="">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban">
                       <circle cx="12" cy="12" r="10"/>
@@ -261,7 +261,7 @@ const buildOmittedComment = (omittedComment) => {
           · @${omittedComment.username}
         </div>
       </span>
-        <p class="max-w-52 truncate text-sm">${omittedComment.content}</p>
+        <p class="max-w-52 tablet:max-w-full tablet:break-all text-ellipsis overflow-hidden text-sm">${omittedComment.content}</p>
       </div>
       <a title="unomit" href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -351,7 +351,7 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       const tagProposalId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptTagProposal = () => {
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        if (tagproposalcard.classList.contains('hidden')) {
+        if (!tagproposalcard.classList.contains('hidden')) {
           acceptTagProposal(tagProposalId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
@@ -394,7 +394,7 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       const unblockAppealId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteUnblockAppeal = () => {
         const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        if (tagproposalcard.classList.contains('hidden')) {
+        if (!tagproposalcard.classList.contains('hidden')) {
           deleteUnblockAppeal(unblockAppealId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
@@ -419,7 +419,6 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
         }
       };
       handleDialog(actionUnomitPost, baseUrl, unomitPostId);
-      //reloadData(baseQuery,buildFunction,resultDiv)
     }
   });
 };
@@ -433,7 +432,7 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
       const actionUnomitComment = () => {
         const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-        if (omittedCommentCard.classList.contains('hidden')) {
+        if (!omittedCommentCard.classList.contains('hidden')) {
           unOmitComment(unomitCommentId, baseUrl);
           omittedCommentCard.classList.add('hidden');
         }
