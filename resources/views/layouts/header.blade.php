@@ -2,7 +2,7 @@
     class="fixed h-20 bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 w-full z-50">
     <div>
         <h1 class="hidden tablet:block text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
-        <a href="{{ url('/') }}"><img src="{{ asset('favicon.ico') }}" class="w-8 tablet:hidden"></a>
+        <a href="{{ url('/') }}"><img src="{{ asset('favicon.ico') }}" class="w-8 tablet:hidden" alt="Search Icon"></a>
     </div>
 
     <div>
@@ -72,7 +72,7 @@
             </a>
             <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
                 href="{{ route('user.posts', Auth::id()) }}">
-                <img class="w-6 h-6 rounded-md" src="{{ Auth::user()->profileImage->url }}" alt="">
+                <img class="w-6 h-6 rounded-md" src="{{ Auth::user()->profileImage->url }}" alt="Profile Image">
             </a>
         @else
             <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('login') }}">Login</a>

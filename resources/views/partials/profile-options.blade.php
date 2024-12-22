@@ -1,4 +1,4 @@
-<div id='profile-options-popup' class="bg-input w-48 absolute top-11 right-0 flex flex-col opacity-0 rounded-xl transition ease-out">
+<div id='profile-options-popup' class="bg-input w-48 absolute top-11 right-0 flex flex-col opacity-0 pointer-events-none rounded-xl transition ease-out">
    @if (Auth::check() and (Auth::id() == $user->id))
       <a href="{{ url('/tag_proposal/create') }}"
         class="text-gray-400 rounded-lg px-4 py-2 text-sm hover:bg-gray-700">Propose new tag</a>
