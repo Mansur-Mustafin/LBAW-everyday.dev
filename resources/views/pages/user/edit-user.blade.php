@@ -11,6 +11,8 @@
         class="flex flex-col gap-4 group" novalidate>
         @csrf
         @method('PUT')
+        <fieldset>
+        <legend class="hidden">Personal Information</legend>
         <h3 class="font-bold text-lg flex-1">Profile Picture</h3>
 
         <div class="flex" id="edit-image">
@@ -137,6 +139,7 @@
             <button class="loading-button text-input bg-white font-bold rounded-xl px-6 py-2 
                 group-invalid:pointer-events-none group-invalid:opacity-60" type="submit">Save</button>
         </div>
+        </fieldset>
     </form>
 
 </section>

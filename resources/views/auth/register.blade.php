@@ -16,6 +16,8 @@
         <div class="md:w-1/2 p-8 w-full">
             <form method="POST" action="{{ route('register') }}" id="registerForm" novalidate class="group">
                 {{ csrf_field() }}
+                <fieldset>
+                <legend class="hidden">Personal Information</legend>
 
                 <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
 
@@ -119,6 +121,7 @@
                         Register
                     </button>
                 </div>
+                </fieldset>
             </form>
         </div>
     </div>

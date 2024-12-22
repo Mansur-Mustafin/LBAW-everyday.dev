@@ -10,7 +10,7 @@
             <div class="list-element flex items-center">
                 <label class="text-sm font-medium text-gray-300 hover:text-white transition">
                     <input type="radio" name="{{$name}}" value="{{$option}}" {{$key == 0 ? 'checked' : ''}}
-                        class="form-radio w-4 h-4 text-purple ring-offset-gray-800 bg-gray-700 border-gray-600" />
+                        class="form-radio w-4 h-4 text-purple ring-offset-gray-800 bg-gray-700 border-gray-600">
                     &nbsp;{{$option}}
                 </label>
             </div>
