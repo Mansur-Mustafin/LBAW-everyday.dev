@@ -161,7 +161,7 @@
 
         <div id="edit-section" class="hidden">
             <form id="editForm" method="POST" action="{{ route('news.update', $post->id) }}"
-                enctype="multipart/form-data">
+                enctype="multipart/form-data" data-post_id="{{$post->id}}">
                 @csrf
                 @method('PUT')
                 <p class="block text-sm font-medium text-gray-300">Title Image</p>
