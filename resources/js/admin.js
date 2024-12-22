@@ -1,4 +1,4 @@
-import { sendAjaxRequest, showMessage, stripHtml } from './utils';
+import { sendAjaxRequest, showMessage, stripHtml, handleDialog } from './utils';
 
 // API Requests
 const deleteTag = async (tagId, baseUrl) => {
@@ -318,7 +318,7 @@ const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
           console.log('deleted user:'+userId);
         }
       };
-      handleDialog(actionDelete, userId);
+      handleDialog(actionDelete,baseUrl, userId);
     }
   });
 };
@@ -335,7 +335,7 @@ const addTagButtons = (baseQuery, buildFunction, resultDiv) => {
           tagCard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteTag, tagId);
+      handleDialog(actionDeleteTag,baseUrl, tagId);
     }
   });
 };
@@ -352,7 +352,7 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionAcceptTagProposal, tagProposalId);
+      handleDialog(actionAcceptTagProposal,baseUrl, tagProposalId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
@@ -365,7 +365,7 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteTagProposal, tagProposalId);
+      handleDialog(actionDeleteTagProposal,baseUrl, tagProposalId);
     }
   });
 };
@@ -382,7 +382,7 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
           unblockAppealCard.classList.add('hidden');
         }
       };
-      handleDialog(actionAcceptUnblockAppeal, unblockAppealId);
+      handleDialog(actionAcceptUnblockAppeal,baseUrl, unblockAppealId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
@@ -395,7 +395,7 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
           tagproposalcard.classList.add('hidden');
         }
       };
-      handleDialog(actionDeleteUnblockAppeal, unblockAppealId);
+      handleDialog(actionDeleteUnblockAppeal,baseUrl, unblockAppealId);
     }
   });
 };
@@ -414,7 +414,7 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
           omittedPostCard.classList.add('hidden');
         }
       };
-      handleDialog(actionUnomitPost, unomitPostId);
+      handleDialog(actionUnomitPost,baseUrl, unomitPostId);
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
   });
@@ -434,7 +434,7 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
           omittedCommentCard.classList.add('hidden');
         }
       };
-      handleDialog(actionUnomitComment, unomitCommentId);
+      handleDialog(actionUnomitComment,baseUrl, unomitCommentId);
     }
   });
 };
@@ -447,30 +447,6 @@ const loadingIcon = document.getElementById('loading-icon');
 const searchBar = document.getElementById('admin-search-bar');
 const baseUrl = searchBar ? searchBar.dataset.url : '';
 
-const handleDialog = (action, elementId) => {
-  const confirmPopup = document.getElementById('confirm-popup');
-  const confirmButton = document.getElementById('confirm-button');
-  const cancelButton = document.getElementById('cancel-button');
-
-  if (confirmPopup) {
-    confirmPopup.classList.remove('hidden');
-    confirmButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      confirmPopup.classList.add('hidden');
-      action(elementId, baseUrl);
-    });
-    cancelButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      confirmPopup.classList.add('hidden');
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key == 'Escape' && !confirmPopup.classList.contains('hidden')) {
-        confirmPopup.classList.add('hidden');
-      }
-    });
-  }
-};
 
 // Auxiliary Functions
 const build = (url, buildCardFunction, resultDiv) => {

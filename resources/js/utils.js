@@ -204,8 +204,46 @@ export const toggleDeleteButton = () => {
   }
 };
 
+export const toggleDeleteButtonComment = (container) => {
+  const commentId = container.dataset.id 
+  const deleteButton = document.getElementById('delete_button-'+commentId)
+  const voteCountElement = container.querySelector('.vote-count').textContent;
+  const hasVotes = parseInt(voteCountElement, 10) != 0;
+
+  if ( hasVotes) {
+    deleteButton.classList.add('hidden')
+  } else {
+    deleteButton.classList.remove('hidden')
+  }
+};
+
 export const stripHtml = (html) => {
   const div = document.createElement('div');
   div.innerHTML = html;
   return div.textContent || div.innerText || '';
+};
+
+export const handleDialog = (action,baseUrl, elementId) => {
+  const confirmPopup = document.getElementById('confirm-popup');
+  const confirmButton = document.getElementById('confirm-button');
+  const cancelButton = document.getElementById('cancel-button');
+
+  if (confirmPopup) {
+    confirmPopup.classList.remove('hidden');
+    confirmButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      confirmPopup.classList.add('hidden');
+      action(elementId, baseUrl);
+    });
+    cancelButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      confirmPopup.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key == 'Escape' && !confirmPopup.classList.contains('hidden')) {
+        confirmPopup.classList.add('hidden');
+      }
+    });
+  }
 };
