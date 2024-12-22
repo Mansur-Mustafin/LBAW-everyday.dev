@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Comment;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
-use App\Models\Comment;
+use App\Models\User;
 
 class StatisticsController extends Controller
 {
