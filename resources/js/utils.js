@@ -203,10 +203,12 @@ export const toggleDeleteButtonComment = (container) => {
   const voteCountElement = container.querySelector('.vote-count').textContent;
   const hasVotes = parseInt(voteCountElement, 10) != 0;
 
-  if (hasVotes) {
-    deleteButton.classList.add('hidden');
-  } else {
-    deleteButton.classList.remove('hidden');
+  if (deleteButton) {
+    if (hasVotes) {
+      deleteButton.classList.add('hidden');
+    } else {
+      deleteButton.classList.remove('hidden');
+    }
   }
 };
 

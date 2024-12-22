@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortPopup = document.getElementById('sort-popup');
     const chevronIcon = toggleSortButton.querySelector('svg');
 
-    chosenSort.innerHTML = hiddenSelectedSort.value;
+    if (chosenSort) {
+      chosenSort.innerHTML = hiddenSelectedSort.value;
+    }
 
     toggleSortButton.addEventListener('click', () => {
       if (sortPopup.classList.contains('opacity-0')) {

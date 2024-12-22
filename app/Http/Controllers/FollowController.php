@@ -57,12 +57,12 @@ class FollowController extends Controller
 
     public function showFollowers(User $user)
     {
-        return view('pages.users', ['title' => "Followers", 'user' => $user]);
+        return view('pages.user.users', ['title' => "Followers", 'user' => $user]);
     }
 
     public function showFollowing(User $user)
     {
-        return view('pages.users', ['title' => "Following", 'user' => $user]);
+        return view('pages.user.users', ['title' => "Following", 'user' => $user]);
     }
 
     public function getFollowers(User $user, Request $request)

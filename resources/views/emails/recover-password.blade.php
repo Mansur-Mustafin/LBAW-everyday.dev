@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Reset</title>
     <style>
-        /* TODO: */
         body {
             margin: 0;
             padding: 0;
@@ -83,7 +82,8 @@
     <div class="content">
         <h2>Password Reset Request</h2>
         <p>Hi {{$mailData['name']}},</p>
-        <p>You recently requested to reset your password for your everyday.dev account. Click the button below to reset it:</p>
+        <p>You recently requested to reset your password for your everyday.dev account. Click the button below to reset
+            it:</p>
         <a href="{{ $mailData['resetLink'] }}" class="btn-reset">Reset Your Password</a>
         <p>If you didn't request a password reset, please ignore this email.</p>
         <p>Thanks,<br>The everyday.dev Team</p>

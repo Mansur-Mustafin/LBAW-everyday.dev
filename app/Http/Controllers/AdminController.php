@@ -40,7 +40,7 @@ class AdminController extends Controller
 
         User::create($credentials);
 
-        return redirect()->route('admin')
+        return redirect()->route('admin.users')
             ->withSuccess('You have successfully created an account!');
     }
 
