@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
   plugins: [
+    nodePolyfills(),
     laravel({
       input: [
         'resources/css/app.css',
@@ -26,6 +28,7 @@ export default defineConfig({
         'resources/js/sort-by.js',
         'resources/js/loading-button.js',
         'resources/js/profile.js',
+        'resources/js/dashboard.js',
       ],
       refresh: true,
     }),
