@@ -48,23 +48,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let count = 0;
 
-    const noTagsLabel = document.getElementById('no-tags');
+    const noTagsLabels = document.querySelectorAll('.no-tags');
+
+    const hideNoTagsLabel = (noTagsLabels) => {
+      noTagsLabels.forEach((noTagsLabel) => {
+        noTagsLabel.classList.add('hidden');
+        noTagsLabel.classList.remove('flex');
+      })
+    }
+
+    const unhideNoTagsLabel = (noTagsLabels) => {
+      noTagsLabels.forEach((noTagsLabel) => {
+        noTagsLabel.classList.remove('hidden');
+        noTagsLabel.classList.add('flex');
+      })
+    }
 
     tagItems.forEach((item) => {
       const labelText = item.textContent.toLowerCase();
       if (labelText.includes(query)) {
         item.style.display = 'flex';
         count++;
-        noTagsLabel.classList.add('hidden');
-        noTagsLabel.classList.remove('flex');
+        hideNoTagsLabel(noTagsLabels)
       } else {
         item.style.display = 'none';
       }
     });
 
     if (count === 0) {
-      noTagsLabel.classList.remove('hidden');
-      noTagsLabel.classList.add('flex');
+      unhideNoTagsLabel(noTagsLabels)
     }
   };
 
