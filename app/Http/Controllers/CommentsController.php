@@ -46,7 +46,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'content' => 'required|string|max:40',
+            'content' => 'required|string',
             'news_post_id' => 'nullable|string',
             'parent_comment_id' => 'nullable|string',
             'thread' => 'required|string'
