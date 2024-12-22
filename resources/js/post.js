@@ -138,7 +138,7 @@ if (editForm) {
 
     displaySection.classList.toggle('hidden');
     editSection.classList.toggle('hidden');
-    editButton.classList.toggle('hidden');
+    editButton?.classList.toggle('hidden');
     saveCancelButtons.classList.toggle('hidden');
 
     const existingTagRemoveButtons = selectedTags.querySelectorAll('button[data-tag]');

@@ -261,7 +261,7 @@ const buildOmittedComment = (omittedComment) => {
           · @${omittedComment.username}
         </div>
       </span>
-        <p class="max-w-52 truncate text-sm">${omittedComment.content}</p>
+        <p class="max-w-52 tablet:max-w-full tablet:break-all text-ellipsis overflow-hidden text-sm">${omittedComment.content}</p>
       </div>
       <a title="unomit" href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
