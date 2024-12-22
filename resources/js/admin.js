@@ -244,22 +244,15 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 };
 
 const buildReportCard = (report) => {
-  const typeColors = {
-    PostReport: 'bg-blue-200',
-    CommentReport: 'bg-green-200',
-    UserReport: 'bg-red-200',
-  };
-  const reportTypeColor = typeColors[report.report_type] || 'bg-gray-200';
-
   const actionButtons = () => {
     switch (report.report_type) {
       case 'PostReport':
         return `
-          <a href="" id="${report.id}-${report.news_post_id}-omitPost-button" class="omitPost-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
+          <a href="" id="${report.id}-${report.news_post_id}-omitPost-button" class="omitPost-button text-sm px-2 py-1 text-gray-700 bg-gray-200 rounded-lg" data-baseurl="${baseUrl}">
             Omit Post
           </a>
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -267,11 +260,11 @@ const buildReportCard = (report) => {
         `;
       case 'CommentReport':
         return `
-          <a href="" id="${report.id}-${report.comment_id}-omitComment-button" class="omitComment-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+          <a href="" id="${report.id}-${report.comment_id}-omitComment-button" class="text-sm omitComment-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg">
             Omit Comment
           </a>
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -282,18 +275,18 @@ const buildReportCard = (report) => {
           ${
             report.reported_status === 'blocked'
               ? `
-            <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 border-yellow-400 text-center">
+            <div class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg border-2 text-sm border-yellow-400 text-center">
               User is blocked
             </div>
-            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
+            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button text-sm px-2 py-1 text-gray-700 bg-gray-200 rounded-lg  data-baseurl="${baseUrl}">
               Delete User
             </a>
           `
               : `
-            <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-yellow-400" data-baseurl="${baseUrl}">
+            <a href="" id="${report.id}-${report.reported_user_id}-block-button" class="block-button px-2 py-1 text-sm text-gray-700 bg-gray-200 rounded-lg " data-baseurl="${baseUrl}">
               Block User
             </a>
-            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
+            <a href="" id="${report.id}-${report.reported_user_id}-deleteUser-button" class="deleteUser-button text-sm px-2 py-1 text-gray-700 bg-gray-200 rounded-lg " data-baseurl="${baseUrl}">
               Delete User
             </a>
           `
@@ -301,7 +294,7 @@ const buildReportCard = (report) => {
           <a href="" id="${
             report.id
           }-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -310,7 +303,7 @@ const buildReportCard = (report) => {
       default:
         return `
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -320,34 +313,28 @@ const buildReportCard = (report) => {
   };
 
   return `
-      <div id="${report.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
-        <div class="flex flex-col flex-grow">
-          <h1 class="text-xl">
-            ${new Date(report.created_at).toLocaleDateString('pt-PT')}
-          </h1>
-        
-          <p class="text-sm mb-3">
+      <div id="${report.id}-card" class="flex p-3 rounded-lg bg-input">
+        <div class="flex flex-col flex-grow">   
+          <p class="text-lg">
             ${report.description}
           </p>
+          <span class="text-sm text-gray-400">By @${report.reporter_username}</span>
 
-          <div class="text-xs text-gray-600 flex flex-wrap gap-2">
-            <span class="${reportTypeColor} px-2 py-1 rounded-lg">Type: ${report.report_type}</span>
-            <span class="bg-gray-200 px-2 py-1 rounded-lg">Reporter: ${
-              report.reporter_username
-            }</span>
+          <div class="text-xs text-gray-600 flex flex-wrap gap-2 mt-2">
+            
             ${
               report.news_post_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Post: ${report.post_title}</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-md">Post: ${report.post_title}</span>`
                 : ''
             }
             ${
               report.comment_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Comment: "${report.comment_content}"</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-md">Comment: "${report.comment_content}"</span>`
                 : ''
             }
             ${
               report.reported_user_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">User: ${report.reported_username}</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-md">User: ${report.reported_username}</span>`
                 : ''
             }
           </div>
@@ -603,7 +590,7 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
           deleteReport(reportId, baseUrl);
           reportCard.classList.add('hidden');
         }
-      }
+      };
       handleDialog(actionBlockUser, baseUrl, reportId);
     }
     const targetDeleteUser = event.target.closest('.deleteUser-button');
@@ -617,11 +604,11 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
           deleteReport(reportId, baseUrl);
           reportCard.classList.add('hidden');
         }
-      }
+      };
       handleDialog(actionDeleteUser, baseUrl, reportId);
     }
     const targetOmitPost = event.target.closest('.omitPost-button');
-    if(targetOmitPost) {
+    if (targetOmitPost) {
       event.preventDefault();
       const [reportId, postId] = targetOmitPost.id.split('-omitPost-button')[0].split('-');
       const actionOmitPost = () => {
@@ -631,11 +618,11 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
           deleteReport(reportId, baseUrl);
           reportCard.classList.add('hidden');
         }
-      }
+      };
       handleDialog(actionOmitPost, baseUrl, reportId);
     }
     const targetOmitComment = event.target.closest('.omitComment-button');
-    if(targetOmitComment) {
+    if (targetOmitComment) {
       event.preventDefault();
       const [reportId, commentId] = targetOmitComment.id.split('-omitComment-button')[0].split('-');
       const actionOmitComment = () => {
@@ -645,7 +632,7 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
           deleteReport(reportId, baseUrl);
           reportCard.classList.add('hidden');
         }
-      }
+      };
       handleDialog(actionOmitComment, baseUrl, reportId);
     }
   });

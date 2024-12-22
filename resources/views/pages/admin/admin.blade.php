@@ -1,6 +1,6 @@
 @extends('layouts.body.admin')
 
-@section('title','Administrator Dashboard')
+@section('title', 'Administrator Dashboard')
 
 @section('content')
 
@@ -63,7 +63,7 @@
   @endif
 
   @if($show == 'reports')
-    <div id="admin-search-reports-results" class="laptop:flex laptop:flex-col gap-2 mt-2"></div>
+    <div id="admin-search-reports-results" class="flex flex-col gap-2 mt-5"></div>
   @endif
 
   @if($show == 'omitted_posts')
