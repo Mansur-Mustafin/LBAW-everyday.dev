@@ -48,6 +48,13 @@ if (createForm) {
     placeholder: 'Content*',
   });
 
+  document.addEventListener('keydown', function (e) {
+    console.log(e.target);
+    if (e.key === 'Escape') {
+      e.target.blur();
+    }
+  });
+
   document
     .querySelector('.ql-toolbar')
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700'); // styles the toolbar, ! is important to override the default styles
@@ -88,6 +95,13 @@ if (editForm) {
       toolbar: toolbarOptions,
     },
     theme: 'snow',
+  });
+
+  document.addEventListener('keydown', function (e) {
+    console.log(e.target);
+    if (e.key === 'Escape') {
+      e.target.blur();
+    }
   });
 
   document
