@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('body')
+
 <body class="bg-background text-white">
     <main class="flex flex-col h-screen">
         @include('layouts.header')
@@ -10,7 +11,7 @@
 
             @include('layouts.admin-aside')
 
-            <section id="content" class="w-full h-full">
+            <section id="content" class="w-full h-full mt-20">
                 @yield('content')
             </section>
         </div>

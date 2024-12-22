@@ -15,7 +15,7 @@
 
         <div class="flex flex-col laptop:flex-row items-center gap-6 mt-12">
             <div class="laptop:w-1/2">
-                <blockquote class="mt-6 p-4 border-l-4 border-purple-500 text-gray-300 italic bg-gray-800 rounded-md">
+                <blockquote class="mt-6 p-4 border-l-4 border-purple text-gray-300 italic bg-gray-800 rounded-md">
                     "Empowering developers to build the future, one line of code at a time."
                 </blockquote>
             </div>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <h2 class="mt-10 text-2xl font-bold text-purple-500">Team Members</h2>
+        <h2 class="mt-10 text-2xl font-bold">Team Members</h2>
 
         <div class="flex flex-col gap-4 tablet:flex-row items-center space-between mt-5">
             <div class="flex flex-col items-center grow">

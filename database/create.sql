@@ -178,7 +178,7 @@ CREATE TABLE user_tag_subscribes (
 
 CREATE TABLE bookmarks (
     user_id INTEGER NOT NULL REFERENCES "user"(id),
-    news_post_id INTEGER NOT NULL REFERENCES news_post(id),
+    news_post_id INTEGER NOT NULL REFERENCES news_post(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, news_post_id)
 );
 

@@ -16,6 +16,7 @@ class UserUpdateRequest extends FormRequest
                 'string',
                 'max:40',
                 Rule::unique('user')->ignore($this->route('user')->id),
+                'regex:/^\S*$/',
             ],
             'email' => [
                 'required',
@@ -26,6 +27,14 @@ class UserUpdateRequest extends FormRequest
             'remove_image' => ['required', 'string'],
             'old_password' => ['nullable', 'string'],
             'new_password' => ['nullable', 'string', 'min:4', 'confirmed'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'The email address is already registered.',
+            'username.regex' => 'The username cannot contain spaces.'
         ];
     }
 }

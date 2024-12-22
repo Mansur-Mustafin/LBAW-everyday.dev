@@ -36,7 +36,7 @@ function addBookmark(postId, container) {
   sendAjaxRequest(
     `/bookmark`,
     (data) => {
-      if (data.message === 'Bookmarked') {
+      if (data.success) {
         container.dataset.user_bookmark = 'true';
         updateBookmarkUI(container);
       }
@@ -52,7 +52,7 @@ function removeBookmark(postId, container) {
   sendAjaxRequest(
     `/bookmark/${postId}`,
     (data) => {
-      if (data.message === 'Bookmark removed') {
+      if (data.success) {
         container.dataset.user_bookmark = 'false';
         updateBookmarkUI(container);
       }
