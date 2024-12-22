@@ -8,9 +8,7 @@
 
     <main class="order-2 tablet:order-none flex-1">
         <h2 class="text-2xl font-semibold my-4 px-4">Notifications</h2>
-        <div data-url="{{ route('notifications.get') }}" id="notifications-list" class="flex flex-col gap-2 p-3">
-
-        </div>
+        <div data-url="{{ route('notifications.get') }}" id="notifications-list" class="flex flex-col gap-2 p-3"></div>
         <div id="loading-icon" class="hidden my-6">
             <img class="w-12 h-12 mx-auto" src="{{ url('/assets/loading-icon.gif') }}" alt="Loading...">
         </div>
