@@ -10,7 +10,7 @@
     <section class="flex flex-col w-full laptop:w-2/3 px-10 py-12 laptop:border-x border-gray-700">
         <div id="display-section">
             <div class="flex justify-between items-center">
-                <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
+                <h1 class="text-3xl break-all laptop:break-normal max-w-40 tablet:max-w-96 laptop:max-w-full font-bold">
                     {{ $post->title }}
                 </h1>
                 
@@ -66,8 +66,8 @@
                 @if (Auth::check())
                     <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
                         <label for="comment"></label>
-                        <input type="text" id="comment" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-                            class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
+                        <input type="text" id="commentInput" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
+                            class="outline-none py-4 pl-4 pr-20 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                             placeholder="Share your thoughts" id="commentInput" /> 
                         <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>
                     </form>

@@ -3,7 +3,7 @@
 @endphp
 
 @if ($level == 0)
-    <div class="border border-solid border-gray-700 rounded-xl flex flex-col {{ $comment->is_omitted ? 'opacity-50' : '' }} "
+    <div class="border border-solid border-gray-700 rounded-xl flex flex-col max-w-72 tablet:max-w-full {{ $comment->is_omitted ? 'opacity-50' : '' }} "
         id="{{ 'comment-' . $comment->id }}" data-auth="{{ Auth::user() && Auth::user()->id }}"
         data-replies="{{ count($comment->replies) == 0 ? 'false' : 'true' }}">
         <div class="{{ count($comment->replies) == 0 ? '' : 'border-b border-solid border-gray-700' }} rounded-xl p-4">
@@ -66,7 +66,7 @@
                 <textarea id="{{ 'comment-input-' . $comment->id }}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
-            <div class="mt-4" id={{ 'comment-content-' . $comment->id }}>
+            <div class="mt-4 break-words" id={{ 'comment-content-' . $comment->id }}>
                 {{ $comment->content }}
             </div>
             @if (Auth::check())
@@ -163,7 +163,7 @@
                         </button>
 
                         <button class="abort-edit hidden" id="{{ 'abort_button-' . $comment->id }}">
-                            @include('partials.svg.comment.delete')
+                            @include('partials.svg.comment.abort')
                         </button>
                         <button class="hidden" id="{{ 'save_button-' . $comment->id }}">
                             @include('partials.svg.comment.save')
@@ -191,7 +191,7 @@
                 <textarea id="{{ 'comment-input-' . $comment->id }}"
                     class="bg-input w-full p-3 mt-5 rounded-xl border border-solid border-white-200 outline-none text-white">{{ trim($comment->content) }}</textarea>
             </form>
-            <div class="mt-4" id={{ 'comment-content-' . $comment->id }}>
+            <div class="mt-4 break-words" id={{ 'comment-content-' . $comment->id }}>
                 {{ $comment->content }}
             </div>
 
