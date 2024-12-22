@@ -34,7 +34,7 @@
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
-        <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" type="file" id="realFileInput" name="image" accept=".png, .jpg, .jpeg, .gif">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <h3 class="font-bold text-lg flex-1">User Information</h3>

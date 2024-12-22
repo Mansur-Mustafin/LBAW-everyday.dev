@@ -1,5 +1,10 @@
-import { data } from 'autoprefixer';
-import { redirectToLogin, showMessage, toggleDeleteButton, toggleDeleteButtonComment, sendAjaxRequest } from './utils';
+import {
+  redirectToLogin,
+  showMessage,
+  toggleDeleteButton,
+  toggleDeleteButtonComment,
+  sendAjaxRequest,
+} from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
