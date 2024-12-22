@@ -1,5 +1,5 @@
 import { data } from 'autoprefixer';
-import { redirectToLogin, showMessage, toggleDeleteButton, sendAjaxRequest } from './utils';
+import { redirectToLogin, showMessage, toggleDeleteButton, toggleDeleteButtonComment, sendAjaxRequest } from './utils';
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -51,6 +51,7 @@ function handleVote(container, isUpvote) {
     });
   }
   toggleDeleteButton();
+  toggleDeleteButtonComment(container);
 }
 
 function submitVote(type, id, isUpvote, container, onComplete) {
