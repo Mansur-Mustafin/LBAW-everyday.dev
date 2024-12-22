@@ -204,6 +204,19 @@ export const toggleDeleteButton = () => {
   }
 };
 
+export const toggleDeleteButtonComment = (container) => {
+  const commentId = container.dataset.id 
+  const deleteButton = document.getElementById('delete_button-'+commentId)
+  const voteCountElement = container.querySelector('.vote-count').textContent;
+  const hasVotes = parseInt(voteCountElement, 10) != 0;
+
+  if ( hasVotes) {
+    deleteButton.classList.add('hidden')
+  } else {
+    deleteButton.classList.remove('hidden')
+  }
+};
+
 export const stripHtml = (html) => {
   const div = document.createElement('div');
   div.innerHTML = html;
