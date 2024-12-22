@@ -68,7 +68,8 @@
             @can('view', $post)
                 @if (Auth::check())
                     <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
-                        <input type="text" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
+                        <label for="comment"></label>
+                        <input type="text" id="comment" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
                             class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
                             placeholder="Share your thoughts" id="commentInput" />
                         <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>

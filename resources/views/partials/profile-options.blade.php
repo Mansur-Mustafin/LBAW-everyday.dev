@@ -13,13 +13,9 @@
         Profile</a>
    @endif
    @if (Auth::check() and (Auth::id() == $user->id))
-{{--       <form action="{{ url('/users/' . $user->id . '/anonymize') }}" method="POST">
-        @csrf
-        @method('PUT') --}}
-        <button type="submit" data-url='{{url('')}}' data-user={{$user->id}} class="delete-account-button text-red-400 rounded-lg px-4 py-2 text-sm w-full text-start hover:bg-gray-700">
-          Delete My Account
-        </button>
-{{--       </form> --}}
+      <button type="submit" data-url='{{url('')}}' data-user={{$user->id}} class="delete-account-button text-red-400 rounded-lg px-4 py-2 text-sm w-full text-start hover:bg-gray-700">
+        Delete My Account
+      </button>
    @endif
    @if (Auth::check() and (Auth::id() == $user->id))
       <a href="{{ url('/logout') }}" class="text-gray-400 rounded-xl px-4 py-2 text-sm hover:bg-gray-700">Logout</a>
