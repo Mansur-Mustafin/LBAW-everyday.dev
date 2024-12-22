@@ -222,3 +222,28 @@ export const stripHtml = (html) => {
   div.innerHTML = html;
   return div.textContent || div.innerText || '';
 };
+
+export const handleDialog = (action,baseUrl, elementId) => {
+  const confirmPopup = document.getElementById('confirm-popup');
+  const confirmButton = document.getElementById('confirm-button');
+  const cancelButton = document.getElementById('cancel-button');
+
+  if (confirmPopup) {
+    confirmPopup.classList.remove('hidden');
+    confirmButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      confirmPopup.classList.add('hidden');
+      action(elementId, baseUrl);
+    });
+    cancelButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      confirmPopup.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key == 'Escape' && !confirmPopup.classList.contains('hidden')) {
+        confirmPopup.classList.add('hidden');
+      }
+    });
+  }
+};

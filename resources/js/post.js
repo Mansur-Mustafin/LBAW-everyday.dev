@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const serverError = document.getElementById('title-server-error');
   const titleError = document.getElementById('title-error');
 
-  titleInput.addEventListener('input', function () {
+  titleInput?.addEventListener('input', function () {
     serverError?.classList.add('hidden');
     titleError?.classList.add('hidden');
     titleInput.classList.remove('border-red-500');

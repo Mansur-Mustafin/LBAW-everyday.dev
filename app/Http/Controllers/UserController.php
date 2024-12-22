@@ -108,30 +108,21 @@ class UserController extends Controller
         try {
             $user->delete();
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => "You have successfully deleted a user! {$user->username}",
-                ]);
+            if($user->id == Auth::id()) {
+                Auth::logout();
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
             }
-
-            Auth::logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('news.recent')
-                ->withSuccess('You have deleted your account successfully!');
+            return response()->json([
+                'success' => true,
+                'message' => "You have successfully deleted a user! {$user->username}",
+            ]);
         } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'An error occurred while deleting the user. Please try again later.',
-                ]);
-            }
-
-            return redirect()->back()
-                ->withErrors('error', 'An error occurred while deleting your account. Please try again later.');
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting the user. Please try again later.',
+            ]);
         }
     }
 }
