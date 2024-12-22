@@ -11,7 +11,7 @@ class TagProposalController extends Controller
 {
     public function showCreationForm()
     {
-        return view('pages.create-tag-proposal');
+        return view('pages.tags.create-tag-proposal');
     }
 
     public function show()
@@ -21,9 +21,6 @@ class TagProposalController extends Controller
 
     public function store(Request $request)
     {
-        // TODO: Create Policy
-        // $this->authorize('store',$tag_proposal');
-
         $validated = $request->validate([
             'name' => 'required|string|max:250',
             'description' => 'required|string|max:1000',
@@ -38,7 +35,7 @@ class TagProposalController extends Controller
         }
 
         TagProposal::create([
-            'name'        => $validated['name'],
+            'name' => $validated['name'],
             'description' => $validated['description'],
             'is_resolved' => false,
             'proposer_id' => Auth::id()

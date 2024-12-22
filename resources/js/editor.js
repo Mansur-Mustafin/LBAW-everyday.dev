@@ -58,7 +58,7 @@ if (createForm) {
     .querySelector('.ql-toolbar')
     .classList.add('rounded-xl', '!p-4', 'my-4', '!border-1', '!border-gray-700'); // styles the toolbar, ! is important to override the default styles
 
-  document.querySelector('.ql-editor').innerHTML = document.querySelector('#old-content').value; // TODO: check this!
+  document.querySelector('.ql-editor').innerHTML = document.querySelector('#old-content').value;
 
   // this is the second submit event listener to this form and is the one that submits it.
   // it iterates through all images and replaces the src path to the one created when the image is uploaded.

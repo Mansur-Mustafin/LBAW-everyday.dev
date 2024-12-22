@@ -5,7 +5,7 @@
 <body class="bg-background text-white">
     <main class="flex flex-col h-screen">
         @include('layouts.header')
-        @include('partials.notification-container')
+        @include('partials.notification.notification-container')
 
         <div class="flex flex-grow">
 

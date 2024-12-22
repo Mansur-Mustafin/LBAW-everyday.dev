@@ -53,9 +53,9 @@ trait PaginationTrait
         }
 
         return response()->json([
-            'news_posts' => view('partials.posts', ['news_posts' => $newsPosts])->render(),
-            'next_page'  => $newsPosts->currentPage() + 1,
-            'last_page'  => $newsPosts->lastPage()
+            'news_posts' => view('partials.post.posts', ['news_posts' => $newsPosts])->render(),
+            'next_page' => $newsPosts->currentPage() + 1,
+            'last_page' => $newsPosts->lastPage()
         ]);
     }
 
