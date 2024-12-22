@@ -38,7 +38,7 @@
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
-        <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" type="file" id="realFileInput" name="image" accept=".png, .jpg, .jpeg, .gif">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <h3 class="font-bold text-lg flex-1">User Information</h3>
@@ -83,7 +83,8 @@
             <label class="font-bold text-sm mb-2">New Password</label>
             <input name="new_password" type="password" class="rounded-2xl bg-input outline-none p-3 text-sm"
                 placeholder="New Password*">
-            <span class="toggle-password material-icons cursor-pointer absolute inset-y-8 right-3 text-gray-500">
+            <span title="change visibility"
+                class="toggle-password material-icons cursor-pointer absolute inset-y-9 right-3 text-gray-500">
                 visibility_off
             </span>
             @error('new_password')
@@ -123,7 +124,7 @@
                     <div class="flex flex-col relative w-full"> {{-- Muito mal feito, no futuro refaco --}}
                         <input name="adm_password" type="password" class="rounded-2xl bg-input outline-none p-3 text-sm"
                             placeholder="Administrative Password*">
-                        <span
+                        <span title="change visibility"
                             class="toggle-password material-icons cursor-pointer absolute inset-y-3 right-3 text-gray-500">
                             visibility_off
                         </span>

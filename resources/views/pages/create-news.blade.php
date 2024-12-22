@@ -13,15 +13,15 @@
         @csrf
         <label class="text-sm font-medium text-gray-300">Title Image</label>
         <div class="flex mt-4 mb-5" id="edit-image">
-            <button class="hidden rounded flex justify-center m-5" id="personalizedFileInput"
+            <button class="hidden rounded flex justify-center" id="personalizedFileInput"
                 title="Click to upload new Image">
                 <img class="rounded-full w-48 h-48 object-cover border-2 border-white" src="" alt="Current Title Image">
             </button>
-            <button class="bg-input rounded-3xl px-6 py-8 w-40 min-h-28" id="buttonAddImage"
+            <button class="bg-input rounded-3xl px-6 py-8 w-40 min-h-28 text-sm" id="buttonAddImage"
                 title="Click to upload new Image">
-                Upload Post Title Image
+                Upload image
             </button>
-            <button id="deleteThumbnail" class="self-start hidden">
+            <button id="deleteThumbnail" class="self-start hidden" title="delete image">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-circle-x">
@@ -31,7 +31,7 @@
                 </svg>
             </button>
         </div>
-        <input class="hidden" type="file" id="realFileInput" name="image">
+        <input class="hidden" type="file" id="realFileInput" name="image" accept=".png, .jpg, .jpeg, .gif">
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <div class="flex flex-col gap-2">

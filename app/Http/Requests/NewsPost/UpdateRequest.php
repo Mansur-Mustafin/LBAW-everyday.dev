@@ -18,7 +18,7 @@ class UpdateRequest extends FormRequest
             ],
             'content' => 'required|string',
             'for_followers' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image',
             'tags' => 'nullable|string',
             'remove_image' => 'required|string',
             'content_images' => 'nullable|string'
