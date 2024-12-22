@@ -15,16 +15,16 @@
         <h3 class="font-bold text-lg flex-1">Tag Proposal Information</h3>
 
         <div class="flex flex-col">
-            <label class="font-bold text-sm mb-2">Tag</label>
-            <input name="name" class="rounded-2xl bg-input outline-none p-3 text-sm" placeholder="Name*" value="">
+            <label class="font-bold text-sm mb-2" for="name">Tag</label>
+            <input name="name" id="name" class="rounded-2xl bg-input outline-none p-3 text-sm" placeholder="Name*" value="">
             @error('name')
                 <span class="text-red-400 text-sm">{{ $message }}</span>
             @enderror
         </div>
 
         <div class="flex flex-col">
-            <label class="font-bold text-sm mb-2">Why this tag?</label>
-            <input name="description" class="rounded-2xl bg-input outline-none p-3 text-sm" placeholder="Description*"
+            <label class="font-bold text-sm mb-2" for="description">Why this tag?</label>
+            <input name="description" id="description" class="rounded-2xl bg-input outline-none p-3 text-sm" placeholder="Description*"
                 value="">
             @error('description')
                 <span class="text-red-400 text-sm">{{ $message }}</span>

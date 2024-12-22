@@ -36,6 +36,7 @@
                 </div>
 
                 <div class="flex flex-col mb-2">
+                    <label for="email"></label>
                     <input id="email" 
                         type="email" 
                         name="email" 
@@ -53,6 +54,7 @@
                 </div>
 
                 <div class="flex flex-col relative w-full mb-7">
+                    <label for="password"></label>
                     <input id="password" 
                         type="password" 
                         name="password" 

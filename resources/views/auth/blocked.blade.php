@@ -18,12 +18,15 @@
                 <form method="POST" action="{{ route('unblock.create') }}" id="blockedForm">
                     @csrf
                     <h2 class="text-2xl font-bold mb-4 text-center">Why should you be unbanned?</h2>
-                    <div class="flex flex-col mb-2">
-                        <textarea form="blockedForm" id="description" name="description" rows="5" class="text-black outline-none rounded m-1 p-2" autofocus></textarea>
-                        @error('description')
-                            <span class="text-red-400 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <label >
+                        Reason:
+                        <div class="flex flex-col mb-2">
+                            <textarea form="blockedForm" id="description" name="description" rows="5" class="text-black outline-none rounded m-1 p-2" autofocus></textarea>
+                            @error('description')
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </label>
                     <div class="flex items-center justify-end mb-4 gap-2">
                         <a href="{{ url('logout') }}"
                             class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
