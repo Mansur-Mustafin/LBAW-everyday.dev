@@ -84,7 +84,7 @@
             </button>
 
             <button class="reportPost-button flex group items-center cursor-pointer ml-3" data-post-id="{{ $post->id }}">
-                <div class="p-2 rounded-xl group-hover:text-purple-700 group-hover:bg-purple-700 group-hover:bg-opacity-50">
+                <div class="p-2 rounded-xl group-hover:text-yellow-700 group-hover:bg-yellow-700 group-hover:bg-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-flag">
@@ -92,7 +92,7 @@
                         <path d="M3 3h11l4 5-4 5H3" />
                     </svg>
                 </div>
-                <label class="hidden tablet:inline group-hover:text-purple-700 cursor-pointer">Report</label>
+                <label class="hidden tablet:inline group-hover:text-yellow-700 cursor-pointer">Report</label>
             </button>
         </div>
 
@@ -119,7 +119,7 @@
                                 data-post-id="{{ $post->id }}">
                             Cancel
                         </button>
-                        <button type="submit" class="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800">
+                        <button type="submit" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
                             Submit
                         </button>
                     </div>
