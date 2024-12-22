@@ -1,4 +1,4 @@
-import { copyToClipboard, sendAjaxRequest, transformLoadingButton,showMessage } from './utils.js';
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton, showMessage } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
@@ -37,7 +37,7 @@ if (omitSection) {
   const baseUrl = omitSection.dataset.url;
   const postId = omitSection.dataset.post;
 
-  const omitCard = document.getElementById('omit-post-card')
+  const omitCard = document.getElementById('omit-post-card');
 
   omitButtons.forEach((omitButton) => {
     omitButton.addEventListener('click', () => {
@@ -45,22 +45,22 @@ if (omitSection) {
       omitButton.classList.add('hidden');
       unomitButtons.forEach((unomitButton) => {
         unomitButton.classList.remove('hidden');
-      })
+      });
       const url = `${baseUrl}/news/${postId}/omit`;
       sendAjaxRequest(url, (_data) => {}, 'PUT');
     });
-  })
+  });
   unomitButtons.forEach((unomitButton) => {
     unomitButton.addEventListener('click', () => {
       omitCard.classList.add('hidden');
       omitButtons.forEach((unomitButton) => {
         unomitButton.classList.remove('hidden');
-      })
+      });
       unomitButton.classList.add('hidden');
       const url = `${baseUrl}/news/${postId}/unomit`;
       sendAjaxRequest(url, (_data) => {}, 'PUT');
     });
-  })
+  });
 }
 
 // Create Post
@@ -130,6 +130,11 @@ if (editForm) {
     const editSection = document.getElementById('edit-section');
     const selectedTags = document.getElementById('selectedTags');
     const tagSelector = document.getElementById('tagSelector');
+    const postPopups = document.querySelectorAll('.post-popup');
+
+    postPopups.forEach((e) => {
+      e.classList.replace('opacity-100', 'opacity-0');
+    });
 
     displaySection.classList.toggle('hidden');
     editSection.classList.toggle('hidden');
