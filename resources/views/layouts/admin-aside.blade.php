@@ -5,7 +5,7 @@ $page = end($urlParts);
 <aside class="p-5 border-r border-solid border-gray-700 h-full w-16 laptop:min-w-56">
     <div class="sticky top-[6rem] flex flex-col items-center laptop:items-start gap-1">
         <a href="{{ route('admin.dashboard') }}"
-            class="flex p-2 rounded-md hover:bg-gray-700 items-center {{ $page == 'dashboard' ? 'bg-gray-800' : '' }} gap-2">
+            class="flex p-2 w-full rounded-md hover:bg-gray-700 items-center {{ $page == 'admin' ? 'bg-gray-800' : '' }} gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-circle-gauge">
@@ -16,7 +16,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Dashboard</span>
         </a>
         <a href="{{ route('admin.users') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 items-center {{ $page == 'users' ? 'bg-gray-800' : '' }} gap-2">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 items-center {{ $page == 'users' ? 'bg-gray-800' : '' }} gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users">
@@ -28,7 +28,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Users</span>
         </a>
         <a href="{{ route('admin.tags') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'tags' ? 'bg-gray-800' : '' }}">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'tags' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-tags">
@@ -40,7 +40,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Tags</span>
         </a>
         <a href="{{ route('admin.tag_proposals') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'tag_proposals' ? 'bg-gray-800' : '' }}">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'tag_proposals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-hand-helping">
@@ -51,7 +51,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Tag Proposals</span>
         </a>
         <a href="{{ route('admin.unblock_appeals') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'unblock_appeals' ? 'bg-gray-800' : '' }}">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'unblock_appeals' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-message-square-lock">
@@ -62,7 +62,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Unblock Appeals</span>
         </a>
         <a href="{{ route('admin.omitted_posts') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'omitted_posts' ? 'bg-gray-800' : '' }}">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'omitted_posts' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-pencil-off">
@@ -75,7 +75,7 @@ $page = end($urlParts);
             <span class="hidden laptop:block">Hidden Posts</span>
         </a>
         <a href="{{ route('admin.omitted_comments') }}"
-            class="laptop:flex block p-2 rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'omitted_comments' ? 'bg-gray-800' : '' }}">
+            class="laptop:flex block p-2 w-full rounded-md hover:bg-gray-700 gap-2 items-center {{ $page == 'omitted_comments' ? 'bg-gray-800' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-message-circle-off">

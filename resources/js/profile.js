@@ -1,3 +1,5 @@
+import { handleDialog, sendAjaxRequest, showMessage } from './utils'
+
 const profileOptions = document.getElementById('profile-options');
 const profileOptionsPopup = document.getElementById('profile-options-popup');
 
@@ -10,3 +12,19 @@ profileOptions?.addEventListener('click', (event) => {
     profileOptionsPopup.classList.add('opacity-0', 'pointer-events-none');
   }
 });
+
+
+const deleteAccountButtons = document.querySelectorAll('.delete-account-button')
+deleteAccountButtons.forEach((deleteAccountButton) => {
+  const baseUrl = deleteAccountButton.dataset.url
+  const userId  = deleteAccountButton.dataset.user
+  const url = baseUrl + '/users/' + userId + '/anonymize'
+  deleteAccountButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    const deleAccountAction = () => {
+      sendAjaxRequest(url,(data) => {showMessage(data.message)},'PUT')
+      location.reload()
+    }
+    handleDialog(deleAccountAction,baseUrl,userId)
+  })
+})

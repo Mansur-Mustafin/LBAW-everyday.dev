@@ -33,7 +33,7 @@ if (statsDiv) {
             </div>
             <div class="bg-input flex flex-col rounded-lg p-3 w-40">
                 <p class="text-sm">Hidden Comments</p>
-                <p class="text-3xl text-gray-400">${data.omitted_posts}</p>
+                <p class="text-3xl text-gray-400">${data.omitted_comments}</p>
             </div>
         `;
         }
