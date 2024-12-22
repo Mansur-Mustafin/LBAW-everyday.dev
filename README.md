@@ -4,8 +4,15 @@
 
 ## How to run the project
 
-To run the project, use ```./start.sh```to intialize everything for you.
-Alternatively, you can start the database and the mail server using ```docker-compose up -d```.
+To run the project, use `./start.sh` to intialize everything for you.
+
+Alternatively, you can start the database and using `docker-compose up -d`.
+
+To start the Docker image, execute the following command:
+
+```bash
+docker run -d --name lbaw2441 -p 8001:80 gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24041
+```
 
 ## Project credentials
 
