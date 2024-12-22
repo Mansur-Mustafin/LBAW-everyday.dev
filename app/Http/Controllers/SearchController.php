@@ -112,10 +112,14 @@ class SearchController extends Controller
             'reporter.username as reporter_username',
             'reported.id as reported_user_id',
             'reported.username as reported_username',
-            'reported.status as reported_status'
+            'reported.status as reported_status',
+            'comment.content as comment_content',
+            'news_post.title as post_title'
         )
             ->leftJoin('user as reporter', 'reporter.id', '=', 'report.reporter_id')
             ->leftJoin('user as reported', 'reported.id', '=', 'report.reported_user_id')
+            ->leftJoin('comment', 'comment.id', '=', 'report.comment_id')
+            ->leftJoin('news_post', 'news_post.id', '=', 'report.news_post_id')
             ->whereRaw("LOWER(reporter.username) like ?", [$searchQuery])
             ->orWhereRaw("LOWER(reported.username) like ?", [$searchQuery]);
 
