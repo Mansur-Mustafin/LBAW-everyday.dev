@@ -9,7 +9,7 @@ const deleteTagProposal = async (tagProposalId, baseUrl) => {
     `${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`,
     (_data) => {},
     'DELETE'
-  ); // TODO: tem data?
+  );
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');

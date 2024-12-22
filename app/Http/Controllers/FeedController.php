@@ -40,7 +40,6 @@ class FeedController extends Controller
 
     public function getMyFeed(Request $request)
     {
-        // TODO:: check maybe has different variant
         /** @var User $user */
         $user = Auth::user();
 

@@ -95,7 +95,6 @@ class User extends Authenticatable
         return $this->tags()->pluck('name')->toArray();
     }
 
-    // TODO: para o que isso serve?
     public function isAdmin(): bool
     {
         return $this->is_admin == true;
