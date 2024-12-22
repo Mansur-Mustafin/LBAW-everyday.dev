@@ -9,6 +9,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta property="og:title" content="everyday.dev - Where the news meet the devs" />
+    <meta property="og:link" content="#" />
+    <meta property="og:image" content="https://fastly.picsum.photos/id/1056/200/200.jpg?hmac=BpHmd2Nrxgn5zfvO7PpucBxqHz3jz2foKNNSFK1VG40" /> 
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <script>
