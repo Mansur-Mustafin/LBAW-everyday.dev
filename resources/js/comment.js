@@ -207,7 +207,6 @@ function addButtonsBehaviour() {
         url,
         (data) => {
           // sendAjaxRequest catches errors
-          console.log(data);
           const omitComment = document.getElementById('omit-comment-' + comment_id);
           const unOmitComment = document.getElementById('unomit-comment-' + comment_id);
 
@@ -232,7 +231,6 @@ function addButtonsBehaviour() {
       sendAjaxRequest(
         url,
         (data) => {
-          console.log(data);
           // sendAjaxRequest catches errors
           const omitComment = document.getElementById('omit-comment-' + comment_id);
           const unOmitComment = document.getElementById('unomit-comment-' + comment_id);

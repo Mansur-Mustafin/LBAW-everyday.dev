@@ -49,7 +49,6 @@ if (createForm) {
   });
 
   document.addEventListener('keydown', function (e) {
-    console.log(e.target);
     if (e.key === 'Escape') {
       e.target.blur();
     }
@@ -81,8 +80,6 @@ if (createForm) {
       .map((image) => 'post/' + image.src.split('post/')[1])
       .join(',');
 
-    console.log(content_images_create.value);
-
     content_create.value = quill.root.innerHTML; // stores the html in a hidden input to send to laravel
 
     createForm.submit();
@@ -98,7 +95,6 @@ if (editForm) {
   });
 
   document.addEventListener('keydown', function (e) {
-    console.log(e.target);
     if (e.key === 'Escape') {
       e.target.blur();
     }
@@ -169,9 +165,7 @@ async function uploadImage(source) {
     if (response.ok) {
       return response.json();
     }
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 const validateForm = async (createForm, isUpdate, postId = null) => {
@@ -205,8 +199,6 @@ const checkTitleAvailability = (title, isUpdate, postId = null) => {
     if (isUpdate && postId) {
       payload.post_id = postId;
     }
-
-    console.log(payload);
 
     sendAjaxRequest(
       '/check-title',

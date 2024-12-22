@@ -29,7 +29,6 @@
       const popup = document.getElementById(popupId);
       if (popup) {
         const closeButton = popup.querySelector('button');
-        console.log(popup);
 
         setTimeout(() => dismissPopUp(popup), 4000);
         closeButton.addEventListener('click', () => dismissPopUp(popup));
@@ -37,7 +36,6 @@
     }
 
     const dismissPopUp = (popup) => {
-      console.log(popup);
 
       popup.classList.replace('animate-slide-in', 'animate-slide-out');
       popup.addEventListener('animationend', () => popup.remove(), {

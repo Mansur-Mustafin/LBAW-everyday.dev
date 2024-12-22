@@ -52,7 +52,6 @@ const deleteUser = async (userId, baseUrl) => {
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data);
       showMessage(data.message);
     },
     'PUT'
@@ -319,7 +318,6 @@ const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
         if (!userCard.classList.contains('hidden')) {
           deleteUser(userId, baseUrl);
           userCard.classList.add('hidden');
-          console.log('deleted user:' + userId);
         }
       };
       handleDialog(actionDelete, baseUrl, userId);
@@ -407,7 +405,6 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
 const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
   resultDiv.addEventListener('click', (event) => {
     const targetUnomit = event.target.closest('.unomit-post-button');
-    console.log(targetUnomit);
     if (targetUnomit) {
       event.preventDefault();
       const unomitPostId = targetUnomit.id.split('-unomit-post-button')[0];
@@ -426,7 +423,6 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
 const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
   resultDiv.addEventListener('click', (event) => {
     const targetUnomit = event.target.closest('.unomit-comment-button');
-    console.log(targetUnomit);
     if (targetUnomit) {
       event.preventDefault();
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
@@ -514,40 +510,34 @@ const omittedCommentsDiv = document.getElementById('admin-search-omitted-comment
 
 // Build Cards
 if (usersDiv) {
-  console.log(usersDiv);
   const baseQuery = baseUrl + '/api/search/users/';
   addInfinitePageBehaviour(baseQuery, buildUserCard, usersDiv);
   addUserButtons(baseQuery, buildUserCard, usersDiv);
 }
 if (tagsDiv) {
-  console.log(tagsDiv);
   const baseQuery = baseUrl + '/api/search/tags/';
   addInfinitePageBehaviour(baseQuery, buildTagCard, tagsDiv);
   addTagButtons(baseQuery, buildTagCard, tagsDiv);
 }
 if (tagProposalsDiv) {
-  console.log(tagProposalsDiv);
   const baseQuery = baseUrl + '/api/search/tag_proposals/';
   addInfinitePageBehaviour(baseQuery, buildTagProposalCard, tagProposalsDiv);
   addTagProposalButtons(baseQuery, buildTagProposalCard, tagProposalsDiv);
 }
 
 if (unblockAppealsDiv) {
-  console.log(unblockAppealsDiv);
   const baseQuery = baseUrl + '/api/search/unblock_appeals/';
   addInfinitePageBehaviour(baseQuery, buildUnblockAppealCard, unblockAppealsDiv);
   addUnblockAppealButtons(baseQuery, buildUnblockAppealCard, unblockAppealsDiv);
 }
 
 if (omittedPostsDiv) {
-  console.log(omittedPostsDiv);
   const baseQuery = baseUrl + '/api/search/omitted_posts/';
   addInfinitePageBehaviour(baseQuery, buildOmittedPost, omittedPostsDiv);
   addUnomitPostButtons(baseQuery, buildOmittedPost, omittedPostsDiv);
 }
 
 if (omittedCommentsDiv) {
-  console.log(omittedCommentsDiv);
   const baseQuery = baseUrl + '/api/search/omitted_comments/';
   addInfinitePageBehaviour(baseQuery, buildOmittedComment, omittedCommentsDiv);
   addUnomitCommentButtons(baseQuery, buildOmittedComment, omittedCommentsDiv);

@@ -48,7 +48,6 @@ function addBookmark(postId, container) {
 }
 
 function removeBookmark(postId, container) {
-  console.log(`/bookmark/${postId}`);
   sendAjaxRequest(
     `/bookmark/${postId}`,
     (data) => {
