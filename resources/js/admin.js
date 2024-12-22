@@ -46,6 +46,16 @@ const deleteReport = async (reportId, baseUrl) => {
   );
 };
 
+const omitPost = async (postId, baseUrl) => {
+  const url = `${baseUrl}/news/${postId}/omit`;
+  sendAjaxRequest(url, (_data) => {}, 'PUT');
+};
+
+const omitComment = async (commentId, baseUrl) => {
+  const url = `${baseUrl}/comments/${commentId}/omit`;
+  sendAjaxRequest(url, (_data) => {}, 'POST');
+};
+
 const unOmitPost = async (postId, baseUrl) => {
   const url = `${baseUrl}/news/${postId}/unomit`;
   sendAjaxRequest(url, (_data) => {}, 'PUT');
@@ -245,9 +255,9 @@ const buildReportCard = (report) => {
     switch (report.report_type) {
       case 'PostReport':
         return `
-          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+          <a href="" id="${report.id}-${report.news_post_id}-omitPost-button" class="omitPost-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400" data-baseurl="${baseUrl}">
             Omit Post
-          </button>
+          </a>
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
@@ -257,9 +267,9 @@ const buildReportCard = (report) => {
         `;
       case 'CommentReport':
         return `
-          <button class="px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
+          <a href="" id="${report.id}-${report.comment_id}-omitComment-button" class="omitComment-button px-2 py-1 text-gray-700 bg-gray-200 rounded-lg hover:bg-red-400">
             Omit Comment
-          </button>
+          </a>
           <a href="" id="${report.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-400">
               <path d="M18 6 6 18"/>
@@ -609,6 +619,34 @@ const addReportButtons = (baseQuery, buildFunction, resultDiv) => {
         }
       }
       handleDialog(actionDeleteUser, baseUrl, reportId);
+    }
+    const targetOmitPost = event.target.closest('.omitPost-button');
+    if(targetOmitPost) {
+      event.preventDefault();
+      const [reportId, postId] = targetOmitPost.id.split('-omitPost-button')[0].split('-');
+      const actionOmitPost = () => {
+        const reportCard = document.getElementById(reportId + '-card');
+        if (!reportCard.classList.contains('hidden')) {
+          omitPost(postId, baseUrl);
+          deleteReport(reportId, baseUrl);
+          reportCard.classList.add('hidden');
+        }
+      }
+      handleDialog(actionOmitPost, baseUrl, reportId);
+    }
+    const targetOmitComment = event.target.closest('.omitComment-button');
+    if(targetOmitComment) {
+      event.preventDefault();
+      const [reportId, commentId] = targetOmitComment.id.split('-omitComment-button')[0].split('-');
+      const actionOmitComment = () => {
+        const reportCard = document.getElementById(reportId + '-card');
+        if (!reportCard.classList.contains('hidden')) {
+          omitComment(commentId, baseUrl);
+          deleteReport(reportId, baseUrl);
+          reportCard.classList.add('hidden');
+        }
+      }
+      handleDialog(actionOmitComment, baseUrl, reportId);
     }
   });
 };
