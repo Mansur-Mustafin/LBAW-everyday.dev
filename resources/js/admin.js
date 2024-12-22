@@ -313,7 +313,7 @@ const buildReportCard = (report) => {
       <div id="${report.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
         <div class="flex flex-col flex-grow">
           <h1 class="text-xl">
-            ${new Date(report.created_at).toLocaleDateString()}
+            ${new Date(report.created_at).toLocaleDateString('pt-PT')}
           </h1>
         
           <p class="text-sm mb-3">
@@ -327,17 +327,17 @@ const buildReportCard = (report) => {
             }</span>
             ${
               report.news_post_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Post ID: ${report.news_post_id}</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Post: ${report.post_title}</span>`
                 : ''
             }
             ${
               report.comment_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Comment ID: ${report.comment_id}</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">Comment: "${report.comment_content}"</span>`
                 : ''
             }
             ${
               report.reported_user_id
-                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">User ID: ${report.reported_user_id}</span>`
+                ? `<span class="bg-gray-200 px-2 py-1 rounded-lg">User: ${report.reported_username}</span>`
                 : ''
             }
           </div>
@@ -556,10 +556,14 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
     if (targetUnomit) {
       event.preventDefault();
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
-      unOmitComment(unomitCommentId, baseUrl);
-      const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-      omittedCommentCard.classList.add('hidden');
-      //reloadData(baseQuery,buildFunction,resultDiv)
+      const actionUnomitComment = () => {
+        const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
+        if (omittedCommentCard.classList.contains('hidden')) {
+          unOmitComment(unomitCommentId, baseUrl);
+          omittedCommentCard.classList.add('hidden');
+        }
+      };
+      handleDialog(actionUnomitComment, baseUrl, unomitCommentId);
     }
   });
 };
@@ -661,12 +665,6 @@ const unblockAppealsDiv = document.getElementById('admin-search-unblock-appeals-
 const reportsDiv = document.getElementById('admin-search-reports-results');
 const omittedPostsDiv = document.getElementById('admin-search-omitted-posts-results');
 const omittedCommentsDiv = document.getElementById('admin-search-omitted-comments-results');
-
-const reloadData = (baseQuery, buildFunction, resultDiv) => {
-  resultDiv.innerHTML = '';
-  page = 1;
-  build(baseQuery, buildFunction, resultDiv);
-};
 
 // Build Cards
 if (usersDiv) {

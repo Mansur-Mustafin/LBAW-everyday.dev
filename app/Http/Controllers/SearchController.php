@@ -9,7 +9,6 @@ use App\Models\TagProposal;
 use App\Models\UnblockAppeal;
 use App\Models\User;
 use App\Models\Report;
-use App\Models\Comment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 

@@ -20,6 +20,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
 use App\Http\Controllers\UnblockAppealController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StatisticPageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
