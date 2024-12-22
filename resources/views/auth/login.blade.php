@@ -17,6 +17,8 @@
 
         <div class="md:w-1/2 p-8 w-full">
             <form method="POST" action="{{ route('login') }}" novalidate class="group">
+                <fieldset>
+                <legend class="hidden">Login Credencials</legend>
                 {{ csrf_field() }}
 
                 <h2 class="text-2xl font-bold mb-4 text-center">Log in</h2>
@@ -122,6 +124,7 @@
                     <a href="{{ route('register') }}" class="text-white underline">Register</a>
                     <p><a href="{{ route('recover.form') }}" class="text-white underline">Forgot Password?</a></p>
                 </div>
+                </fieldset>
             </form>
         </div>
     </div>

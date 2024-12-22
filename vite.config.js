@@ -9,6 +9,7 @@ export default defineConfig({
       input: [
         'resources/css/app.css',
         'resources/js/auth.js',
+        'resources/js/app.js',
         'resources/js/edit-image.js',
         'resources/js/infinite-page.js',
         'resources/js/search.js',
