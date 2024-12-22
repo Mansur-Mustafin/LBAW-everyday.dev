@@ -1,7 +1,7 @@
 <aside
     class="relative border-r border-solid border-gray-700 w-16 min-w-16 laptop:min-w-56 p-5 flex flex-col items-center laptop:items-start gap-1 top-[4.93rem]">
-    <div class="fixed top-[6rem] flex flex-col gap-1 items-center laptop:items-start">
-        <a href="{{ route('news.recent') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+    <div class="fixed w-48 top-[6rem] flex flex-col gap-1 items-center laptop:items-start">
+        <a href="{{ route('news.recent') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-clock">
@@ -11,7 +11,7 @@
             <span class="hidden laptop:block">Recent News</span>
         </a>
         @if (Auth::check())
-            <a href="{{ route('news.my') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+            <a href="{{ route('news.my') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-house">
@@ -24,7 +24,7 @@
 
             {{-- <div class="border-2 rounded-xl border-gray-500 w-9/12 my-3"></div> --}}
 
-            <a href="{{ route('news.bookmark') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center">
+            <a href="{{ route('news.bookmark') }}" class="flex gap-2 p-2 rounded-md hover:bg-gray-700 items-center w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-bookmark-plus">
@@ -37,9 +37,9 @@
         @endif
     </div>
 
-    <div class="fixed bottom-3 flex flex-col gap-1 items-center laptop:items-start">
-        <a href="{{ route('contacts') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+    <div class="fixed w-48 bottom-3 flex flex-col gap-1 items-center laptop:items-start">
+        <a href="{{ route('contacts') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"z viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-notebook-tabs">
                 <path d="M2 6h4" />
@@ -54,7 +54,7 @@
             </svg>
             <span class="hidden laptop:block">Contacts</span>
         </a>
-        <a href="{{ route('about') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('about') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-users-round">
@@ -64,7 +64,7 @@
             </svg>
             <span class="hidden laptop:block">About us</span>
         </a>
-        <a href="{{ route('features') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2">
+        <a href="{{ route('features') }}" class="flex p-2 items-center rounded-md hover:bg-gray-700 gap-2 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="current"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-star">
