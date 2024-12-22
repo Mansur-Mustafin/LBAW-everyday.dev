@@ -66,11 +66,7 @@
                     <form class="mt-10 flex items-center" id="commentForm" data-auth="{{Auth::user() && Auth::user()->id}}">
                         <label for="comment"></label>
                         <input type="text" id="commentInput" data-post_id="{{ $post->id }}" data-thread="{{ $thread }}"
-<<<<<<< Updated upstream:resources/views/pages/news/post.blade.php
                             class="outline-none py-4 pl-4 pr-20 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
-=======
-                            class="outline-none p-4 w-full border border-solid border-gray-700 bg-input rounded-xl hover:border-white hover:border-opacity-70"
->>>>>>> Stashed changes:resources/views/pages/post.blade.php
                             placeholder="Share your thoughts" id="commentInput" /> 
                         <button class="-ml-20 px-5 py-2 rounded-xl" type="submit">Post</button>
                     </form>
