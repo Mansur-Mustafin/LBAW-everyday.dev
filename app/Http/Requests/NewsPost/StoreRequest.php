@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests\NewsPost;
 
-use App\Models\NewsPost;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator;
 
 class StoreRequest extends FormRequest
 {

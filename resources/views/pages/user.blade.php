@@ -125,9 +125,9 @@
                     </a>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="mr-4">{{ $user->rank }} <span class="text-gray-500">rank</span> </span>
+                    <span>{{ $user->rank }} <span class="text-gray-500">rank</span></span>
                     @if (Auth::check() and Auth::id() == $user->id || Auth::user()->is_admin)
-                        <span>{{ $user->reputation }} <span class="text-gray-500">reputation</span> </span>
+                        <span>{{ $user->reputation }} <span class="text-gray-500">reputation</span></span>
                     @endif
                 </div>
             </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
-use App\Http\Controllers\ChartController;
 use App\Http\Requests\Auth\AdminRegisterRequest;
 use App\Http\Requests\User\AdminUpdateRequest;
 use App\Models\User;
