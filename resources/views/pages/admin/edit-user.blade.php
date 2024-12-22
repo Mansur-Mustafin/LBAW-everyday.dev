@@ -13,6 +13,8 @@
         class="flex flex-col gap-4" id="admin-edit-profile">
         @csrf
         @method('PUT')
+        <fieldset>
+        <legend class="hidden">Personal Information</legend>
         <h3 class="font-bold text-lg flex-1">Profile Picture</h3>
 
         <div class="flex" id="edit-image">
@@ -86,24 +88,6 @@
             @enderror
         </div>
 
-
-        <div class="flex justify-between items-center">
-            {{-- CREATE TYPE UserStatus AS ENUM ('active', 'blocked', 'pending', 'deleted'); --}}
-            {{-- <div class="flex flex-col">
-                <label class="font-bold text-sm">User Status</label>
-                <select class="bg-input rounded-2xl p-3 w-40" id="tagSelector">
-                    <option selected disabled></option>
-                    <option value='active'>active</option>
-                    <option value='blocked'>blocked</option>
-                    <option value='pending'>pending</option>
-                    <option value='deleted'>deleted</option>
-                </select>
-                @error('user-status')
-                <span class="text-red-400 text-sm">{{ $message }}</span>
-                @enderror
-            </div> --}}
-        </div>
-
         <h3 class="font-bold text-lg flex-1">User Privilegies</h3>
 
         <div class="flex flex-col">
@@ -135,6 +119,7 @@
             <button class="loading-button text-input bg-white font-bold rounded-xl px-6 py-2"
                 type="submit">Save</button>
         </div>
+        <fieldset>
     </form>
 </section>
 @endsection

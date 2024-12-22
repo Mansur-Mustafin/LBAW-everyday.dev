@@ -15,6 +15,8 @@
         <div class="w-2/3 p-8">
             <form method="POST" action="{{ route('recover.reset') }}" id="registerForm" novalidate class="group">
                 @csrf
+                <fieldset>
+                <legend class="hidden">Passwords fields</legend>
                 <input type="hidden" name="token" value="{{ $token }}">
                 <input type="hidden" name="email" value="{{ $email }}">
 
@@ -72,7 +74,7 @@
                 @error('email')
                     <span class="text-red-400 text-sm">{{ $message }}</span>
                 @enderror
-
+                </fieldset>
             </form>
         </div>
     </div>    

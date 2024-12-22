@@ -13,7 +13,6 @@
                 <h1 class="text-3xl break-all laptop:break-normal max-w-40 tablet:max-w-96 laptop:max-w-full font-bold">
                     {{ $post->title }}
                 </h1>
-                
                 @if(Auth::check())
                 <div class="relative laptop:hidden" title="post options">
                     <button class="hover:bg-input p-2 rounded-xl post-options">
