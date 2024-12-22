@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Reset</title>
     <style>
-        /* TODO: */
         body {
             margin: 0;
             padding: 0;
@@ -82,8 +81,10 @@
     <div class="content">
         <h2>Profile Information Update</h2>
         <p>Hi {{$mailData['name']}},</p>
-        <p>We wanted to let you know that your profile information has been <strong>updated by an administrator</strong>. If you made this request, no further action is needed.</p>
-        <p>If you did not authorize these changes or notice any unexpected activity, please contact our support team immediately.</p>
+        <p>We wanted to let you know that your profile information has been <strong>updated by an
+                administrator</strong>. If you made this request, no further action is needed.</p>
+        <p>If you did not authorize these changes or notice any unexpected activity, please contact our support team
+            immediately.</p>
         <a href="{{ route('user.posts', $mailData['id']) }}" class="btn-reset">View Your Account</a>
         <p>Thanks,<br>The everyday.dev Team</p>
     </div>
