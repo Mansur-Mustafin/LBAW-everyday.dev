@@ -25,7 +25,7 @@
     <div class="flex gap-2">
         @if (Auth::check())
             {{-- Notifications --}}
-            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('notifications.index') }}"
+            <a class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('notifications.index') }}"
                 title="notifications">
                 <div class="w-6 h-6 rounded-md relative">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,11 +46,10 @@
                 </div>
             </a>
             @if (Auth::user()->isAdmin())
-                <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
-                    href="{{ url('/admin') }}">
+                <a class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block" href="{{ url('/admin') }}">
                     Dashboard
                 </a>
-                <a type="button" class="bg-white text-black rounded-xl p-2 font-bold laptop:hidden" href="{{ url('/admin') }}">
+                <a class="bg-white text-black rounded-xl p-2 font-bold laptop:hidden" href="{{ url('/admin') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-shield">
@@ -59,11 +58,11 @@
                     </svg>
                 </a>
             @endif
-            <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
+            <a class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
                 href="{{ route('news.create') }}">
                 New post
             </a>
-            <a type="button" class="bg-white text-black rounded-xl p-2 laptop:hidden " href="{{ route('news.create') }}">
+            <a class="bg-white text-black rounded-xl p-2 laptop:hidden " href="{{ route('news.create') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-plus">
@@ -71,8 +70,7 @@
                     <path d="M12 5v14" />
                 </svg>
             </a>
-            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
-                href="{{ route('user.posts', Auth::id()) }}">
+            <a class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('user.posts', Auth::id()) }}">
                 <img class="w-6 h-6 rounded-md" src="{{ Auth::user()->profileImage->url }}" alt="Profile Image">
             </a>
         @else
