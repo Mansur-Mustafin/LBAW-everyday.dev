@@ -1,5 +1,7 @@
 @extends('layouts.body.default')
 
+@section('title','Create News')
+
 @section('content')
 
 @include('partials.success-popup')
@@ -33,6 +35,7 @@
         <input class="hidden" id="fileRemoved" name="remove_image" value="false">
 
         <div class="flex flex-col gap-2">
+            <label for="title"></label>
             <input name="title" 
                 id="title" 
                 class="rounded-2xl bg-input outline-none p-3 @error('title') border border-red-500 @else  @enderror" 
