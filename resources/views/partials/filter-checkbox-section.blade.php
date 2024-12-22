@@ -22,14 +22,14 @@
             </div>
         @endif
 
-        <h2 class="hidden text-sm" id="no-tags">No tags matched your search</h2>
+        <h2 class="no-tags hidden text-sm">No tags matched your search</h2>
 
         @foreach ($items as $key => $item)
             @if ($key < 6)
                 <div class="ml-1 list-element flex items-center">
                     <label class="text-sm font-medium text-gray-300 hover:text-white transition">
                         <input type="checkbox" value="{{$item}}" name="{{$name}}"
-                            class="form-checkbox w-4 h-4 text-purple rounded ring-offset-gray-800 bg-gray-700 border-gray-600   " />
+                            class="form-checkbox w-4 h-4 text-purple rounded ring-offset-gray-800 bg-gray-700 border-gray-600">
                         &nbsp;{{$item}}
                     </label>
                 </div>
@@ -44,7 +44,7 @@
                         <div class="ml-1 list-element flex items-center">
                             <label class="text-sm font-medium text-gray-300 hover:text-white transition">
                                 <input type="checkbox" value="{{$item}}" name="{{$name}}"
-                                    class="form-checkbox w-4 h-4 text-purple rounded ring-offset-gray-800 bg-gray-700 border-gray-600" />
+                                    class="form-checkbox w-4 h-4 text-purple rounded ring-offset-gray-800 bg-gray-700 border-gray-600">
                                 &nbsp;{{$item}}
                             </label>
                         </div>
