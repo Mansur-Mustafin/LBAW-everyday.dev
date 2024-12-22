@@ -13,12 +13,8 @@
                 <h1 class="text-3xl break-all tablet:break-normal max-w-52 tablet:max-w-full font-bold">
                     {{ $post->title }}
                 </h1>
-<<<<<<< HEAD
-                <div class="relative laptop:hidden" title="post options">
-=======
                 @if(Auth::check())
-                <div class="relative laptop:hidden">
->>>>>>> main
+                <div class="relative laptop:hidden" title="post options">
                     <button class="hover:bg-input p-2 rounded-xl post-options">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
