@@ -351,7 +351,7 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       const tagProposalId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptTagProposal = () => {
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        if (tagproposalcard.classList.contains('hidden')) {
+        if (!tagproposalcard.classList.contains('hidden')) {
           acceptTagProposal(tagProposalId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
@@ -394,7 +394,7 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       const unblockAppealId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteUnblockAppeal = () => {
         const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        if (tagproposalcard.classList.contains('hidden')) {
+        if (!tagproposalcard.classList.contains('hidden')) {
           deleteUnblockAppeal(unblockAppealId, baseUrl);
           tagproposalcard.classList.add('hidden');
         }
@@ -419,7 +419,6 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
         }
       };
       handleDialog(actionUnomitPost, baseUrl, unomitPostId);
-      //reloadData(baseQuery,buildFunction,resultDiv)
     }
   });
 };
@@ -433,7 +432,7 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
       const actionUnomitComment = () => {
         const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-        if (omittedCommentCard.classList.contains('hidden')) {
+        if (!omittedCommentCard.classList.contains('hidden')) {
           unOmitComment(unomitCommentId, baseUrl);
           omittedCommentCard.classList.add('hidden');
         }
