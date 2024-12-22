@@ -1,5 +1,7 @@
 @extends('layouts.body.default')
 
+@section('title','Create Tag')
+
 @section('content')
 
 @include('partials.success-popup')

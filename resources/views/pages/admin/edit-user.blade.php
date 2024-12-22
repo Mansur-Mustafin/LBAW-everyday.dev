@@ -1,5 +1,7 @@
 @extends('layouts.body.default')
 
+@section('title','Edit User Admin')
+
 @section('content')
 
 @include('partials.success-popup')

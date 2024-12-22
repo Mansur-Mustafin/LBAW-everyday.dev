@@ -2,6 +2,8 @@
 
 @include('partials.success-popup')
 
+@section('title','Notifications')
+
 @section('content')
 <section
     class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
