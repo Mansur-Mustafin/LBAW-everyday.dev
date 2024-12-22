@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\NewsPost;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
