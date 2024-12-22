@@ -1,6 +1,7 @@
 @extends('layouts.body.single-form')
 
 @include('partials.success-popup')
+
 @section('content')
 <div class="flex items-center justify-center">
     <div class="flex items-center justify-center md:flex-row rounded-2xl shadow-2xl shadow-gray-900 max-w-4xl w-full overflow-hidden">

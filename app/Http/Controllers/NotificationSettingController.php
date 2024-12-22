@@ -17,15 +17,25 @@ class NotificationSettingController extends Controller
             'comment' => 'boolean',
         ]);
 
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        NotificationSetting::where('user_id', $user->id)->update([
-            'follow_notifications' => $validated['follow'],
-            'vote_notifications' => $validated['vote'],
-            'post_notifications' => $validated['post'],
-            'comment_notifications' => $validated['comment'],
+            NotificationSetting::where('user_id', $user->id)->update([
+                'follow_notifications' => $validated['follow'],
+                'vote_notifications' => $validated['vote'],
+                'post_notifications' => $validated['post'],
+                'comment_notifications' => $validated['comment'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot update settings. Please try again later.',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Settings updated successfully'
         ]);
-
-        return response()->json(['success' => true, 'message' => 'Settings updated successfully']);
     }
 }

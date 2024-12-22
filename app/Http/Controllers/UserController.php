@@ -103,21 +103,26 @@ class UserController extends Controller
 
     public function destroy(User $user, Request $request)
     {
-        $this->authorize('delete',$user);
-        $user->delete();
+        $this->authorize('delete', $user);
 
-        if($request->ajax()) {
+        try {
+            $user->delete();
+
+            if($user->id == Auth::id()) {
+                Auth::logout();
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            }
             return response()->json([
-                'success'=>'You have successfully deleted a user!'
+                'success' => true,
+                'message' => "You have successfully deleted a user! {$user->username}",
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting the user. Please try again later.',
             ]);
         }
-
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('news.recent')
-            ->withSuccess('You have deleted your account successfully!');
     }
 }

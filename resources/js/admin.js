@@ -1,11 +1,11 @@
-import { sendAjaxRequest, stripHtml } from './utils';
+import { sendAjaxRequest, showMessage, stripHtml, handleDialog } from './utils';
 
 // API Requests
 const deleteTag = async (tagId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (_data) => {}, 'DELETE');
+  sendAjaxRequest(`${baseUrl}/admin/tags/delete/${tagId}`, (data) => {}, 'DELETE');
 };
 const deleteTagProposal = async (tagProposalId, baseUrl) => {
-  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (data) => {}, 'DELETE');
+  sendAjaxRequest(`${baseUrl}/admin/tag_proposals/delete/${tagProposalId}`, (_data) => {}, 'DELETE'); // TODO: tem data?
 };
 const acceptTagProposal = async (tagProposalId, baseUrl) => {
   sendAjaxRequest(`${baseUrl}/admin/tag_proposals/accept/${tagProposalId}`, (_data) => {}, 'PUT');
@@ -49,6 +49,7 @@ const deleteUser = async (userId, baseUrl) => {
     url,
     (data) => {
       console.log(data);
+      showMessage(data.message);
     },
     'PUT'
   );
@@ -74,11 +75,11 @@ const buildUserCard = (user) => {
   const pageUrl = `${baseUrl}/users/${user.id}/posts`;
   const editProfileUrl = `${baseUrl}/admin/users/${user.id}/edit`;
   return `
-    <div class="flex flex-col p-3 border rounded-lg border-gray-700 bg-input" id="${user.id}-card">
+    <div class="flex flex-col p-3 rounded-lg bg-input" id="${user.id}-card">
       <div class="flex justify-between">
         <div class="flex-grow">
           <a href="${pageUrl}" class="text-lg flex place items-center gap-3">
-            <span class="max-w-32 tablet:max-w-60 truncate ">${user.public_name}</span>
+            <span class="max-w-32 tablet:max-w-60 truncate">${user.public_name}</span>
             
             ${adminBadge(user.is_admin ? 'admin' : '')}
             ${blockedBadge(user.status)}
@@ -130,7 +131,7 @@ const buildUserCard = (user) => {
           <a id="${
             user.id
           }-delete-button" data-url="${baseUrl}" class="delete-button flex flex-col p-2 justify-center" href="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash hover:stroke-red-600">
               <polyline points="3 6 5 6 21 6"/>
               <path d="M19 6l-1.34 14.22A2 2 0 0 1 15.67 22H8.33a2 2 0 0 1-1.99-1.78L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2m-7 0h8"/>
             </svg>
@@ -157,22 +158,22 @@ const buildTagCard = (tag) => {
 };
 const buildTagProposalCard = (tagProposal) => {
   return `
-      <div id="${tagProposal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <div id="${tagProposal.id}-card" class="flex p-3 rounded-xl bg-input">
         <div class="flex-grow">
-          <p class="tablet:text-2xl">${tagProposal.name}</p>
-          <p class="">${tagProposal.description}</p>
-          <p class="text-gray-600">from ${tagProposal.proposer.public_name}
+          <p class="text-lg">${tagProposal.name}</p>
+          <p class="text-sm truncate max-w-32 tablet:max-w-60">${tagProposal.description}</p>
+          <p class="text-gray-400 text-sm">from ${tagProposal.proposer.public_name} ·
           <span class="">@${tagProposal.proposer.username}</span>
           </p>
         </div>
-        <div class="flex flex-col tablet:flex-row">
+        <div class="flex">
           <a href="" id="${tagProposal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
               <path d="M20 6 9 17l-5-5"/>
             </svg>
           </a>  
           <a href="" id="${tagProposal.id}-delete-button" class="delete-button place-content-center m-3" data-baseurl="${baseUrl}">  
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
             <path d="M18 6 6 18"/>
               <path d="m6 6 12 12"/>
             </svg>
@@ -184,26 +185,26 @@ const buildTagProposalCard = (tagProposal) => {
 const buildUnblockAppealCard = (unblockAppeal) => {
   const pageUrl = `${baseUrl}/users/${unblockAppeal.user_id}/posts`;
   return `
-      <div id="${unblockAppeal.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+      <div id="${unblockAppeal.id}-card" class="flex p-3 rounded-lg bg-input">
         <div class="flex flex-col flex-grow ">
-          <a href="${pageUrl}" class="tablet:text-2xl">
+          <a href="${pageUrl}" class="text-lg">
             ${unblockAppeal.public_name}
           </a>
-          <a class="text-gray-600">
+          <a class="text-gray-400 text-sm">
             @${unblockAppeal.username}
           </a>
-          <p class="">${unblockAppeal.description}</p>
+          <p class="text-sm mt-1">${unblockAppeal.description}</p>
         </div>
         ${
           !unblockAppeal.is_resolved
             ? `
             <a href="" id="${unblockAppeal.id}-accept-button" class="accept-button text-xl place-content-center m-3" data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hover:stroke-green-600">
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </a>  
             <a href="" id="${unblockAppeal.id}-delete-button" class="delete-button place-content-center m-3 " data-baseurl="${baseUrl}">  
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x hover:stroke-red-600">
                 <path d="M18 6 6 18"/>
                 <path d="m6 6 12 12"/>
               </svg>
@@ -222,18 +223,19 @@ const buildUnblockAppealCard = (unblockAppeal) => {
 const buildOmittedPost = (omittedPost) => {
   const pageUrl = `${baseUrl}/news/${omittedPost.id}`;
   return `
-    <div id="${omittedPost.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedPost.id}-card" class="flex p-3 rounded-lg bg-input">
       <a href="${pageUrl}" class="flex flex-col flex-grow w-full">
-        ${omittedPost.author.public_name}
-        <div class="text-gray-600">
-          @${omittedPost.author.username}
+        <span class="text-lg truncate max-w-52 tablet:max-w-full">${stripHtml(
+          omittedPost.title
+        )}</span>
+        <div class="text-gray-400 text-sm">
+          By ${omittedPost.author.public_name} · @${omittedPost.author.username}
         </div>
-        <p class="max-w-52 truncate">${stripHtml(omittedPost.content)}</p>
       </a>
       <a href="" class="unomit-post-button place-content-center m-3" id="${
         omittedPost.id
       }-unomit-post-button ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
               <path
@@ -247,16 +249,18 @@ const buildOmittedPost = (omittedPost) => {
 
 const buildOmittedComment = (omittedComment) => {
   return `
-    <div id="${omittedComment.id}-card" class="flex p-2 border rounded border-gray-700 bg-input">
+    <div id="${omittedComment.id}-card" class="flex p-3 rounded-lg bg-input">
       <div class="flex flex-col flex-grow w-full">
+      <span class="flex items-center gap-1">
         ${omittedComment.public_name}
-        <div class="text-gray-600">
-          @${omittedComment.username}
+        <div class="text-gray-400 text-sm">
+          · @${omittedComment.username}
         </div>
-        <p class="max-w-52 truncate">${omittedComment.content}</p>
+      </span>
+        <p class="max-w-52 truncate text-sm">${omittedComment.content}</p>
       </div>
       <a href="" class="unomit-comment-button place-content-center m-3" id="${omittedComment.id}-unomit-comment-button ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" class="lucide lucide-eye">
               <path
@@ -307,11 +311,14 @@ const addUserButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const userId = targetDelete.id.split('-delete-button')[0];
       const actionDelete = () => {
-        deleteUser(userId, baseUrl);
         const userCard = document.getElementById(userId + '-card');
-        userCard.classList.add('hidden');
+        if(!userCard.classList.contains('hidden')){ 
+          deleteUser(userId, baseUrl);
+          userCard.classList.add('hidden');
+          console.log('deleted user:'+userId);
+        }
       };
-      handleDialog(actionDelete, userId);
+      handleDialog(actionDelete,baseUrl, userId);
     }
   });
 };
@@ -322,11 +329,13 @@ const addTagButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const tagId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTag = () => {
-        deleteTag(tagId, baseUrl);
         const tagCard = document.getElementById(tagId + '-card');
-        tagCard.classList.add('hidden');
+        if(!tagCard.classList.contains('hidden')) {
+          deleteTag(tagId, baseUrl);
+          tagCard.classList.add('hidden');
+        }
       };
-      handleDialog(actionDeleteTag, tagId);
+      handleDialog(actionDeleteTag,baseUrl, tagId);
     }
   });
 };
@@ -337,22 +346,26 @@ const addTagProposalButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const tagProposalId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptTagProposal = () => {
-        acceptTagProposal(tagProposalId, baseUrl);
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(tagproposalcard.classList.contains('hidden')) {
+          acceptTagProposal(tagProposalId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
-      handleDialog(actionAcceptTagProposal, tagProposalId);
+      handleDialog(actionAcceptTagProposal,baseUrl, tagProposalId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
       event.preventDefault();
       const tagProposalId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteTagProposal = () => {
-        deleteTagProposal(tagProposalId, baseUrl);
         const tagproposalcard = document.getElementById(tagProposalId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(!tagproposalcard.classList.contains('hidden')) {
+          deleteTagProposal(tagProposalId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
-      handleDialog(actionDeleteTagProposal, tagProposalId);
+      handleDialog(actionDeleteTagProposal,baseUrl, tagProposalId);
     }
   });
 };
@@ -363,22 +376,26 @@ const addUnblockAppealButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unblockAppealId = targetAccept.id.split('-accept-button')[0];
       const actionAcceptUnblockAppeal = () => {
-        acceptUnblockAppeal(unblockAppealId, baseUrl);
-        const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        tagproposalcard.classList.add('hidden');
+        const unblockAppealCard = document.getElementById(unblockAppealId + '-card');
+        if(!unblockAppealCard.classList.contains('hidden')) {
+          acceptUnblockAppeal(unblockAppealId, baseUrl);
+          unblockAppealCard.classList.add('hidden');
+        }
       };
-      handleDialog(actionAcceptUnblockAppeal, unblockAppealId);
+      handleDialog(actionAcceptUnblockAppeal,baseUrl, unblockAppealId);
     }
     const targetDelete = event.target.closest('.delete-button');
     if (targetDelete) {
       event.preventDefault();
       const unblockAppealId = targetDelete.id.split('-delete-button')[0];
       const actionDeleteUnblockAppeal = () => {
-        deleteUnblockAppeal(unblockAppealId, baseUrl);
         const tagproposalcard = document.getElementById(unblockAppealId + '-card');
-        tagproposalcard.classList.add('hidden');
+        if(tagproposalcard.classList.contains('hidden')) {
+          deleteUnblockAppeal(unblockAppealId, baseUrl);
+          tagproposalcard.classList.add('hidden');
+        }
       };
-      handleDialog(actionDeleteUnblockAppeal, unblockAppealId);
+      handleDialog(actionDeleteUnblockAppeal,baseUrl, unblockAppealId);
     }
   });
 };
@@ -391,11 +408,13 @@ const addUnomitPostButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unomitPostId = targetUnomit.id.split('-unomit-post-button')[0];
       const actionUnomitPost = () => {
-        unOmitPost(unomitPostId, baseUrl);
         const omittedPostCard = document.getElementById(unomitPostId + '-card');
-        omittedPostCard.classList.add('hidden');
+        if(!omittedPostCard.classList.contains('hidden')) {
+          unOmitPost(unomitPostId, baseUrl);
+          omittedPostCard.classList.add('hidden');
+        }
       };
-      handleDialog(actionUnomitPost, unomitPostId);
+      handleDialog(actionUnomitPost,baseUrl, unomitPostId);
       //reloadData(baseQuery,buildFunction,resultDiv)
     }
   });
@@ -409,11 +428,13 @@ const addUnomitCommentButtons = (baseQuery, buildFunction, resultDiv) => {
       event.preventDefault();
       const unomitCommentId = targetUnomit.id.split('-unomit-comment-button')[0];
       const actionUnomitComment = () => {
-        unOmitComment(unomitCommentId, baseUrl);
         const omittedCommentCard = document.getElementById(unomitCommentId + '-card');
-        omittedCommentCard.classList.add('hidden');
+        if(omittedCommentCard.classList.contains('hidden')) {
+          unOmitComment(unomitCommentId, baseUrl);
+          omittedCommentCard.classList.add('hidden');
+        }
       };
-      handleDialog(actionUnomitComment, unomitCommentId);
+      handleDialog(actionUnomitComment,baseUrl, unomitCommentId);
     }
   });
 };
@@ -426,30 +447,6 @@ const loadingIcon = document.getElementById('loading-icon');
 const searchBar = document.getElementById('admin-search-bar');
 const baseUrl = searchBar ? searchBar.dataset.url : '';
 
-const handleDialog = (action, elementId) => {
-  const confirmPopup = document.getElementById('confirm-popup');
-  const confirmButton = document.getElementById('confirm-button');
-  const cancelButton = document.getElementById('cancel-button');
-
-  if (confirmPopup) {
-    confirmPopup.classList.remove('hidden');
-    confirmButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      confirmPopup.classList.add('hidden');
-      action(elementId, baseUrl);
-    });
-    cancelButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      confirmPopup.classList.add('hidden');
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key == 'Escape' && !confirmPopup.classList.contains('hidden')) {
-        confirmPopup.classList.add('hidden');
-      }
-    });
-  }
-};
 
 // Auxiliary Functions
 const build = (url, buildCardFunction, resultDiv) => {
@@ -459,7 +456,6 @@ const build = (url, buildCardFunction, resultDiv) => {
   sendAjaxRequest(
     url,
     (data) => {
-      console.log(data);
       loading = false;
       if (loadingIcon) loadingIcon.classList.add('hidden');
       lastPage = data.last_page;

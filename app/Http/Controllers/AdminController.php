@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ImageTypeEnum;
-use App\Http\Controllers\ChartController;
 use App\Http\Requests\Auth\AdminRegisterRequest;
 use App\Http\Requests\User\AdminUpdateRequest;
 use App\Models\User;
 use App\Services\FileService;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -78,29 +78,52 @@ class AdminController extends Controller
             $user->save();
         }
 
+        $emailSent = MailController::notifyUserUpdate($user);
+
+        if (!$emailSent) {
+            return redirect()->route('user.posts', ['user' => $user->id])
+                ->withSuccess('User profile updated successfully, email notification failed to send.');
+        }
+
         return redirect()->route('user.posts', ['user' => $user->id])
             ->withSuccess('You have successfully updated!');
     }
 
     public function blockUser(User $user)
     {
-        $user->update([
-            'status' => 'blocked'
-        ]);
+        try {
+            $user->update([
+                'status' => 'blocked'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User could not be banned, an error occurred.'
+            ]);
+        }
 
         return response()->json([
-            'sucess' => 'You have successfully banned a user'
+            'success' => true,
+            'message' => 'You have successfully banned a user'
         ]);
     }
 
     public function unblockUser(User $user)
     {
-        $user->update([
-            'status' => 'active'
-        ]);
+        try {
+            $user->update([
+                'status' => 'active'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User could not be unbanned, an error occurred.'
+            ]);
+        }
 
         return response()->json([
-            'sucess' => 'You have successfully unbanned a user'
+            'success' => true,
+            'message' => 'You have successfully unbanned the user.'
         ]);
     }
 }
