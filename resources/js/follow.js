@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
       sendAjaxRequest(
         url,
         (data) => {
-          console.log(data);
           if (target.id === 'follow-button-refresh' || target.id === 'unfollow-button-refresh') {
             location.reload();
           }

@@ -52,7 +52,6 @@ export function sendAjaxRequest(
       }
     })
     .then((data) => {
-      console.log(data);
       if (data.success == true) {
         handler(data);
       } else if (data.success == false) {
@@ -62,12 +61,8 @@ export function sendAjaxRequest(
       }
     })
     .catch((error) => {
-      console.log('Error', error);
-      // if (error.status == 500) {
-      //   handlerError(error.message);
-      // }
       if (error.status == 403) {
-        handlerError("This action is not allowed :-(");
+        handlerError('This action is not allowed :-(');
       }
       if (error.status == 404) {
         handlerError('Page not Found');
@@ -141,8 +136,6 @@ export function uploadBase64Image(dataUrl) {
 }
 
 export const transformLoadingButton = (button) => {
-  console.log(button);
-
   button.classList.remove('text-input', 'bg-white', 'font-bold', 'px-6', 'py-2');
 
   button.classList.add(
@@ -205,15 +198,15 @@ export const toggleDeleteButton = () => {
 };
 
 export const toggleDeleteButtonComment = (container) => {
-  const commentId = container.dataset.id 
-  const deleteButton = document.getElementById('delete_button-'+commentId)
+  const commentId = container.dataset.id;
+  const deleteButton = document.getElementById('delete_button-' + commentId);
   const voteCountElement = container.querySelector('.vote-count').textContent;
   const hasVotes = parseInt(voteCountElement, 10) != 0;
 
-  if ( hasVotes) {
-    deleteButton.classList.add('hidden')
+  if (hasVotes) {
+    deleteButton.classList.add('hidden');
   } else {
-    deleteButton.classList.remove('hidden')
+    deleteButton.classList.remove('hidden');
   }
 };
 
@@ -223,7 +216,7 @@ export const stripHtml = (html) => {
   return div.textContent || div.innerText || '';
 };
 
-export const handleDialog = (action,baseUrl, elementId) => {
+export const handleDialog = (action, baseUrl, elementId) => {
   const confirmPopup = document.getElementById('confirm-popup');
   const confirmButton = document.getElementById('confirm-button');
   const cancelButton = document.getElementById('cancel-button');
