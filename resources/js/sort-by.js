@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (sortContainer) {
     const toggleSortButton = document.getElementById('toggle-sort-button');
-    const chosenSort = toggleSortButton.querySelector('p');
+    const chosenSort = toggleSortButton.querySelector('.sort-button');
     const hiddenSelectedSort = sortContainer.querySelector('input[type=hidden]');
     const sortPopup = document.getElementById('sort-popup');
     const chevronIcon = toggleSortButton.querySelector('svg');

@@ -7,12 +7,12 @@
 
 <div class="container tablet:mx-auto w-full">
     <div class="flex flex-row items-center px-5 pt-5">
-        <h1 id="news-page-title" class="text-2xl font-semibold grow">{{ $title }}</h1>
+        <p id="news-page-title" class="text-2xl font-semibold grow">{{ $title }}</p>
         @isset($tags)
             <div class="relative" id="sort-by-container">
                 <button id="toggle-sort-button"
                     class="flex flex-row items-center mr-2 cursor-pointer hover:bg-input transition rounded-md px-2 py-1">
-                    <p class="text-sm mr-1 font-semibold">Sort by</p>
+                    <span class="sort-button text-sm mr-1 font-semibold">Sort by</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-chevron-up transition ease-out rotate-180">
@@ -59,8 +59,8 @@
     </div>
 
     <div id="no-results" class="hidden flex flex-col items-center justify-center">
-        <h1 class="text-white text-xl">No results found.</h1>
-        <h1 class="text-gray-500 text-sm">meow..</h1>
+        <p class="text-white text-xl">No results found.</p>
+        <p class="text-gray-500 text-sm">meow..</p>
 
         <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 888 342.09"
             xmlns:xlink="http://www.w3.org/1999/xlink">
