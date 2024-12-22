@@ -31,10 +31,17 @@ class VoteController extends Controller
         try {
             $vote->save();
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error on save']);
+            return response()->json([
+                'message' => 'Error on save',
+                'success' => false
+            ]);
         }
 
-        return response()->json(['message' => 'Saved', 'vote_id' => $vote->id]);
+        return response()->json([
+            'vote_id' => $vote->id,
+            'message' => 'Saved',
+            'success' => true
+        ]);
     }
 
     public function destroy(Vote $vote)
@@ -44,10 +51,16 @@ class VoteController extends Controller
         try {
             $vote->delete();
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error on delete']);
+            return response()->json([
+                'message' => 'Error on delete',
+                'success' => false
+            ]);
         }
 
-        return response()->json(['message' => 'Vote removed']);
+        return response()->json([
+            'message' => 'Vote removed',
+            'success' => true
+        ]);
     }
 
     public function update(Request $request, Vote $vote)
@@ -61,9 +74,15 @@ class VoteController extends Controller
         try {
             $vote->update(['is_upvote' => $validated['is_upvote']]);
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error on update']);
+            return response()->json([
+                'message' => 'Error on update',
+                'success' => false
+            ]);
         }
 
-        return response()->json(['message' => 'Vote updated']);
+        return response()->json([
+            'message' => 'Vote updated',
+            'success' => true
+        ]);
     }
 }

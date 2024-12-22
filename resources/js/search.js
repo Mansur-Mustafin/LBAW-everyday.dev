@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './utils';
+import { sendAjaxRequest, stripHtml, truncateWords } from './utils';
 
 const searchBarDiv = document.getElementById('search-bar');
 const searchContainer = document.getElementById('search-container');
@@ -8,11 +8,11 @@ const isAuth = searchBarDiv ? searchBarDiv.dataset.auth : '';
 let loading = false;
 
 let clickedInsideResults = false;
-resultsDiv.addEventListener('mousedown', () => {
+resultsDiv?.addEventListener('mousedown', () => {
   clickedInsideResults = true;
 });
 
-searchBarDiv.addEventListener('blur', () => {
+searchBarDiv?.addEventListener('blur', () => {
   setTimeout(() => {
     if (!clickedInsideResults) {
       resultsDiv.classList.add('hidden');
@@ -23,45 +23,47 @@ searchBarDiv.addEventListener('blur', () => {
   }, 100); // Delay for links
 });
 
-searchBarDiv.addEventListener('focus', () => {
+searchBarDiv?.addEventListener('focus', () => {
   resultsDiv.classList.remove('hidden');
   searchContainer.classList.add('rounded-t-2xl');
   searchContainer.classList.remove('rounded-2xl');
 });
-
-searchBarDiv.onkeyup = async () => {
-  resultsDiv.classList.remove('hidden');
-  if (searchBarDiv.value === '') {
-    searchContainer.classList.remove('rounded-t-2xl');
-    searchContainer.classList.add('rounded-2xl');
-    resultsDiv.innerHTML = '';
-    return;
-  } else {
-    searchContainer.classList.remove('rounded-2xl');
-    searchContainer.classList.add('rounded-t-2xl');
-  }
-
-  if (loading) {
-    return;
-  }
-
-  const searchQuery = `${baseUrl}/api/search?query=${searchBarDiv.value}`;
-  sendAjaxRequest(
-    searchQuery,
-    (data) => {
+ 
+if(searchBarDiv) {
+  searchBarDiv.onkeyup = async () => {
+    resultsDiv.classList.remove('hidden');
+    if (searchBarDiv.value === '') {
+      searchContainer.classList.remove('rounded-t-2xl');
+      searchContainer.classList.add('rounded-2xl');
       resultsDiv.innerHTML = '';
-      showElements(data['news_posts'], buildPost);
-      if (isAuth) {
-        showElements(data['tags'], buildTag);
-        showElements(data['users'], buildUser);
-      }
-      if (data['news_posts'].length > 0) {
-        addMorePosts(searchBarDiv.value);
-      }
-    },
-    'GET'
-  );
-};
+      return;
+    } else {
+      searchContainer.classList.remove('rounded-2xl');
+      searchContainer.classList.add('rounded-t-2xl');
+    }
+
+    if (loading) {
+      return;
+    }
+
+    const searchQuery = `${baseUrl}/api/search?query=${searchBarDiv.value}`;
+    sendAjaxRequest(
+      searchQuery,
+      (data) => {
+        resultsDiv.innerHTML = '';
+        showElements(data['news_posts'], buildPost);
+        if (isAuth) {
+          showElements(data['tags'], buildTag);
+          showElements(data['users'], buildUser);
+        }
+        if (data['news_posts'].length > 0) {
+          addMorePosts(searchBarDiv.value);
+        }
+      },
+      'GET'
+    );
+  };
+}
 
 const showElements = (elements, buildFunction) => {
   elements.forEach((element) => {
@@ -95,10 +97,10 @@ const buildPost = (post) => {
                     <p class="bg-red-400 px-3 py-1 h-7 mr-1 rounded-full text-sm">Post</p>
                     <div class="flex-1 min-w-0">
                         <p>
-                            ${post.title}
+                            ${truncateWords(post.title, 5)}
                         </p>
                         <p class="text-sm text-nowrap text-ellipsis overflow-hidden">
-                            ${post.content}
+                            ${stripHtml(post.content)}
                         </p>
                     </div>
                 </a>

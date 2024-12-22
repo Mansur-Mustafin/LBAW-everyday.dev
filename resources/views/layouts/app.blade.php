@@ -9,7 +9,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <meta property="og:title" content="everyday.dev - Where the news meet the devs" />
+    <meta property="og:link" content="#" />
+    <meta property="og:image" content="https://fastly.picsum.photos/id/1056/200/200.jpg?hmac=BpHmd2Nrxgn5zfvO7PpucBxqHz3jz2foKNNSFK1VG40" /> 
+
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
     <script>
         const pusherAppKey = "{{ env('PUSHER_APP_KEY') }}";
@@ -18,8 +22,11 @@
     </script>
 
     <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+    
     @vite('resources/css/app.css')
     @vite('resources/js/utils.js')
+    @vite('resources/js/dashboard.js')
+    @vite('resources/js/app.js')
     @vite('resources/js/vote.js')
     @vite('resources/js/post.js')
     @vite('resources/js/comment.js')
@@ -39,6 +46,7 @@
     @vite('resources/js/sort-by.js')
     @vite('resources/js/user.js')
     @vite('resources/js/loading-button.js')
+    @vite('resources/js/profile.js')
 
 
     <script type="text/javascript">

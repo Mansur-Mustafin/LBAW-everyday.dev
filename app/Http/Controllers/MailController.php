@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MailTypeEnum;
 use App\Mail\MailModel;
 use App\Models\User;
 use Exception;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Mail;
+
 
 class MailController extends Controller
 {
@@ -31,9 +33,14 @@ class MailController extends Controller
 
         $token = Str::random(60);
 
-        DB::table('password_resets')->updateOrInsert(
-            ['email' => $request->email],
-            ['token' => Hash::make($token), 'created_at' => now()]
+        DB::table('password_resets')->upsert(
+            [
+                'email' => $request->email,
+                'token' => Hash::make($token),
+                'created_at' => now(),
+            ],
+            ['email'],
+            ['token', 'created_at']
         );
 
         $mailData = [
@@ -43,10 +50,26 @@ class MailController extends Controller
         ];
 
         try {
-            Mail::to($request->email)->send(new MailModel($mailData));
+            Mail::to($request->email)->send(new MailModel($mailData, MailTypeEnum::RECOVER));
             return redirect()->route('login')->withSuccess('Email sent successfully!');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['email' => 'Our email recovery service is not avaliable now, try later.']);
         }
+    }
+
+    public static function notifyUserUpdate($user): bool
+    {
+        $mailData = [
+            'email' => $user->email,
+            'name' => $user->public_name,
+            'id' => $user->id,
+        ];
+
+        try {
+            Mail::to($user->email)->send(new MailModel($mailData, MailTypeEnum::PROFILE_UPDATE));
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
     }
 }

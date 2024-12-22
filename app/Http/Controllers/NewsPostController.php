@@ -12,10 +12,10 @@ use App\Models\Tag;
 use App\Services\FileService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class NewsPostController extends Controller
 {
@@ -53,8 +53,6 @@ class NewsPostController extends Controller
             $comments = $newsPost->comments->where('is_omitted', '!=', 'true');
         }
 
-        //dd($comments);
-
         $this->preparePostForUser($newsPost);
         $this->processComments($comments, $user);
 
@@ -75,9 +73,10 @@ class NewsPostController extends Controller
     {
         $validated = $request->validated();
 
+        $content = strip_tags($validated['content'], '<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><a>');
         $post = NewsPost::create([
             'title' => $validated['title'],
-            'content' => $validated['content'],
+            'content' => $content,
             'for_followers' => $validated['for_followers'],
             'author_id' => Auth::user()->id,
         ]);
@@ -111,9 +110,10 @@ class NewsPostController extends Controller
 
         $validated = $request->validated();
 
+        $content = strip_tags($validated['content'], '<span><p><strong><em><u><em><s><li><ol><ul><blockquote><pre><img><br><a>');
         $newsPost->update([
             'title' => $validated['title'],
-            'content' => $validated['content'],
+            'content' => $content,
             'for_followers' => $validated['for_followers'],
         ]);
 
@@ -143,7 +143,7 @@ class NewsPostController extends Controller
         }
 
         return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post atualizado com sucesso!');
+            ->withSuccess('Post updated successfully!');
     }
 
     public function destroy(NewsPost $newsPost): RedirectResponse
@@ -161,37 +161,68 @@ class NewsPostController extends Controller
 
     public function omit(Request $request, NewsPost $newsPost)
     {
-        // TODO try catch
         $this->authorize('omit', $newsPost);
-        $newsPost->update([
-            'is_omitted' => "true"
-        ]);
 
-        if ($request->ajax()) {
-            return response()->json(['sucess' => true]);
+        try {
+            $newsPost->update([
+                'is_omitted' => "true"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to omit the post.'
+            ]);
         }
-        return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post omitted successfully!');
+
+        return response()->json([
+            'message' => 'Post omitted successfully!',
+            'success' => true
+        ]);
     }
 
     public function unomit(Request $request, NewsPost $newsPost)
     {
-        // TODO try catch
         $this->authorize('omit', $newsPost);
-        $newsPost->update([
-            'is_omitted' => 'false'
-        ]);
 
-        if ($request->ajax()) {
-            return response()->json(['sucess' => true]);
+        try {
+            $newsPost->update([
+                'is_omitted' => 'false'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to unmit the post.',
+                'success' => false
+            ]);
         }
-        return redirect()->route('news.show', ['news_post' => $newsPost->id])
-            ->with('message', 'Post un-omitted successfully!');
+
+        return response()->json([
+            'message' => 'Post un-omitted successfully!',
+            'success' => true
+        ]);
     }
 
     public function showOmittedPosts()
     {
         return view('pages.admin.admin', ['show' => 'omitted_posts']);
+    }
+
+    public function postAlreadyExists(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:250',
+            'post_id' => 'nullable|integer|exists:news_post,id',
+        ]);
+
+        $query = NewsPost::where('title', $request->input('title'));
+
+        if ($request->filled('post_id')) {
+            $query->where('id', '!=', $request->input('post_id'));
+        }
+
+        return response()->json([
+            'exists' => $query->exists(),
+            'success' => true,
+        ]);
     }
 
     private function preparePostForUser(NewsPost $newsPost): void
@@ -231,8 +262,6 @@ class NewsPostController extends Controller
 
     static function processComments($comments, $user)
     {
-        // TODO: nos temos que processar todos os comments? nao podemos so processar quais vamos mostrar?
-
         if (!$user) {
             return;
         }

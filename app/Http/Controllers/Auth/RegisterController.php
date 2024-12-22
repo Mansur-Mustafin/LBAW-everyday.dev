@@ -24,8 +24,9 @@ class RegisterController extends Controller
 
         Auth::attempt([
             'email' => $credentials['email'],
-            'password' => $credentials['password']
+            'password' => $request->input('password')
         ]);
+
         $request->session()->regenerate();
 
         return redirect()->route('news.recent')

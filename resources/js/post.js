@@ -1,12 +1,11 @@
-import { copyToClipboard, sendAjaxRequest, transformLoadingButton } from './utils.js';
+import { copyToClipboard, sendAjaxRequest, transformLoadingButton, showMessage } from './utils.js';
 
 const tagSelector = document.getElementById('tagSelector');
 const selectedTags = document.getElementById('selectedTags');
-
 const createForm = document.getElementById('createForm');
-const title = document.getElementById('title');
-
 const tagsSection = document.getElementById('tags-section');
+const omitSection = document.getElementById('omit-section');
+
 if (tagsSection) {
   const baseUrl = tagsSection.dataset.url;
 
@@ -30,12 +29,42 @@ if (tagsSection) {
   });
 }
 
+// Omit Post
+if (omitSection) {
+  const omitButtons = document.querySelectorAll('.omit-post-button');
+  const unomitButtons = document.querySelectorAll('.unomit-post-button');
+
+  const baseUrl = omitSection.dataset.url;
+  const postId = omitSection.dataset.post;
+
+  const omitCard = document.getElementById('omit-post-card');
+
+  omitButtons.forEach((omitButton) => {
+    omitButton.addEventListener('click', () => {
+      omitCard.classList.remove('hidden');
+      omitButton.classList.add('hidden');
+      unomitButtons.forEach((unomitButton) => {
+        unomitButton.classList.remove('hidden');
+      });
+      const url = `${baseUrl}/news/${postId}/omit`;
+      sendAjaxRequest(url, (_data) => {}, 'PUT');
+    });
+  });
+  unomitButtons.forEach((unomitButton) => {
+    unomitButton.addEventListener('click', () => {
+      omitCard.classList.add('hidden');
+      omitButtons.forEach((unomitButton) => {
+        unomitButton.classList.remove('hidden');
+      });
+      unomitButton.classList.add('hidden');
+      const url = `${baseUrl}/news/${postId}/unomit`;
+      sendAjaxRequest(url, (_data) => {}, 'PUT');
+    });
+  });
+}
+
 // Create Post
 if (createForm) {
-  title.addEventListener('change', function (evt) {
-    title.style.borderWidth = '0px';
-  });
-
   tagSelector.addEventListener('change', function () {
     const selectedTag = tagSelector.value;
     if (selectedTag) {
@@ -76,9 +105,6 @@ if (createForm) {
   createForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    // call this function after validation
-    transformLoadingButton(createForm.querySelector('#post-button'));
-
     let post_tags = [];
 
     Array.from(selectedTags.children).forEach((child) => {
@@ -86,12 +112,6 @@ if (createForm) {
     });
 
     if (post_tags.length >= 0) document.getElementById('tagsInput').value = post_tags.join(',');
-
-    if (!title.value.length) {
-      title.style.borderWidth = '1px';
-      title.style.borderColor = 'red';
-      return;
-    }
   });
 }
 
@@ -110,6 +130,11 @@ if (editForm) {
     const editSection = document.getElementById('edit-section');
     const selectedTags = document.getElementById('selectedTags');
     const tagSelector = document.getElementById('tagSelector');
+    const postPopups = document.querySelectorAll('.post-popup');
+
+    postPopups.forEach((e) => {
+      e.classList.replace('opacity-100', 'opacity-0');
+    });
 
     displaySection.classList.toggle('hidden');
     editSection.classList.toggle('hidden');
@@ -220,3 +245,35 @@ const shareButton = document.getElementById('share-post');
 if (shareButton) {
   copyToClipboard(shareButton);
 }
+
+// had to attach the event to the dom because the buttons are being added dynamically
+document.addEventListener('click', (event) => {
+  // if the click matches the button
+  if (event.target.closest('.post-options')) {
+    const button = event.target.closest('.post-options');
+
+    const popup = button.parentElement.querySelector('#post-options-popup');
+    if (popup) {
+      if (popup.classList.contains('opacity-0')) {
+        popup.classList.remove('opacity-0', 'pointer-events-none');
+        popup.classList.add('opacity-100');
+      } else {
+        popup.classList.remove('opacity-100');
+        popup.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  const titleInput = document.getElementById('title');
+  const serverError = document.getElementById('title-server-error');
+  const titleError = document.getElementById('title-error');
+
+  titleInput?.addEventListener('input', function () {
+    serverError?.classList.add('hidden');
+    titleError?.classList.add('hidden');
+    titleInput.classList.remove('border-red-500');
+    titleInput.classList.remove('border');
+  });
+});

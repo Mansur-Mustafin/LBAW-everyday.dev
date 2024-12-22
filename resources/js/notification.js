@@ -1,4 +1,4 @@
-import { truncateWords, showSuccessMessage, sendAjaxRequest } from './utils.js';
+import { truncateWords, showMessage, sendAjaxRequest, dismissPopUp } from './utils.js';
 
 // Receive Notification in Real-time
 if (userId) {
@@ -12,15 +12,6 @@ if (userId) {
   channel.bind('notification-personal', function (data) {
     displayNotification(data);
   });
-
-  const dismissNotification = (notificationElement) => {
-    if (notificationElement) {
-      notificationElement.classList.replace('animate-slide-in', 'animate-slide-out');
-      notificationElement.addEventListener('animationend', () => notificationElement.remove(), {
-        once: true,
-      });
-    }
-  };
 
   const notificationHandlers = {
     VoteNotification: ({ vote }) => ({
@@ -59,7 +50,7 @@ if (userId) {
         <div class="mb-3">${text}</div>
         ${
           hrefOpen !== '#'
-            ? `<a href="${hrefOpen}" class="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-white text-black hover:bg-purple-950 hover:text-white">Open</a>`
+            ? `<a href="${hrefOpen}" class="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-white text-black hover:bg-purple hover:text-white">Open</a>`
             : ''
         }
       </div>
@@ -87,9 +78,9 @@ if (userId) {
     container.appendChild(notificationElement);
 
     const closeButton = notificationElement.querySelector('button');
-    closeButton.addEventListener('click', () => dismissNotification(notificationElement));
+    closeButton.addEventListener('click', () => dismissPopUp(notificationElement));
 
-    setTimeout(() => dismissNotification(notificationElement), 5000);
+    setTimeout(() => dismissPopUp(notificationElement), 5000);
   }
 }
 
@@ -121,7 +112,7 @@ if (notificationSettings) {
       (data) => {
         if (data.success) {
           notificationSettingsButtons.classList.add('hidden');
-          showSuccessMessage(data.message);
+          showMessage(data.message);
           toggleTwoDivs.forEach((div) => {
             div.dataset.initialvalue =
               div.querySelector('.hiddenToggle').value === 'true' ? 'true' : 'false';

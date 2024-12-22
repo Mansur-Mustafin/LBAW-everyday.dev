@@ -19,14 +19,47 @@
 }
 
 /* Quill placeholder styles */
-#editor-create-container .ql-editor.ql-blank::before{
+#editor-create-container .ql-editor.ql-blank::before,
+#editor-edit-container .ql-editor.ql-blank::before{
     font-family: system-ui;
     font-style: normal;
     font-size: 16px;
     color: #9ca3af;
 }
 
-#editor-create-container {
+#editor-create-container, #editor-edit-container {
     font-size: 16px;
     font-family: system-ui;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.animate-slide-in {
+    animation: slideInRight 0.5s forwards;
+}
+
+.animate-slide-out {
+    animation: slideOutRight 0.5s forwards;
 }

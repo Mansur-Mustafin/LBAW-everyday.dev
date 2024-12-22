@@ -1,11 +1,16 @@
 @extends('layouts.body.default')
 
-@section('content')
+@if($user->id == Auth::id())
+    @section('title','Your Profile')
+@else
+    @section('title','User Profile')
+@endif
 
+@section('content')
 @include('partials.success-popup')
 
 <section
-    class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[50.5rem] h-full">
+    class="flex flex-col tablet:flex-row laptop:border-x laptop:border-gray-700 self-center w-full laptop:m-auto laptop:max-w-[52rem] h-full">
     <main class="order-2 tablet:order-none flex-1">
         @php
             $isPostsActive = Route::currentRouteNamed('user.posts');
@@ -52,19 +57,31 @@
 
     </main>
 
-    <aside class="order-1 tablet:order-none border-l border-gray-700">
+    <aside class="order-1 tablet:order-none border-l border-gray-700 tablet:w-[19rem]">
         <header class="flex items-center p-4">
             <h2 class="font-bold text-lg flex-1">Profile</h2>
             @can('follow', $user)
-                <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-2 py-1 mx-2 text-sm"
                     data-user-id="{{ $user->id }}" data-action="follow">Follow</button>
             @endcan
             @can('unfollow', $user)
-                <button class="follow-button text-input bg-white font-bold rounded-xl px-4 py-1 mx-2 self-end"
+                <button class="follow-button text-input bg-white font-bold rounded-xl px-2 py-1 mx-2 text-sm"
                     data-user-id="{{ $user->id }}" data-action="unfollow">Unfollow</button>
             @endcan
-            <button id="share-profile" class="relative">
-                <span class="copied-feedback absolute bottom-7 -left-4 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
+            @if ($user->id == Auth::user()->id)
+                <a title="logout" href="{{ url('/logout') }}" class="rounded-lg px-2 py-2 text-sm hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-log-out">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" x2="9" y1="12" y2="12" />
+                    </svg>
+                </a>
+            @endif
+            <button id="share-profile" title="share" class="relative hover:bg-input p-2 rounded-xl">
+                <span
+                    class="copied-feedback absolute top-10 -left-4 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-link">
@@ -72,27 +89,39 @@
                     <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                 </svg>
             </button>
+            <div class="relative">
+                <button id="profile-options" class="hover:bg-input p-2 rounded-xl" title="profile options">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-ellipsis-vertical">
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                    </svg>
+                </button>
+                @include('partials.profile-options')
+            </div>
 
         </header>
         <div class="rounded flex justify-center m-5">
             <img src="{{ $user->profileImage->url }}" alt="Your profile image"
                 class="rounded-full w-48 h-48 object-cover border-2 border-white">
         </div>
-        <div class="p-4">
-            <p class="font-bold text-lg">
+        <div class="p-4 flex flex-col">
+            <p class="font-bold text-lg flex items-center justify-between">
                 {{ $user->public_name }}
                 @if (Auth::check() and $user->is_admin)
-                    <span class="bg-red-400 text-gray-800 px-3 py-1 ml-1 rounded-full text-sm ">Admin</span>
+                    <span class="bg-purple text-white px-2 rounded-full text-sm">Admin</span>
                 @endif
             </p>
-            <span class="text-gray-300">{{ $user->username }} </span>
-            <span class="text-sm text-gray-500"> • Joined {{ $user->created_at->format('F Y') }} </span>
-            @if (Auth::check() and Auth::id() == $user->id)
-                <p class="text-gray-300">{{ $user->email }} </p>
-            @endif
+            <div class="flex items-center gap-2">
+                <span class="text-gray-300">{{ $user->username }} </span>
+                <span class="text-xs text-gray-500"> • Joined {{ $user->created_at->format('F Y') }} </span>
+            </div>
+
         </div>
-        <div class="p-4 mt-4">
-            <p>
+        <div class="p-4 text-sm flex flex-col">
+            <div class="flex items-center justify-between">
                 <a href="{{ route('user.following', $user->id) }}">
                     <span class="mr-4">{{ $user->following()->count() }} <span
                             class="text-gray-500">following</span></span>
@@ -100,17 +129,23 @@
                 <a href="{{ route('user.followers', $user->id) }}">
                     <span>{{ $user->followers()->count() }} <span class="text-gray-500">followers</span></span>
                 </a>
-            </p>
-            <p>
-                <span class="mr-4">{{ $user->rank }} <span class="text-gray-500">rank</span> </span>
+            </div>
+            <div class="flex items-center justify-between">
+                <span>{{ $user->rank }} <span class="text-gray-500">rank</span></span>
                 @if (Auth::check() and Auth::id() == $user->id || Auth::user()->is_admin)
-                    <span>{{ $user->reputation }} <span class="text-gray-500">reputation</span> </span>
+                    <span>{{ $user->reputation }} <span class="text-gray-500">reputation</span></span>
                 @endif
-            </p>
+            </div>
         </div>
-        <div class="p-4 mt-4">
+        <div class="p-4 flex flex-col gap-2">
             <h3 class="font-bold text-lg">Favorite Tags</h3>
-            @include('partials.tags', ['tags' => $user->tag_names])
+            <div class="flex gap-2 flex-wrap">
+                @foreach ($user->tag_names as $tag)
+                    <div class="text-sm text-gray-400 lowercase bg-input px-2 rounded-md">
+                        #{{ $tag }}
+                    </div>
+                @endforeach
+            </div>
         </div>
 
         <div class="p-4 flex flex-col gap-2 justify-center">
@@ -177,10 +212,10 @@
 
         <!-- More info (only admin) -->
         @if (Auth::check() and Auth::user()->is_admin)
-            <div class="p-4">
+            <div class="p-4 flex flex-col gap-2">
                 <h3 class="font-bold text-lg">User Info</h3>
-                <div class="flex flex-wrap gap-2 mb-2 mt-1">
-                    <span class="bg-red-400 text-gray-800 px-3 py-1 ml-2 rounded-full text-sm ">{{ $user->status }}</span>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-purple text-white px-2 py-1 font-bold rounded-full text-sm ">{{ $user->status }}</span>
                 </div>
             </div>
         @endif
@@ -188,5 +223,4 @@
 </section>
 
 @include('layouts.footer')
-
 @endsection

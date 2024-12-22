@@ -46,10 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    let count = 0;
+
+    const noTagsLabel = document.getElementById('no-tags');
+
     tagItems.forEach((item) => {
       const labelText = item.textContent.toLowerCase();
-      item.style.display = labelText.includes(query) ? 'flex' : 'none';
+      if (labelText.includes(query)) {
+        item.style.display = 'flex';
+        count++;
+        noTagsLabel.classList.add('hidden');
+        noTagsLabel.classList.remove('flex');
+      } else {
+        item.style.display = 'none';
+      }
     });
+
+    if (count === 0) {
+      noTagsLabel.classList.remove('hidden');
+      noTagsLabel.classList.add('flex');
+    }
   };
 
   document.getElementById('toggle-filter-button')?.addEventListener('click', () => {
@@ -70,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleSection(list, chevronIcon, showAllButton, listMore)
     );
     showAllButton?.addEventListener('click', () => showAll(list, listMore, showAllButton));
-    searchInput?.addEventListener('input', () => filterSearch(searchInput, tagItems, showAllButton));
+    searchInput?.addEventListener('input', () =>
+      filterSearch(searchInput, tagItems, showAllButton)
+    );
   });
 });

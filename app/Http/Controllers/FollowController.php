@@ -6,7 +6,6 @@ use App\Enums\NotificationTypeEnum;
 use App\Models\Notification;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +13,9 @@ class FollowController extends Controller
 {
     public function followUser(User $user)
     {
+        $this->authorize('follow', $user);
+
         try {
-            $this->authorize('follow', $user);
             Auth::user()->following()->attach($user->id);
 
             Notification::create([
@@ -24,21 +24,34 @@ class FollowController extends Controller
                 'follower_id' => Auth::id(),
             ]);
 
-            return response()->json(['message' => 'Successfully followed user']);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => 'Cannot follow this user'], 403);
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully followed user'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot follow this user'
+            ]);
         }
     }
 
     public function unfollowUser(User $user)
     {
+        $this->authorize('unfollow', $user);
+
         try {
-            $this->authorize('unfollow', $user);
             Auth::user()->following()->detach($user->id);
 
-            return response()->json(['message' => 'Successfully unfollowed user']);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => 'Cannot follow this user'], 403);
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully unfollowed user'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot follow this user'
+            ]);
         }
     }
 
@@ -85,9 +98,15 @@ class FollowController extends Controller
         try {
             Auth::user()->tags()->attach($request->tag);
 
-            return response()->json(['message' => "Successfully followed {$request->tag}"]);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => "Cannot follow this {$request->tag}"], 403);
+            return response()->json([
+                'success' => true,
+                'message' => "Successfully followed {$request->tag}"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Cannot follow this {$request->tag}"
+            ]);
         }
     }
 
@@ -97,9 +116,15 @@ class FollowController extends Controller
         try {
             Auth::user()->tags()->detach($request->tag);
 
-            return response()->json(['message' => "Successfully unfollowed {$request->tag}"]);
-        } catch (AuthorizationException $e) {
-            return response()->json(['message' => "Cannot unfollow this {$request->tag}"], 403);
+            return response()->json([
+                'success' => true,
+                'message' => "Successfully unfollowed {$request->tag}"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Cannot unfollow this {$request->tag}"
+            ]);
         }
     }
 }

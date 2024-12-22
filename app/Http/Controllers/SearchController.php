@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\NewsPost;
 use App\Models\Tag;
 use App\Models\TagProposal;

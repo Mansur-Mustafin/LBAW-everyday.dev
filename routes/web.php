@@ -14,7 +14,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingController;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TagProposalController;
@@ -44,6 +44,7 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->middleware(['auth'])->name('logout');
+    Route::get('/blocked', 'showBlocked')->name('blocked');
 });
 
 Route::controller(PasswordRecoverController::class)->group(function () {
@@ -84,6 +85,7 @@ Route::controller(NewsPostController::class)->group(function () {
         Route::post('news/', 'store')->name('news');
         Route::put('news/{news_post}', 'update')->name('news.update');
         Route::delete('news/{news_post}', 'destroy');
+        Route::post('/check-title', 'postAlreadyExists')->name('news.exists');
     });
     Route::middleware('admin')->group(function () {
         Route::put('news/{news_post}/omit', 'omit')->name('news.omit');
@@ -148,7 +150,7 @@ Route::prefix('admin/tags')->middleware(['admin', 'blocked'])->controller(TagCon
 
 Route::prefix('admin')->middleware('admin')->controller(AdminController::class)->group(function () {
     // Users
-    Route::get('/', 'showUsers')->name('admin');
+    Route::get('/', 'show')->name('admin.dashboard');
     Route::get('/users', 'showUsers')->name('admin.users');
     Route::get('/users/{user}/edit', 'showEditForm');
     Route::get('/users/create', 'showCreateForm');
@@ -218,8 +220,13 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-Route::controller(PageController::class)->group(function () {
+Route::controller(StaticPageController::class)->group(function () {
     Route::get('/contacts', 'contacts')->name('contacts');
     Route::get('/about-us', 'about')->name('about');
     Route::get('/main-features', 'features')->name('features');
+});
+
+
+Route::controller(StatisticsController::class)->group(function () {
+    Route::get('api/stats', 'show')->middleware('admin');
 });

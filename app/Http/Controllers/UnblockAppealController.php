@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UnblockAppeal;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class UnblockAppealController extends Controller
         return view('pages.admin.admin', ['show' => 'unblock_appeals']);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'description' => 'required|string|max:2000',
@@ -22,7 +23,7 @@ class UnblockAppealController extends Controller
         $existingAppeal = UnblockAppeal::where('user_id', Auth::id())->where('is_resolved', false)->exists();
 
         if ($existingAppeal) {
-            return redirect()->view('auth.blocked')
+            return redirect()->route('blocked')
                 ->withError('There is already an active unblock appeal.');
         }
 
@@ -36,7 +37,7 @@ class UnblockAppealController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->view('auth.blocked')
+        return redirect()->route('blocked')
             ->withSuccess('You have successfully created an Unblock Appeal!');
     }
 
@@ -48,9 +49,15 @@ class UnblockAppealController extends Controller
             ]);
             $unblock_appeal->delete();
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Unblock appeal rejected'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while rejecting the unblock appeal'
+            ]);
         }
     }
 
@@ -65,9 +72,15 @@ class UnblockAppealController extends Controller
                 'status' => 'active'
             ]);
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'User has been unblocked.'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while accepting the unblock appeal.'
+            ]);
         }
     }
 }

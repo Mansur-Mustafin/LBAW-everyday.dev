@@ -1,6 +1,8 @@
-<header class="fixed bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 w-full">
+<header
+    class="fixed h-20 bg-background py-3 px-5 flex items-center justify-between border-b border-1 border-gray-700 w-full z-50">
     <div>
-        <h1 class="text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+        <h1 class="hidden tablet:block text-2xl h1"><a href="{{ url('/') }}">everyday.dev</a></h1>
+        <a href="{{ url('/') }}"><img src="{{ asset('favicon.ico') }}" class="w-8 tablet:hidden" alt="Search Icon"></a>
     </div>
 
     <div>
@@ -23,8 +25,8 @@
     <div class="flex gap-2">
         @if (Auth::check())
             {{-- Notifications --}}
-            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
-                href="{{ route('notifications.index') }}">
+            <a class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('notifications.index') }}"
+                title="notifications">
                 <div class="w-6 h-6 rounded-md relative">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -44,21 +46,23 @@
                 </div>
             </a>
             @if (Auth::user()->isAdmin())
-                <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block" href="{{ url('/admin') }}">
+                <a class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block" href="{{ url('/admin') }}">
                     Dashboard
                 </a>
-                <a type="button" class="bg-white text-black rounded-xl p-2 font-bold laptop:hidden" href="{{ url('/admin') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield">
-                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                <a class="bg-white text-black rounded-xl p-2 font-bold laptop:hidden" href="{{ url('/admin') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-shield">
+                        <path
+                            d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
                     </svg>
                 </a>
             @endif
-            <a type="button" class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
+            <a class="bg-white text-black rounded-xl px-6 py-2 font-bold hidden laptop:block"
                 href="{{ route('news.create') }}">
                 New post
             </a>
-            <a type="button" class="bg-white text-black rounded-xl p-2 laptop:hidden "
-                href="{{ route('news.create') }}">
+            <a class="bg-white text-black rounded-xl p-2 laptop:hidden " href="{{ route('news.create') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-plus">
@@ -66,14 +70,12 @@
                     <path d="M12 5v14" />
                 </svg>
             </a>
-            <a type="button" class="bg-white text-black rounded-xl p-2 font-bold"
-                href="{{ route('user.posts', Auth::id()) }}">
-                <img class="w-6 h-6 rounded-md" src="{{ Auth::user()->profileImage->url }}" alt="">
+            <a class="bg-white text-black rounded-xl p-2 font-bold" href="{{ route('user.posts', Auth::id()) }}">
+                <img class="w-6 h-6 rounded-md" src="{{ Auth::user()->profileImage->url }}" alt="Profile Image">
             </a>
         @else
             <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('login') }}">Login</a>
-            <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold"
-                href="{{ route('register') }}">Register</a>
+            <a class="button bg-white text-black rounded-xl px-6 py-2 font-bold" href="{{ route('register') }}">Register</a>
         @endif
     </div>
 </header>

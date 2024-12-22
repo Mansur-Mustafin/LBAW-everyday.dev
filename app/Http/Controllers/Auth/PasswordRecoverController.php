@@ -55,21 +55,10 @@ class PasswordRecoverController extends Controller
     {
         $resetEntry = DB::table('password_resets')->where('email', $email)->first();
 
-        // TODO:: recheck
-        // if (
-        //     !$resetEntry ||
-        //     !Hash::check($token, $resetEntry->token) ||
-        //     Carbon::now()->diffInMinutes(Carbon::parse($resetEntry->created_at)) > 5
-        // ) {
-        //     return false;
-        // }
-        //
-        // return true;
-
         return (
             $resetEntry &&
             Hash::check($token, $resetEntry->token) &&
-            !Carbon::now()->diffInMinutes(Carbon::parse($resetEntry->created_at)) > 5
+            Carbon::now()->diffInMinutes(Carbon::parse($resetEntry->created_at)) < 5
         );
     }
 }

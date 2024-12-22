@@ -13,6 +13,7 @@ export default {
       colors: {
         input: '#1b1f24',
         background: '#0f1217',
+        purple: '#581c87',
       },
       typography: (theme) => ({
         DEFAULT: {
@@ -37,12 +38,18 @@ export default {
               margin: '0',
               color: 'inherit',
             },
+            strong: {
+              color: 'inherit',  
+            },
             span: {
               backgroundColor: 'transparent',
             },
             img: {
               margin: '0',
             },
+            a: {
+              color: '#06c',
+            }
           },
         },
       }),

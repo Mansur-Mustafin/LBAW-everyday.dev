@@ -8,7 +8,8 @@
         <div class="border-r border-solid border-gray-700 p-3 rounded-xl flex gap-1">
             <!-- Upvote Button -->
             <button type="submit"
-                class="upvote-button flex items-center justify-center mr-1 hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400">
+                class="upvote-button flex items-center justify-center mr-1 hover:bg-green-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-green-400"
+                title="upvote">
                 <svg class="{{$post->user_vote == 'upvote' ? 'hidden' : ''}}" id="post-upvote-outline-{{ $post->id }}"
                     rpl="" fill="currentColor" width="20" icon-name="upvote-outline" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +30,8 @@
 
             <!-- Downvote Button -->
             <button type="submit"
-                class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400">
+                class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400"
+                title="downvote">
                 <svg class="{{$post->user_vote == 'downvote' ? 'hidden' : ''}}"
                     id="post-downvote-outline-{{ $post->id }}" rpl="" fill="currentColor" width="20"
                     icon-name="downvote-outline" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -67,9 +69,9 @@
             </button>
 
             <button class="flex gap-1 group items-center cursor-pointer relative" id="share-post">
-                <span class="copied-feedback absolute bottom-10 left-6 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
-                <div
-                    class="p-2 rounded-xl group-hover:text-purple-400 group-hover:bg-purple-700 group-hover:bg-opacity-50">
+                <span
+                    class="copied-feedback absolute bottom-10 left-6 opacity-0 transition-opacity duration-300 text-sm bg-input px-1.5 py-0.5 rounded-lg">copied</span>
+                <div class="p-2 rounded-xl group-hover:text-purple group-hover:bg-purple group-hover:bg-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-link">
@@ -78,7 +80,7 @@
                     </svg>
                 </div>
 
-                <label class="hidden tablet:inline group-hover:text-purple-400 cursor-pointer">Share</label>
+                <label class="hidden tablet:inline group-hover:text-purple cursor-pointer">Share</label>
             </button>
 
             <button class="reportPost-button flex group items-center cursor-pointer ml-3" data-post-id="{{ $post->id }}">

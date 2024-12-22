@@ -16,6 +16,7 @@ class AdminUpdateRequest extends FormRequest
                 'string',
                 'max:40',
                 Rule::unique('user')->ignore($this->route('user')->id),
+                'regex:/^\S*$/',
             ],
             'email' => [
                 'required',
@@ -28,6 +29,14 @@ class AdminUpdateRequest extends FormRequest
             'is_admin' => 'required|string',
             'new_password' => 'nullable|string|min:4',
             'adm_password' => 'nullable|string'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'The email address is already registered.',
+            'username.regex' => 'The username cannot contain spaces.'
         ];
     }
 }

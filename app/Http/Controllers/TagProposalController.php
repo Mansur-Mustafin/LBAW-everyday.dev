@@ -30,11 +30,11 @@ class TagProposalController extends Controller
         ]);
 
         if (Tag::where('name', $validated['name'])->exists()) {
-            return redirect()->back()->withErrors('Tag already existed');
+            return redirect()->back()->withErrors(['name' => 'Tag already existed.']);
         }
 
         if (TagProposal::where('name', $validated['name'])->exists()) {
-            return redirect()->back()->withErrors('Tag already proposed');
+            return redirect()->back()->withErrors(['name' => 'Tag already proposed.']);
         }
 
         TagProposal::create([
@@ -52,9 +52,16 @@ class TagProposalController extends Controller
     {
         try {
             $tagProposal->delete();
-            return response()->json(['success' => true]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tag proposal deleted successfully.'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while deleting the tag proposal.'
+            ]);
         }
     }
 
@@ -69,9 +76,15 @@ class TagProposalController extends Controller
                 'name' => $tagProposal->name
             ]);
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Tag proposal accepted and tag created.'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while accepting the tag proposal.'
+            ]);
         }
     }
 }

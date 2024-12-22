@@ -29,7 +29,7 @@ class CommentsController extends Controller
         return $this->buildComment($threadParent, $thread);
     }
 
-    public function buildComment($comment, $thread)
+    public function buildComment(Comment $comment, string $thread)
     {
         return response()->json([
             'thread' => view('partials.comment', [
@@ -38,7 +38,8 @@ class CommentsController extends Controller
                 'post' => NewsPost::find($comment->news_post_id),
                 'thread' => $thread
             ])->render(),
-            "thread_id" => $comment->id
+            'thread_id' => $comment->id,
+            'success' => true
         ]);
     }
 
@@ -51,17 +52,24 @@ class CommentsController extends Controller
             'thread' => 'required|string'
         ]);
 
-        $comment = Comment::create([
-            'content' => $validated['content'],
-            'news_post_id' => $validated['news_post_id'] ?? null,
-            'parent_comment_id' => $validated['parent_comment_id'] ?? null,
-            'author_id' => Auth::id()
-        ]);
+        try {
+            $comment = Comment::create([
+                'content' => $validated['content'],
+                'news_post_id' => $validated['news_post_id'] ?? null,
+                'parent_comment_id' => $validated['parent_comment_id'] ?? null,
+                'author_id' => Auth::id()
+            ]);
 
-        if ($comment['news_post_id']) {
-            return $this->buildComment($comment, $validated['thread']);
-        } else {
-            return $this->buildNestedComment($comment, $validated['thread']);
+            if ($comment['news_post_id']) {
+                return $this->buildComment($comment, $validated['thread']);
+            } else {
+                return $this->buildNestedComment($comment, $validated['thread']);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create the comment.'
+            ]);
         }
     }
 
@@ -73,11 +81,19 @@ class CommentsController extends Controller
             'content' => 'nullable|string|max:250'
         ]);
 
-        $comment->update([
-            'content' => $validated['content'],
-        ]);
+        try {
+            $comment->update(['content' => $validated['content']]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update the comment.'
+            ]);
+        }
 
-        return response()->json(['comment' => $comment]);
+        return response()->json([
+            'success' => true,
+            'comment' => $comment
+        ]);
     }
 
     public function destroy(Comment $comment)
@@ -85,37 +101,49 @@ class CommentsController extends Controller
         try {
             $this->authorize('delete', $comment);
             $comment->delete();
-            return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);  // TODO: return 500?
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the comment.'
+            ]);
         }
+
+        return response()->json(['success' => true]);
     }
 
     public function omit(Comment $comment)
     {
+        $this->authorize('omit', $comment);
+
         try {
-            $this->authorize('omit', $comment);
             $comment->update([
                 'is_omitted' => "true"
             ]);
-
-            return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);  // TODO: return 500?
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to omit the comment.'
+            ]);
         }
+
+        return response()->json(['success' => true]);
     }
 
     public function unomit(Comment $comment)
     {
+        $this->authorize('omit', $comment);
+
         try {
-            $this->authorize('omit', $comment);
             $comment->update([
                 'is_omitted' => "false"
             ]);
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false]);  // TODO: return 500?
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to unomit the comment.'
+            ]);
         }
     }
 

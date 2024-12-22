@@ -1,4 +1,4 @@
-import { redirectToLogin, sendAjaxRequest } from './utils.js';
+import { redirectToLogin, sendAjaxRequest, toggleDeleteButton } from './utils.js';
 import { addVoteButtonBehaviour } from './vote.js';
 
 // Adds Vote Behaviour to Comments
@@ -32,6 +32,7 @@ function addCommentHandler(data) {
 
   addButtonsBehaviour();
   addVoteButtonBehaviour();
+  toggleDeleteButton();
 }
 
 function editCommentHandler(data) {
@@ -188,20 +189,17 @@ function addButtonsBehaviour() {
 
       const url = '/comments/' + comment_id;
       const method = 'DELETE';
-      sendAjaxRequest(
-        url,
-        (_data) => {
-          // sendAjaxRequest catches errors
-          const comment = document.getElementById('comment-' + comment_id);
-          comment.remove();
-        },
-        method
-      );
+      const comment = document.getElementById('comment-' + comment_id);
+      if(!comment.classList.contains('hidden')) {
+        sendAjaxRequest(url,(_data) => {}, method);
+        comment.classList.add('hidden');
+        toggleDeleteButton();
+      }
     });
   });
 
   document.querySelectorAll('.omit-comment').forEach(function (element) {
-    element.addEventListener('click',function (event) {
+    element.addEventListener('click', function (event) {
       event.preventDefault();
       const comment_id = element.id.split('-')[2];
 
@@ -211,7 +209,7 @@ function addButtonsBehaviour() {
         url,
         (data) => {
           // sendAjaxRequest catches errors
-          console.log(data)
+          console.log(data);
           const omitComment = document.getElementById('omit-comment-' + comment_id);
           const unOmitComment = document.getElementById('unomit-comment-' + comment_id);
 
@@ -220,15 +218,14 @@ function addButtonsBehaviour() {
 
           const comment = document.getElementById('comment-' + comment_id);
           comment.classList.add('opacity-50');
-
         },
         method
       );
-    })
-  })
+    });
+  });
 
   document.querySelectorAll('.unomit-comment').forEach(function (element) {
-    element.addEventListener('click',function (event) {
+    element.addEventListener('click', function (event) {
       event.preventDefault();
       const comment_id = element.id.split('-')[2];
 
@@ -237,7 +234,7 @@ function addButtonsBehaviour() {
       sendAjaxRequest(
         url,
         (data) => {
-          console.log(data)
+          console.log(data);
           // sendAjaxRequest catches errors
           const omitComment = document.getElementById('omit-comment-' + comment_id);
           const unOmitComment = document.getElementById('unomit-comment-' + comment_id);
@@ -251,8 +248,8 @@ function addButtonsBehaviour() {
         },
         method
       );
-    })
-  })
+    });
+  });
 }
 
 document.querySelectorAll('.reportComment-button').forEach(button => {

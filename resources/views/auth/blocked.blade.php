@@ -1,6 +1,7 @@
 @extends('layouts.body.single-form')
 
 @include('partials.success-popup')
+
 @section('content')
 <div class="flex items-center justify-center">
     <div class="flex items-center justify-center md:flex-row rounded-2xl shadow-2xl shadow-gray-900 max-w-4xl w-full overflow-hidden">
@@ -15,14 +16,17 @@
 
             <div class="md:w-1/2 p-8 w-full">
                 <form method="POST" action="{{ route('unblock.create') }}" id="blockedForm">
-                    {{ csrf_field() }}
+                    @csrf
                     <h2 class="text-2xl font-bold mb-4 text-center">Why should you be unbanned?</h2>
-                    <div class="flex flex-col mb-2">
-                        <textarea form="blockedForm" id="description" name="description" rows="5" class="text-black outline-none rounded m-1 p-2" autofocus></textarea>
-                        @error('description')
-                            <span class="text-red-400 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <label >
+                        Reason:
+                        <div class="flex flex-col mb-2">
+                            <textarea form="blockedForm" id="description" name="description" rows="5" class="text-black outline-none rounded m-1 p-2" autofocus></textarea>
+                            @error('description')
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </label>
                     <div class="flex items-center justify-end mb-4 gap-2">
                         <a href="{{ url('logout') }}"
                             class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200">
@@ -47,7 +51,7 @@
             <div class="md:w-1/2 p-8 w-full">
                 <h2 class="text-2xl font-bold mb-4 text-center">Your request is pending</h2>
                 <p class="flex flex-col mb-2 text-center">
-                    Your request is know being analyzed by our administrators.
+                    Your request is now being analyzed by our administrators.
                 </p>
                 <a href="{{ url('logout') }}"
                     class=" bg-white hover:bg-gray-300 text-black rounded-xl px-6 py-2 font-bold transition duration-200 flex flex-col items-center">
