@@ -45,7 +45,8 @@
 
 
                     @can('delete', $comment)
-                        <button class="delete-comment" id="{{ 'delete_button-' . $comment->id }}" title="delete comment">
+                        <button class="delete-comment" id="{{ 'delete_button-' . $comment->id }}"
+                            id="{{ 'delete_button-' . $comment->id }}" title="delete comment">
                             @include('partials.svg.comment.delete')
                         </button>
                     @endcan

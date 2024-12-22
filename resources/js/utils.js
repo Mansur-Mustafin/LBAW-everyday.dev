@@ -67,7 +67,7 @@ export function sendAjaxRequest(
       //   handlerError(error.message);
       // }
       if (error.status == 403) {
-        handlerError("This action is not allowed :-(");
+        handlerError('This action is not allowed :-(');
       }
       if (error.status == 404) {
         handlerError('Page not Found');
@@ -205,15 +205,17 @@ export const toggleDeleteButton = () => {
 };
 
 export const toggleDeleteButtonComment = (container) => {
-  const commentId = container.dataset.id 
-  const deleteButton = document.getElementById('delete_button-'+commentId)
+  const commentId = container.dataset.id;
+  const deleteButton = document.getElementById('delete_button-' + commentId);
   const voteCountElement = container.querySelector('.vote-count').textContent;
   const hasVotes = parseInt(voteCountElement, 10) != 0;
 
-  if ( hasVotes) {
-    deleteButton.classList.add('hidden')
-  } else {
-    deleteButton.classList.remove('hidden')
+  if (deleteButton) {
+    if (hasVotes) {
+      deleteButton.classList.add('hidden');
+    } else {
+      deleteButton.classList.remove('hidden');
+    }
   }
 };
 
@@ -223,7 +225,7 @@ export const stripHtml = (html) => {
   return div.textContent || div.innerText || '';
 };
 
-export const handleDialog = (action,baseUrl, elementId) => {
+export const handleDialog = (action, baseUrl, elementId) => {
   const confirmPopup = document.getElementById('confirm-popup');
   const confirmButton = document.getElementById('confirm-button');
   const cancelButton = document.getElementById('cancel-button');

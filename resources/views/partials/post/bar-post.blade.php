@@ -24,7 +24,8 @@
             <button type="submit"
                 class="downvote-button flex items-center justify-center ml-1 hover:bg-red-800 hover:bg-opacity-50 p-2 rounded-xl hover:text-red-400"
                 title="downvote">
-                <div class="{{$post->user_vote == 'downvote' ? 'hidden' : ''}}">
+                <div class="{{$post->user_vote == 'downvote' ? 'hidden' : ''}}"
+                    id="post-downvote-outline-{{ $post->id }}">
                     @include('partials.svg.post.downvote-outline')
                 </div>
                 <div class="{{$post->user_vote == 'downvote' ? '' : 'hidden'}}" id="post-downvote-fill-{{ $post->id }}">
