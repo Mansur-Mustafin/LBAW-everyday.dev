@@ -60,7 +60,6 @@
                 @enderror
             </div>
 
-            {{-- TODO: disabled? --}}
             <div class="flex flex-col mb-2 mt-3">
                 <label for="email" class="font-bold text-sm mb-2">E-Mail</label>
                 <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required

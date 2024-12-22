@@ -22,7 +22,6 @@
   </div>
 @endif
 
-<!-- TODO: move this into a file later -->
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
