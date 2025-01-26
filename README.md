@@ -63,21 +63,5 @@ docker run -d --name lbaw2441 -p 8001:80 gitlab.up.pt:5050/lbaw/lbaw2425/lbaw240
 
 GROUP24041, 26/09/2024
 
-<!-- 
-
-sudo apt update
-sudo apt install git composer php8.3 php8.3-mbstring php8.3-xml php8.3-pgsql php8.3-curl
-
-composer update
-
-docker compose up -d
-
-php artisan db:seed
-php artisan serve
-
-./upload_image.sh
-
-docker login gitlab.up.pt:5050
-docker run -d --name lbaw24041 -p 8001:80 gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24041
-
- -->
+> Grade: 19.6 <br>
+> Professor: Tiago Boldt Sousa 
